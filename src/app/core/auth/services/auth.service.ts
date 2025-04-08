@@ -10,7 +10,7 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class AuthService {
     private readonly API_URL = 'http://localhost:8081/api';
-    private readonly AUTH_URL = 'http://localhost:8080/auth/realms/wavecare_project/protocol/openid-connect/token';
+    private readonly AUTH_URL = 'http://localhost:8080/auth/realms/Keycloak_WaveCare/protocol/openid-connect/token';
     private currentUserSubject = new BehaviorSubject<LoginResponse | null>(null);
     private platformId = inject(PLATFORM_ID);
     
@@ -71,7 +71,7 @@ export class AuthService {
       const body = new URLSearchParams();
       body.set('grant_type', 'refresh_token');
       body.set('refresh_token', refreshToken);
-      body.set('client_id', 'projet-wavecare');
+      body.set('client_id', 'wavecare_web');
 
       return this.http.post<LoginResponse>(this.AUTH_URL, body.toString(), {
           headers: new HttpHeaders({
@@ -121,7 +121,7 @@ export class AuthService {
     body.set('username', credentials.username);
     body.set('password', credentials.password);
     body.set('grant_type', 'password');
-    body.set('client_id', 'projet-wavecare');
+    body.set('client_id', 'wavecare_web');
 
     const httpOptions = {
       headers: new HttpHeaders()
@@ -157,7 +157,7 @@ export class AuthService {
             if (refreshToken) {
                 
                 const body = new URLSearchParams();
-                body.set('client_id', 'projet-wavecare');
+                body.set('client_id', 'wavecare_web');
                 body.set('refresh_token', refreshToken);
 
                 this.http.post(
