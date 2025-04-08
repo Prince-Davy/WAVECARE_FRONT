@@ -1,0 +1,49 @@
+<div class="auth-container" >
+
+    <mat-card>
+      <div role="img"   style="text-align: center"  aria-label="Description of the overall image">
+      <img  style="height:130px ; width:180px ;text-align: center; margin-bottom: 30px" class="md-card-image" alt="logo de l'application wavecare" src="LogoWaveCare.png">
+      </div>
+
+      <mat-card-content >
+<!--        style="background-color: #005EA5">-->
+<!--        <div style="text-align: center; font-size: xx-large; margin-bottom: 30px"  >WaveCare</div>-->
+        <div style=" margin-bottom: 10px" >Je me connecte avec mon Email :</div>
+        <form [formGroup]="***REMOVED***Form" (ngSubmit)="onSubmit()">
+
+          <mat-label style=" margin-bottom: 10px" >Email:</mat-label>
+
+          <mat-form-field appearance="fill">
+
+            <input matInput formControlName="username" required>
+            <mat-error *ngIf="***REMOVED***Form.get('username')?.hasError('required')">
+              Username is required
+            </mat-error>
+          </mat-form-field>
+          <mat-label style=" margin-bottom: 10px" >***REMOVED***:</mat-label>
+          <mat-form-field appearance="fill">
+            <input matInput [type]="hidePassword ? 'password' : 'text'"
+                   formControlName="password" required>
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+                    [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="***REMOVED***Form.get('password')?.hasError('required')">
+              Password is required
+            </mat-error>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary"
+                  type="submit" [disabled]="***REMOVED***Form.invalid">
+            Connexion
+          </button>
+        </form>
+        <div style=" margin-top: 20px; margin-bottom: 40px" >***REMOVED*** oublié ?</div>
+        <div style=" margin-bottom: 10px ; margin-bottom: 30px" >---------------------------- OU ----------------------------</div>
+        <div style=" margin-bottom: 20px" >S’identifier avec :</div><div role="img"   style="text-align: center"  aria-label="Description of the overall image">
+          <img  style="height:50% ; width:50% ;text-align: center; margin-bottom: 50px" class="md-card-image" alt="logo de l'application wavecare" src="948d526564465b406590c620d273b65f.png">
+        </div>
+        <div>Un problème ? Je m’adresse à un admistrateur</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
