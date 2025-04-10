@@ -51,7 +51,7 @@ export class AuthComponent {
         next: (response) => {
           // Handle successful ***REMOVED*** based on user role
           // const role = response.role;
-          console.log("You are logged in")
+          console.log("You are logged in");
           this.router.navigate(['/dashboard']);
           // switch (role) {
           //   case 'SUPER_ADMIN':

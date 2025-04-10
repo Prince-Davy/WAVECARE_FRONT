@@ -9,8 +9,8 @@ import { isPlatformBrowser } from '@angular/common';
     providedIn: 'root'
 })
 export class AuthService {
-    private readonly API_URL = 'http://localhost:8081/api';
-    private readonly AUTH_URL = 'http://localhost:8080/auth/realms/Keycloak_WaveCare/protocol/openid-connect/token';
+    private readonly API_URL = 'http://localhost:8080/api';
+    private readonly AUTH_URL = 'http://localhost:8081/auth/realms/Keycloak_WaveCare/protocol/openid-connect/token';
     private currentUserSubject = new BehaviorSubject<LoginResponse | null>(null);
     private platformId = inject(PLATFORM_ID);
     

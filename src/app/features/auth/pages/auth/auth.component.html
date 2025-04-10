@@ -1,49 +1,42 @@
-<div class="auth-container" >
+<div class="auth-container">
+  
+  
+  <img class="logo" alt="logo de l'application wavecare" src="assets/images/LogoWaveCare_SansTexte.png">
+  
+  <mat-card class="***REMOVED***-card">
+    <h2 class="title">WaveCare</h2>
+    <p class="subtitle">Je me connecte avec mon Email :</p>
 
-    <mat-card>
-      <div role="img"   style="text-align: center"  aria-label="Description of the overall image">
-      <img  style="height:130px ; width:180px ;text-align: center; margin-bottom: 30px" class="md-card-image" alt="logo de l'application wavecare" src="LogoWaveCare.png">
-      </div>
+    <form [formGroup]="***REMOVED***Form" (ngSubmit)="onSubmit()" class="***REMOVED***-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="username" placeholder="Email" required>
+      </mat-form-field>
 
-      <mat-card-content >
-<!--        style="background-color: #005EA5">-->
-<!--        <div style="text-align: center; font-size: xx-large; margin-bottom: 30px"  >WaveCare</div>-->
-        <div style=" margin-bottom: 10px" >Je me connecte avec mon Email :</div>
-        <form [formGroup]="***REMOVED***Form" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline">
+        <mat-label>***REMOVED***</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="***REMOVED***" required>
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
 
-          <mat-label style=" margin-bottom: 10px" >Email:</mat-label>
+      <button mat-raised-button color="primary" type="submit" [disabled]="***REMOVED***Form.invalid">
+        CONNEXION
+      </button>
+    </form>
 
-          <mat-form-field appearance="fill">
+    <a class="***REMOVED***" href="#">MOT DE PASSE OUBLIÉ ?</a>
 
-            <input matInput formControlName="username" required>
-            <mat-error *ngIf="***REMOVED***Form.get('username')?.hasError('required')">
-              Username is required
-            </mat-error>
-          </mat-form-field>
-          <mat-label style=" margin-bottom: 10px" >***REMOVED***:</mat-label>
-          <mat-form-field appearance="fill">
-            <input matInput [type]="hidePassword ? 'password' : 'text'"
-                   formControlName="password" required>
-            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
-                    [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
-              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
-            <mat-error *ngIf="***REMOVED***Form.get('password')?.hasError('required')">
-              Password is required
-            </mat-error>
-          </mat-form-field>
+    <div class="divider">
+      <span></span>
+      <p>OU</p>
+      <span></span>
+    </div>
 
-          <button mat-raised-button color="primary"
-                  type="submit" [disabled]="***REMOVED***Form.invalid">
-            Connexion
-          </button>
-        </form>
-        <div style=" margin-top: 20px; margin-bottom: 40px" >***REMOVED*** oublié ?</div>
-        <div style=" margin-bottom: 10px ; margin-bottom: 30px" >---------------------------- OU ----------------------------</div>
-        <div style=" margin-bottom: 20px" >S’identifier avec :</div><div role="img"   style="text-align: center"  aria-label="Description of the overall image">
-          <img  style="height:50% ; width:50% ;text-align: center; margin-bottom: 50px" class="md-card-image" alt="logo de l'application wavecare" src="948d526564465b406590c620d273b65f.png">
-        </div>
-        <div>Un problème ? Je m’adresse à un admistrateur</div>
-      </mat-card-content>
-    </mat-card>
-  </div>
+    <p class="signin-alt">S’identifier avec :</p>
+    <img src="assets/images/pro-sante-connect.png" class="psc-logo" alt="Pro Santé Connect">
+
+    <p class="footer">UN PROBLÈME ? JE M’ADRESSE À UN ADMINISTRATEUR</p>
+  </mat-card>
+</div>
