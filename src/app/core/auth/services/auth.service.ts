@@ -11,7 +11,6 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class AuthService {
     private readonly API_URL = 'http://localhost:8081/api';
-    // private readonly AUTH_URL = 'http://localhost:8080/auth/realms/Keycloak_WaveCare/protocol/openid-connect/token';
     private readonly AUTH_URL = 'http://localhost:8081/api/login';
     private currentUserSubject = new BehaviorSubject<LoginResponse | null>(null);
     private platformId = inject(PLATFORM_ID);
@@ -31,19 +30,13 @@ export class AuthService {
       }
   }
 
-    private setStoredUser(user: LoginResponse | null): void {
-        if (isPlatformBrowser(this.platformId)) {
-            if (user) {
-                localStorage.setItem('currentUser', JSON.stringify(user));
-            } else {
-                localStorage.removeItem('currentUser');
-            }
-        }
+    setStoredUser(tokenResponse: any) {
+        localStorage.setItem('access_token', tokenResponse.access_token);
+        localStorage.setItem('refresh_token', tokenResponse.refresh_token);
     }
 
-
-    getToken(): string | undefined {
-        return this.currentUserSubject.value?.access_token;
+    getToken(): string | null {
+        return localStorage.getItem('access_token');
     }
 
     getCurrentRole(): string | undefined {
@@ -129,8 +122,6 @@ export class AuthService {
           .set('Content-Type', 'application/json')
           .set('Accept', 'application/json')
   };
- // const formData = body.toString();
-
     return this.http.post<LoginResponse>(
       this.AUTH_URL,
       body,
@@ -152,27 +143,9 @@ export class AuthService {
         );
 }
 
-    logout(): void {
-        if (isPlatformBrowser(this.platformId)) {
-            const refreshToken = this.currentUserSubject.value?.refresh_token;
-            if (refreshToken) {
-
-                const body = new URLSearchParams();
-                body.set('client_id', 'wavecare_web');
-                body.set('refresh_token', refreshToken);
-
-                this.http.post(
-                    `${this.AUTH_URL.replace('/token', '/logout')}`,
-                    body.toString(),
-                    {
-                        headers: new HttpHeaders({
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        })
-                    }
-                ).subscribe();
-            }
-        }
-        this.setStoredUser(null);
+    logout() {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
         this.currentUserSubject.next(null);
     }
 
