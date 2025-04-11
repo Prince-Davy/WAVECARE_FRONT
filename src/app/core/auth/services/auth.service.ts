@@ -124,7 +124,6 @@ export class AuthService {
         password: credentials.password
     }
 
-
     const httpOptions = {
       headers: new HttpHeaders()
           .set('Content-Type', 'application/json')
