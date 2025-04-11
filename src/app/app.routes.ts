@@ -2,14 +2,14 @@
 import { Routes } from '@angular/router';
 
 
-import { authGuard } from './core/auth/guards/auth.guard';
+import { AuthGuard } from './core/auth/guards/auth.guard';
 import { roleGuard } from './core/auth/guards/role.guard';
 import { AppComponent } from './app.component';
 import { AuthComponent } from './features/auth/pages/auth/auth.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 
 export const routes: Routes = [
-  
+
   {
     path: '',
     redirectTo: '/***REMOVED***',
@@ -19,24 +19,24 @@ export const routes: Routes = [
     path: '***REMOVED***',
     component: AuthComponent
   },
-  { 
-    path: 'dashboard', 
+  {
+    path: 'dashboard',
     component: DashboardComponent ,
-    canActivate: [authGuard]
-  
+    canActivate: [AuthGuard]
+
   },
-  
+
   // Protected routes
   {
     path: 'super-admin',
     component: AppComponent,
-    canActivate: [authGuard, () => roleGuard(['SUPER_ADMIN'])],
+    canActivate: [AuthGuard, () => roleGuard(['SUPER_ADMIN'])],
     children: [
-     
+
     ]
   },
-  
-  
+
+
   {
     path: '**',
     component: DashboardComponent
