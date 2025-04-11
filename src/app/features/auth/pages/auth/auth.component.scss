@@ -4,6 +4,8 @@
   justify-content: center;
   align-items: center;
   background-color: white; 
+  transform: scale(0.8); 
+  transform-origin: top center; 
 }
 
 .login-card {
@@ -96,11 +98,6 @@ button[type="submit"] {
   margin-bottom: 10px;
 }
 
-.psc-logo {
-  width: 70%;
-  margin: 20px auto; 
-  object-fit: cover; 
-}
 
 .footer {
   font-size: 12px;
@@ -113,3 +110,22 @@ button[type="submit"] {
 ::ng-deep .mat-mdc-form-field-subscript-wrapper {
   display: none !important;
 }
+
+.psc-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-block;
+
+  &:focus {
+    outline: 2px solid #005fcc;
+    outline-offset: 2px;
+  }
+
+  .psc-logo {
+    max-width: 70%;
+    height: auto;
+  }
+}
+
