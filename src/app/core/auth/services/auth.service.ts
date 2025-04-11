@@ -5,15 +5,17 @@ import { catchError, tap, timeout } from 'rxjs/operators';
 import { LoginResponse, LoginCredentials } from '../models/auth.types';
 import { isPlatformBrowser } from '@angular/common';
 
+
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
-    private readonly API_URL = 'http://localhost:8080/api';
-    private readonly AUTH_URL = 'http://localhost:8081/auth/realms/Keycloak_WaveCare/protocol/openid-connect/token';
+    private readonly API_URL = 'http://localhost:8081/api';
+    // private readonly AUTH_URL = 'http://localhost:8080/auth/realms/Keycloak_WaveCare/protocol/openid-connect/token';
+    private readonly AUTH_URL = 'http://localhost:8081/api/login';
     private currentUserSubject = new BehaviorSubject<LoginResponse | null>(null);
     private platformId = inject(PLATFORM_ID);
-    
+
     currentUser$ = this.currentUserSubject.asObservable();
 
     constructor(private http: HttpClient) {
@@ -21,7 +23,7 @@ export class AuthService {
           const storedUser = localStorage.getItem('currentUser');
           if (storedUser) {
               this.currentUserSubject.next(JSON.parse(storedUser));
-              
+
               if (!this.isTokenValid()) {
                   this.logout();
               }
@@ -38,18 +40,18 @@ export class AuthService {
             }
         }
     }
-    
+
 
     getToken(): string | undefined {
         return this.currentUserSubject.value?.access_token;
     }
 
     getCurrentRole(): string | undefined {
-        
+
         const token = this.getToken();
         if (token) {
             const decodedToken = this.decodeToken(token);
-            return decodedToken.realm_access?.roles[0]; 
+            return decodedToken.realm_access?.roles[0];
         }
         return undefined;
     }
@@ -97,12 +99,12 @@ export class AuthService {
             return false;
         }
 
-        
-        const expirationTime = decodedToken.exp * 1000; 
+
+        const expirationTime = decodedToken.exp * 1000;
         const currentTime = Date.now();
-        
+
         if (currentTime >= expirationTime) {
-            
+
             this.setStoredUser(null);
             this.currentUserSubject.next(null);
             return false;
@@ -115,24 +117,23 @@ export class AuthService {
 }
 
   login(credentials: LoginCredentials): Observable<LoginResponse> {
-    
 
-    const body = new URLSearchParams();
-    body.set('username', credentials.username);
-    body.set('password', credentials.password);
-    body.set('grant_type', 'password');
-    body.set('client_id', 'wavecare_web');
+
+    const body = {
+        username : credentials.username,
+        password: credentials.password
+    }
 
     const httpOptions = {
       headers: new HttpHeaders()
-          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('Content-Type', 'application/json')
           .set('Accept', 'application/json')
   };
-  const formData = body.toString();
-    
+ // const formData = body.toString();
+
     return this.http.post<LoginResponse>(
-      this.AUTH_URL, 
-      formData, 
+      this.AUTH_URL,
+      body,
       httpOptions)
         .pipe(
             tap(response => {
@@ -141,12 +142,12 @@ export class AuthService {
                     this.currentUserSubject.next(response);
                 }
             }),
-            
+
             catchError(error => {
                 this.currentUserSubject.next(null);
                 return throwError(() => error);
             }),
-            
+
             timeout(10000)
         );
 }
@@ -155,7 +156,7 @@ export class AuthService {
         if (isPlatformBrowser(this.platformId)) {
             const refreshToken = this.currentUserSubject.value?.refresh_token;
             if (refreshToken) {
-                
+
                 const body = new URLSearchParams();
                 body.set('client_id', 'wavecare_web');
                 body.set('refresh_token', refreshToken);
