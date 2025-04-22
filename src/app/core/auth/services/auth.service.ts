@@ -149,6 +149,9 @@ export class AuthService {
         this.currentUserSubject.next(null);
     }
 
+  forgotPassword(email: string): Observable<any> {
+      return this.http.post(this.API_URL+'/***REMOVED***', {email})
+  }
     checkSuperAdminAccess(): Observable<string> {
         return this.http.get<string>(`${this.API_URL}/super-admin`);
     }
