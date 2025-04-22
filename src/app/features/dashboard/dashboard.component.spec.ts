@@ -1,23 +1,100 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DashboardComponent } from './dashboard.component';
+import { AuthService } from '../../core/auth/services/auth.service';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';  // Importer "of" pour retourner des observables simulés
+import { LoginResponse } from '../../core/auth/models/auth.types';
+
+// Importez les modules nécessaires comme BrowserModule si vous en avez besoin
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let routerSpy: jasmine.SpyObj<Router>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [DashboardComponent]
-    })
-    .compileComponents();
+  beforeEach(() => {
+    const authSpy = jasmine.createSpyObj('AuthService', ['currentUser$', 'getCurrentRole', 'logout']);
+    const routerSpyObj = jasmine.createSpyObj('Router', ['navigate']);
 
-    fixture = TestBed.createComponent(DashboardComponent);
+    TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule // Ajoutez ce module pour simuler la navigation
+      ],
+      providers: [
+        { provide: AuthService, useValue: authSpy },
+        { provide: Router, useValue: routerSpyObj }
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(DashboardComponent);  // N'ajoutez plus le composant dans "declarations"
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
   });
 
-  it('should create', () => {
+  it('devrait créer le composant', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('devrait mettre à jour currentUser et userRole à l\'initialisation', () => {
+    const mockUser: LoginResponse = {
+      access_token: 'fake-access-token',
+      refresh_token: 'fake-refresh-token',
+      expires_in: 3600,
+      token_type: 'Bearer',
+      scope: 'read write',
+      role: 'ADMIN'
+    };
+
+    authServiceSpy.currentUser$ = of(mockUser);
+    authServiceSpy.getCurrentRole.and.returnValue('ADMIN');
+
+    fixture.detectChanges(); // Déclenche ngOnInit
+
+    expect(component.currentUser).toEqual(mockUser);
+    expect(component.userRole).toEqual('ADMIN');
+  });
+
+  it('devrait appeler logout et naviguer vers la page de connexion', () => {
+    component.logout();
+
+    expect(authServiceSpy.logout).toHaveBeenCalled();
+    expect(component.currentUser).toBeNull();
+    expect(component.userRole).toBeUndefined();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/***REMOVED***']);
+  });
+
+  it('devrait retourner le token décodé', () => {
+    const mockToken = 'fake.access.token';
+    const decodedToken = { exp: 1672449600 }; // exp = 31 décembre 2022
+
+    spyOn(window, 'atob').and.returnValue(JSON.stringify(decodedToken));
+    component.currentUser = { access_token: mockToken } as LoginResponse;
+
+    const result = component.getDecodedToken();
+
+    expect(result).toEqual(decodedToken);
+  });
+
+  it('devrait retourner la date d\'expiration du token', () => {
+    const mockToken = 'fake.access.token';
+    const decodedToken = { exp: 1672449600 }; // exp = 31 décembre 2022
+
+    spyOn(window, 'atob').and.returnValue(JSON.stringify(decodedToken));
+    component.currentUser = { access_token: mockToken } as LoginResponse;
+
+    const result = component.getTokenExpiration();
+
+    expect(result).toBe(new Date(decodedToken.exp * 1000).toLocaleString());
+  });
+
+  it('devrait retourner "N/A" si aucun token n\'est présent dans getTokenExpiration', () => {
+    component.currentUser = { access_token: '' } as LoginResponse;
+
+    const result = component.getTokenExpiration();
+
+    expect(result).toBe('N/A');
   });
 });
