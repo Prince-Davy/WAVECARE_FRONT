@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../../core/auth/services/auth.service';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -21,11 +21,12 @@ import { Router } from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    RouterLink
   ],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
-  
+
 })
 export class AuthComponent {
   ***REMOVED***Form: FormGroup;
@@ -36,9 +37,9 @@ export class AuthComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
-  
+
   ) {
-    
+
     this.***REMOVED***Form = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
