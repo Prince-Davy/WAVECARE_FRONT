@@ -1,0 +1,44 @@
+<div class="auth-container">
+  
+  
+  <img class="logo" alt="logo de l'application wavecare" src="assets/images/LogoWaveCare_SansTexte.png">
+  
+  <mat-card class="login-card">
+    <h2 class="title">WaveCare</h2>
+    <p class="subtitle">Je me connecte avec mon Email :</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="username" aria-label="Email" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Mot de passe</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" aria-label="Mot de passe" required>
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">
+        CONNEXION
+      </button>
+    </form>
+
+    <a class="forgot-password" href="#">MOT DE PASSE OUBLIÉ ?</a>
+
+    <div class="divider">
+      <span></span>
+      <p>OU</p>
+      <span></span>
+    </div>
+
+    <p class="signin-alt">S’identifier avec :</p>
+    <button class="psc-button" aria-label="Connexion avec Pro Santé Connect">
+      <img src="assets/images/pro-sante-connect.png" class="psc-logo" alt="Connexion via Pro Santé Connect">
+    </button>
+
+    <p class="footer">UN PROBLÈME ? JE M’ADRESSE À UN ADMINISTRATEUR</p>
+  </mat-card>
+</div>
