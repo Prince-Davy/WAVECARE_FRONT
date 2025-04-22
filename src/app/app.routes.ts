@@ -7,6 +7,7 @@ import { roleGuard } from './core/auth/guards/role.guard';
 import { AppComponent } from './app.component';
 import { AuthComponent } from './features/auth/pages/auth/auth.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
+import {ForgotPasswordComponent} from './features/auth/pages/forgot-password/forgot-password.component';
 
 export const routes: Routes = [
 
@@ -18,6 +19,10 @@ export const routes: Routes = [
   {
     path: 'login',
     component: AuthComponent
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent
   },
   {
     path: 'dashboard',
