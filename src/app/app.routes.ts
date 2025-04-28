@@ -1,16 +1,13 @@
-
 import { Routes } from '@angular/router';
-
-
 import { AuthGuard } from './core/auth/guards/auth.guard';
 import { roleGuard } from './core/auth/guards/role.guard';
 import { AppComponent } from './app.component';
 import { AuthComponent } from './features/auth/pages/auth/auth.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
-import {ForgotPasswordComponent} from './features/auth/pages/forgot-password/forgot-password.component';
+import { ForgotPasswordComponent } from './features/auth/pages/forgot-password/forgot-password.component';
+import { NotFoundComponent } from './features/not-found/not-found.component';
 
 export const routes: Routes = [
-
   {
     path: '',
     redirectTo: '/login',
@@ -26,24 +23,21 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: DashboardComponent ,
+    component: DashboardComponent,
     canActivate: [AuthGuard]
-
   },
-
-  // Protected routes
   {
     path: 'super-admin',
     component: AppComponent,
     canActivate: [AuthGuard, () => roleGuard(['SUPER_ADMIN'])],
-    children: [
-
-    ]
+    children: []
   },
-
-
+  {
+    path: '404',
+    component: NotFoundComponent
+  },
   {
     path: '**',
-    component: DashboardComponent
+    component: NotFoundComponent
   }
 ];
