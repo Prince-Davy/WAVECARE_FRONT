@@ -24,7 +24,6 @@ export class AuthRedirectGuard implements CanActivate {
         this.router.navigate(['/***REMOVED***']);
       }
     } else {
-      // Comportement par défaut pour le SSR
       this.router.navigate(['/***REMOVED***']);
     }
     
