@@ -1,0 +1,134 @@
+/* not-found.component.scss */
+.not-found-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    position: relative;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+  }
+  
+  .content {
+    text-align: center;
+    max-width: 800px;
+    padding: 0 20px;
+    z-index: 2;
+  }
+  
+  .error-code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  
+  .digit {
+    font-size: 200px;
+    font-weight: bold;
+    color: #0056a4; /* Bleu foncé */
+    line-height: 1;
+  }
+  
+  .dot {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #e61c76; /* Rose */
+    display: inline-block;
+  }
+  
+  .dot-1 {
+    margin-right: 10px;
+  }
+  
+  .dot-2 {
+    margin: 0 10px;
+    position: relative;
+    top: -40px;
+  }
+  
+  .dot-3 {
+    margin-left: 10px;
+    position: relative;
+    top: -80px;
+  }
+  
+  .message {
+    margin-bottom: 40px;
+  }
+  
+  .message p {
+    margin: 10px 0;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .action-button a {
+    display: inline-block;
+    padding: 15px 50px;
+    background-color: #0056a4; /* Bleu foncé */
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .action-button a:hover {
+    background-color: #004080;
+  }
+  
+  .corner-shape {
+    position: absolute;
+    bottom: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background-color: #e61c76; /* Rose */
+    z-index: 1;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .digit {
+      font-size: 120px;
+    }
+    
+    .dot {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .message p {
+      font-size: 16px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .digit {
+      font-size: 80px;
+    }
+    
+    .dot {
+      width: 40px;
+      height: 40px;
+    }
+    
+    .dot-2 {
+      top: -20px;
+    }
+    
+    .dot-3 {
+      top: -40px;
+    }
+    
+    .message p {
+      font-size: 14px;
+    }
+  }
