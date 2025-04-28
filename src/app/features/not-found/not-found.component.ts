@@ -17,23 +17,21 @@ export class NotFoundComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-  
+
   }
 
   goToHome(): void {
     if (isPlatformBrowser(this.platformId)) {
-      const token = this.authService.getToken();
-      const isValidToken = token && this.authService.isTokenValid();
-      
-      console.log('Redirection depuis goToHome - Token valide:', isValidToken);
-      
-      if (isValidToken) {
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.router.navigate(['/login']);
-      }
-    } else {
-      this.router.navigate(['/login']);
+        const token = this.authService.getToken();
+        const getToken = token && this.authService.getToken();
+        
+        console.log('Redirection depuis goToHome - Token valide:', getToken);
+        
+        if (getToken) {
+            this.router.navigate(['/dashboard']);
+        } else {
+            this.router.navigate(['/login']);
+        }
     }
   }
 }
