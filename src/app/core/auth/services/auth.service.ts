@@ -23,9 +23,10 @@ export class AuthService {
           if (storedUser) {
               this.currentUserSubject.next(JSON.parse(storedUser));
 
+              /* Problème de suppresion de token avec l'appel de log out dans le constructeur
               if (!this.isTokenValid()) {
                   this.logout();
-              }
+             } */
           }
       }
   }
