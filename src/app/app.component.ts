@@ -5,14 +5,13 @@ import { AuthComponent } from './features/auth/pages/auth/auth.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, AuthComponent],  
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   template: `
-    <app-auth></app-auth>  
+    <app-auth></app-auth>
   `
 })
 export class AppComponent {
   title = 'WAVECARE_FRONT';
 }
-                                                   
