@@ -10,8 +10,8 @@ import { isPlatformBrowser } from '@angular/common';
     providedIn: 'root'
 })
 export class AuthService {
-    private readonly API_URL = 'http://localhost:8081/api';
-    private readonly AUTH_URL = 'http://localhost:8081/api/login';
+    private readonly API_URL = 'http://localhost:8080/api';
+    private readonly AUTH_URL = 'http://localhost:8080/api/login';
     private currentUserSubject = new BehaviorSubject<LoginResponse | null>(null);
     private platformId = inject(PLATFORM_ID);
 
@@ -23,9 +23,10 @@ export class AuthService {
           if (storedUser) {
               this.currentUserSubject.next(JSON.parse(storedUser));
 
+              /* Problème de suppresion de token avec l'appel de log out dans le constructeur
               if (!this.isTokenValid()) {
                   this.logout();
-              }
+             } */
           }
       }
   }

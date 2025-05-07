@@ -1,0 +1,225 @@
+/* not-found.component.scss */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap');
+
+.not-found-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Montserrat', Arial, sans-serif;
+  
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 700px; 
+    padding: 0 15px; 
+  }
+  
+  .logo {
+    margin-bottom: 30px; 
+    
+    img {
+      width: 350px; 
+      height: auto;
+    }
+  }
+  
+  .error-code {
+    position: relative;
+    font-size: 300px; 
+    font-weight: 900; 
+    color: #005EA5; 
+    line-height: 0.8;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; // Reduced from 60px
+  }
+  
+  .digit {
+    position: relative;
+  }
+  
+  .dot {
+    width: 70px; // Reduced from 80px
+    height: 70px; // Reduced from 80px
+    border-radius: 50%;
+    background-color: #E6197A; // Rose exact de la charte
+    display: inline-block;
+    position: absolute;
+  }
+  
+  .dot-left {
+    left: -100px; // Reduced from -120px
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .dot-middle {
+    left: 50%;
+    transform: translateX(-120%); // Adjusted proportionally
+    top: -25px; // Adjusted proportionally
+  }
+  
+  .dot-right {
+    right: -100px; // Reduced from -120px
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .message {
+    margin-bottom: 20px; // Reduced from 35px
+    
+    p {
+      margin: 6px 0;
+      font-size: 18px; // Reduced from 20px
+      font-weight: 500; // Medium
+      color: #333;
+      line-height: 1.4;
+    }
+  }
+  
+  .action-button {
+    margin-top: 10px; // Reduced from 20px
+    
+    a {
+      display: inline-block;
+      padding: 14px 32px; // Reduced from 16px 38px
+      background-color: #005EA5; // Bleu exact de la charte
+      color: white;
+      text-decoration: none;
+      border-radius: 35px; // Reduced from 40px
+      font-weight: 600;
+      font-size: 16px; // Reduced from 18px
+      transition: background-color 0.3s;
+      cursor: pointer;
+      letter-spacing: 0.5px; // Ajouter un léger espacement des lettres
+      
+      &:hover {
+        background-color: darken(#005EA5, 10%);
+      }
+    }
+  }
+  
+  .support-links {
+    margin-top: 20px; // Reduced from 25px
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; // Reduced from 12px
+    
+    a {
+      color: #005EA5; // Bleu exact de la charte
+      text-decoration: none;
+      font-size: 14px; // Reduced from 16px
+      cursor: pointer;
+      font-weight: 500;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  
+  .corner-shape-top {
+    position: absolute;
+    top: 25px; // Reduced from 30px
+    right: 170px; // Reduced from 200px
+    width: 25px; // Reduced from 30px
+    height: 25px; // Reduced from 30px
+    border-radius: 50%;
+    background-color: #E6197A; // Rose exact de la charte
+    opacity: 0.3;
+  }
+  
+  .corner-shape-bottom {
+    position: absolute;
+    bottom: -100px; // Reduced from -200px
+    right: -170px; // Reduced from -200px
+    width: 340px; // Reduced from 400px
+    height: 340px; // Reduced from 400px
+    border-radius: 50%;
+    background-color: #E6197A; // Rose exact de la charte
+  }
+  
+  .corner-shape-left {
+    position: absolute;
+    bottom: 40px; // Reduced from 50px
+    left: -100px; // Reduced from -120px
+    width: 200px; // Reduced from 240px
+    height: 200px; // Reduced from 240px
+    border-radius: 50%;
+    background-color: #E6197A; // Rose exact de la charte
+  }
+}
+
+// Responsive styles
+@media (max-width: 1200px) {
+  .not-found-container {
+    .error-code {
+      font-size: 240px; // Reduced from 280px
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .not-found-container {
+    .error-code {
+      font-size: 170px; // Reduced from 200px
+    }
+    
+    .dot {
+      width: 50px; // Reduced from 60px
+      height: 50px; // Reduced from 60px
+    }
+    
+    .dot-left {
+      left: -70px; // Reduced from -80px
+    }
+    
+    .dot-right {
+      right: -70px; // Reduced from -80px
+    }
+    
+    .action-button a {
+      padding: 14px 32px; // Reduced from 16px 36px
+      font-size: 14px; // Reduced from 16px
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .not-found-container {
+    .error-code {
+      font-size: 120px; // Reduced from 140px
+    }
+    
+    .dot {
+      width: 35px; // Reduced from 40px
+      height: 35px; // Reduced from 40px
+    }
+    
+    .dot-left {
+      left: -50px; // Reduced from -60px
+    }
+    
+    .dot-right {
+      right: -50px; // Reduced from -60px
+    }
+    
+    .message p {
+      font-size: 14px; // Reduced from 16px
+    }
+    
+    .action-button a {
+      padding: 12px 26px; // Reduced from 14px 30px
+      font-size: 13px; // Reduced from 15px
+    }
+  }
+}
