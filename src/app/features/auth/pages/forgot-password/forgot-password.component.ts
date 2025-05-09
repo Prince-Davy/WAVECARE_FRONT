@@ -13,15 +13,8 @@ import {RouterLink} from '@angular/router';
   selector: 'app-forgot-password',
   imports: [
     ReactiveFormsModule,
-    MatButton,
     MatCard,
-    MatFormField,
-    MatIcon,
-    MatIconButton,
     MatInput,
-    MatLabel,
-    MatSuffix,
-    RouterLink,
     // ,ToastrModule
   ],
   templateUrl: './forgot-password.component.html',
