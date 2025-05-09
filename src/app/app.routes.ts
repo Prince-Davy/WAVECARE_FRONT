@@ -7,8 +7,6 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { ForgotPasswordComponent } from './features/auth/pages/forgot-password/forgot-password.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
 import {AssistanceComponent} from './features/auth/pages/assitance/assistance.component';
-import {ForgotPasswordComponent} from './features/auth/pages/forgot-password/forgot-password.component';
-import {AssistanceComponent} from './features/auth/pages/assitance/assistance.component';
 
 export const routes: Routes = [
   {
@@ -32,10 +30,8 @@ export const routes: Routes = [
   },
   {
     path: 'assistance',
-    component: AssistanceComponent ,
-    canActivate: [AuthGuard]
+    component: AssistanceComponent
   },
-  // Protected routes
   {
     path: 'super-admin',
     component: AppComponent,
