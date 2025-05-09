@@ -75,4 +75,8 @@ export class AuthComponent {
       });
     }
   }
+
+  goToHelp() {
+    this.router.navigate(['/assistance']);
+  }
 }
