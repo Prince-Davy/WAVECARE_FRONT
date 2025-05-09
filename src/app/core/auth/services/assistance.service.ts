@@ -9,7 +9,7 @@ import {SupportRequestDto} from '../models/support-request.dto';
   providedIn: 'root'
 })
 export class AssistanceService {
-  private apiUrl = 'http://localhost:8081/api/support/submit/';
+  private apiUrl = 'http://localhost:8080/api/support/submit';
 
   constructor(private http: HttpClient) {}
 
