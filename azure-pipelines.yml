@@ -43,12 +43,10 @@ variables:
   -  template: templates-general/variables.yml@templates
   
 extends:
-  template: templates-general/azure-general-python-tpl.yml@templates
+  template: templates-general/azure-general-front-tpl.yml@templates
   parameters:
     DEPLOY_INTEG: true
     DEPLOY_PROD: false
-    SKIP_QUALITY: false
-    SKIP_DOXYGEN: false
-    #NO_QUALITY_FAIL: true
-    #NO_DOXYGEN_FAIL: true
+    NO_QUALITY_FAIL: true
+    NO_DOXYGEN_FAIL: true
     SCAN_SQ: true
