@@ -22,10 +22,11 @@ ENV PATH="/root/.local/bin:$PATH"
 
 # Copy run script
 COPY ./run.sh /run.sh
+COPY ./run.sh /tmp/run.sh
 RUN chmod +x /run.sh
-RUN ls -al /
-RUN poetry --version
+RUN chmod +x /tmp/run.sh
+RUN ls -al /tmp
 
 WORKDIR /var/workspace/code
 
-ENTRYPOINT ["/run.sh"]
+ENTRYPOINT ["/tmp/run.sh"]
