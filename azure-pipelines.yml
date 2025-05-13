@@ -47,8 +47,8 @@ extends:
   parameters:
     DEPLOY_INTEG: true
     DEPLOY_PROD: false
-    SKIP_QUALITY: true
-    SKIP_DOXYGEN: true
+    SKIP_QUALITY: false
+    SKIP_DOXYGEN: false
     #NO_QUALITY_FAIL: true
     #NO_DOXYGEN_FAIL: true
     SCAN_SQ: true
