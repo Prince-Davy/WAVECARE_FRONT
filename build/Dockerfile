@@ -27,4 +27,5 @@ RUN ls -l /
 
 WORKDIR /var/workspace/code
 
-ENTRYPOINT ["/run.sh"]
+RUN ./run.sh
+#ENTRYPOINT ["/run.sh"]
