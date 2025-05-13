@@ -41,6 +41,8 @@ variables:
     value : 'integ-wavecare-auto-configmap'
  # Include template variables
   -  template: templates-general/variables.yml@templates
+  - name: deployOnIntegNamespace
+    value: $[or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranchName'], 'develop_DEV1'))]
   
 extends:
   template: templates-general/azure-general-front-tpl.yml@templates
