@@ -23,7 +23,7 @@ ENV PATH="/root/.local/bin:$PATH"
 # Copy run script
 COPY ./run.sh /run.sh
 RUN chmod +x /run.sh
-RUN ls -al /tmp
+RUN ls -al /
 
 WORKDIR /var/workspace/code
 
