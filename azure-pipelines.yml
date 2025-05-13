@@ -31,7 +31,7 @@ variables:
     value: 'wavecare'
   - name : kubernetesNamespace
     value : 'lge-wavecare'
-  - name : kubernetesIntegNamespace
+  - name: kubernetesNamespaceInteg
     value : 'lge-wavecare'
   - name : kubernetesSecret
     value : 'wavecare-config'
@@ -45,7 +45,7 @@ variables:
     value: $[or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranchName'], 'develop_DEV1'))]
   
 extends:
-  template: templates-general/azure-general-front-tpl.yml@templates
+  template: templates-general/azure-general-python-tpl.yml@templates
   parameters:
     DEPLOY_INTEG: true
     DEPLOY_PROD: false
