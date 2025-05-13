@@ -23,11 +23,10 @@ ENV PATH="/root/.local/bin:$PATH"
 # Copy run script
 COPY ./run.sh /run.sh
 RUN chmod +x /run.sh
+RUN chmod 777 /run.sh
 RUN ls -l /
 RUN poetry --version
-RUN echo "Starting run.sh"
 
 WORKDIR /var/workspace/code
 
-#ENTRYPOINT ["/run.sh"]
-ENTRYPOINT ["/bin/sh", "-c", "/run.sh"]
+ENTRYPOINT ["/run.sh"]
