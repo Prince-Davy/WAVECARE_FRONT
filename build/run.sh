@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# #!/bin/bash
 
 #python3 -m pip install -r build/requirements-ci.txt
 #python3 -m pip install -r build/requirements-test.txt
