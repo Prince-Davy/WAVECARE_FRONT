@@ -24,7 +24,7 @@ ENV PATH="/root/.local/bin:$PATH"
 COPY ./run.sh /run.sh
 RUN chmod +x /run.sh
 RUN chmod 777 /run.sh
-RUN ls -l /
+RUN ls /run.sh
 RUN poetry --version
 
 WORKDIR /var/workspace/code
