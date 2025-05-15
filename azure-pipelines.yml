@@ -20,15 +20,15 @@ variables:
   - name: project_group
     value: 'wavecare'
   - name: project_name
-    value: 'wavecare'
+    value: 'wavecare-front'
   - name: imageRepository
-    value: lge-wavecare/wavecare
+    value: lge-wavecare/wavecare-front
   - name: dockerfilePath
     value: $(Build.SourcesDirectory)/Dockerfile
   - name: deploymentName
-    value: 'wavecare'
+    value: 'wavecare-front'
   - name: deploymentIntegName
-    value: 'wavecare'
+    value: 'wavecare-front'
   - name : kubernetesNamespace
     value : 'lge-wavecare'
   - name: kubernetesNamespaceInteg
