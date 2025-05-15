@@ -12,6 +12,7 @@ spec:
       labels:
         app: wavecare-front
     spec:
+      serviceAccountName: lge-wavecare-sa
       containers:
       - name: postgres
         image: postgres
