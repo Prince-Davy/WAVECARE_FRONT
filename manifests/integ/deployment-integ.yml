@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wavecare-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wavecare-front
+  template:
+    metadata:
+      labels:
+        app: wavecare-front
+    spec:
+      containers:
+      - name: postgres
+        image: postgres
+        env:
+        - name: POSTGRES_DB
+          value: keycloak
+        - name: POSTGRES_USER
+          value: keycloak
+        - name: POSTGRES_PASSWORD
+          value: password
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-data
+      - name: keycloak
+        image: quay.io/keycloak/keycloak:legacy
+        env:
+        - name: DB_VENDOR
+          value: POSTGRES
+        - name: DB_ADDR
+          value: localhost
+        - name: DB_DATABASE
+          value: keycloak
+        - name: DB_USER
+          value: keycloak
+        - name: DB_PASSWORD
+          value: password
+        - name: KEYCLOAK_USER
+          value: admin
+        - name: KEYCLOAK_PASSWORD
+          value: admin
+        ports:
+        - containerPort: 8080
+      volumes:
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: postgres-pvc
+      initContainers:
+      - name: wait-for-postgres
+        image: busybox
+        command: ['sh', '-c', 'until nc -z localhost 5432; do echo waiting for postgres; sleep 2; done;']
