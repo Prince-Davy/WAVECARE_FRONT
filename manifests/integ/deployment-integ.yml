@@ -1,7 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app: wavecare-front
   name: wavecare-front
+  namespace: lge-wavecare
 spec:
   replicas: 1
   selector:
@@ -14,42 +17,52 @@ spec:
     spec:
       serviceAccountName: lge-wavecare-sa
       containers:
-      - name: postgres
-        image: postgres
-        env:
-        - name: POSTGRES_DB
-          value: keycloak
-        - name: POSTGRES_USER
-          value: keycloak
-        - name: POSTGRES_PASSWORD
-          value: password
-        volumeMounts:
-        - mountPath: /var/lib/postgresql/data
-          name: postgres-data
-      - name: keycloak
-        image: quay.io/keycloak/keycloak:legacy
-        env:
-        - name: DB_VENDOR
-          value: POSTGRES
-        - name: DB_ADDR
-          value: localhost
-        - name: DB_DATABASE
-          value: keycloak
-        - name: DB_USER
-          value: keycloak
-        - name: DB_PASSWORD
-          value: password
-        - name: KEYCLOAK_USER
-          value: admin
-        - name: KEYCLOAK_PASSWORD
-          value: admin
-        ports:
-        - containerPort: 8080
+        - name: wavecare-front
+          image: sogetilabsfrance.azurecr.io/lge-wavecare/wavecare-front:latest-integ
+          env:
+            - name: POSTGRES_DB
+              value: keycloak
+            - name: POSTGRES_USER
+              value: keycloak
+            - name: POSTGRES_PASSWORD
+              value: password
+            - name: DB_VENDOR
+              value: POSTGRES
+            - name: DB_ADDR
+              value: localhost
+            - name: DB_DATABASE
+              value: keycloak
+            - name: DB_USER
+              value: keycloak
+            - name: DB_PASSWORD
+              value: password
+            - name: KEYCLOAK_USER
+              value: admin
+            - name: KEYCLOAK_PASSWORD
+              value: admin
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-data
+            - mountPath: /mnt/secrets-store
+              name: secrets-store-inline
+              readOnly: true
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: 200m
+              memory: 600Mi
+            requests:
+              cpu: 200m
+              memory: 600Mi
       volumes:
-      - name: postgres-data
-        persistentVolumeClaim:
-          claimName: postgres-pvc
+        - name: secrets-store-inline
+          csi:
+            driver: "secrets-store.csi.k8s.io"
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "secret-provider-wavecare-integ"
       initContainers:
-      - name: wait-for-postgres
-        image: busybox
-        command: ['sh', '-c', 'until nc -z localhost 5432; do echo waiting for postgres; sleep 2; done;']
+        - name: wait-for-postgres
+          image: busybox
+          command: ['sh', '-c', 'until nc -z localhost 5432; do echo waiting for postgres; sleep 2; done;']
