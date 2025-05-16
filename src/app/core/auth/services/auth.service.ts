@@ -1,5 +1,5 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, tap, timeout } from 'rxjs/operators';
 import { LoginResponse, LoginCredentials } from '../models/auth.types';
@@ -150,9 +150,24 @@ export class AuthService {
         this.currentUserSubject.next(null);
     }
 
-  forgotPassword(email: string): Observable<any> {
-      return this.http.post(this.API_URL+'/forgot-password', {email})
-  }
+    forgotPassword(email: string): Observable<any> {
+        const body = new HttpParams().set('email', email);
+
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/x-www-form-urlencoded'
+            })
+        };
+
+        return this.http.post(`${this.API_URL}/password-reset/request`, body.toString(), {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }),
+            responseType: 'text' // 👈 important
+        });
+
+
+    }
     checkSuperAdminAccess(): Observable<string> {
         return this.http.get<string>(`${this.API_URL}/super-admin`);
     }
