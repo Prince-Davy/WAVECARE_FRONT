@@ -163,7 +163,7 @@ export class AuthService {
             headers: new HttpHeaders({
                 'Content-Type': 'application/x-www-form-urlencoded'
             }),
-            responseType: 'text' // 👈 important
+            responseType: 'text'
         });
 
 
