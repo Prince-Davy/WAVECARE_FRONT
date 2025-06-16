@@ -7,6 +7,7 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { ForgotPasswordComponent } from './features/auth/pages/***REMOVED***/***REMOVED***.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
 import {AssistanceComponent} from './features/auth/pages/assitance/assistance.component';
+import { ResetPasswordComponent } from './features/auth/pages/***REMOVED***/***REMOVED***.component';
 
 export const routes: Routes = [
   {
@@ -37,6 +38,10 @@ export const routes: Routes = [
     component: AppComponent,
     canActivate: [AuthGuard, () => roleGuard(['SUPER_ADMIN'])],
     children: []
+  },
+    {
+  path: '***REMOVED***',
+  component: ResetPasswordComponent
   },
   {
     path: '404',

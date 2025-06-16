@@ -30,6 +30,7 @@ export class AuthService {
           }
       }
   }
+  
 
     setStoredUser(tokenResponse: any) {
         localStorage.setItem('access_token', tokenResponse.access_token);
@@ -151,23 +152,42 @@ export class AuthService {
     }
 
     forgotPassword(email: string): Observable<any> {
-        const body = new HttpParams().set('email', email);
+    const body = new HttpParams().set('email', email);
 
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/x-www-form-urlencoded'
-            })
-        };
+    return this.http.post(`${this.API_URL}/password-reset/request`, body.toString(), {
+        headers: new HttpHeaders({
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }),
+        responseType: 'text'
+    }).pipe(
+        catchError(error => {
+            console.error('Erreur lors de la demande de réinitialisation:', error);
+            return throwError(() => error);
+        })
+    );
+}
 
-        return this.http.post(`${this.API_URL}/password-reset/request`, body.toString(), {
+    // Ajoutez aussi cette méthode pour la réinitialisation complète du mot de passe
+    resetPassword(token: string, newPassword: string): Observable<any> {
+        const body = new HttpParams()
+            .set('token', token)
+            .set('newPassword', newPassword);
+
+        return this.http.post(`${this.API_URL}/password-reset/confirm`, body.toString(), {
             headers: new HttpHeaders({
                 'Content-Type': 'application/x-www-form-urlencoded'
             }),
             responseType: 'text'
-        });
-
-
+        }).pipe(
+            catchError(error => {
+                console.error('Erreur lors de la réinitialisation du mot de passe:', error);
+                return throwError(() => error);
+            })
+        );
     }
+
+
+
     checkSuperAdminAccess(): Observable<string> {
         return this.http.get<string>(`${this.API_URL}/super-admin`);
     }
