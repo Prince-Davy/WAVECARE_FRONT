@@ -1,0 +1,16 @@
+<mat-toolbar color="primary" class="navbar">
+    <div class="brand">
+      <img class="logo" alt="logo de l'application wavecare" src="assets/images/LogoWaveCare.png">
+      <span>WaveCare</span>
+    </div>
+    <span class="spacer"></span>
+    <nav>
+      <a mat-button routerLink="/dashboard">Suivi des tickets</a>
+      <a mat-button routerLink="/profils">Gestion des profils</a>
+    </nav>
+    <span class="spacer"></span>
+    <div class="user-info">
+      <span *ngIf="currentUser">Bonjour, {{ currentUser.username }}</span>
+      <button mat-button color="accent" class="logout-button" (click)="logout()">Déconnexion</button>
+    </div>
+  </mat-toolbar>
