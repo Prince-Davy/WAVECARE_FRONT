@@ -83,7 +83,7 @@ export class AuthComponent {
           // }
         },
         error: (error) => {
-          this.errorMessage = 'Login failed. Please check your credentials.';
+          this.errorMessage = 'E-mail et/ou mot de passe invalide.';
           console.error('Login error:', error);
         }
       });

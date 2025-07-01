@@ -24,8 +24,8 @@
         </button>
       </mat-form-field>
 
-      <div *ngIf="loginForm.invalid && submitted" class="global-error">
-         {{ errorMessage || 'E-mail et/ou mot de passe invalide' }}
+      <div *ngIf="(loginForm.invalid && submitted)||(errorMessage.length>0)" class="global-error">
+         {{'E-mail et/ou mot de passe invalide'}}
       </div>
 
       <!-- Bouton de soumission -->
