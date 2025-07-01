@@ -6,13 +6,23 @@ import { AuthService } from '../../core/auth/services/auth.service';
 import { LoginResponse } from '../../core/auth/models/auth.types';
 import { Router } from '@angular/router';
 
+import { NavbarComponent } from './../navbar/navbar.component';
+import { TicketTableComponent } from './../ticket-table/ticket-table.component';
+import { FooterComponent } from './../footer/footer.component';
+
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [
+    NavbarComponent,
+    TicketTableComponent,
+    FooterComponent
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
+
+
 export class DashboardComponent implements OnInit, OnDestroy {
 
   currentUser: LoginResponse | null = null;
