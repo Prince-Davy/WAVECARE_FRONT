@@ -1,7 +1,7 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { catchError, tap, timeout } from 'rxjs/operators';
+import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
 import { LoginResponse, LoginCredentials } from '../models/auth.types';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -167,24 +167,80 @@ export class AuthService {
     );
 }
 
-    // Ajoutez aussi cette méthode pour la réinitialisation complète du mot de passe
-    resetPassword(token: string, newPassword: string): Observable<any> {
-        const body = new HttpParams()
-            .set('token', token)
-            .set('newPassword', newPassword);
+getUserInfoFromToken(token: string): Observable<{ id: string, email: string }> {
+  console.log('🔄 Appel API getUserInfoFromToken avec token:', token);
+  console.log('🔄 URL complète:', `${this.API_URL}/password-reset/reset-password?token=${token}`);
+  
+  return this.http.get<{ id: string, email: string }>(
+    `${this.API_URL}/password-reset/reset-password?token=${token}`
+  ).pipe(
+    tap(response => console.log('✅ Réponse API getUserInfoFromToken:', response)),
+    catchError(error => {
+      console.error('❌ Erreur API getUserInfoFromToken:', error);
+      return throwError(() => error);
+    })
+  );
+}
 
-        return this.http.post(`${this.API_URL}/password-reset/confirm`, body.toString(), {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }),
-            responseType: 'text'
-        }).pipe(
-            catchError(error => {
-                console.error('Erreur lors de la réinitialisation du mot de passe:', error);
-                return throwError(() => error);
-            })
-        );
-    }
+updatePassword(userId: string, payload: { userName: string; newPassword: string }): Observable<any> {
+  console.log('🔄 Appel updatePassword avec userId:', userId);
+  console.log('🔄 Payload:', payload);
+  console.log('🔄 URL complète:', `${this.API_URL}/user/${userId}/password`);
+  
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  });
+
+  return this.http.put(`${this.API_URL}/user/${userId}/password`, payload, {
+    headers: headers
+  }).pipe(
+    tap(response => console.log('✅ Réponse updatePassword:', response)),
+    catchError(error => {
+      console.error('❌ Erreur updatePassword:', error);
+      console.error('❌ Status:', error.status);
+      console.error('❌ Error body:', error.error);
+      return throwError(() => error);
+    })
+  );
+}
+
+deleteToken(token: string): Observable<any> {
+  const params = new HttpParams().set('token', token);
+  return this.http.delete(`${this.API_URL}/password-reset/supprimer-token`, {
+    params: params,
+    responseType: 'text'
+  });
+}
+
+
+// Dans auth.service.ts - méthode corrigée
+resetPasswordWithToken(token: string, newPassword: string): Observable<any> {
+  console.log('🔄 Appel resetPasswordWithToken avec token:', token);
+  
+  // D'abord récupérer les infos utilisateur depuis le token
+  return this.getUserInfoFromToken(token).pipe(
+    switchMap(userInfo => {
+      // Ensuite utiliser l'endpoint existant avec userId et email
+      const payload = {
+        userName: userInfo.email,
+        newPassword: newPassword
+      };
+      
+      console.log('🔄 Payload envoyé:', payload);
+      console.log('🔄 URL complète:', `${this.API_URL}/user/${userInfo.id}/password`);
+      
+      return this.http.put(`${this.API_URL}/user/${userInfo.id}/password`, payload, {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+      });
+    }),
+    tap(response => console.log('✅ Réponse resetPasswordWithToken:', response)),
+    catchError(error => {
+      console.error('❌ Erreur resetPasswordWithToken:', error);
+      return throwError(() => error);
+    })
+  );
+}
 
 
 
