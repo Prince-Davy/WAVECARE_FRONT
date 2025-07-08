@@ -133,6 +133,7 @@ button[type="submit"] {
   cursor: pointer;
 }
 
+
 .modal-backdrop {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -168,4 +169,12 @@ button[type="submit"] {
   text-decoration: underline;
   cursor: pointer;
 }
+
+.global-error {
+  color: red;
+  font-weight: bold;
+  margin: 10px 0;
+  text-align: center;
+}
+
 

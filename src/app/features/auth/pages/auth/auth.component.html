@@ -8,20 +8,28 @@
     <p class="subtitle">Je me connecte avec mon Email :</p>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+
+      <!-- Champ Email -->
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input matInput formControlName="username" aria-label="Email" required>
+        <input matInput formControlName="username" required>
       </mat-form-field>
 
+      <!-- Champ Mot de passe -->
       <mat-form-field appearance="outline">
         <mat-label>Mot de passe</mat-label>
-        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" aria-label="Mot de passe" required>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
         <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">
+      <div *ngIf="(loginForm.invalid && submitted)||(errorMessage.length>0)" class="global-error">
+         {{'E-mail et/ou mot de passe invalide'}}
+      </div>
+
+      <!-- Bouton de soumission -->
+      <button mat-raised-button color="primary" type="submit">
         CONNEXION
       </button>
     </form>
@@ -31,6 +39,7 @@
       {{ errorMessage }}
     </div>
 
+
     <a routerLink="/forgot-password" class="forgot-password" href="#">MOT DE PASSE OUBLIÉ ?</a>
 
     <div class="divider">
@@ -39,7 +48,7 @@
       <span></span>
     </div>
 
-    <p class="signin-alt">S'identifier avec :</p>
+    <p class="signin-alt">S’identifier avec :</p>
     <button class="psc-button" aria-label="Connexion avec Pro Santé Connect">
       <img src="assets/images/pro-sante-connect.png" class="psc-logo" alt="Connexion via Pro Santé Connect">
     </button>

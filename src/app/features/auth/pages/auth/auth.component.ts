@@ -1,7 +1,7 @@
 // auth.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../../core/auth/services/auth.service';
 import {Router, RouterLink} from '@angular/router';
+import {strictEmailValidator} from '../../../../../shared/validators/strictEmailValidator';
 
 @Component({
   selector: 'app-auth',
@@ -34,6 +35,7 @@ export class AuthComponent {
   errorMessage: string = '';
   isLockoutModalOpen = false;
   lockoutMessage = '';
+  submitted= false;
 
   constructor(
     private fb: FormBuilder,
@@ -43,12 +45,24 @@ export class AuthComponent {
   ) {
 
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
+      username: ['', [Validators.required,strictEmailValidator]],
+      password: ['', [Validators.required, Validators.pattern(
+            '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#¤$@\\-_])[A-Za-z\\d#¤$@\\-_]{12,20}$'
+          )
+        ]
+      ]
     });
+  }
+  get username() {
+    return this.loginForm.get('username');
+  }
+
+  get password() {
+    return this.loginForm.get('password');
   }
 
   onSubmit() {
+    this.submitted=true;
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
