@@ -33,6 +33,8 @@ export class AuthComponent {
   loginForm: FormGroup;
   hidePassword = true;
   errorMessage: string = '';
+  isLockoutModalOpen = false;
+  lockoutMessage = '';
   submitted= false;
 
   constructor(
@@ -83,14 +85,27 @@ export class AuthComponent {
           // }
         },
         error: (error) => {
-          this.errorMessage = 'E-mail et/ou mot de passe invalide.';
-          console.error('Login error:', error);
+          if (error.status === 429) {
+            // Scenario 2: Lockout
+            this.lockoutMessage = error.error || "Suite à 5 tentatives de connexion infructueuses votre accès à l'application est bloqué.";
+            this.isLockoutModalOpen = true;
+          } else if (error.status === 401) {
+            this.errorMessage = 'Erreur de connexion. Veuillez vérifier vos identifiants.';
+          } else {
+            this.errorMessage = 'Une erreur inattendue est survenue. Veuillez réessayer plus tard.';
+          }
         }
       });
     }
   }
 
-  goToHelp() {
+  closeLockoutModal() {
+    this.isLockoutModalOpen = false;
+    this.router.navigate(['/login']);
+  }
+
+  goToAssistance() {
+    this.isLockoutModalOpen = false;
     this.router.navigate(['/assistance']);
   }
 }

@@ -34,6 +34,11 @@
       </button>
     </form>
 
+    <!-- Error message for scenario 1 -->
+    <div *ngIf="errorMessage" class="error-message" role="alert" style="color: #d32f2f; margin-top: 10px;">
+      {{ errorMessage }}
+    </div>
+
 
     <a routerLink="/forgot-password" class="forgot-password" href="#">MOT DE PASSE OUBLIÉ ?</a>
 
@@ -48,6 +53,19 @@
       <img src="assets/images/pro-sante-connect.png" class="psc-logo" alt="Connexion via Pro Santé Connect">
     </button>
 
-    <p class="footer" (click)="goToHelp()" (keydown.enter)="goToHelp()">UN PROBLÈME ? JE M’ADRESSE À UN ADMINISTRATEUR</p>
+    <p class="footer" (click)="goToAssistance()" (keydown.enter)="goToAssistance()">UN PROBLÈME ? JE M'ADRESSE À UN ADMINISTRATEUR</p>
   </mat-card>
+
+  <!-- Lockout Modal (Scenario 2) -->
+  <div *ngIf="isLockoutModalOpen" class="modal-backdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="lockoutTitle">
+      <button class="close-btn" (click)="closeLockoutModal()" aria-label="Fermer">Fermer&nbsp;×</button>
+      <h2 id="lockoutTitle">Accès bloqué</h2>
+      <p>{{ lockoutMessage }}
+        <a href="#" (click)="goToAssistance(); $event.preventDefault();" class="modal-link">
+          Veuillez contacter votre administrateur
+        </a>
+      </p>
+    </div>
+  </div>
 </div>
