@@ -6,13 +6,23 @@ import { AuthService } from '../../core/auth/services/auth.service';
 import { LoginResponse } from '../../core/auth/models/auth.types';
 import { Router } from '@angular/router';
 
+import { NavbarComponent } from './../navbar/navbar.component';
+import { TicketTableComponent } from '../ticket-table/ticket-table-component/ticket-table.component';
+import { FooterComponent } from './../footer/footer.component';
+
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [
+    NavbarComponent,
+    TicketTableComponent,
+    FooterComponent
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
+
+
 export class DashboardComponent implements OnInit, OnDestroy {
 
   currentUser: LoginResponse | null = null;
@@ -36,7 +46,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-   
+
     this.subscription.unsubscribe();
   }
 
@@ -47,7 +57,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.router.navigate(['/***REMOVED***']);
     }
 
-  
+
   getDecodedToken(): any {
     if (this.currentUser?.access_token) {
       return JSON.parse(atob(this.currentUser.access_token.split('.')[1]));
@@ -55,7 +65,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  
+
   getTokenExpiration(): string {
     const decodedToken = this.getDecodedToken();
     if (decodedToken?.exp) {

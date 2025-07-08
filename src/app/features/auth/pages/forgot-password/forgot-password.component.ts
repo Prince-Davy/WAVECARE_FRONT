@@ -48,7 +48,6 @@ export class ForgotPasswordComponent {
         error: (error: HttpErrorResponse) => {
           console.error('Erreur:', error);
           
-          // Si l'erreur est en fait un statut 200 OK, c'est un succès
           if (error.status === 200) {
             console.log('Statut 200 reçu comme erreur, traitant comme succès');
             this.resetRequestSuccess = true;
