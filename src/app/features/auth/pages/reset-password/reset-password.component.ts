@@ -84,18 +84,25 @@ export class ResetPasswordComponent implements OnInit {
     const payload = { userName: this.email, newPassword };
 
     this.authService.updatePassword(this.userId, payload).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log('✅ Mot de passe mis à jour avec succès:', response);
         this.isLoading = false;
         this.isError = false;
         this.message = 'Mot de passe réinitialisé avec succès. Redirection...';
 
         if (this.token) {
-          this.authService.deleteToken(this.token).subscribe();
+          this.authService.deleteToken(this.token).subscribe({
+            next: () => console.log('✅ Token supprimé avec succès'),
+            error: (error) => console.error('❌ Erreur lors de la suppression du token:', error)
+          });
         }
 
-        setTimeout(() => this.router.navigate(['/login']), 2000);
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
       },
       error: (error) => {
+        console.error('❌ Erreur lors de la mise à jour du mot de passe:', error);
         this.isLoading = false;
         this.isError = true;
         this.message = this.getErrorMessage(error);

@@ -189,11 +189,12 @@ updatePassword(userId: string, payload: { userName: string; newPassword: string 
   
   const headers = new HttpHeaders({
     'Content-Type': 'application/json',
-    'Accept': 'application/json'
+    'Accept': 'text/plain' 
   });
 
   return this.http.put(`${this.API_URL}/user/${userId}/password`, payload, {
-    headers: headers
+    headers: headers,
+    responseType: 'text' 
   }).pipe(
     tap(response => console.log('✅ Réponse updatePassword:', response)),
     catchError(error => {
@@ -214,14 +215,11 @@ deleteToken(token: string): Observable<any> {
 }
 
 
-// Dans auth.service.ts - méthode corrigée
 resetPasswordWithToken(token: string, newPassword: string): Observable<any> {
   console.log('🔄 Appel resetPasswordWithToken avec token:', token);
   
-  // D'abord récupérer les infos utilisateur depuis le token
   return this.getUserInfoFromToken(token).pipe(
     switchMap(userInfo => {
-      // Ensuite utiliser l'endpoint existant avec userId et email
       const payload = {
         userName: userInfo.email,
         newPassword: newPassword
