@@ -1,16 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../core/auth/services/auth.service';
+import { MatIcon } from "@angular/material/icon";
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule
+  ],
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss']
 })
+
 export class ResetPasswordComponent implements OnInit {
   resetForm: FormGroup;
   token: string | null = null;
@@ -19,6 +32,8 @@ export class ResetPasswordComponent implements OnInit {
   isLoading = false;
   message = '';
   isError = false;
+  showNewPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -27,7 +42,12 @@ export class ResetPasswordComponent implements OnInit {
     private router: Router
   ) {
     this.resetForm = this.fb.group({
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      newPassword: ['', [
+        Validators.required,
+        Validators.minLength(12),
+        Validators.maxLength(20),
+        this.passwordPatternValidator()
+      ]],
       confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
   }
@@ -67,6 +87,23 @@ export class ResetPasswordComponent implements OnInit {
     return password === confirmPassword ? null : { passwordMismatch: true };
   }
 
+  passwordPatternValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (!value) return null;
+      const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\-€\._])[A-Za-z\d!@#\$%\^&\*\-€\._]{12,20}$/;
+      return pattern.test(value) ? null : { invalidPasswordPattern: true };
+    };
+  }
+
+  toggleNewPasswordVisibility() {
+    this.showNewPassword = !this.showNewPassword;
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
   onSubmitNewPassword() {
     if (this.resetForm.invalid) {
       this.markFormGroupTouched();
@@ -84,18 +121,25 @@ export class ResetPasswordComponent implements OnInit {
     const payload = { userName: this.email, newPassword };
 
     this.authService.updatePassword(this.userId, payload).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log('✅ Mot de passe mis à jour avec succès:', response);
         this.isLoading = false;
         this.isError = false;
         this.message = 'Mot de passe réinitialisé avec succès. Redirection...';
 
         if (this.token) {
-          this.authService.deleteToken(this.token).subscribe();
+          this.authService.deleteToken(this.token).subscribe({
+            next: () => console.log('✅ Token supprimé avec succès'),
+            error: (error) => console.error('❌ Erreur lors de la suppression du token:', error)
+          });
         }
 
-        setTimeout(() => this.router.navigate(['/login']), 2000);
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
       },
       error: (error) => {
+        console.error('❌ Erreur lors de la mise à jour du mot de passe:', error);
         this.isLoading = false;
         this.isError = true;
         this.message = this.getErrorMessage(error);
