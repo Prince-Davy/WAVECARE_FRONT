@@ -52,6 +52,11 @@ mat-label {
   color: #005EA5 !important;
 }
 
+label {
+  display: flex;
+  padding-bottom: 10px;
+}
+
 input {
   color: black !important;
 }

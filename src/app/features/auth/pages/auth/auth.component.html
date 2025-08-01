@@ -10,22 +10,24 @@
     <form [formGroup]="***REMOVED***Form" (ngSubmit)="onSubmit()" class="***REMOVED***-form">
 
       <!-- Champ Email -->
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="username" required>
+      <label for="***REMOVED***-username">Email :</label>
+      <mat-form-field>
+        <input id="***REMOVED***-username" matInput formControlName="username" required>
       </mat-form-field>
 
       <!-- Champ ***REMOVED*** -->
-      <mat-form-field appearance="outline">
-        <mat-label>***REMOVED***</mat-label>
-        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
-        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+      <label for="***REMOVED***-password">***REMOVED*** :</label>
+      <mat-form-field>
+        <input id="***REMOVED***-password" matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password"
+          required>
+        <button title="Afficher ou masquer mon mot de passe" mat-icon-button matSuffix
+          (click)="hidePassword = !hidePassword" type="button">
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
       </mat-form-field>
 
       <div *ngIf="(***REMOVED***Form.invalid && submitted)||(errorMessage.length>0)" class="global-error">
-         {{'E-mail et/ou mot de passe invalide'}}
+        {{'E-mail et/ou mot de passe invalide'}}
       </div>
 
       <!-- Bouton de soumission -->
@@ -53,7 +55,8 @@
       <img src="assets/images/pro-sante-connect.png" class="psc-logo" alt="Connexion via Pro Santé Connect">
     </button>
 
-    <p class="footer" (click)="goToAssistance()" (keydown.enter)="goToAssistance()">UN PROBLÈME ? JE M'ADRESSE À UN ADMINISTRATEUR</p>
+    <p class="footer" (click)="goToAssistance()" (keydown.enter)="goToAssistance()">UN PROBLÈME ? JE M'ADRESSE À UN
+      ADMINISTRATEUR</p>
   </mat-card>
 
   <!-- Lockout Modal (Scenario 2) -->
