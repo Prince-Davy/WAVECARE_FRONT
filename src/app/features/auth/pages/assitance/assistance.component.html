@@ -2,19 +2,21 @@
   <img class="logo" alt="logo de l'application wavecare" src="assets/images/LogoWaveCare_SansTexte.png">
   <mat-card class="assistance-card">
     <h2 class="title">Aide & Support</h2>
+    @if (submissionSuccess !== null) {
     <div class="message">
-      <div *ngIf="submissionSuccess === true" class="success-message">
-        ✅ Demande envoyée avec succès
-      </div>
-      <div *ngIf="submissionSuccess === false" class="error-message">
-        ❌ Echec de l'envoi de la demande
-      </div>
+      @if (submissionSuccess) {
+      <div class="success-message">✅ Demande envoyée avec succès</div>
+      }
+      @else {
+      <div class="error-message">❌ Echec de l'envoi de la demande</div>
+      }
     </div>
+    }
     <p class="subtitle">Veuillez remplir le formulaire et expliquer votre demande</p>
     <p class="mandatory-fields">*Tous les champs sont obligatoires</p>
     <form [formGroup]="assistanceForm" (ngSubmit)="onSubmit()" class="assistance-form">
       <div class="form-group">
-        <label class="form-label" for="nom">Nom</label>
+        <label class="form-label" for="nom">Nom :</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <input matInput id="nom" formControlName="nom" placeholder="Dupont" aria-label="Nom" required>
           <div *ngIf="assistanceForm.get('nom')?.invalid && assistanceForm.get('nom')?.touched" class="error-message">
@@ -23,7 +25,7 @@
         </mat-form-field>
       </div>
       <div class="form-group">
-        <label class="form-label" for="prenom">Prénom</label>
+        <label class="form-label" for="prenom">Prénom :</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <input matInput id="prenom" formControlName="prenom" placeholder="Lynda" aria-label="Prénom" required>
           <div *ngIf="assistanceForm.get('prenom')?.invalid && assistanceForm.get('prenom')?.touched" class="error-message">
@@ -32,7 +34,7 @@
         </mat-form-field>
       </div>
       <div class="form-group">
-        <label class="form-label" for="email">Email</label>
+        <label class="form-label" for="email">Email :</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <input matInput id="email" formControlName="email" placeholder="toto@domaine.com" aria-label="Email" required>
           <div *ngIf="assistanceForm.get('email')?.invalid && assistanceForm.get('email')?.touched" class="error-message">
@@ -53,7 +55,7 @@
         </mat-form-field>
       </div>
       <div class="form-group">
-        <label class="form-label" for="description">Décrire votre demande (500 caractères max):</label>
+        <label class="form-label" for="description">Décrire votre demande (500 caractères max) :</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <textarea matInput id="description" formControlName="description" aria-label="Description" required></textarea>
           <div *ngIf="assistanceForm.get('description')?.invalid && assistanceForm.get('description')?.touched" class="error-message">
@@ -61,9 +63,11 @@
           </div>
         </mat-form-field>
       </div>
-      <button class="submit-ticket" mat-raised-button color="primary" type="submit" [disabled]="assistanceForm.invalid">
-        ENVOYER MA DEMANDE
-      </button>
+      <div class="submit-ticket-wrapper">
+        <button class="submit-ticket" mat-raised-button color="primary" type="submit" [disabled]="assistanceForm.invalid">
+          ENVOYER MA DEMANDE
+        </button>
+      </div>
     </form>
   </mat-card>
 </div>
