@@ -81,15 +81,23 @@ input::placeholder, textarea::placeholder {
 .submit-ticket {
   font-weight: bold;
   margin-top: 8px;
+  width: 100%;
 
   &:disabled {
-    color: #DDDDDD;
-    background-color: #4c5b6a;
+    background-color: #E0E0E0;
+    color: #858585;
+    box-shadow: none;
   }
+
+}
+
+.submit-ticket-wrapper:has(.submit-ticket:disabled) {
+  cursor: not-allowed;
 }
 
 .message {
   height: 40px;
+  padding-bottom: 20px;
 }
 
 .success-message, .error-message {
