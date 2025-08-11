@@ -58,24 +58,8 @@
   text-align: left;
 }
 
-mat-form-field {
-  width: 100%;
-  background-color: white;
-  border-radius: 4px;
-  margin-bottom: 10px;
-}
-
 mat-label {
   color: #005EA5 !important;
-}
-
-input, textarea {
-  color: black !important;
-}
-
-input::placeholder, textarea::placeholder {
-  color: white;
-  opacity: 1;
 }
 
 .submit-ticket {
