@@ -1,14 +1,14 @@
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Subscription } from 'rxjs';
-import { AuthService } from '../../core/auth/services/auth.service';
-import { LoginResponse } from '../../core/auth/models/auth.types';
 import { Router } from '@angular/router';
+import { LoginResponse } from '@app/core/auth/models/auth.types';
+import { AuthService } from '@app/core/auth/services/auth.service';
+import { Subscription } from 'rxjs';
 
-import { NavbarComponent } from './../navbar/navbar.component';
-import { TicketTableComponent } from '../ticket-table/ticket-table-component/ticket-table.component';
-import { FooterComponent } from './../footer/footer.component';
+import { FooterComponent } from '@app/features/footer/footer.component';
+import { NavbarComponent } from '@app/features/navbar/navbar.component';
+import { TicketTableComponent } from '@app/features/ticket-table/ticket-table-component/ticket-table.component';
 
 
 @Component({
@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.subscription.add(
@@ -55,7 +55,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.currentUser = null;
     this.userRole = undefined;
     this.router.navigate(['/login']);
-    }
+  }
 
 
   getDecodedToken(): any {

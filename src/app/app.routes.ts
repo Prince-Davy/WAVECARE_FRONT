@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './core/auth/guards/auth.guard';
-import { roleGuard } from './core/auth/guards/role.guard';
-import { AppComponent } from './app.component';
-import { AuthComponent } from './features/auth/pages/auth/auth.component';
-import { DashboardComponent } from './features/dashboard/dashboard.component';
-import { ForgotPasswordComponent } from './features/auth/pages/forgot-password/forgot-password.component';
-import { NotFoundComponent } from './features/not-found/not-found.component';
-import {AssistanceComponent} from './features/auth/pages/assitance/assistance.component';
-import { ResetPasswordComponent } from './features/auth/pages/reset-password/reset-password.component';
+import { AppComponent } from '@app/app.component';
+import { AuthGuard } from '@app/core/auth/guards/auth.guard';
+import { roleGuard } from '@app/core/auth/guards/role.guard';
+import { AssistanceComponent } from '@app/features/auth/pages/assistance/assistance.component';
+import { AuthComponent } from '@app/features/auth/pages/auth/auth.component';
+import { ForgotPasswordComponent } from '@app/features/auth/pages/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from '@app/features/auth/pages/reset-password/reset-password.component';
+import { DashboardComponent } from '@app/features/dashboard/dashboard.component';
+import { NotFoundComponent } from '@app/features/not-found/not-found.component';
 
 export const routes: Routes = [
   {
@@ -39,9 +39,9 @@ export const routes: Routes = [
     canActivate: [AuthGuard, () => roleGuard(['SUPER_ADMIN'])],
     children: []
   },
-    {
-  path: 'reset-password',
-  component: ResetPasswordComponent
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent
   },
   {
     path: '404',
