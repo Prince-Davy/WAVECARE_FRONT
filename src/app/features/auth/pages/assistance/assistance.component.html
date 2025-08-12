@@ -18,7 +18,7 @@
       <div class="form-group">
         <label class="form-label" for="nom">Nom :</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <input matInput id="nom" formControlName="nom" placeholder="Dupont" aria-label="Nom" required>
+          <input matInput id="nom" formControlName="lastName" placeholder="Dupont" aria-label="Nom" required>
           <div *ngIf="assistanceForm.get('nom')?.invalid && assistanceForm.get('nom')?.touched" class="error-message">
             Nom invalide.
           </div>
@@ -27,7 +27,7 @@
       <div class="form-group">
         <label class="form-label" for="prenom">Prénom :</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <input matInput id="prenom" formControlName="prenom" placeholder="Lynda" aria-label="Prénom" required>
+          <input matInput id="prenom" formControlName="firstName" placeholder="Lynda" aria-label="Prénom" required>
           <div *ngIf="assistanceForm.get('prenom')?.invalid && assistanceForm.get('prenom')?.touched" class="error-message">
             Prénom invalide.
           </div>
@@ -36,7 +36,7 @@
       <div class="form-group">
         <label class="form-label" for="email">Email :</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <input matInput id="email" formControlName="email" placeholder="toto@domaine.com" aria-label="Email" required>
+          <input matInput id="email" formControlName="mail" placeholder="toto@domaine.com" aria-label="Email" required>
           <div *ngIf="assistanceForm.get('email')?.invalid && assistanceForm.get('email')?.touched" class="error-message">
             Email invalide.
           </div>
@@ -45,19 +45,17 @@
       <div class="form-group">
         <label class="form-label" for="objet">Quel est l'objet de votre demande ?</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-select id="objet" formControlName="objet" aria-label="Objet" required>
-            <mat-option value="Identifiant">Identifiant</mat-option>
-            <mat-option value="Mot de passe">Mot de passe</mat-option>
-            <mat-option value="Pro Santé Connect">Pro Santé Connect</mat-option>
-            <mat-option value="Problème d'accès">Problème d'accès</mat-option>
-            <mat-option value="Autres">Autres</mat-option>
+          <mat-select id="objet" formControlName="subject" aria-label="Objet" required>
+            @for(category of ticketCategories; track category) {
+            <mat-option [value]="category">{{'feature.assistance.create-ticket.category.' + category | translate}}</mat-option>
+            }
           </mat-select>
         </mat-form-field>
       </div>
       <div class="form-group">
         <label class="form-label" for="description">Décrire votre demande (500 caractères max) :</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <textarea matInput id="description" formControlName="description" aria-label="Description" required></textarea>
+          <textarea matInput id="description" formControlName="content" aria-label="Description" required></textarea>
           <div *ngIf="assistanceForm.get('description')?.invalid && assistanceForm.get('description')?.touched" class="error-message">
             Description invalide.
           </div>
