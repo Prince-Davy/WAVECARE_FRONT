@@ -11,17 +11,15 @@
 
       <!-- Champ Email -->
       <label for="login-username">Email :</label>
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <input id="login-username" matInput formControlName="username" required>
       </mat-form-field>
 
       <!-- Champ Mot de passe -->
       <label for="login-password">Mot de passe :</label>
-      <mat-form-field>
-        <input id="login-password" matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password"
-          required>
-        <button title="Afficher ou masquer mon mot de passe" mat-icon-button matSuffix
-          (click)="hidePassword = !hidePassword" type="button">
+      <mat-form-field appearance="outline">
+        <input id="login-password" matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+        <button title="Afficher ou masquer mon mot de passe" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
       </mat-form-field>
