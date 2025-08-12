@@ -1,15 +1,14 @@
-import { Component } from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
-import {MatSelectModule} from '@angular/material/select';
-import {AssistanceService} from '../../../../core/auth/services/assistance.service';
-import {SupportRequestModel} from '../../../../core/auth/models/support-request.model';
-import {SupportRequestDto} from '../../../../core/auth/models/support-request.dto';
+import { MatSelectModule } from '@angular/material/select';
+import { SupportRequestDto } from '@app/core/auth/models/support-request.dto';
+import { SupportRequestModel } from '@app/core/auth/models/support-request.model';
+import { AssistanceService } from '@app/core/auth/services/assistance.service';
 
 @Component({
   selector: 'app-assistance',
@@ -28,7 +27,7 @@ import {SupportRequestDto} from '../../../../core/auth/models/support-request.dt
   styleUrls: ['./assistance.component.scss']
 })
 export class AssistanceComponent {
-  assistanceForm : FormGroup<any>;
+  assistanceForm: FormGroup<any>;
   submissionSuccess: boolean | null = null;
 
   constructor(private fb: FormBuilder, private assistanceService: AssistanceService) {

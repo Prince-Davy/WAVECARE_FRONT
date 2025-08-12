@@ -1,12 +1,12 @@
+import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../../../core/auth/services/auth.service';
-import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { HttpErrorResponse } from '@angular/common/http';
+import { MatInputModule } from '@angular/material/input';
+import { AuthService } from '@app/core/auth/services/auth.service';
 
 @Component({
   selector: 'app-***REMOVED***',
@@ -38,7 +38,7 @@ export class ForgotPasswordComponent {
   submit(): void {
     if (this.form.valid) {
       const email = this.form.value.email!;
-      
+
       this.authService.forgotPassword(email).subscribe({
         next: (response) => {
           console.log('Réponse reçue:', response);
@@ -47,7 +47,7 @@ export class ForgotPasswordComponent {
         },
         error: (error: HttpErrorResponse) => {
           console.error('Erreur:', error);
-          
+
           if (error.status === 200) {
             console.log('Statut 200 reçu comme erreur, traitant comme succès');
             this.resetRequestSuccess = true;

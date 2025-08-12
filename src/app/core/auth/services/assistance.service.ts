@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { SupportRequestDto } from '@app/core/auth/models/support-request.dto';
+import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
-import {SupportRequestDto} from '../models/support-request.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +10,7 @@ import {SupportRequestDto} from '../models/support-request.dto';
 export class AssistanceService {
   private apiUrl = 'http://localhost:8080/api/support/submit';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   submitTicket(ticketData: SupportRequestDto): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
