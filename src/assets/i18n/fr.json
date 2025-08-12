@@ -1,0 +1,15 @@
+{
+  "feature": {
+    "assistance": {
+      "create-ticket": {
+        "category": {
+          "ACCOUNT_ID": "Identifiant",
+          "ACCOUNT_PASSWORD": "***REMOVED***",
+          "EXTERNAL_AUTHENTICATOR": "Pro Santé Connect",
+          "ACCOUNT_ACCESS": "Problème d'accès",
+          "OTHER": "Autre"
+        }
+      }
+    }
+  }
+}
