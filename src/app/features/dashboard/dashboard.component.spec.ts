@@ -1,12 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DashboardComponent } from './dashboard.component';
-import { AuthService } from '../../core/auth/services/auth.service';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';  // Importer "of" pour retourner des observables simulés
-import { LoginResponse } from '../../core/auth/models/auth.types';
-
-// Importez les modules nécessaires comme BrowserModule si vous en avez besoin
-import { RouterTestingModule } from '@angular/router/testing';
+import { LoginResponse } from '@app/core/auth/models/auth.types';
+import { AuthService } from '@app/core/auth/services/auth.service';
+import { DashboardComponent } from '@app/features/dashboard/dashboard.component';
+import { of } from 'rxjs';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -19,9 +16,6 @@ describe('DashboardComponent', () => {
     const routerSpyObj = jasmine.createSpyObj('Router', ['navigate']);
 
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule // Ajoutez ce module pour simuler la navigation
-      ],
       providers: [
         { provide: AuthService, useValue: authSpy },
         { provide: Router, useValue: routerSpyObj }
