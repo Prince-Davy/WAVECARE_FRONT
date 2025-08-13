@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { SupportRequestDto } from '@app/core/auth/models/support-request.dto';
-import { SupportRequestModel } from '@app/core/auth/models/support-request.model';
+import { CreateAssistanceTicketDTO } from '@app/core/auth/models/assistance-ticket-dto';
 import { AssistanceService } from '@app/core/auth/services/assistance.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-assistance',
@@ -21,7 +22,8 @@ import { AssistanceService } from '@app/core/auth/services/assistance.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatSelectModule
+    MatSelectModule,
+    TranslateModule
   ],
   templateUrl: './assistance.component.html',
   styleUrls: ['./assistance.component.scss']
@@ -29,31 +31,41 @@ import { AssistanceService } from '@app/core/auth/services/assistance.service';
 export class AssistanceComponent {
   assistanceForm: FormGroup<any>;
   submissionSuccess: boolean | null = null;
+  ticketCategories: string[] = [];
 
   constructor(private fb: FormBuilder, private assistanceService: AssistanceService) {
-    this.assistanceForm = SupportRequestModel.createForm(this.fb);
+    this.assistanceForm = this.fb.group({
+      lastName: ['', [Validators.required, Validators.pattern('^[a-zA-Z-]+$')]],
+      firstName: ['', [Validators.required, Validators.pattern('^[a-zA-Z-]+$')]],
+      mail: ['', [Validators.required, Validators.email]],
+      subject: ['', Validators.required],
+      content: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]]
+    });
+
+    this.assistanceService.getTicketCategories().subscribe((categories) => this.ticketCategories = categories);
   }
 
   onSubmit() {
     if (this.assistanceForm.valid) {
-      const ticketData: SupportRequestDto = {
-        firstName: this.assistanceForm.value.prenom,
-        lastName: this.assistanceForm.value.nom,
-        email: this.assistanceForm.value.email,
-        subject: this.assistanceForm.value.objet,
-        description: this.assistanceForm.value.description
-      };
+      const ticketData: CreateAssistanceTicketDTO = {
+        firstName: this.assistanceForm.value.firstName,
+        lastName: this.assistanceForm.value.lastName,
+        mail: this.assistanceForm.value.mail,
+        category: this.assistanceForm.value.subject,
+        content: this.assistanceForm.value.content
+      } as CreateAssistanceTicketDTO;
 
-      this.assistanceService.submitTicket(ticketData).subscribe(
-        response => {
-          console.log('Ticket submitted successfully', response);
-          this.submissionSuccess = true;
-        },
-        error => {
-          console.error('Error submitting ticket', error);
-          this.submissionSuccess = false;
-        }
-      );
+      this.assistanceService.submitTicket(ticketData)
+        .subscribe({
+          next: (result) => {
+            console.log('Ticket submitted successfully', result);
+            this.submissionSuccess = true;
+          },
+          error: (error: HttpErrorResponse) => {
+            console.error('An error occurred while trying to submit the ticket', error);
+            this.submissionSuccess = false;
+          }
+        });
     } else {
       this.submissionSuccess = false;
     }
