@@ -1,9 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';  // Importer AppComponent
-import { AuthComponent } from './features/auth/pages/auth/auth.component';  // Importer AuthComponent
-import { RouterTestingModule } from '@angular/router/testing'; // Si vous utilisez le routage
-import { HttpClientTestingModule } from '@angular/common/http/testing';  // Importer le module de test HTTP
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';  // Importer BrowserAnimationsModule
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppComponent } from '@app/app.component';
+import { AuthComponent } from '@app/features/auth/pages/auth/auth.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -11,9 +9,7 @@ describe('AppComponent', () => {
       imports: [
         AppComponent,
         AuthComponent,
-        RouterTestingModule,
-        HttpClientTestingModule,  // Ajouter HttpClientTestingModule ici
-        BrowserAnimationsModule,  // Ajouter BrowserAnimationsModule pour gérer les animations
+        BrowserAnimationsModule,
       ],
     }).compileComponents();
   });

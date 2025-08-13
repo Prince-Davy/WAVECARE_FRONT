@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AuthComponent } from './auth.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { AuthService } from '../../../../core/auth/services/auth.service';
-import { Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
+import { AuthService } from '@app/core/auth/services/auth.service';
+import { AuthComponent } from '@app/features/auth/pages/auth/auth.component';
+import { of, throwError } from 'rxjs';
 
 describe('AuthComponent', () => {
   let component: AuthComponent;
