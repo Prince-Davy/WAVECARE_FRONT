@@ -33,13 +33,22 @@ export class AssistanceComponent {
   submissionSuccess: boolean | null = null;
   ticketCategories: string[] = [];
 
+  /**
+   * This regex matches if :
+   * - It has at least one letter (unicode letter)
+   * - it doesn't contains two consecutive dashes (-)
+   * - it doesn't contains two consecutive spaces
+   * - It doesn't contains any special characters (only a dash '-')
+   */
+  private readonly NAME_REGEX: RegExp = /^(?=.*[\p{L}])(?!.* {2})(?!.*-{3})[\p{L}\- ]+$/u;
+
   constructor(private fb: FormBuilder, private assistanceService: AssistanceService) {
     this.assistanceForm = this.fb.group({
-      lastName: ['', [Validators.required, Validators.pattern('^[a-zA-Z-]+$')]],
-      firstName: ['', [Validators.required, Validators.pattern('^[a-zA-Z-]+$')]],
+      lastName: ['', [Validators.required, Validators.pattern(this.NAME_REGEX), Validators.maxLength(50)]],
+      firstName: ['', [Validators.required, Validators.pattern(this.NAME_REGEX), Validators.maxLength(50)]],
       mail: ['', [Validators.required, Validators.email]],
       subject: ['', Validators.required],
-      content: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]]
+      content: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(2000)]]
     });
 
     this.assistanceService.getTicketCategories().subscribe((categories) => this.ticketCategories = categories);
