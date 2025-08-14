@@ -1,16 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // <-- Ajoute ceci
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
-import { AuthService } from '../../core/auth/services/auth.service';
-import { Router } from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '@app/core/auth/services/auth.service';
 
 @Component({
   selector: 'navbar',
   standalone: true,
   imports: [
-    CommonModule,         
+    CommonModule,
     MatToolbarModule,
     MatButtonModule,
     RouterModule
@@ -20,7 +19,7 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent {
   currentUser: any;
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
   logout(): void {
     this.authService.logout();
