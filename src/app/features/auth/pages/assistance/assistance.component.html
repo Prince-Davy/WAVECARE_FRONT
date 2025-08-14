@@ -16,49 +16,62 @@
     <p class="mandatory-fields">*Tous les champs sont obligatoires</p>
     <form [formGroup]="assistanceForm" (ngSubmit)="onSubmit()" class="assistance-form">
       <div class="form-group">
-        <label class="form-label" for="nom">Nom :</label>
+        <label class="form-label" for="lastName">Nom :</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <input matInput id="nom" formControlName="lastName" placeholder="Dupont" aria-label="Nom" required>
-          <div *ngIf="assistanceForm.get('nom')?.invalid && assistanceForm.get('nom')?.touched" class="error-message">
+          <input matInput id="lastName" formControlName="lastName" placeholder="Dupont" required>
+          @if (assistanceForm.get('lastName')?.invalid && assistanceForm.get('lastName')?.touched) {
+          <div class="error-message">
             Nom invalide.
           </div>
+          }
         </mat-form-field>
       </div>
       <div class="form-group">
-        <label class="form-label" for="prenom">Prénom :</label>
+        <label class="form-label" for="firstName">Prénom :</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <input matInput id="prenom" formControlName="firstName" placeholder="Lynda" aria-label="Prénom" required>
-          <div *ngIf="assistanceForm.get('prenom')?.invalid && assistanceForm.get('prenom')?.touched" class="error-message">
+          <input matInput id="firstName" formControlName="firstName" placeholder="Lynda" required>
+          @if (assistanceForm.get('firstName')?.invalid && assistanceForm.get('firstName')?.touched) {
+          <div class="error-message">
             Prénom invalide.
           </div>
+          }
         </mat-form-field>
       </div>
       <div class="form-group">
-        <label class="form-label" for="email">Email :</label>
+        <label class="form-label" for="mail">Email :</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <input matInput id="email" formControlName="mail" placeholder="toto@domaine.com" aria-label="Email" required>
-          <div *ngIf="assistanceForm.get('email')?.invalid && assistanceForm.get('email')?.touched" class="error-message">
+          <input matInput id="mail" formControlName="mail" placeholder="toto@domaine.com" required>
+          @if (assistanceForm.get('mail')?.invalid && assistanceForm.get('mail')?.touched) {
+          <div class="error-message">
             Email invalide.
           </div>
+          }
         </mat-form-field>
       </div>
       <div class="form-group">
-        <label class="form-label" for="objet">Quel est l'objet de votre demande ?</label>
+        <label class="form-label" for="subject">Quel est l'objet de votre demande ?</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-select id="objet" formControlName="subject" aria-label="Quel est l'objet de votre demande ?" required>
+          <mat-select id="subject" formControlName="subject" aria-label="Quel est l'objet de votre demande ?" required>
             @for(category of ticketCategories; track category) {
             <mat-option [value]="category">{{'feature.assistance.create-ticket.category.' + category | translate}}</mat-option>
             }
           </mat-select>
+          @if (assistanceForm.get('subject')?.invalid && assistanceForm.get('subject')?.touched) {
+          <div class="error-message">
+            Objet invalide.
+          </div>
+          }
         </mat-form-field>
       </div>
       <div class="form-group">
-        <label class="form-label" for="description">Décrire votre demande (2000 caractères max) :</label>
+        <label class="form-label" for="content">Décrire votre demande (2000 caractères max) :</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <textarea matInput id="description" formControlName="content" aria-label="Décrire votre demande (2000 caractères max) :" required></textarea>
-          <div *ngIf="assistanceForm.get('description')?.invalid && assistanceForm.get('description')?.touched" class="error-message">
+          <textarea matInput id="content" formControlName="content" required></textarea>
+          @if (assistanceForm.get('content')?.invalid && assistanceForm.get('content')?.touched) {
+          <div class="error-message">
             Description invalide.
           </div>
+          }
         </mat-form-field>
       </div>
       <div class="submit-ticket-wrapper">
