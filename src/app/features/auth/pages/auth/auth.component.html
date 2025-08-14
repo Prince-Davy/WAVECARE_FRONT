@@ -10,22 +10,22 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
 
       <!-- Champ Email -->
+      <label for="login-username">Email :</label>
       <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="username" required>
+        <input id="login-username" matInput formControlName="username" required>
       </mat-form-field>
 
       <!-- Champ Mot de passe -->
+      <label for="login-password">Mot de passe :</label>
       <mat-form-field appearance="outline">
-        <mat-label>Mot de passe</mat-label>
-        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
-        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+        <input id="login-password" matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+        <button title="Afficher ou masquer mon mot de passe" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
       </mat-form-field>
 
       <div *ngIf="(loginForm.invalid && submitted)||(errorMessage.length>0)" class="global-error">
-         {{'E-mail et/ou mot de passe invalide'}}
+        {{'E-mail et/ou mot de passe invalide'}}
       </div>
 
       <!-- Bouton de soumission -->
@@ -53,7 +53,8 @@
       <img src="assets/images/pro-sante-connect.png" class="psc-logo" alt="Connexion via Pro Santé Connect">
     </button>
 
-    <p class="footer" (click)="goToAssistance()" (keydown.enter)="goToAssistance()">UN PROBLÈME ? JE M'ADRESSE À UN ADMINISTRATEUR</p>
+    <p class="footer" (click)="goToAssistance()" (keydown.enter)="goToAssistance()">UN PROBLÈME ? JE M'ADRESSE À UN
+      ADMINISTRATEUR</p>
   </mat-card>
 
   <!-- Lockout Modal (Scenario 2) -->

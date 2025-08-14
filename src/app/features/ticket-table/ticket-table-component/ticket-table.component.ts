@@ -1,8 +1,8 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatSort, MatSortModule} from '@angular/material/sort';
-import {TicketTableService} from '../ticket-table-services/ticket-table.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { TicketTableService } from '@app/features/ticket-table/ticket-table-services/ticket-table.service';
 
 @Component({
   selector: 'ticket-table',
@@ -15,18 +15,18 @@ import {TicketTableService} from '../ticket-table-services/ticket-table.service'
   templateUrl: './ticket-table.component.html',
   styleUrls: ['./ticket-table.component.scss']
 })
-export class TicketTableComponent implements OnInit{
+export class TicketTableComponent implements OnInit {
   displayedColumns: string[] = ['id', 'objet', 'nom', 'prenom', 'mail', 'statut', 'date'];
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private ticketTableService : TicketTableService) {
+  constructor(private ticketTableService: TicketTableService) {
   }
 
   ngOnInit(): void {
-     this.getTicketData();
-    }
+    this.getTicketData();
+  }
 
   getTicketData(): void {
     this.ticketTableService.getTicket().subscribe({

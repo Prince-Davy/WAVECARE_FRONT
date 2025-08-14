@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,7 +9,7 @@ export class TicketTableService {
 
   private apiUrl = 'http://localhost:8080/api/ticket/';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
 
   getTicket(): Observable<any> {

@@ -1,0 +1,71 @@
+<div class="assistance-container">
+  <img class="logo" alt="logo de l'application wavecare" src="assets/images/LogoWaveCare_SansTexte.png">
+  <mat-card class="assistance-card">
+    <h2 class="title">Aide & Support</h2>
+    @if (submissionSuccess !== null) {
+    <div class="message">
+      @if (submissionSuccess) {
+      <div class="success-message">✅ Demande envoyée avec succès</div>
+      }
+      @else {
+      <div class="error-message">❌ Echec de l'envoi de la demande</div>
+      }
+    </div>
+    }
+    <p class="subtitle">Veuillez remplir le formulaire et expliquer votre demande</p>
+    <p class="mandatory-fields">*Tous les champs sont obligatoires</p>
+    <form [formGroup]="assistanceForm" (ngSubmit)="onSubmit()" class="assistance-form">
+      <div class="form-group">
+        <label class="form-label" for="nom">Nom :</label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input matInput id="nom" formControlName="lastName" placeholder="Dupont" aria-label="Nom" required>
+          <div *ngIf="assistanceForm.get('nom')?.invalid && assistanceForm.get('nom')?.touched" class="error-message">
+            Nom invalide.
+          </div>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="prenom">Prénom :</label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input matInput id="prenom" formControlName="firstName" placeholder="Lynda" aria-label="Prénom" required>
+          <div *ngIf="assistanceForm.get('prenom')?.invalid && assistanceForm.get('prenom')?.touched" class="error-message">
+            Prénom invalide.
+          </div>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="email">Email :</label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input matInput id="email" formControlName="mail" placeholder="toto@domaine.com" aria-label="Email" required>
+          <div *ngIf="assistanceForm.get('email')?.invalid && assistanceForm.get('email')?.touched" class="error-message">
+            Email invalide.
+          </div>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="objet">Quel est l'objet de votre demande ?</label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-select id="objet" formControlName="subject" aria-label="Objet" required>
+            @for(category of ticketCategories; track category) {
+            <mat-option [value]="category">{{'feature.assistance.create-ticket.category.' + category | translate}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="description">Décrire votre demande (500 caractères max) :</label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <textarea matInput id="description" formControlName="content" aria-label="Description" required></textarea>
+          <div *ngIf="assistanceForm.get('description')?.invalid && assistanceForm.get('description')?.touched" class="error-message">
+            Description invalide.
+          </div>
+        </mat-form-field>
+      </div>
+      <div class="submit-ticket-wrapper">
+        <button class="submit-ticket" mat-raised-button color="primary" type="submit" [disabled]="assistanceForm.invalid">
+          ENVOYER MA DEMANDE
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>
