@@ -36,29 +36,31 @@ export class ForgotPasswordComponent {
   }
 
   submit(): void {
-    if (this.form.valid) {
-      const email = this.form.value.email!;
+    if (this.form.invalid) {
+      this.form.get('email')?.markAsTouched();
+      this.resetRequestSuccess = false;
+      return;
+    }
 
-      this.authService.forgotPassword(email).subscribe({
-        next: (response) => {
-          console.log('Réponse reçue:', response);
+    const email = this.form.value.email!;
+    
+    this.authService.forgotPassword(email).subscribe({
+      next: (response) => {
+        console.log('Réponse reçue:', response);
+        this.resetRequestSuccess = true;
+        this.form.reset();
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Erreur:', error);
+        
+        if (error.status === 200) {
+          console.log('Statut 200 reçu comme erreur, traitant comme succès');
           this.resetRequestSuccess = true;
           this.form.reset();
-        },
-        error: (error: HttpErrorResponse) => {
-          console.error('Erreur:', error);
-
-          if (error.status === 200) {
-            console.log('Statut 200 reçu comme erreur, traitant comme succès');
-            this.resetRequestSuccess = true;
-            this.form.reset();
-          } else {
-            this.resetRequestSuccess = false;
-          }
+        } else {
+          this.resetRequestSuccess = false;
         }
-      });
-    } else {
-      this.resetRequestSuccess = false;
-    }
+      }
+    });
   }
 }
