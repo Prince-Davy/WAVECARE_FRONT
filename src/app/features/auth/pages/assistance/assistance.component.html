@@ -45,7 +45,7 @@
       <div class="form-group">
         <label class="form-label" for="objet">Quel est l'objet de votre demande ?</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-select id="objet" formControlName="subject" aria-label="Objet" required>
+          <mat-select id="objet" formControlName="subject" aria-label="Quel est l'objet de votre demande ?" required>
             @for(category of ticketCategories; track category) {
             <mat-option [value]="category">{{'feature.assistance.create-ticket.category.' + category | translate}}</mat-option>
             }
@@ -53,16 +53,16 @@
         </mat-form-field>
       </div>
       <div class="form-group">
-        <label class="form-label" for="description">Décrire votre demande (500 caractères max) :</label>
+        <label class="form-label" for="description">Décrire votre demande (2000 caractères max) :</label>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <textarea matInput id="description" formControlName="content" aria-label="Description" required></textarea>
+          <textarea matInput id="description" formControlName="content" aria-label="Décrire votre demande (2000 caractères max) :" required></textarea>
           <div *ngIf="assistanceForm.get('description')?.invalid && assistanceForm.get('description')?.touched" class="error-message">
             Description invalide.
           </div>
         </mat-form-field>
       </div>
       <div class="submit-ticket-wrapper">
-        <button class="submit-ticket" mat-raised-button color="primary" type="submit" [disabled]="assistanceForm.invalid">
+        <button class="submit-ticket" mat-raised-button type="submit" [disabled]="assistanceForm.invalid">
           ENVOYER MA DEMANDE
         </button>
       </div>
