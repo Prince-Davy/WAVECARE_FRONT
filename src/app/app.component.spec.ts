@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from '@app/app.component';
-import { AuthComponent } from '@app/features/auth/pages/auth/auth.component';
+import { AuthComponent } from '@app/features/auth/components/auth/auth.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {

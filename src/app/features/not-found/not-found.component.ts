@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '@app/core/auth/services/auth.service';
+import { AuthService } from '@app/features/auth/services/auth.service';
 
 @Component({
   selector: 'app-not-found',

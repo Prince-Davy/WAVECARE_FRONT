@@ -2,8 +2,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
-import { LoginResponse } from '@app/core/auth/models/auth.types';
-import { AuthService } from '@app/core/auth/services/auth.service';
+import { LoginResponse } from '@app/features/auth/models/auth.types';
+import { AuthService } from '@app/features/auth/services/auth.service';
 import { Subscription } from 'rxjs';
 
 import { FooterComponent } from '@app/features/footer/footer.component';

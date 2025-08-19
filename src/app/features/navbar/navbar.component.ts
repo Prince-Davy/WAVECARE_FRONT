@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '@app/core/auth/services/auth.service';
+import { AuthService } from '@app/features/auth/services/auth.service';
 
 @Component({
   selector: 'navbar',
