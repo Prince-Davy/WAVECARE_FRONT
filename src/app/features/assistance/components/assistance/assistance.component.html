@@ -1,0 +1,74 @@
+<div class="assistance-container">
+  <img class="logo" [alt]="'feature.assistance.assistance-component.logo-alt' | translate" src="assets/images/LogoWaveCare_SansTexte.png">
+  <mat-card class="assistance-card">
+    <h2 class="title">{{'feature.assistance.assistance-component.title' | translate}}</h2>
+    @if (submissionSuccess !== null) {
+    <div class="message">
+      @if (submissionSuccess) {
+      <div class="success-message">{{'feature.assistance.assistance-component.submit.message.success' | translate}}</div>
+      }
+      @else {
+      <div class="error-message">{{'feature.assistance.assistance-component.submit.message.success' | translate}}</div>
+      }
+    </div>
+    }
+    <p class="description">{{'feature.assistance.assistance-component.description' | translate}}</p>
+    <p class="advisory">{{'feature.assistance.assistance-component.advisory' | translate}}</p>
+    <form [formGroup]="assistanceForm" (ngSubmit)="onSubmit()" class="assistance-form">
+      <div class="form-group">
+        <label class="form-label" for="lastName">{{'feature.assistance.assistance-component.form.lastName.label' | translate}}</label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input matInput id="lastName" formControlName="lastName" [placeholder]="'feature.assistance.assistance-component.form.lastName.placeholder' | translate" required>
+          @if (assistanceForm.get('lastName')?.invalid && assistanceForm.get('lastName')?.touched) {
+          <div class="form-control-error-message">{{'feature.assistance.assistance-component.form.lastName.error-message' | translate}}</div>
+          }
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="firstName">{{'feature.assistance.assistance-component.form.firstName.label' | translate}}</label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input matInput id="firstName" formControlName="firstName" [placeholder]="'feature.assistance.assistance-component.form.firstName.placeholder' | translate" required>
+          @if (assistanceForm.get('firstName')?.invalid && assistanceForm.get('firstName')?.touched) {
+          <div class="form-control-error-message">{{'feature.assistance.assistance-component.form.firstName.error-message' | translate}}</div>
+          }
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="mail">{{'feature.assistance.assistance-component.form.mail.label' | translate}}</label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input matInput id="mail" formControlName="mail" [placeholder]="'feature.assistance.assistance-component.form.mail.placeholder' | translate" required>
+          @if (assistanceForm.get('mail')?.invalid && assistanceForm.get('mail')?.touched) {
+          <div class="form-control-error-message">{{'feature.assistance.assistance-component.form.mail.error-message' | translate}}</div>
+          }
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="subject">{{'feature.assistance.assistance-component.form.category.label' | translate}}</label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-select id="subject" formControlName="subject" [aria-label]="'feature.assistance.assistance-component.form.category.label' | translate" required>
+            @for(category of ticketCategories; track category) {
+            <mat-option [value]="category">{{'feature.assistance.assistance-component.form.category.ticket-category.' + category | translate}}</mat-option>
+            }
+          </mat-select>
+          @if (assistanceForm.get('subject')?.invalid && assistanceForm.get('subject')?.touched) {
+          <div class="form-control-error-message">{{'feature.assistance.assistance-component.form.category.error-message' | translate}}</div>
+          }
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="content">{{'feature.assistance.assistance-component.form.content.label' | translate}}</label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <textarea matInput id="content" formControlName="content" required></textarea>
+          @if (assistanceForm.get('content')?.invalid && assistanceForm.get('content')?.touched) {
+          <div class="form-control-error-message">{{'feature.assistance.assistance-component.form.content.error-message' | translate}}</div>
+          }
+        </mat-form-field>
+      </div>
+      <div class="submit-ticket-wrapper">
+        <button class="submit-ticket" mat-raised-button type="submit" [disabled]="assistanceForm.invalid">
+          {{'feature.assistance.assistance-component.submit.button' | translate}}
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

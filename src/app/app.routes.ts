@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
 import { AppComponent } from '@app/app.component';
-import { AuthGuard } from '@app/core/auth/guards/auth.guard';
-import { roleGuard } from '@app/core/auth/guards/role.guard';
-import { AssistanceComponent } from '@app/features/auth/pages/assistance/assistance.component';
-import { AuthComponent } from '@app/features/auth/pages/auth/auth.component';
-import { ForgotPasswordComponent } from '@app/features/auth/pages/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from '@app/features/auth/pages/reset-password/reset-password.component';
+import { AssistanceComponent } from '@app/features/assistance/components/assistance/assistance.component';
+import { AuthComponent } from '@app/features/auth/components/auth/auth.component';
+import { ForgotPasswordComponent } from '@app/features/auth/components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from '@app/features/auth/components/reset-password/reset-password.component';
+import { AuthGuard } from '@app/features/auth/guards/auth.guard';
+import { roleGuard } from '@app/features/auth/guards/role.guard';
 import { DashboardComponent } from '@app/features/dashboard/dashboard.component';
 import { NotFoundComponent } from '@app/features/not-found/not-found.component';
 

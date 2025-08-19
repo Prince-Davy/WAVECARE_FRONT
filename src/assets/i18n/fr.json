@@ -1,14 +1,109 @@
 {
   "feature": {
     "assistance": {
-      "create-ticket": {
-        "category": {
-          "ACCOUNT_ID": "Identifiant",
-          "ACCOUNT_PASSWORD": "Mot de passe",
-          "EXTERNAL_AUTHENTICATOR": "Pro Santé Connect",
-          "ACCOUNT_ACCESS": "Problème d'accès",
-          "OTHER": "Autre"
+      "assistance-component": {
+        "logo-alt": "Logo de l'application wavecare",
+        "title": "Aide & Support",
+        "description": "Veuillez remplir le formulaire et expliquer votre demande",
+        "advisory": "*Tous les champs sont obligatoires",
+        "form": {
+          "lastName": {
+            "label": "Nom :",
+            "placeholder": "Dupont",
+            "error-message": "Nom invalide"
+          },
+          "firstName": {
+            "label": "Prénom :",
+            "placeholder": "Lynda",
+            "error-message": "Prénom invalide"
+          },
+          "mail": {
+            "label": "Email :",
+            "placeholder": "dupont.lynda@hopital.fr",
+            "error-message": "Email invalide"
+          },
+          "category": {
+            "label": "Quel est l'objet de votre demande ?",
+            "error-message": "Objet invalide",
+            "ticket-category": {
+              "ACCOUNT_ID": "Identifiant",
+              "ACCOUNT_PASSWORD": "Mot de passe",
+              "EXTERNAL_AUTHENTICATOR": "Pro Santé Connect",
+              "ACCOUNT_ACCESS": "Problème d'accès",
+              "OTHER": "Autre"
+            }
+          },
+          "content": {
+            "label": "Décrire votre demande (2000 caractères max) :",
+            "error-message": "Description invalide"
+          }
+        },
+        "submit": {
+          "message": {
+            "success": "✅ Demande envoyée avec succès",
+            "error": "❌ Echec de l'envoi de la demande"
+          },
+          "button": "ENVOYER MA DEMANDE"
         }
+      }
+    },
+    "auth": {
+      "auth-component": {
+        "logo-alt": "Logo de l'application wavecare",
+        "title": "WaveCare",
+        "description": "Je me connecte avec mon Email :",
+        "form": {
+          "username": {
+            "label": "Email :",
+            "error-message": "Ce champs est obligatoire"
+          },
+          "password": {
+            "label": "Mot de passe :",
+            "error-message": "Ce champs est obligatoire",
+            "hide-password-button": "Afficher ou masquer mon mot de passe"
+          }
+        },
+        "submit": {
+          "button": "CONNEXION",
+          "error-message": {
+            "auth-error": "'E-mail et/ou mot de passe invalide'",
+            "server-error": "Problème technique. Veuillez contacter un administrateur."
+          }
+        },
+        "account-locked-modal": {
+          "title": "Accès bloqué",
+          "message": "Suite à 5 tentatives de connexion infructueuses votre accès à l'application est bloqué.",
+          "link": "Veuillez contacter votre administrateur",
+          "close-button": "Fermer"
+        },
+        "forgot-password-link": "MOT DE PASSE OUBLIÉ ?",
+        "or-divider-text": "OU",
+        "external-auth-label": {
+          "label": "S’identifier avec :",
+          "alt": "Connexion via Pro Santé Connect"
+        },
+        "assistance-link": "UN PROBLÈME ? JE M'ADRESSE À UN ADMINISTRATEUR"
+      },
+      "forgot-password-component": {
+        "logo-alt": "Logo de l'application wavecare",
+        "title": "Demande de réinitialisation du mot de passe",
+        "description": "Veuillez entrer votre adresse e-mail. Un e-mail vous sera envoyé avec un lien pour réinitialiser votre mot de passe",
+        "form": {
+          "mail": {
+            "error-message": {
+              "required": "L'email est requis",
+              "format": "Format d'email invalide"
+            }
+          }
+        },
+        "submit": {
+          "message": {
+            "success": "Un lien a été envoyé à l'adresse e-mail indiquée. Si vous n'avez pas reçu de message, veuillez réessayer et vérifier dans vos courriers indésirables (SPAM).",
+            "error": "E-mail non reconnu"
+          },
+          "button": "VALIDER"
+        },
+        "assistance-link": "UN PROBLÈME ? JE M'ADRESSE À UN ADMINISTRATEUR"
       }
     }
   }
