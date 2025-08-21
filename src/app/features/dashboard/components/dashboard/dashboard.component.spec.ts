@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { LoginResponse } from '@app/features/auth/models/auth.types';
 import { AuthService } from '@app/features/auth/services/auth.service';
-import { DashboardComponent } from '@app/features/dashboard/dashboard.component';
+import { DashboardComponent } from '@app/features/dashboard/components/dashboard/dashboard.component';
 import { of } from 'rxjs';
 
 describe('DashboardComponent', () => {

@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, AbstractControlOptions, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '@app/features/auth/services/auth.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-reset-password',
@@ -30,8 +30,7 @@ export class ResetPasswordComponent implements OnInit {
   token: string | null = null;
   userId: string = '';
   email: string = '';
-  isLoading = false;
-  message = '';
+  message: string | undefined;
   isError = false;
   showNewPassword = false;
   showConfirmPassword = false;
@@ -40,17 +39,16 @@ export class ResetPasswordComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) {
     this.resetForm = this.fb.group({
       newPassword: ['', [
         Validators.required,
-        Validators.minLength(12),
-        Validators.maxLength(20),
         this.passwordPatternValidator()
       ]],
       confirmPassword: ['', Validators.required]
-    }, { validators: this.passwordMatchValidator });
+    }, { validators: this.passwordMatchValidator } as AbstractControlOptions);
   }
 
   ngOnInit() {
@@ -58,7 +56,10 @@ export class ResetPasswordComponent implements OnInit {
     if (this.token && this.token.trim() !== '') {
       this.loadUserInfoFromToken();
     } else {
-      this.message = 'Lien invalide.';
+      // Doing this because during OnInit the translation service isn't loaded yet. Once its loaded, we can set the message.
+      this.translate.onTranslationChange.subscribe(
+        () => this.message = this.translate.instant('feature.auth.reset-password-component.message.error.invalid-link')
+      );
       this.isError = true;
     }
   }
@@ -66,18 +67,16 @@ export class ResetPasswordComponent implements OnInit {
   loadUserInfoFromToken() {
     if (!this.token) return;
 
-    this.isLoading = true;
     this.authService.getUserInfoFromToken(this.token).subscribe({
       next: (data) => {
         this.userId = data.id;
         this.email = data.email;
-        this.isLoading = false;
         this.isError = false;
       },
       error: (error) => {
-        this.isLoading = false;
         this.isError = true;
-        this.message = 'Le lien de réinitialisation est invalide ou expiré.';
+        this.message = this.translate.instant('feature.auth.reset-password-component.message.error.expired-link');
+        console.error('Error while trying to recover the user information from the token.', error);
       }
     });
   }
@@ -112,26 +111,23 @@ export class ResetPasswordComponent implements OnInit {
     }
 
     if (!this.userId || !this.email) {
-      this.message = 'Erreur: informations utilisateur non disponibles.';
       this.isError = true;
+      this.message = this.translate.instant('feature.auth.reset-password-component.form.submit.message.error.userinfo-not-available');
       return;
     }
 
-    this.isLoading = true;
     const newPassword = this.resetForm.get('newPassword')?.value;
     const payload = { userName: this.email, newPassword };
 
     this.authService.updatePassword(this.userId, payload).subscribe({
       next: (response) => {
-        console.log('✅ Mot de passe mis à jour avec succès:', response);
-        this.isLoading = false;
         this.isError = false;
-        this.message = 'Mot de passe réinitialisé avec succès. Redirection...';
+        this.message = this.translate.instant('feature.auth.reset-password-component.form.submit.message.success');
 
         if (this.token) {
           this.authService.deleteToken(this.token).subscribe({
-            next: () => console.log('✅ Token supprimé avec succès'),
-            error: (error) => console.error('❌ Erreur lors de la suppression du token:', error)
+            next: () => console.log('Token was successfully removed'),
+            error: (error) => console.error('Error while trying to delete the token', error)
           });
         }
 
@@ -140,22 +136,11 @@ export class ResetPasswordComponent implements OnInit {
         }, 2000);
       },
       error: (error) => {
-        console.error('❌ Erreur lors de la mise à jour du mot de passe:', error);
-        this.isLoading = false;
+        console.error('Error while trying to update password', error);
         this.isError = true;
-        this.message = this.getErrorMessage(error);
+        this.message = this.translate.instant('feature.auth.reset-password-component.form.submit.message.error.technical');
       }
     });
-  }
-
-  private getErrorMessage(error: any): string {
-    switch (error.status) {
-      case 400: return 'Les données fournies sont invalides.';
-      case 401: return 'Le lien de réinitialisation est invalide ou expiré.';
-      case 404: return 'Utilisateur non trouvé.';
-      case 500: return 'Erreur serveur. Veuillez réessayer plus tard.';
-      default: return 'Erreur lors de la réinitialisation du mot de passe.';
-    }
   }
 
   private markFormGroupTouched() {
@@ -164,7 +149,7 @@ export class ResetPasswordComponent implements OnInit {
     });
   }
 
-  get newPassword() { return this.resetForm.get('newPassword'); }
-  get confirmPassword() { return this.resetForm.get('confirmPassword'); }
-  get passwordMismatch() { return this.resetForm.hasError('passwordMismatch'); }
+  get newPasswordForm() { return this.resetForm.get('newPassword'); }
+  get confirmPasswordForm() { return this.resetForm.get('confirmPassword'); }
+  get passwordMismatchValidatorError() { return this.resetForm.hasError('passwordMismatch'); }
 }

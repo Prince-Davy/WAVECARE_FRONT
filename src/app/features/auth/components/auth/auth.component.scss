@@ -29,11 +29,12 @@
   font-size: 40px;
   font-weight: bold;
   margin-top: 0px;
+  margin-bottom: 15px;
 }
 
 .description {
   font-size: 20px;
-  margin-top: 0;
+  margin-top: 15px;
   margin-bottom: 40px;
 }
 
@@ -42,13 +43,14 @@
   flex-direction: column;
 }
 
-mat-label {
-  color: #005EA5 !important;
-}
-
 label {
   display: flex;
   padding-bottom: 10px;
+  font-size: 18px;
+}
+
+.login-submit-wrapper:has(.login-submit:disabled) {
+  cursor: not-allowed;
 }
 
 .login-submit {
@@ -180,21 +182,6 @@ label {
   color: #1976d2;
   text-decoration: underline;
   cursor: pointer;
-}
-
-.message {
-  padding-bottom: 20px;
-}
-
-.error-message {
-  background-color: white;
-  border-radius: 4px;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  font-weight: 500;
-  text-align: center;
-  align-content: center;
-  color: #ef0000;
 }
 
 .form-control-error-message {

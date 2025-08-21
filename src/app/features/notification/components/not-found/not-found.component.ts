@@ -1,10 +1,20 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { Router } from '@angular/router';
+import { MatButton } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '@app/features/auth/services/auth.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-not-found',
+  standalone: true,
+  imports: [
+    MatButton,
+    MatIconModule,
+    TranslateModule,
+    RouterLink
+  ],
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss']
 })

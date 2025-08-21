@@ -5,7 +5,7 @@
     <h2 class="title">{{'feature.auth.auth-component.title' | translate}}</h2>
 
     @if (submitted && errorMessage) {
-    <div class="message">
+    <div class="notification-message">
       <div class="error-message" role="alert">{{ errorMessage }}</div>
     </div>
     }
@@ -17,7 +17,7 @@
       <!-- Mail Field -->
       <label for="login-username">{{'feature.auth.auth-component.form.username.label' | translate}}</label>
       <mat-form-field appearance="outline">
-        <input id="login-username" matInput formControlName="username" required>
+        <input id="login-username" matInput [placeholder]="'feature.auth.auth-component.form.username.placeholder' | translate" formControlName="username" required>
         @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
         <div class="form-control-error-message">{{'feature.auth.auth-component.form.username.error-message' | translate}}</div>
         }
@@ -26,7 +26,7 @@
       <!-- Password Field -->
       <label for="login-password">{{'feature.auth.auth-component.form.password.label' | translate}}</label>
       <mat-form-field appearance="outline">
-        <input id="login-password" matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+        <input id="login-password" matInput [placeholder]="'feature.auth.auth-component.form.password.placeholder' | translate" [type]="hidePassword ? 'password' : 'text'" formControlName="password" required autocomplete="off">
         <button [title]="'feature.auth.auth-component.form.password.hide-password-button' | translate" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
@@ -36,7 +36,9 @@
       </mat-form-field>
 
       <!-- Submit Button -->
-      <button mat-raised-button class="login-submit" [disabled]="!loginForm.valid" type="submit">{{'feature.auth.auth-component.submit.button' | translate}}</button>
+      <div class="login-submit-wrapper">
+        <button mat-raised-button class="login-submit" [disabled]="!loginForm.valid" type="submit">{{'feature.auth.auth-component.form.submit.button' | translate}}</button>
+      </div>
     </form>
     <a routerLink="/forgot-password" class="forgot-password" href="#">
       {{'feature.auth.auth-component.forgot-password-link' | translate}}
