@@ -6,8 +6,8 @@ import { LoginResponse } from '@app/features/auth/models/auth.types';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { Subscription } from 'rxjs';
 
-import { FooterComponent } from '@app/features/footer/footer.component';
-import { NavbarComponent } from '@app/features/navbar/navbar.component';
+import { FooterComponent } from '@app/features/dashboard/components/footer/footer.component';
+import { NavbarComponent } from '@app/features/dashboard/components/navbar/navbar.component';
 import { TicketTableComponent } from '@app/features/ticket-table/ticket-table-component/ticket-table.component';
 
 

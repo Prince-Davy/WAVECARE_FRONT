@@ -85,9 +85,9 @@ export class AuthComponent {
             // Scenario 2: Lockout
             this.isLockoutModalOpen = true;
           } else if (error.status === 401) {
-            this.errorMessage = this.translate.instant('feature.auth.auth-component.submit.error-message.auth-error');
+            this.errorMessage = this.translate.instant('feature.auth.auth-component.form.submit.error-message.auth-error');
           } else {
-            this.errorMessage = this.translate.instant('feature.auth.auth-component.submit.error-message.server-error');
+            this.errorMessage = this.translate.instant('feature.auth.auth-component.form.submit.error-message.server-error');
           }
         }
       });

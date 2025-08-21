@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   background-color: white;
-  transform: scale(0.8);
+  transform: scale(0.9);
   transform-origin: top center;
 }
 
@@ -20,8 +20,8 @@
 }
 
 .logo {
-  height: 150px;
-  width: 250px;
+  height: 125px;
+  width: 200px;
   margin-bottom: 20px;
 }
 
@@ -29,17 +29,18 @@
   font-size: 40px;
   font-weight: bold;
   margin-top: 0px;
+  margin-bottom: 15px;
 }
 
 .description {
-  font-size: 14px;
-  margin-bottom: 20px;
+  font-size: 20px;
+  margin-bottom: 8px;
 }
 
 .advisory {
-  font-size: 12px;
+  font-size: 14px;
   color: white;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 
 .assistance-form {
@@ -48,19 +49,15 @@
 }
 
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .form-label {
   color: white;
-  font-size: 14px;
+  font-size: 18px;
   margin-bottom: 8px;
   display: block;
   text-align: left;
-}
-
-mat-label {
-  color: #005EA5 !important;
 }
 
 .submit-ticket {
@@ -77,28 +74,11 @@ mat-label {
   cursor: not-allowed;
 }
 
-.message {
-  padding-bottom: 20px;
-}
-
-.success-message, .error-message {
-  background-color: white;
-  border-radius: 4px;
-  height: 40px;
-  font-weight: 500;
-  text-align: center;
-  align-content: center;
-}
-
-.success-message {
-  color: green;
-}
-
-.error-message {
-  color: #ef0000;
-}
-
 .form-control-error-message {
   text-align: center;
   color: #ef0000;
+}
+
+#content {
+  height: 72px
 }

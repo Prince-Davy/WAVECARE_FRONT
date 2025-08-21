@@ -6,8 +6,8 @@ import { ForgotPasswordComponent } from '@app/features/auth/components/***REMOVE
 import { ResetPasswordComponent } from '@app/features/auth/components/***REMOVED***/***REMOVED***.component';
 import { AuthGuard } from '@app/features/auth/guards/auth.guard';
 import { roleGuard } from '@app/features/auth/guards/role.guard';
-import { DashboardComponent } from '@app/features/dashboard/dashboard.component';
-import { NotFoundComponent } from '@app/features/not-found/not-found.component';
+import { DashboardComponent } from '@app/features/dashboard/components/dashboard/dashboard.component';
+import { NotFoundComponent } from '@app/features/notification/components/not-found/not-found.component';
 
 export const routes: Routes = [
   {

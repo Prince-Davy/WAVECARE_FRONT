@@ -19,11 +19,12 @@
           },
           "mail": {
             "label": "Email :",
-            "placeholder": "dupont.lynda@hopital.fr",
+            "placeholder": "dupont.lynda@example.fr",
             "error-message": "Email invalide"
           },
           "category": {
             "label": "Quel est l'objet de votre demande ?",
+            "placeholder": "Sélectionner une option",
             "error-message": "Objet invalide",
             "ticket-category": {
               "ACCOUNT_ID": "Identifiant",
@@ -34,16 +35,17 @@
             }
           },
           "content": {
-            "label": "Décrire votre demande (2000 caractères max) :",
+            "label": "Description (2000 caractères max) :",
+            "placeholder": "Décrivez votre demande...",
             "error-message": "Description invalide"
-          }
-        },
-        "submit": {
-          "message": {
-            "success": "✅ Demande envoyée avec succès",
-            "error": "❌ Echec de l'envoi de la demande"
           },
-          "button": "ENVOYER MA DEMANDE"
+          "submit": {
+            "message": {
+              "success": "✅ Demande envoyée avec succès",
+              "error": "❌ Echec de l'envoi de la demande"
+            },
+            "button": "ENVOYER MA DEMANDE"
+          }
         }
       }
     },
@@ -55,19 +57,21 @@
         "form": {
           "username": {
             "label": "Email :",
+            "placeholder": "votre.email@example.fr",
             "error-message": "Ce champs est obligatoire"
           },
           "password": {
             "label": "***REMOVED*** :",
+            "placeholder": "***REMOVED***",
             "error-message": "Ce champs est obligatoire",
             "hide-password-button": "Afficher ou masquer mon mot de passe"
-          }
-        },
-        "submit": {
-          "button": "CONNEXION",
-          "error-message": {
-            "auth-error": "'E-mail et/ou mot de passe invalide'",
-            "server-error": "Problème technique. Veuillez contacter un administrateur."
+          },
+          "submit": {
+            "button": "CONNEXION",
+            "error-message": {
+              "auth-error": "E-mail et/ou mot de passe invalide",
+              "server-error": "Problème technique. Veuillez contacter un administrateur."
+            }
           }
         },
         "account-locked-modal": {
@@ -78,7 +82,7 @@
         },
         "***REMOVED***-link": "MOT DE PASSE OUBLIÉ ?",
         "or-divider-text": "OU",
-        "external-auth-label": {
+        "external-auth": {
           "label": "S’identifier avec :",
           "alt": "Connexion via Pro Santé Connect"
         },
@@ -90,20 +94,85 @@
         "description": "Veuillez entrer votre adresse e-mail. Un e-mail vous sera envoyé avec un lien pour réinitialiser votre mot de passe",
         "form": {
           "mail": {
+            "label": "Email :",
+            "placeholder": "votre.email@example.fr",
             "error-message": {
               "required": "L'email est requis",
               "format": "Format d'email invalide"
             }
+          },
+          "submit": {
+            "message": {
+              "success": "Un lien a été envoyé à l'adresse e-mail indiquée. Si vous n'avez pas reçu de message, veuillez réessayer et vérifier dans vos courriers indésirables (SPAM).",
+              "error": "E-mail non reconnu"
+            },
+            "button": "VALIDER"
           }
         },
-        "submit": {
-          "message": {
-            "success": "Un lien a été envoyé à l'adresse e-mail indiquée. Si vous n'avez pas reçu de message, veuillez réessayer et vérifier dans vos courriers indésirables (SPAM).",
-            "error": "E-mail non reconnu"
-          },
-          "button": "VALIDER"
-        },
         "assistance-link": "UN PROBLÈME ? JE M'ADRESSE À UN ADMINISTRATEUR"
+      },
+      "***REMOVED***-component": {
+        "logo-alt": "Logo de l'application wavecare",
+        "title": "Réinitialisation de votre mot de passe",
+        "password-requirements": "Le mot de passe doit contenir :\n\nUn minimum de 12 caractères et un maximum de 20 caractères\nEt au moins :\n\n\tUne lettre majuscule (Exemple : A, B, C)\n\tUne lettre minuscule (Exemple : a, b, c)\n\tUn chiffre (Exemple : 1, 2, 3)\n\tUn caractère spécial (Exemple : #, €, $, &#64;, *, ‑)",
+        "form": {
+          "***REMOVED***word": {
+            "label": "Nouveau mot de passe :",
+            "placeholder": "Nouveau mot de passe",
+            "error-message": {
+              "required": "Ce champs est obligatoire",
+              "minlength": "Le mot de passe doit contenir au moins 12 caractères.",
+              "maxlength": "Le mot de passe ne peut pas dépasser 20 caractères.",
+              "pattern": "Le mot de passe doit contenir une majuscule, une minuscule, un chiffre et un caractère spécial."
+            },
+            "hide-password-button": "Afficher ou masquer mon mot de passe"
+          },
+          "confirm-password": {
+            "label": "Confirmation du mot de passe :",
+            "placeholder": "Confirmation du mot de passe",
+            "error-message": {
+              "must-match": "Les mots de passe ne correspondent pas."
+            },
+            "hide-password-button": "Afficher ou masquer mon mot de passe"
+          },
+          "submit": {
+            "message": {
+              "success": "✅ ***REMOVED*** réinitialisé avec succès. Redirection...",
+              "error": {
+                "userinfo-not-available": "Erreur: informations utilisateur non disponibles",
+                "technical": "Erreur lors de la réinitialisation du mot de passe"
+              }
+            },
+            "button": "VALIDER"
+          }
+        },
+        "message": {
+          "error": {
+            "invalid-link": "Lien invalide",
+            "expired-link": "Le lien de réinitialisation est invalide ou a expiré"
+          }
+        }
+      }
+    },
+    "dashboard": {
+      "navbar-component": {
+        "logo-alt": "Logo de l'application wavecare",
+        "title": "WaveCare",
+        "menu": {
+          "ticket-management-dashboard": "Suivi des tickets",
+          "user-management-dashboard": "Gestion des profils"
+        },
+        "logout-button": "Déconnexion"
+      },
+      "footer-component": {
+        "content": "© 2025 WaveCare. Tous droits réservés."
+      }
+    },
+    "notification": {
+      "not-found-component": {
+        "message": "Nous rencontrons actuellement des problèmes techniques.\nNos équipes travaillent activement à résoudre ce problème.\nNous vous remercions de votre patience et vous prions de nous excuser pour la gêne occasionnée.",
+        "back-to-home": "Retour à l'accueil",
+        "ticket": "Signaler le problème"
       }
     }
   }
