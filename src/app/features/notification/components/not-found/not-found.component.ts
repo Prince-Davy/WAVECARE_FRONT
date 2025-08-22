@@ -1,4 +1,3 @@
-import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -31,17 +30,6 @@ export class NotFoundComponent implements OnInit {
   }
 
   goToHome(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const token = this.authService.getToken();
-      const getToken = token && this.authService.getToken();
-
-      console.log('Redirection depuis goToHome - Token valide:', getToken);
-
-      if (getToken) {
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.router.navigate(['/***REMOVED***']);
-      }
-    }
+    this.router.navigate(['/dashboard']);
   }
 }

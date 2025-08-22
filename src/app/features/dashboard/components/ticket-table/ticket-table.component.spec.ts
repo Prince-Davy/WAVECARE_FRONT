@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TicketTableComponent } from '@app/features/ticket-table/ticket-table-component/ticket-table.component';
+import { TicketTableComponent } from '@app/features/dashboard/components/ticket-table/ticket-table.component';
 
 
 describe('TicketTableComponent', () => {
