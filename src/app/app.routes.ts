@@ -1,54 +1,38 @@
 import { Routes } from '@angular/router';
-import { AppComponent } from '@app/app.component';
-import { AssistanceComponent } from '@app/features/assistance/components/assistance/assistance.component';
-import { AuthComponent } from '@app/features/auth/components/auth/auth.component';
-import { ForgotPasswordComponent } from '@app/features/auth/components/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from '@app/features/auth/components/reset-password/reset-password.component';
 import { AuthGuard } from '@app/features/auth/guards/auth.guard';
-import { roleGuard } from '@app/features/auth/guards/role.guard';
-import { DashboardComponent } from '@app/features/dashboard/components/dashboard/dashboard.component';
-import { NotFoundComponent } from '@app/features/notification/components/not-found/not-found.component';
+
+export const PATH_TO_TICKETS: string = 'tickets';
+export const PATH_TO_ASSISTANCE = 'assistance';
 
 export const routes: Routes = [
   {
-    path: '',
-    redirectTo: '/login',
-    pathMatch: 'full'
-  },
-  {
     path: 'login',
-    component: AuthComponent
+    loadComponent: () => import('@app/features/auth/components/auth/auth.component').then(c => c.AuthComponent)
   },
   {
     path: 'forgot-password',
-    component: ForgotPasswordComponent
-  },
-  {
-    path: 'dashboard',
-    component: DashboardComponent,
-    canActivate: [AuthGuard]
-
-  },
-  {
-    path: 'assistance',
-    component: AssistanceComponent
-  },
-  {
-    path: 'super-admin',
-    component: AppComponent,
-    canActivate: [AuthGuard, () => roleGuard(['SUPER_ADMIN'])],
-    children: []
+    loadComponent: () => import('@app/features/auth/components/forgot-password/forgot-password.component').then(c => c.ForgotPasswordComponent)
   },
   {
     path: 'reset-password',
-    component: ResetPasswordComponent
+    loadComponent: () => import('@app/features/auth/components/reset-password/reset-password.component').then(c => c.ResetPasswordComponent)
   },
   {
-    path: '404',
-    component: NotFoundComponent
+    path: PATH_TO_ASSISTANCE,
+    loadComponent: () => import('@app/features/assistance/components/assistance/assistance.component').then(c => c.AssistanceComponent)
+  },
+  {
+    path: PATH_TO_TICKETS,
+    canActivate: [AuthGuard],
+    loadComponent: () => import('@app/features/dashboard/components/ticket-table/ticket-table.component').then(c => c.TicketTableComponent)
+  },
+  {
+    path: '',
+    redirectTo: PATH_TO_TICKETS,
+    pathMatch: "full"
   },
   {
     path: '**',
-    component: NotFoundComponent
+    loadComponent: () => import('@app/features/notification/components/not-found/not-found.component').then(c => c.NotFoundComponent)
   }
 ];

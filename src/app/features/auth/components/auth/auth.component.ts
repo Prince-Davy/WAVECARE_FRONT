@@ -7,8 +7,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '@app/features/auth/services/auth.service';
+import { NavigationService } from '@app/features/navigation/services/navigation.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -40,7 +41,7 @@ export class AuthComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router,
+    private navigationService: NavigationService,
     private translate: TranslateService
   ) {
 
@@ -62,23 +63,8 @@ export class AuthComponent {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
-          // Handle successful login based on user role
-          // const role = response.role;
           console.log("You are logged in");
-          this.router.navigate(['/dashboard']);
-          // switch (role) {
-          //   case 'SUPER_ADMIN':
-          //     this.router.navigate(['/super-admin-dashboard']);
-          //     break;
-          //   case 'MEDICAL_ADMIN':
-          //     this.router.navigate(['/medical-admin-dashboard']);
-          //     break;
-          //   case 'HEALTH_PROFESSIONAL':
-          //     this.router.navigate(['/health-professional-dashboard']);
-          //     break;
-          //   default:
-          //     this.errorMessage = 'Unknown user role';
-          // }
+          this.navigationService.navigateToTickets();
         },
         error: (error) => {
           if (error.status === 429) {
@@ -96,11 +82,5 @@ export class AuthComponent {
 
   closeLockoutModal() {
     this.isLockoutModalOpen = false;
-    this.router.navigate(['/login']);
-  }
-
-  goToAssistance() {
-    this.isLockoutModalOpen = false;
-    this.router.navigate(['/assistance']);
   }
 }
