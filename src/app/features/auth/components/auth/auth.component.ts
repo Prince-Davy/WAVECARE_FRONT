@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
+import { PATH_TO_ASSISTANCE, PATH_TO_FORGOT_PASSWORD } from '@app/app.routes';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { NavigationService } from '@app/features/navigation/services/navigation.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -32,6 +33,10 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 })
 export class AuthComponent {
+
+  readonly PATH_TO_FORGOT_PASSWORD_FOR_HTML = `/${PATH_TO_FORGOT_PASSWORD}`;
+  readonly PATH_TO_ASSISTANCE_FOR_HTML = `/${PATH_TO_ASSISTANCE}`;
+
   loginForm: FormGroup;
   hidePassword = true;
   errorMessage: string | undefined;
@@ -64,7 +69,7 @@ export class AuthComponent {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
           console.log("You are logged in");
-          this.navigationService.navigateToTickets();
+          this.navigationService.navigateToHome();
         },
         error: (error) => {
           if (error.status === 429) {

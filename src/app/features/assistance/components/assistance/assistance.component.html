@@ -1,5 +1,7 @@
 <div class="assistance-container">
-  <img class="logo" [alt]="'feature.assistance.assistance-component.logo-alt' | translate" src="assets/images/LogoWaveCare_SansTexte.png">
+  <a routerLink="" href="#">
+    <img class="logo" [alt]="'feature.assistance.assistance-component.logo-alt' | translate" src="assets/images/LogoWaveCare_SansTexte.png">
+  </a>
   <mat-card class="assistance-card">
     <h2 class="title">{{'feature.assistance.assistance-component.title' | translate}}</h2>
     @if (submissionSuccess !== null) {
@@ -66,9 +68,11 @@
         </mat-form-field>
       </div>
       <div class="submit-ticket-wrapper">
-        <button class="submit-ticket" mat-raised-button type="submit" [disabled]="assistanceForm.invalid">
-          {{'feature.assistance.assistance-component.form.submit.button' | translate}}
-        </button>
+        <div>
+          <button class="submit-ticket" mat-raised-button type="submit" [disabled]="assistanceForm.invalid">
+            {{'feature.assistance.assistance-component.form.submit.button' | translate}}
+          </button>
+        </div>
       </div>
     </form>
   </mat-card>

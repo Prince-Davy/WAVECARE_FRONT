@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { RouterLink } from '@angular/router';
+import { PATH_TO_ASSISTANCE } from '@app/app.routes';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -19,13 +21,17 @@ import { TranslateModule } from '@ngx-translate/core';
     MatInputModule,
     MatButtonModule,
     MatFormFieldModule,
-    TranslateModule
+    TranslateModule,
+    RouterLink
   ],
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.scss']
 })
 export class ForgotPasswordComponent {
-  form;
+
+  readonly PATH_TO_ASSISTANCE_FOR_HTML = `/${PATH_TO_ASSISTANCE}`;
+
+  form: FormGroup;
   resetRequestSuccess: boolean | null = null;
 
   constructor(
