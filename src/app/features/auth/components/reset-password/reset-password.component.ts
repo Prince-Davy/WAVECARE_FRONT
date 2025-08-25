@@ -5,8 +5,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '@app/features/auth/services/auth.service';
+import { NavigationService } from '@app/features/navigation/services/navigation.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -19,7 +20,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    TranslateModule
+    TranslateModule,
+    RouterLink
   ],
   templateUrl: './***REMOVED***.component.html',
   styleUrls: ['./***REMOVED***.component.scss']
@@ -39,7 +41,7 @@ export class ResetPasswordComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router,
+    private navigationService: NavigationService,
     private translate: TranslateService
   ) {
     this.resetForm = this.fb.group({
@@ -132,7 +134,7 @@ export class ResetPasswordComponent implements OnInit {
         }
 
         setTimeout(() => {
-          this.router.navigate(['/***REMOVED***']);
+          this.navigationService.navigateToLogin();
         }, 2000);
       },
       error: (error) => {

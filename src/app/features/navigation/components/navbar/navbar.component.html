@@ -1,12 +1,14 @@
 <mat-toolbar color="primary" class="navbar">
   <div class="brand">
-    <img class="logo" [alt]="'feature.dashboard.navbar-component.logo-alt' | translate" src="assets/images/LogoWaveCare.png">
+    <a routerLink="" href="#">
+      <img class="logo" [alt]="'feature.dashboard.navbar-component.logo-alt' | translate" src="assets/images/LogoWaveCare.png">
+    </a>
     <span>{{'feature.dashboard.navbar-component.title' | translate}}</span>
   </div>
   <span class="spacer"></span>
   <nav>
-    <a mat-button routerLink="/dashboard">{{'feature.dashboard.navbar-component.menu.ticket-management-dashboard' | translate}}</a>
-    <a mat-button routerLink="/profils">{{'feature.dashboard.navbar-component.menu.user-management-dashboard' | translate}}</a>
+    <a mat-button [routerLink]="PATH_TO_TICKETS_FOR_HTML" href="#">{{'feature.dashboard.navbar-component.menu.ticket-management-dashboard' | translate}}</a>
+    <a mat-button routerLink="" href="#">{{'feature.dashboard.navbar-component.menu.user-management-dashboard' | translate}}</a>
   </nav>
   <span class="spacer"></span>
   <div class="user-info">

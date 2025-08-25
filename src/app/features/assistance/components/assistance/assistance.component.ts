@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { RouterLink } from '@angular/router';
 import { CreateAssistanceTicketDTO } from '@app/features/assistance/models/assistance-ticket-dto';
 import { AssistanceService } from '@app/features/assistance/services/assistance.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -23,7 +24,8 @@ import { TranslateModule } from '@ngx-translate/core';
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
-    TranslateModule
+    TranslateModule,
+    RouterLink
   ],
   templateUrl: './assistance.component.html',
   styleUrls: ['./assistance.component.scss']

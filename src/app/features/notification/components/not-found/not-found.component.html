@@ -18,13 +18,13 @@
       <p>{{'feature.notification.not-found-component.message' | translate}}</p>
     </div>
 
-    <button mat-raised-button class="action-button" (click)="goToHome()">
+    <button mat-raised-button class="action-button" (click)="navigationService.navigateToHome()">
       <mat-icon>arrow_back</mat-icon>
       {{'feature.notification.not-found-component.back-to-home' | translate}}
     </button>
 
     <div class="support-links">
-      <a routerLink="/assistance" href="#" class="report-link">{{'feature.notification.not-found-component.ticket' | translate}}</a>
+      <a [routerLink]="PATH_TO_ASSISTANCE_FOR_HTML" href="#" class="report-link">{{'feature.notification.not-found-component.ticket' | translate}}</a>
     </div>
   </div>
 

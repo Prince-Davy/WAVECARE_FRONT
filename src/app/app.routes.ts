@@ -1,20 +1,23 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from '@app/features/auth/guards/auth.guard';
 
-export const PATH_TO_TICKETS: string = 'tickets';
+export const PATH_TO_LOGIN = '***REMOVED***';
+export const PATH_TO_FORGOT_PASSWORD = '***REMOVED***';
+export const PATH_TO_RESET_PASSWORD = '***REMOVED***';
 export const PATH_TO_ASSISTANCE = 'assistance';
+export const PATH_TO_TICKETS: string = 'tickets';
 
 export const routes: Routes = [
   {
-    path: '***REMOVED***',
+    path: PATH_TO_LOGIN,
     loadComponent: () => import('@app/features/auth/components/auth/auth.component').then(c => c.AuthComponent)
   },
   {
-    path: '***REMOVED***',
+    path: PATH_TO_FORGOT_PASSWORD,
     loadComponent: () => import('@app/features/auth/components/***REMOVED***/***REMOVED***.component').then(c => c.ForgotPasswordComponent)
   },
   {
-    path: '***REMOVED***',
+    path: PATH_TO_RESET_PASSWORD,
     loadComponent: () => import('@app/features/auth/components/***REMOVED***/***REMOVED***.component').then(c => c.ResetPasswordComponent)
   },
   {

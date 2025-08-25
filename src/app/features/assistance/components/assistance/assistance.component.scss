@@ -70,8 +70,18 @@
   }
 }
 
+.submit-ticket-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
 .submit-ticket-wrapper:has(.submit-ticket:disabled) {
-  cursor: not-allowed;
+  div {
+    display: flex;
+    width: fit-content;
+    height: fit-content;
+    cursor: not-allowed;
+  }
 }
 
 .form-control-error-message {
