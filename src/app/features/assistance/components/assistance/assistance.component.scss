@@ -1,0 +1,84 @@
+.assistance-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  transform: scale(0.9);
+  transform-origin: top center;
+}
+
+.assistance-card {
+  background-color: #005EA5;
+  color: white;
+  border-radius: 25px;
+  padding: 40px 50px;
+  width: 850px;
+  max-width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+  height: 125px;
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 40px;
+  font-weight: bold;
+  margin-top: 0px;
+  margin-bottom: 15px;
+}
+
+.description {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.advisory {
+  font-size: 14px;
+  color: white;
+  margin-bottom: 5px;
+}
+
+.assistance-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 8px;
+}
+
+.form-label {
+  color: white;
+  font-size: 18px;
+  margin-bottom: 8px;
+  display: block;
+  text-align: left;
+}
+
+.submit-ticket {
+  font-weight: bold;
+  margin-top: 8px;
+
+  &:disabled {
+    background-color: #E0E0E0;
+    color: #626262;
+  }
+}
+
+.submit-ticket-wrapper:has(.submit-ticket:disabled) {
+  cursor: not-allowed;
+}
+
+.form-control-error-message {
+  text-align: center;
+  color: #ef0000;
+}
+
+#content {
+  height: 72px
+}

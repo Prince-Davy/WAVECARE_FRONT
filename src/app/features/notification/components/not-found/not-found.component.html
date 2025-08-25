@@ -1,0 +1,34 @@
+<!-- not-found.component.html -->
+<div class="not-found-container">
+  <div class="content">
+    <div class="logo">
+      <img class="logo" [alt]="'feature.notification.not-found-component.logo-alt' | translate" src="assets/images/LogoWaveCare_SansTexte.png">
+    </div>
+
+    <div class="error-code">
+      <span class="dot dot-left"></span>
+      <span class="digit">4</span>
+      <span class="dot dot-middle"></span>
+      <span class="digit">0</span>
+      <span class="dot dot-right"></span>
+      <span class="digit">4</span>
+    </div>
+
+    <div class="message">
+      <p>{{'feature.notification.not-found-component.message' | translate}}</p>
+    </div>
+
+    <button mat-raised-button class="action-button" (click)="goToHome()">
+      <mat-icon>arrow_back</mat-icon>
+      {{'feature.notification.not-found-component.back-to-home' | translate}}
+    </button>
+
+    <div class="support-links">
+      <a routerLink="/assistance" href="#" class="report-link">{{'feature.notification.not-found-component.ticket' | translate}}</a>
+    </div>
+  </div>
+
+  <div class="corner-shape-top"></div>
+  <div class="corner-shape-bottom"></div>
+  <div class="corner-shape-left"></div>
+</div>

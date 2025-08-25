@@ -1,0 +1,84 @@
+<div class="auth-container">
+  <img class="logo" [alt]="'feature.auth.auth-component.logo-alt' | translate" src="assets/images/LogoWaveCare_SansTexte.png">
+
+  <mat-card class="***REMOVED***-card">
+    <h2 class="title">{{'feature.auth.auth-component.title' | translate}}</h2>
+
+    @if (submitted && errorMessage) {
+    <div class="notification-message">
+      <div class="error-message" role="alert">{{ errorMessage }}</div>
+    </div>
+    }
+
+    <p class="description">{{'feature.auth.auth-component.description' | translate}}</p>
+
+    <form [formGroup]="***REMOVED***Form" (ngSubmit)="onSubmit()" class="***REMOVED***-form">
+
+      <!-- Mail Field -->
+      <label for="***REMOVED***-username">{{'feature.auth.auth-component.form.username.label' | translate}}</label>
+      <mat-form-field appearance="outline">
+        <input id="***REMOVED***-username" matInput [placeholder]="'feature.auth.auth-component.form.username.placeholder' | translate" formControlName="username" required>
+        @if (***REMOVED***Form.get('username')?.invalid && ***REMOVED***Form.get('username')?.touched) {
+        <div class="form-control-error-message">{{'feature.auth.auth-component.form.username.error-message' | translate}}</div>
+        }
+      </mat-form-field>
+
+      <!-- Password Field -->
+      <label for="***REMOVED***-password">{{'feature.auth.auth-component.form.password.label' | translate}}</label>
+      <mat-form-field appearance="outline">
+        <input id="***REMOVED***-password" matInput [placeholder]="'feature.auth.auth-component.form.password.placeholder' | translate" [type]="hidePassword ? 'password' : 'text'" formControlName="password" required autocomplete="off">
+        <button [title]="'feature.auth.auth-component.form.password.hide-password-button' | translate" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (***REMOVED***Form.get('password')?.invalid && ***REMOVED***Form.get('password')?.touched) {
+        <div class="form-control-error-message">{{'feature.auth.auth-component.form.password.error-message' | translate}}</div>
+        }
+      </mat-form-field>
+
+      <!-- Submit Button -->
+      <div class="***REMOVED***-submit-wrapper">
+        <button mat-raised-button class="***REMOVED***-submit" [disabled]="!***REMOVED***Form.valid" type="submit">{{'feature.auth.auth-component.form.submit.button' | translate}}</button>
+      </div>
+    </form>
+    <a routerLink="/***REMOVED***" class="***REMOVED***" href="#">
+      {{'feature.auth.auth-component.***REMOVED***-link' | translate}}
+    </a>
+
+    <div class="divider">
+      <span></span>
+      <p>{{'feature.auth.auth-component.or-divider-text' | translate}}</p>
+      <span></span>
+    </div>
+
+    <p class="signin-alt">{{'feature.auth.auth-component.external-auth.label' | translate}}</p>
+    <button class="psc-button" [attr.aria-label]="'feature.auth.auth-component.external-auth.label' | translate">
+      <img src="assets/images/pro-sante-connect.png" class="psc-logo" [alt]="'feature.auth.auth-component.external-auth.alt' | translate">
+    </button>
+
+    <a class="assistance-link" routerLink="/assistance" href="#">
+      {{'feature.auth.auth-component.assistance-link' | translate}}
+    </a>
+  </mat-card>
+</div>
+
+<!-- Lockout Modal (Scenario 2) -->
+@if (isLockoutModalOpen) {
+<div class="modal-backdrop">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button button mat-button class="modal-close-button" (click)="closeLockoutModal()">
+      <span>
+        {{'feature.auth.auth-component.account-locked-modal.close-button' | translate}}
+        <mat-icon>close</mat-icon>
+      </span>
+    </button>
+    <div class="modal-content">
+      <h2 id="lockoutTitle">{{'feature.auth.auth-component.account-locked-modal.title' | translate}}</h2>
+      <p class="modal-paragraph">{{'feature.auth.auth-component.account-locked-modal.message' | translate}}
+      </p>
+      <a href="#" routerLink="/assistance" class="modal-link">
+        {{'feature.auth.auth-component.account-locked-modal.link' | translate}}
+      </a>
+    </div>
+  </div>
+</div>
+}
