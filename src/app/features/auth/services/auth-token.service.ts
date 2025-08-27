@@ -22,6 +22,11 @@ export class AuthTokenService {
     sessionStorage.removeItem(this.SESSION_STORAGE_TOKEN_KEY);
   }
 
+  /**
+   * Checks if the current token is still valid.
+   *
+   * @returns true if the token is valid, false otherwise
+   */
   isTokenValid(): boolean {
     const token: string | null = this.getToken();
     if (!token) {
