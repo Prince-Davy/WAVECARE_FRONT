@@ -1,5 +1,5 @@
 <div class="table-container">
-    <h2>Suivi des tickets</h2>
+    <h2 class="dashboard-title">Suivi des tickets</h2>
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
   
       <!-- Colonnes -->
@@ -10,7 +10,7 @@
   
       <ng-container matColumnDef="objet">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="category">Objet demandé</th>
-        <td mat-cell *matCellDef="let ticket">{{ ticket.category }}</td>
+        <td mat-cell *matCellDef="let ticket">{{ categoryKey(ticket.category) | translate }}</td>
       </ng-container>
 
       <ng-container matColumnDef="nom">
@@ -30,12 +30,17 @@
 
       <ng-container matColumnDef="statut">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="status">Statut</th>
-        <td mat-cell *matCellDef="let ticket">{{ ticket.status }}</td>
+        <td mat-cell *matCellDef="let ticket">{{ statusKey(ticket.status) | translate }}</td>
       </ng-container>
 
       <ng-container matColumnDef="date">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="ticketCreationDate">Date et heure</th>
         <td mat-cell *matCellDef="let ticket">{{ ticket.creation | date:'dd/MM/yyyy - HH:mm' }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let ticket"><mat-icon matTooltip="Modifier" class="material-symbols-outlined" aria-label="Modifier">edit</mat-icon></td>
       </ng-container>
   
       <!-- Header & Row -->

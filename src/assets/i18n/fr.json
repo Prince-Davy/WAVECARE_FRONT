@@ -155,6 +155,11 @@
       }
     },
     "dashboard": {
+      "status": {
+              "STANDBY": "En attente",
+              "PROCESS": "En cours",
+              "SOLVED": "Résolu"
+      },
       "navbar-component": {
         "logo-alt": "Logo de l'application wavecare",
         "title": "WaveCare",
