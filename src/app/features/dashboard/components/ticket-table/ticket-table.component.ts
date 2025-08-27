@@ -6,19 +6,22 @@ import { DashboardComponent } from '../../abstract/dashboard-component.abstract'
 import { TicketTableService } from '../../services/ticket-table.service';
 import { merge, of, startWith, switchMap, map, catchError, Observable, Subscription } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
 
 type RowDto = any;
 
 @Component({
   selector: 'ticket-table',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatSortModule, DatePipe],
+  imports: [MatTableModule, MatPaginatorModule, MatSortModule, DatePipe, TranslateModule, MatIconModule, MatTooltip],
   templateUrl: './ticket-table.component.html',
   styleUrls: ['./ticket-table.component.scss']
 })
 export class TicketTableComponent extends DashboardComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'objet', 'nom', 'prenom', 'mail', 'statut', 'date'];
+  displayedColumns: string[] = ['id', 'objet', 'nom', 'prenom', 'mail', 'statut', 'date', 'action'];
   dataSource = new MatTableDataSource<RowDto>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -78,6 +81,14 @@ export class TicketTableComponent extends DashboardComponent implements OnInit, 
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
+  }
+
+  categoryKey(cat: string | null): string {
+    return `feature.assistance.assistance-component.form.category.ticket-category.${cat ?? ''}`;
+  }
+
+  statusKey(status: string | null): string {
+    return `feature.dashboard.status.${status ?? ''}`;
   }
 
   nextPage(): void {
