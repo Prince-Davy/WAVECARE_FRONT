@@ -24,7 +24,7 @@
           },
           "category": {
             "label": "Quel est l'objet de votre demande ?",
-            "placeholder": "Sélectionner une option",
+            "placeholder": "Sélectionnez une option",
             "error-message": "Objet invalide",
             "ticket-category": {
               "ACCOUNT_ID": "Identifiant",
