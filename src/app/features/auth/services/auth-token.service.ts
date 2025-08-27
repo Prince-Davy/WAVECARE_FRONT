@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ExtendedJwtPayload } from '@app/features/auth/models/extended-jwt-payload.interface';
 import { jwtDecode } from "jwt-decode";
 
 @Injectable({
@@ -33,5 +34,16 @@ export class AuthTokenService {
       return false;
     }
     return jwtDecode(token).exp! > (Date.now() / 1000);
+  }
+
+  getCompleteName() {
+    const token = this.getToken();
+    if (!token) {
+      return false;
+    }
+
+    const decodedToken: ExtendedJwtPayload = jwtDecode(token);
+
+    return decodedToken.name ? `${decodedToken.name}` : `${decodedToken.given_name} ${decodedToken.family_name}`;
   }
 }

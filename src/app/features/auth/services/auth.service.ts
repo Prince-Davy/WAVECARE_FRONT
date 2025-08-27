@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LoginCredentials, LoginResponse } from '@app/features/auth/models/auth.types';
+import { LoginCredentials, LoginResponse } from '@app/features/auth/models/auth.interface';
+import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
 import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
-import { AuthTokenService } from './auth-token.service';
 
 
 @Injectable({
