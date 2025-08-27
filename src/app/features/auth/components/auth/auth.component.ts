@@ -1,6 +1,6 @@
 // auth.component.ts
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 import { PATH_TO_ASSISTANCE, PATH_TO_FORGOT_PASSWORD } from '@app/app.routes';
+import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { NavigationService } from '@app/features/navigation/services/navigation.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -32,7 +33,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   styleUrl: './auth.component.scss',
 
 })
-export class AuthComponent {
+export class AuthComponent implements OnInit {
 
   readonly PATH_TO_FORGOT_PASSWORD_FOR_HTML = `/${PATH_TO_FORGOT_PASSWORD}`;
   readonly PATH_TO_ASSISTANCE_FOR_HTML = `/${PATH_TO_ASSISTANCE}`;
@@ -46,6 +47,7 @@ export class AuthComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private authTokenService: AuthTokenService,
     private navigationService: NavigationService,
     private translate: TranslateService
   ) {
@@ -54,6 +56,12 @@ export class AuthComponent {
       username: ['', [Validators.required]],
       password: ['', [Validators.required]]
     });
+  }
+
+  ngOnInit(): void {
+    if (this.authTokenService.isTokenValid()) {
+      this.navigationService.navigateToHome()
+    }
   }
   get username() {
     return this.loginForm.get('username');
