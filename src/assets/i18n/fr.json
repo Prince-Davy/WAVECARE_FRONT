@@ -181,7 +181,8 @@
               "label": "Date et heure"
             },
             "action": {
-              "label": "Action"
+              "label": "Action",
+              "tooltip": "Consulter / Modifier"
             }
           },
           "paginator": {
