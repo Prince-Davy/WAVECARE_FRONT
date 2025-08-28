@@ -40,7 +40,8 @@
 
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef>{{ 'feature.dashboard.ticket-table-component.table.column.action.label' | translate }}</th>
-      <td mat-cell *matCellDef="let ticket"><mat-icon matTooltip="Consulter / Modifier" matTooltipPosition="right" class="material-symbols-outlined" aria-label="Modifier">edit</mat-icon></td>
+      <td mat-cell *matCellDef="let ticket"><mat-icon [matTooltip]="'feature.dashboard.ticket-table-component.table.column.action.tooltip' | translate" matTooltipPosition="right" class="material-symbols-outlined"
+          aria-label="'feature.dashboard.ticket-table-component.table.column.action.tooltip' | translate">edit</mat-icon></td>
     </ng-container>
 
     <!-- Header & Row -->
