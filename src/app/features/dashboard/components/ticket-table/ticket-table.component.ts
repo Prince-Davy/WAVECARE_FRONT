@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { MatCardModule } from "@angular/material/card";
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
@@ -9,9 +10,11 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
 import { DashboardComponent } from '@app/features/dashboard/abstract/dashboard-component.abstract';
 import { CustomPaginator } from '@app/features/dashboard/classes/custom-paginator';
-import { Page, Ticket, TicketTableService } from '@app/features/dashboard/services/ticket-table.service';
+import { Ticket } from '@app/features/dashboard/models/ticket.interface';
+import { Page, TicketService } from '@app/features/dashboard/services/ticket.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { finalize, merge } from 'rxjs';
+import { finalize, merge, zip } from 'rxjs';
+import { TicketDialogComponent, TicketDialogData } from '../ticket-dialog/ticket-dialog.component';
 
 @Component({
   selector: 'ticket-table',
@@ -25,6 +28,8 @@ import { finalize, merge } from 'rxjs';
 })
 export class TicketTableComponent extends DashboardComponent implements AfterViewInit {
 
+  readonly dialog = inject(MatDialog);
+
   displayedColumns: string[] = ['id', 'subject', 'lastName', 'firstName', 'mail', 'status', 'date', 'action'];
   dataSource: MatTableDataSource<Ticket> = new MatTableDataSource<Ticket>([]);
 
@@ -35,7 +40,7 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
   resultsLength: number = 0;
   pageSize: number = this.pageSizeOptions[1];
 
-  constructor(private api: TicketTableService) {
+  constructor(private ticketService: TicketService) {
     super();
   }
 
@@ -43,7 +48,7 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
     merge(this.paginator.initialized, this.paginator.page)
       .subscribe((event: void | PageEvent) => {
         this.isLoading = true;
-        this.api.getTickets(event ? event.pageIndex : 0, event ? event.pageSize : this.pageSize)
+        this.ticketService.getTickets(event ? event.pageIndex : 0, event ? event.pageSize : this.pageSize)
           .pipe(
             finalize(() => this.isLoading = false)
           )
@@ -59,6 +64,31 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
       });
 
     this.dataSource.paginator = this.paginator;
+  }
+
+  openTicketDialog(ticketId: number) {
+    zip(this.ticketService.getTicketStatuses(), this.ticketService.getTicket(ticketId))
+      .subscribe(([statuses, ticket]) => {
+        this.dialog.open(TicketDialogComponent, {
+          data: {
+            ticket,
+            statuses
+          } as TicketDialogData,
+        })
+          .afterClosed()
+          .subscribe((ticket: Ticket) => {
+            console.log('The dialog was closed');
+            if (ticket !== undefined) {
+              console.log(ticket);
+              this.ticketService.updateTicket(ticket).subscribe({
+                error: (error: any) => {
+                  console.error("An error occurred when trying to update ticket.")
+                }
+              });
+            }
+          });;
+
+      });
   }
 
   private updateRows(rows: Ticket[], totalElements: number, pageSize: number) {
