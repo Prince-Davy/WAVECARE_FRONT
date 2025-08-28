@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
@@ -15,7 +16,7 @@ import { finalize, merge } from 'rxjs';
 @Component({
   selector: 'ticket-table',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatSortModule, DatePipe, TranslateModule, MatIconModule, MatTooltip],
+  imports: [MatTableModule, MatPaginatorModule, MatSortModule, DatePipe, TranslateModule, MatIconModule, MatTooltip, MatCardModule],
   templateUrl: './ticket-table.component.html',
   styleUrls: ['./ticket-table.component.scss'],
   providers: [

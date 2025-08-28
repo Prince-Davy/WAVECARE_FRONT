@@ -1,3 +1,19 @@
 .dashboard-title {
-    color: #005EA5;
+  color: #005EA5;
+}
+
+.ticket-container {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  height: calc(75vh - 25px);
+  width: auto;
 }
