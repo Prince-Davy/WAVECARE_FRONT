@@ -1,3 +1,14 @@
-<div class="app-container">
-  <router-outlet></router-outlet>
+@if (dashboardMode) {
+<!-- Dashboard  -->
+<div class="dashboard-container">
+  <navbar></navbar>
+  <main class="main-content">
+    <router-outlet (activate)="onActivate($event)"></router-outlet>
+  </main>
+  <app-footer></app-footer>
 </div>
+}
+@else {
+<!-- Full page components  -->
+<router-outlet (activate)="onActivate($event)"></router-outlet>
+}
