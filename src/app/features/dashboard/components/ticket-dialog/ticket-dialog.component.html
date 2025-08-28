@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Ticket n°{{data.ticket.id}}</h2>
+<mat-dialog-content>
+  <p>Id: {{data.ticket.id}}</p>
+  <p>Objet de la demande: {{data.ticket.category}}</p>
+  <p>Nom: {{data.ticket.lastName}}</p>
+  <p>firstName: {{data.ticket.firstName}}</p>
+  <p>Email: {{data.ticket.mail}}</p>
+  <p>Description: {{data.ticket.description}}</p>
+  <label for="status">Statut : </label>
+  <mat-form-field>
+    <mat-select id="status" [(value)]="data.ticket.status" [aria-label]="'Statut'" required>
+      @for(status of data.statuses; track status) {
+      <mat-option [value]="status">{{ status }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <label for="comment">Commentaire administrateur : </label>
+  <mat-form-field [formGroup]="comment">
+    <textarea matInput id="comment" [placeholder]="'todo'" formControlName="textarea" required></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>No Thanks</button>
+  <button mat-button [mat-dialog-close]="validate()" cdkFocusInitial>Ok</button>
+</mat-dialog-actions>

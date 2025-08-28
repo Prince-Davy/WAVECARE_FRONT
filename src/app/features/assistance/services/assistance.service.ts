@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class AssistanceService {
 
-  private apiUrl = 'http://localhost:8080/api/ticket';
+  private apiUrl = 'http://localhost:8080/api/tickets';
 
   constructor(private http: HttpClient) { }
 

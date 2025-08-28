@@ -18,7 +18,9 @@ import { Subscription } from "rxjs";
     }
    }
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class CustomPaginator extends MatPaginatorIntl implements OnDestroy {
   private readonly PAGINATOR_LABEL_DENOMINATION = `feature.dashboard.ticket-table-component.table.paginator`;
 

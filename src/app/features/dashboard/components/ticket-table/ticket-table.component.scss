@@ -17,3 +17,9 @@
   height: calc(75vh - 25px);
   width: auto;
 }
+
+td {
+  mat-icon {
+    cursor: pointer;
+  }
+}
