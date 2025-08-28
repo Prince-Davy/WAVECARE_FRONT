@@ -1,17 +1,25 @@
-<mat-toolbar color="primary" class="navbar">
+<div color="primary" class="navbar">
   <div class="brand">
     <a routerLink="" href="#">
       <img class="logo" [alt]="'feature.dashboard.navbar-component.logo-alt' | translate" src="assets/images/LogoWaveCare.png">
     </a>
-    <span>{{'feature.dashboard.navbar-component.title' | translate}}</span>
   </div>
+  <span class="spacer-mini"></span>
+  <a class="custom-tab-button" [routerLink]="PATH_TO_TICKETS_FOR_HTML" href="#">
+    <span class="custom-tab-button-label">{{'feature.dashboard.navbar-component.menu.ticket-management-dashboard' | translate}}</span>
+    <span class="custom-tab-button-underline"></span>
+  </a>
+
+  <a class="custom-tab-button" routerLink="" href="#">
+    <span class="custom-tab-button-label">{{'feature.dashboard.navbar-component.menu.user-management-dashboard' | translate}}</span>
+    <span class="custom-tab-button-underline-transparent"></span>
+  </a>
   <span class="spacer"></span>
-  <nav>
-    <a mat-button [routerLink]="PATH_TO_TICKETS_FOR_HTML" href="#">{{'feature.dashboard.navbar-component.menu.ticket-management-dashboard' | translate}}</a>
-    <a mat-button routerLink="" href="#">{{'feature.dashboard.navbar-component.menu.user-management-dashboard' | translate}}</a>
-  </nav>
-  <span class="spacer"></span>
-  <div class="user-info">
+  <div class="account-actions">
+    <div class="user-info">
+      <mat-icon>person</mat-icon>
+      <span>{{ authTokenService.getCompleteName() }}</span>
+    </div>
     <button mat-raised-button class="logout-button" (click)="logout()">{{'feature.dashboard.navbar-component.logout-button' | translate}}</button>
   </div>
-</mat-toolbar>
+</div>

@@ -211,7 +211,6 @@
       },
       "navbar-component": {
         "logo-alt": "Logo de l'application wavecare",
-        "title": "WaveCare",
         "menu": {
           "ticket-management-dashboard": "Suivi des tickets",
           "user-management-dashboard": "Gestion des profils"
