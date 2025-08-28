@@ -49,8 +49,18 @@ label {
   font-size: 18px;
 }
 
+.***REMOVED***-submit-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
 .***REMOVED***-submit-wrapper:has(.***REMOVED***-submit:disabled) {
-  cursor: not-allowed;
+  div {
+    display: flex;
+    width: fit-content;
+    height: fit-content;
+    cursor: not-allowed;
+  }
 }
 
 .***REMOVED***-submit {
@@ -107,22 +117,12 @@ label {
   cursor: pointer;
 }
 
-
-::ng-deep .mat-mdc-form-field-subscript-wrapper {
-  display: none !important;
-}
-
 .psc-button {
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
   display: inline-block;
-
-  &:focus {
-    outline: 2px solid #005fcc;
-    outline-offset: 2px;
-  }
 
   .psc-logo {
     max-width: 70%;

@@ -1,14 +1,17 @@
 // auth.component.ts
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { PATH_TO_ASSISTANCE, PATH_TO_FORGOT_PASSWORD } from '@app/app.routes';
+import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
 import { AuthService } from '@app/features/auth/services/auth.service';
+import { NavigationService } from '@app/features/navigation/services/navigation.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -30,7 +33,11 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   styleUrl: './auth.component.scss',
 
 })
-export class AuthComponent {
+export class AuthComponent implements OnInit {
+
+  readonly PATH_TO_FORGOT_PASSWORD_FOR_HTML = `/${PATH_TO_FORGOT_PASSWORD}`;
+  readonly PATH_TO_ASSISTANCE_FOR_HTML = `/${PATH_TO_ASSISTANCE}`;
+
   ***REMOVED***Form: FormGroup;
   hidePassword = true;
   errorMessage: string | undefined;
@@ -40,7 +47,8 @@ export class AuthComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router,
+    private authTokenService: AuthTokenService,
+    private navigationService: NavigationService,
     private translate: TranslateService
   ) {
 
@@ -48,6 +56,12 @@ export class AuthComponent {
       username: ['', [Validators.required]],
       password: ['', [Validators.required]]
     });
+  }
+
+  ngOnInit(): void {
+    if (this.authTokenService.isTokenValid()) {
+      this.navigationService.navigateToHome()
+    }
   }
   get username() {
     return this.***REMOVED***Form.get('username');
@@ -62,23 +76,8 @@ export class AuthComponent {
     if (this.***REMOVED***Form.valid) {
       this.authService.***REMOVED***(this.***REMOVED***Form.value).subscribe({
         next: (response) => {
-          // Handle successful ***REMOVED*** based on user role
-          // const role = response.role;
           console.log("You are logged in");
-          this.router.navigate(['/dashboard']);
-          // switch (role) {
-          //   case 'SUPER_ADMIN':
-          //     this.router.navigate(['/super-admin-dashboard']);
-          //     break;
-          //   case 'MEDICAL_ADMIN':
-          //     this.router.navigate(['/medical-admin-dashboard']);
-          //     break;
-          //   case 'HEALTH_PROFESSIONAL':
-          //     this.router.navigate(['/health-professional-dashboard']);
-          //     break;
-          //   default:
-          //     this.errorMessage = 'Unknown user role';
-          // }
+          this.navigationService.navigateToHome();
         },
         error: (error) => {
           if (error.status === 429) {
@@ -96,11 +95,5 @@ export class AuthComponent {
 
   closeLockoutModal() {
     this.isLockoutModalOpen = false;
-    this.router.navigate(['/***REMOVED***']);
-  }
-
-  goToAssistance() {
-    this.isLockoutModalOpen = false;
-    this.router.navigate(['/assistance']);
   }
 }

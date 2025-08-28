@@ -1,9 +1,9 @@
-import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { LoginCredentials, LoginResponse } from '@app/features/auth/models/auth.types';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
+import { AuthTokenService } from './auth-token.service';
 
 
 @Injectable({
@@ -12,108 +12,10 @@ import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
 export class AuthService {
   private readonly API_URL = 'http://localhost:8080/api';
   private readonly AUTH_URL = 'http://localhost:8080/api/***REMOVED***';
-  private currentUserSubject = new BehaviorSubject<LoginResponse | null>(null);
-  private platformId = inject(PLATFORM_ID);
 
-  currentUser$ = this.currentUserSubject.asObservable();
-
-  constructor(private http: HttpClient) {
-    if (isPlatformBrowser(this.platformId)) {
-      const storedUser = localStorage.getItem('currentUser');
-      if (storedUser) {
-        this.currentUserSubject.next(JSON.parse(storedUser));
-
-        /* Problème de suppresion de token avec l'appel de log out dans le constructeur
-        if (!this.isTokenValid()) {
-            this.logout();
-       } */
-      }
-    }
-  }
-
-
-  setStoredUser(tokenResponse: any) {
-    localStorage.setItem('access_token', tokenResponse.access_token);
-    localStorage.setItem('refresh_token', tokenResponse.refresh_token);
-  }
-
-  getToken(): string | null {
-    return localStorage.getItem('access_token');
-  }
-
-  getCurrentRole(): string | undefined {
-
-    const token = this.getToken();
-    if (token) {
-      const decodedToken = this.decodeToken(token);
-      return decodedToken.realm_access?.roles[0];
-    }
-    return undefined;
-  }
-
-  private decodeToken(token: string): any {
-    try {
-      return JSON.parse(atob(token.split('.')[1]));
-    } catch (e) {
-      return null;
-    }
-  }
-
-  refreshToken(): Observable<LoginResponse> {
-    const refreshToken = this.currentUserSubject.value?.refresh_token;
-    if (!refreshToken) {
-      return throwError(() => new Error('No refresh token available'));
-    }
-
-    const body = new URLSearchParams();
-    body.set('grant_type', 'refresh_token');
-    body.set('refresh_token', refreshToken);
-    body.set('client_id', 'wavecare_web');
-
-    return this.http.post<LoginResponse>(this.AUTH_URL, body.toString(), {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded'
-      })
-    }).pipe(
-      tap(response => {
-        this.setStoredUser(response);
-        this.currentUserSubject.next(response);
-      })
-    );
-  }
-
-  isTokenValid(): boolean {
-    const currentUser = this.currentUserSubject.value;
-    if (!currentUser?.access_token) {
-      return false;
-    }
-
-    try {
-      const decodedToken = this.decodeToken(currentUser.access_token);
-      if (!decodedToken) {
-        return false;
-      }
-
-
-      const expirationTime = decodedToken.exp * 1000;
-      const currentTime = Date.now();
-
-      if (currentTime >= expirationTime) {
-
-        this.setStoredUser(null);
-        this.currentUserSubject.next(null);
-        return false;
-      }
-
-      return true;
-    } catch {
-      return false;
-    }
-  }
+  constructor(private http: HttpClient, private tokenService: AuthTokenService) { }
 
   ***REMOVED***(credentials: LoginCredentials): Observable<LoginResponse> {
-
-
     const body = {
       username: credentials.username,
       password: credentials.password
@@ -131,24 +33,15 @@ export class AuthService {
       .pipe(
         tap(response => {
           if (response.access_token) {
-            this.setStoredUser(response);
-            this.currentUserSubject.next(response);
+            this.tokenService.setToken(response.access_token);
           }
         }),
-
-        catchError(error => {
-          this.currentUserSubject.next(null);
-          return throwError(() => error);
-        }),
-
         timeout(10000)
       );
   }
 
   logout() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    this.currentUserSubject.next(null);
+    this.tokenService.removeToken();
   }
 
   forgotPassword(email: string): Observable<any> {

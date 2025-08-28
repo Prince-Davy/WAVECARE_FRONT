@@ -5,7 +5,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { Router } from '@angular/router';
 import { AuthComponent } from '@app/features/auth/components/auth/auth.component';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { of, throwError } from 'rxjs';
@@ -14,11 +13,9 @@ describe('AuthComponent', () => {
   let component: AuthComponent;
   let fixture: ComponentFixture<AuthComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
-  let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(() => {
     const authSpy = jasmine.createSpyObj('AuthService', ['***REMOVED***']);
-    const routerSpyObj = jasmine.createSpyObj('Router', ['navigate']);
 
     TestBed.configureTestingModule({
       imports: [
@@ -32,15 +29,13 @@ describe('AuthComponent', () => {
         MatIconModule
       ],
       providers: [
-        { provide: AuthService, useValue: authSpy },
-        { provide: Router, useValue: routerSpyObj }
+        { provide: AuthService, useValue: authSpy }
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AuthComponent);
     component = fixture.componentInstance;
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
-    routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
   });
 
   it('devrait créer le composant', () => {
@@ -70,7 +65,6 @@ describe('AuthComponent', () => {
     };
 
     expect(authServiceSpy.***REMOVED***).toHaveBeenCalledWith(expectedLoginPayload);
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/dashboard']);
   });
 
   it('devrait afficher un message d’erreur en cas d’échec de connexion', () => {

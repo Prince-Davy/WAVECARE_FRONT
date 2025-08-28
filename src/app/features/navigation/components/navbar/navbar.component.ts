@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Router, RouterModule } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { PATH_TO_TICKETS } from '@app/app.routes';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { NavigationService } from '../../services/navigation.service';
 
 @Component({
   selector: 'navbar',
@@ -13,17 +15,20 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule,
     MatToolbarModule,
     MatButtonModule,
-    RouterModule,
+    RouterLink,
     TranslateModule
   ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  constructor(private authService: AuthService, private router: Router) { }
+
+  readonly PATH_TO_TICKETS_FOR_HTML = `/${PATH_TO_TICKETS}`;
+
+  constructor(private authService: AuthService, private navigationService: NavigationService) { }
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/***REMOVED***']);
+    this.navigationService.navigateToLogin();
   }
 }

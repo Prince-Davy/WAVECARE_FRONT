@@ -1,9 +1,9 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '@app/features/auth/services/auth.service';
+import { RouterLink } from '@angular/router';
+import { PATH_TO_ASSISTANCE } from '@app/app.routes';
+import { NavigationService } from '@app/features/navigation/services/navigation.service';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -18,30 +18,9 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss']
 })
-export class NotFoundComponent implements OnInit {
+export class NotFoundComponent {
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) { }
+  readonly PATH_TO_ASSISTANCE_FOR_HTML = `/${PATH_TO_ASSISTANCE}`;
 
-  ngOnInit(): void {
-
-  }
-
-  goToHome(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const token = this.authService.getToken();
-      const getToken = token && this.authService.getToken();
-
-      console.log('Redirection depuis goToHome - Token valide:', getToken);
-
-      if (getToken) {
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.router.navigate(['/***REMOVED***']);
-      }
-    }
-  }
+  constructor(public navigationService: NavigationService) { }
 }
