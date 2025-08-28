@@ -6,6 +6,8 @@
 
 .main-content {
   height: 85vh;
+  flex: 1 1 auto;
+  overflow: auto;
 }
 
 .user-info-card {

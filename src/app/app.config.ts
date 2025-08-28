@@ -7,12 +7,6 @@ import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 export const appConfig: ApplicationConfig = {
-  // providers: [
-  //   provideRouter(['/login']),
-  //   provideHttpClient(
-  //     withInterceptors([AuthInterceptor])
-  //   )
-  // ]
   providers: [
     provideRouter(routes, withComponentInputBinding()),
     provideTranslateService({
@@ -23,12 +17,7 @@ export const appConfig: ApplicationConfig = {
         suffix: '.json'
       })
     }),
-    provideHttpClient(
-      // withInterceptors([AuthInterceptor])
-    ),
+    provideHttpClient(),
     provideAnimations()
   ]
-
-  // providers: [
-  //   provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration(withEventReplay())]
 };

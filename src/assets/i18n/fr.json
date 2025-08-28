@@ -155,9 +155,62 @@
       }
     },
     "dashboard": {
+      "ticket-table-component": {
+        "title": "Suivi des Tickets",
+        "table": {
+          "column": {
+            "id": {
+              "label": "Id"
+            },
+            "subject": {
+              "label": "Objet demandé"
+            },
+            "lastName": {
+              "label": "Nom"
+            },
+            "firstName": {
+              "label": "Prénom"
+            },
+            "mail": {
+              "label": "Mail"
+            },
+            "status": {
+              "label": "Statut"
+            },
+            "date": {
+              "label": "Date et heure"
+            },
+            "action": {
+              "label": "Action",
+              "tooltip": "Consulter / Modifier"
+            }
+          },
+          "paginator": {
+            "itemsPerPage": "Nombre de lignes par page ",
+            "nextPage": "Suivant",
+            "previousPage": "Précédent",
+            "firstPage": "Première page",
+            "lastPage": "Dernière page",
+            "of": "sur"
+          }
+        },
+        "ticket": {
+          "status": {
+            "STANDBY": "En attente",
+            "PROCESS": "En cours",
+            "SOLVED": "Résolu"
+          },
+          "category": {
+            "ACCOUNT_ID": "Identifiant",
+            "ACCOUNT_PASSWORD": "Mot de passe",
+            "EXTERNAL_AUTHENTICATOR": "Pro Santé Connect",
+            "ACCOUNT_ACCESS": "Problème d'accès",
+            "OTHER": "Autre"
+          }
+        }
+      },
       "navbar-component": {
         "logo-alt": "Logo de l'application wavecare",
-        "title": "WaveCare",
         "menu": {
           "ticket-management-dashboard": "Suivi des tickets",
           "user-management-dashboard": "Gestion des profils"
