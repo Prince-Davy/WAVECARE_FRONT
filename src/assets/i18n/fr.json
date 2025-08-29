@@ -178,7 +178,7 @@
               "label": "Statut"
             },
             "date": {
-              "label": "Date et heure"
+              "label": "Date de création"
             },
             "action": {
               "label": "Action",
