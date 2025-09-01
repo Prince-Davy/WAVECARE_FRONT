@@ -25,14 +25,7 @@
           "category": {
             "label": "Quel est l'objet de votre demande ?",
             "placeholder": "Sélectionnez une option",
-            "error-message": "Objet invalide",
-            "ticket-category": {
-              "ACCOUNT_ID": "Identifiant",
-              "ACCOUNT_PASSWORD": "Mot de passe",
-              "EXTERNAL_AUTHENTICATOR": "Pro Santé Connect",
-              "ACCOUNT_ACCESS": "Problème d'accès",
-              "OTHER": "Autre"
-            }
+            "error-message": "Objet invalide"
           },
           "content": {
             "label": "Description (2000 caractères max) :",
@@ -193,20 +186,30 @@
             "lastPage": "Dernière page",
             "of": "sur"
           }
+        }
+      },
+      "ticket-dialog-component": {
+        "title": "Ticket n°{{id}}",
+        "content": {
+          "id": "Id : {{id}}",
+          "subject": "Objet de la demande : {{subject}}",
+          "lastName": "Nom : {{lastName}}",
+          "firstName": "Prénom : {{firstName}}",
+          "email": "Email : {{email}}",
+          "description": "Description : {{description}}"
         },
-        "ticket": {
+        "form": {
           "status": {
-            "STANDBY": "En attente",
-            "PROCESS": "En cours",
-            "SOLVED": "Résolu"
+            "label": "Statut : "
           },
-          "category": {
-            "ACCOUNT_ID": "Identifiant",
-            "ACCOUNT_PASSWORD": "Mot de passe",
-            "EXTERNAL_AUTHENTICATOR": "Pro Santé Connect",
-            "ACCOUNT_ACCESS": "Problème d'accès",
-            "OTHER": "Autre"
+          "admin-comment": {
+            "label": "Commentaire administrateur (500 caractères maximum) : ",
+            "placeholder": "Écrivez votre commentaire..."
           }
+        },
+        "action-button": {
+          "confirm": "Enregister",
+          "cancel": "Annuler"
         }
       },
       "navbar-component": {
@@ -226,6 +229,22 @@
         "message": "Nous rencontrons actuellement des problèmes techniques.\nNos équipes travaillent activement à résoudre ce problème.\nNous vous remercions de votre patience et vous prions de nous excuser pour la gêne occasionnée.",
         "back-to-home": "Retour à l'accueil",
         "ticket": "Signaler le problème"
+      }
+    }
+  },
+  "model": {
+    "ticket": {
+      "status": {
+        "STANDBY": "En attente",
+        "PROCESS": "En cours",
+        "SOLVED": "Résolu"
+      },
+      "category": {
+        "ACCOUNT_ID": "Identifiant",
+        "ACCOUNT_PASSWORD": "Mot de passe",
+        "EXTERNAL_AUTHENTICATOR": "Pro Santé Connect",
+        "ACCOUNT_ACCESS": "Problème d'accès",
+        "OTHER": "Autre"
       }
     }
   }
