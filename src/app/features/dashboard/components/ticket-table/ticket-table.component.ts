@@ -4,7 +4,7 @@ import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { MatCardModule } from "@angular/material/card";
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -46,21 +46,8 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
 
   ngAfterViewInit(): void {
     merge(this.paginator.initialized, this.paginator.page)
-      .subscribe((event: void | PageEvent) => {
-        this.isLoading = true;
-        this.ticketService.getTickets(event ? event.pageIndex : 0, event ? event.pageSize : this.pageSize)
-          .pipe(
-            finalize(() => this.isLoading = false)
-          )
-          .subscribe({
-            next: (result: Page<Ticket>) => {
-              this.updateRows(result.content, result.totalElements, result.size);
-            },
-            error: (error: HttpErrorResponse) => {
-              console.error('An error occurred while loading tickets;', error);
-              this.updateRows([], 0, 0);
-            }
-          })
+      .subscribe(() => {
+        this.refreshTable();
       });
 
     this.dataSource.paginator = this.paginator;
@@ -80,14 +67,33 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
             console.log('The dialog was closed');
             if (ticket !== undefined) {
               console.log(ticket);
-              this.ticketService.updateTicket(ticket).subscribe({
-                error: (error: any) => {
-                  console.error("An error occurred when trying to update ticket.")
-                }
-              });
+              this.ticketService.updateTicket(ticket)
+                .pipe(finalize(() => this.refreshTable()))
+                .subscribe({
+                  error: (error: any) => {
+                    console.error("An error occurred when trying to update ticket.")
+                  }
+                });
             }
           });;
 
+      });
+  }
+
+  private refreshTable(): void {
+    this.isLoading = true;
+    this.ticketService.getTickets(this.paginator.pageIndex, this.paginator.pageSize)
+      .pipe(
+        finalize(() => this.isLoading = false)
+      )
+      .subscribe({
+        next: (result: Page<Ticket>) => {
+          this.updateRows(result.content, result.totalElements, result.size);
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('An error occurred while loading tickets;', error);
+          this.updateRows([], 0, 0);
+        }
       });
   }
 
