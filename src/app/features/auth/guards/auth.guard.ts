@@ -1,5 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 import { NavigationService } from '@app/features/navigation/services/navigation.service';
 import { AuthTokenService } from '../services/auth-token.service';
@@ -9,18 +8,14 @@ import { AuthTokenService } from '../services/auth-token.service';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private tokenService: AuthTokenService, private navigationService: NavigationService, @Inject(PLATFORM_ID) private platformId: Object) { }
+  constructor(private tokenService: AuthTokenService, private navigationService: NavigationService) { }
 
   canActivate(): boolean {
-    if (isPlatformBrowser(this.platformId)) {
-      if (this.tokenService.isTokenValid()) {
-        return true;
-      } else {
-        this.navigationService.navigateToLogin();
-        return false;
-      }
+    if (this.tokenService.isTokenValid()) {
+      return true;
     } else {
-      return false
+      this.navigationService.navigateToLogin();
+      return false;
     }
   }
 }

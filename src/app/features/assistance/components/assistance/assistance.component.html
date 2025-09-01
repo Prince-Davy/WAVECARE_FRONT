@@ -50,7 +50,7 @@
           <mat-select id="subject" [placeholder]="'feature.assistance.assistance-component.form.category.placeholder' | translate" formControlName="subject"
             [aria-label]="'feature.assistance.assistance-component.form.category.label' | translate" required>
             @for(category of ticketCategories; track category) {
-            <mat-option [value]="category">{{'feature.assistance.assistance-component.form.category.ticket-category.' + category | translate}}</mat-option>
+            <mat-option [value]="category">{{'model.ticket.category.' + category | translate}}</mat-option>
             }
           </mat-select>
           @if (assistanceForm.get('subject')?.invalid && assistanceForm.get('subject')?.touched) {
