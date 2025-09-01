@@ -10,6 +10,7 @@
 
 
 .table-wrapper {
+  background-color: white;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
@@ -27,6 +28,5 @@ td {
 
 mat-card {
   overflow: unset;
-  height: calc(100% - 70px); // the title size is roughly 70px,
-  margin-bottom: 20px;
+  height: calc(100% - 90px); // the title size is roughly 70px + 20 px for some spacing at the bottom
 }
