@@ -63,7 +63,7 @@ export class AssistanceComponent {
         lastName: this.assistanceForm.value.lastName,
         mail: this.assistanceForm.value.mail,
         category: this.assistanceForm.value.subject,
-        content: this.assistanceForm.value.content
+        description: this.assistanceForm.value.content
       } as CreateAssistanceTicketDTO;
 
       this.assistanceService.submitTicket(ticketData)

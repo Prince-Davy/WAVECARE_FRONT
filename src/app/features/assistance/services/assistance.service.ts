@@ -13,7 +13,7 @@ export class AssistanceService {
   constructor(private http: HttpClient) { }
 
   submitTicket(ticketData: CreateAssistanceTicketDTO): Observable<void> {
-    return this.http.post<any>(`${this.apiUrl}/create`, ticketData);
+    return this.http.post<any>(`${this.apiUrl}`, ticketData);
   }
 
   getTicketCategories(): Observable<string[]> {
