@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Ticket } from '@app/features/dashboard/models/ticket.interface';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface TicketDialogData {
   ticket: Ticket;
@@ -24,7 +25,8 @@ export interface TicketDialogData {
     MatSelectModule,
     MatButtonModule,
     MatDialogModule,
-    MatInputModule
+    MatInputModule,
+    TranslateModule
   ],
   templateUrl: './ticket-dialog.component.html',
   styleUrl: './ticket-dialog.component.scss'
