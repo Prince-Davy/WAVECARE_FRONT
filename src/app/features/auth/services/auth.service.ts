@@ -4,14 +4,15 @@ import { LoginCredentials, LoginResponse } from '@app/features/auth/models/auth.
 import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
 import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:8080/api';
-  private readonly AUTH_URL = 'http://localhost:8080/api/login';
+  private readonly API_URL = `${environment.apiUrl}/api/`;
+  private readonly AUTH_URL = `${environment.apiUrl}/api/login`;
 
   constructor(private http: HttpClient, private tokenService: AuthTokenService) { }
 

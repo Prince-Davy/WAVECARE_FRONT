@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Ticket } from '../models/ticket.interface';
+import { environment } from 'src/environments/environment';
 
 export interface Page<T> {
   content: T[];
@@ -12,7 +13,7 @@ export interface Page<T> {
 
 @Injectable({ providedIn: 'root' })
 export class TicketService {
-  private readonly apiUrl = 'http://localhost:8080/api/tickets';
+  private readonly apiUrl = `${environment.apiUrl}/api/tickets`;
 
   constructor(private http: HttpClient) { }
 
