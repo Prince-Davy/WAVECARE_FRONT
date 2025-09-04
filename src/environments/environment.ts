@@ -1,3 +1,3 @@
 export const environment = {
-  apiUrl: "TODO" // Replace by keys from the vault
+  apiUrl: "http://localhost:8080" // Replace by keys from the vault
 };
