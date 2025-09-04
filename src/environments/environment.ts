@@ -1,3 +1,4 @@
+// These values must remain empty and will be filled from the environment that is currently being built/served
 export const environment = {
-  apiUrl: "http://localhost:8080" // Replace by keys from the vault
+  apiUrl: ""
 };
