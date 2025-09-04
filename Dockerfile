@@ -20,7 +20,7 @@ COPY --from=build /app/dist /app/dist
 COPY --from=build /app/package*.json ./
 
 # Install only dependencies and excludes devDependencies, reducing the size of the image
-RUN npm install --production
+RUN npm install --omit=dev
 
 EXPOSE 4000
 
