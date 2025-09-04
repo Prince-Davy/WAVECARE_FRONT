@@ -24,6 +24,9 @@
       ],
       "@assets/*": [
         "src/assets/*"
+      ],
+      "@environments/*": [
+        "src/environments/*"
       ]
     }
   },
