@@ -3,8 +3,8 @@ import { ApplicationConfig } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from '@app/app.routes';
-import { provideTranslateService } from '@ngx-translate/core';
-import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideTranslateLoader, provideTranslateService } from '@ngx-translate/core';
+import { CustomTranslateLoader } from 'src/translate-loader';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -12,10 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideTranslateService({
       lang: 'fr',
       fallbackLang: 'fr',
-      loader: provideTranslateHttpLoader({
-        prefix: 'assets/i18n/',
-        suffix: '.json'
-      })
+      loader: provideTranslateLoader(CustomTranslateLoader)
     }),
     provideHttpClient(),
     provideAnimations()
