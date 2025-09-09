@@ -107,7 +107,7 @@
       "reset-password-component": {
         "logo-alt": "Logo de l'application wavecare",
         "title": "Réinitialisation de votre mot de passe",
-        "password-requirements": "Le mot de passe doit contenir :\n\nUn minimum de 12 caractères et un maximum de 20 caractères\nEt au moins :\n\n\tUne lettre majuscule (Exemple : A, B, C)\n\tUne lettre minuscule (Exemple : a, b, c)\n\tUn chiffre (Exemple : 1, 2, 3)\n\tUn caractère spécial (Exemple : #, €, $, &#64;, *, ‑)",
+        "password-requirements": "Le mot de passe doit contenir :\n\nUn minimum de 12 caractères et un maximum de 20 caractères\nEt au moins :\n\n\tUne lettre majuscule (Exemple : A, B, C)\n\tUne lettre minuscule (Exemple : a, b, c)\n\tUn chiffre (Exemple : 1, 2, 3)\n\tUn caractère spécial (Exemple : #, €, $, @, *, ‑)",
         "form": {
           "new-password": {
             "label": "Nouveau mot de passe :",
