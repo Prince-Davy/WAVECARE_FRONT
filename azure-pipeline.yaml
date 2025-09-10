@@ -55,11 +55,11 @@ variables:
 extends:
   template: templates-general/azure-general-front-tpl.yml@templates
   parameters:
-    DEPLOY_INTEG: true
-    DEPLOY_PROD: false
+    DEPLOY_INTEG: false
+    DEPLOY_TEST: true
+    DEPLOY_PROD: true
     NO_DOXYGEN_FAIL: true
-    NO_QUALITY_FAIL: true
     NO_SECURITY_FAIL: true
-    # souci avec SonarQube :
     NO_SONAR_FAIL: true
+    NO_QUALITY_FAIL: true
     SCAN_SQ: true
