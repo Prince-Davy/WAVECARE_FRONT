@@ -48,7 +48,7 @@ variables:
     value: false
   - name: SKIP_SECURITY
     value: false
- ## Include template variables
+ # Include template variables
   -  template: templates-general/variables.yml@templates
 
   
