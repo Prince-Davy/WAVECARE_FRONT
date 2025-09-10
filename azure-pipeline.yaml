@@ -56,9 +56,9 @@ variables:
 extends:
   template: templates-general/azure-general-front-tpl.yml@templates
   parameters:
-    DEPLOY_INTEG: false
-    DEPLOY_TEST: true
-    DEPLOY_PROD: true
+    DEPLOY_INTEG: true
+    DEPLOY_TEST: false
+    DEPLOY_PROD: false
     NO_DOXYGEN_FAIL: true
     NO_SECURITY_FAIL: true
     NO_SONAR_FAIL: true
