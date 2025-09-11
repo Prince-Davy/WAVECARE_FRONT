@@ -191,12 +191,12 @@
       "ticket-dialog-component": {
         "title": "Ticket n°{{id}}",
         "content": {
-          "id": "Id : {{id}}",
-          "subject": "Objet de la demande : {{subject}}",
-          "lastName": "Nom : {{lastName}}",
-          "firstName": "Prénom : {{firstName}}",
-          "email": "Email : {{email}}",
-          "description": "Description : {{description}}"
+          "id": "Id : ",
+          "subject": "Objet de la demande : ",
+          "lastName": "Nom : ",
+          "firstName": "Prénom : ",
+          "email": "Email : ",
+          "description": "Description : "
         },
         "form": {
           "status": {
@@ -208,8 +208,8 @@
           }
         },
         "action-button": {
-          "confirm": "Enregister",
-          "cancel": "Annuler"
+          "confirm": "ENREGISTRER LES MODIFICATIONS",
+          "cancel": "ANNULER"
         }
       },
       "navbar-component": {

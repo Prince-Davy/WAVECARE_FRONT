@@ -19,7 +19,7 @@
     <form [formGroup]="assistanceForm" (ngSubmit)="onSubmit()" class="assistance-form">
       <div class="form-group">
         <label class="form-label" for="lastName">{{'feature.assistance.assistance-component.form.lastName.label' | translate}}</label>
-        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
           <input matInput id="lastName" formControlName="lastName" [placeholder]="'feature.assistance.assistance-component.form.lastName.placeholder' | translate" required>
           @if (assistanceForm.get('lastName')?.invalid && assistanceForm.get('lastName')?.touched) {
           <div class="form-control-error-message">{{'feature.assistance.assistance-component.form.lastName.error-message' | translate}}</div>
@@ -28,7 +28,7 @@
       </div>
       <div class="form-group">
         <label class="form-label" for="firstName">{{'feature.assistance.assistance-component.form.firstName.label' | translate}}</label>
-        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
           <input matInput id="firstName" formControlName="firstName" [placeholder]="'feature.assistance.assistance-component.form.firstName.placeholder' | translate" required>
           @if (assistanceForm.get('firstName')?.invalid && assistanceForm.get('firstName')?.touched) {
           <div class="form-control-error-message">{{'feature.assistance.assistance-component.form.firstName.error-message' | translate}}</div>
@@ -37,7 +37,7 @@
       </div>
       <div class="form-group">
         <label class="form-label" for="mail">{{'feature.assistance.assistance-component.form.mail.label' | translate}}</label>
-        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
           <input matInput id="mail" formControlName="mail" [placeholder]="'feature.assistance.assistance-component.form.mail.placeholder' | translate" required>
           @if (assistanceForm.get('mail')?.invalid && assistanceForm.get('mail')?.touched) {
           <div class="form-control-error-message">{{'feature.assistance.assistance-component.form.mail.error-message' | translate}}</div>
@@ -46,7 +46,7 @@
       </div>
       <div class="form-group">
         <label class="form-label" for="subject">{{'feature.assistance.assistance-component.form.category.label' | translate}}</label>
-        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
           <mat-select id="subject" [placeholder]="'feature.assistance.assistance-component.form.category.placeholder' | translate" formControlName="subject"
             [aria-label]="'feature.assistance.assistance-component.form.category.label' | translate" required>
             @for(category of ticketCategories; track category) {
@@ -60,7 +60,7 @@
       </div>
       <div class="form-group">
         <label class="form-label" for="content">{{'feature.assistance.assistance-component.form.content.label' | translate}}</label>
-        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
           <textarea matInput id="content" [placeholder]="'feature.assistance.assistance-component.form.content.placeholder' | translate" formControlName="content" required></textarea>
           @if (assistanceForm.get('content')?.invalid && assistanceForm.get('content')?.touched) {
           <div class="form-control-error-message">{{'feature.assistance.assistance-component.form.content.error-message' | translate}}</div>
