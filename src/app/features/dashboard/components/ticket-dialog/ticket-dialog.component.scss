@@ -1,3 +1,52 @@
+.ticket-dialog-title {
+  color: #005EA5;
+  font-weight: bold;
+  padding-left: 0.75em;
+  letter-spacing: 1px;
+}
+
 p {
   white-space: pre-wrap;
+  margin-block-start: 0em;
+  margin-block-end: 0.5em;
+
+  span {
+    font-weight: bold;
+  }
+}
+
+form {
+  margin-top: 1.5em;
+}
+
+mat-form-field {
+  margin-top: 5px;
+}
+
+textarea {
+  min-height: 5em;
+}
+
+.ticket-dialog-cancel {
+  border: #005EA5 1px solid;
+}
+
+.ticket-dialog-validate {
+  color: white !important;
+  background-color: #005EA5 !important;
+
+  &:disabled {
+    background-color: #E0E0E0 !important;
+    color: #626262 !important;
+  }
+}
+
+.ticket-dialog-validate-wrapper {
+  margin-left: 10px;
+}
+
+.ticket-dialog-validate-wrapper:has(.ticket-dialog-validate:disabled) {
+  div {
+    cursor: not-allowed;
+  }
 }

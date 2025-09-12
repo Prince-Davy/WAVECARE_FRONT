@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, model } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,7 +20,6 @@ export interface TicketDialogData {
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    FormsModule,
     MatFormFieldModule,
     MatSelectModule,
     MatButtonModule,
@@ -35,15 +34,20 @@ export class TicketDialogComponent {
 
   readonly dialogRef = inject(MatDialogRef<TicketDialogComponent>);
   readonly data = inject<TicketDialogData>(MAT_DIALOG_DATA);
-  readonly ticket = model(this.data.ticket);
+  readonly ticket = this.data.ticket;
 
-  comment = new FormGroup({
-    textarea: new FormControl(this.data.ticket.adminComment)
-  });
+  ticketDialogForm: FormGroup<any>;
 
-  validate(): Ticket {
-    this.data.ticket.adminComment = this.comment.value.textarea ?? '';
-    return this.data.ticket;
+  constructor(private fb: FormBuilder) {
+    this.ticketDialogForm = this.fb.group({
+      status: [this.data.ticket.status, [Validators.required]],
+      comment: [this.data.ticket.adminComment, [Validators.required, Validators.maxLength(500)]]
+    })
   }
 
+  validate(): Ticket {
+    this.data.ticket.status = this.ticketDialogForm.value.status ?? '';
+    this.data.ticket.adminComment = this.ticketDialogForm.value.comment ?? '';
+    return this.data.ticket;
+  }
 }
