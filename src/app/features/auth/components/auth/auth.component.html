@@ -16,7 +16,7 @@
 
       <!-- Mail Field -->
       <label for="***REMOVED***-username">{{'feature.auth.auth-component.form.username.label' | translate}}</label>
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
         <input id="***REMOVED***-username" matInput [placeholder]="'feature.auth.auth-component.form.username.placeholder' | translate" formControlName="username" required>
         @if (***REMOVED***Form.get('username')?.invalid && ***REMOVED***Form.get('username')?.touched) {
         <div class="form-control-error-message">{{'feature.auth.auth-component.form.username.error-message' | translate}}</div>
@@ -25,7 +25,7 @@
 
       <!-- Password Field -->
       <label for="***REMOVED***-password">{{'feature.auth.auth-component.form.password.label' | translate}}</label>
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
         <input id="***REMOVED***-password" matInput [placeholder]="'feature.auth.auth-component.form.password.placeholder' | translate" [type]="hidePassword ? 'password' : 'text'" formControlName="password" required autocomplete="off">
         <button [title]="'feature.auth.auth-component.form.password.hide-password-button' | translate" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
