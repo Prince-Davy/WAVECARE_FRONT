@@ -107,7 +107,7 @@
       "***REMOVED***-component": {
         "logo-alt": "Logo de l'application wavecare",
         "title": "Réinitialisation de votre mot de passe",
-        "password-requirements": "Le mot de passe doit contenir :\n\nUn minimum de 12 caractères et un maximum de 20 caractères\nEt au moins :\n\n\tUne lettre majuscule (Exemple : A, B, C)\n\tUne lettre minuscule (Exemple : a, b, c)\n\tUn chiffre (Exemple : 1, 2, 3)\n\tUn caractère spécial (Exemple : #, €, $, &#64;, *, ‑)",
+        "password-requirements": "Le mot de passe doit contenir :\n\nUn minimum de 12 caractères et un maximum de 20 caractères\nEt au moins :\n\n\tUne lettre majuscule (Exemple : A, B, C)\n\tUne lettre minuscule (Exemple : a, b, c)\n\tUn chiffre (Exemple : 1, 2, 3)\n\tUn caractère spécial (Exemple : #, €, $, @, *, ‑)",
         "form": {
           "***REMOVED***word": {
             "label": "Nouveau mot de passe :",
@@ -191,12 +191,12 @@
       "ticket-dialog-component": {
         "title": "Ticket n°{{id}}",
         "content": {
-          "id": "Id : {{id}}",
-          "subject": "Objet de la demande : {{subject}}",
-          "lastName": "Nom : {{lastName}}",
-          "firstName": "Prénom : {{firstName}}",
-          "email": "Email : {{email}}",
-          "description": "Description : {{description}}"
+          "id": "Id : ",
+          "subject": "Objet de la demande : ",
+          "lastName": "Nom : ",
+          "firstName": "Prénom : ",
+          "email": "Email : ",
+          "description": "Description : "
         },
         "form": {
           "status": {
@@ -208,8 +208,8 @@
           }
         },
         "action-button": {
-          "confirm": "Enregister",
-          "cancel": "Annuler"
+          "confirm": "ENREGISTRER LES MODIFICATIONS",
+          "cancel": "ANNULER"
         }
       },
       "navbar-component": {

@@ -1,29 +1,33 @@
-<h2 mat-dialog-title>
+<h2 class="ticket-dialog-title" mat-dialog-title>
   {{ 'feature.dashboard.ticket-dialog-component.title' | translate: { id: data.ticketDetailDTO.id} }}
 </h2>
 <mat-dialog-content>
-  <p>{{ 'feature.dashboard.ticket-dialog-component.content.id' | translate: { id: data.ticketDetailDTO.id} }}</p>
-  <p>{{ 'feature.dashboard.ticket-dialog-component.content.subject' | translate: { subject:
-    'model.ticket.category.' + data.ticketDetailDTO.categoryLabel | translate
-    } }}</p>
-  <p>{{ 'feature.dashboard.ticket-dialog-component.content.lastName' | translate: { lastName: data.ticketDetailDTO.lastName} }}</p>
-  <p>{{ 'feature.dashboard.ticket-dialog-component.content.firstName' | translate: { firstName: data.ticketDetailDTO.firstName} }}</p>
-  <p>{{ 'feature.dashboard.ticket-dialog-component.content.email' | translate: { email: data.ticketDetailDTO.mail} }}</p>
-  <p>{{ 'feature.dashboard.ticket-dialog-component.content.description' | translate: { description: data.ticketDetailDTO.description} }}</p>
-  <label for="status">{{ 'feature.dashboard.ticket-dialog-component.form.status.label' | translate }}</label>
-  <mat-form-field>
-    <mat-select id="status" [(value)]="data.ticketDetailDTO.statusId" [aria-label]="'feature.dashboard.ticket-dialog-component.form.status.label' | translate" required>
-      @for(status of data.statuses; track status) {
-      <mat-option [value]="status.id">{{'model.ticket.status.' + status.label| translate }}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-  <label for="comment">{{ 'feature.dashboard.ticket-dialog-component.form.admin-comment.label' | translate }}</label>
-  <mat-form-field [formGroup]="comment">
-    <textarea matInput id="comment" [placeholder]="'feature.dashboard.ticket-dialog-component.form.admin-comment.placeholder' | translate" formControlName="textarea" required></textarea>
-  </mat-form-field>
+  <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.id' | translate}}</span> {{ id: data.ticketDetailDTO.id }}</p>
+  <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.subject' | translate }}</span>{{ 'model.ticket.category.' + data.ticketDetailDTO.categoryLabel | translate }}
+  <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.lastName' | translate }}</span>{{ data.ticketDetailDTO.lastName}}</p>
+  <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.firstName' | translate }}</span>{{ data.ticketDetailDTO.firstName }}</p>
+  <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.email' | translate }}</span>{{ data.ticketDetailDTO.mail }}</p>
+  <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.description' | translate }}</span>{{ data.ticketDetailDTO.description }}</p>
+  <form [formGroup]="ticketDialogForm">
+    <label for="status">{{ 'feature.dashboard.ticket-dialog-component.form.status.label' | translate }}</label>
+    <mat-form-field class="grey-form-field" appearance="outline" subscriptSizing="dynamic">
+      <mat-select id="status" formControlName="status" [aria-label]="'feature.dashboard.ticket-dialog-component.form.status.label' | translate" required>
+        @for(status of data.statuses; track status) {
+        <mat-option [value]="status.id">{{ 'model.ticket.status.' + status.label | translate }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <label for="comment">{{ 'feature.dashboard.ticket-dialog-component.form.admin-comment.label' | translate }}</label>
+    <mat-form-field class="grey-form-field" appearance="outline" subscriptSizing="dynamic">
+      <textarea matInput mat-autosize id="comment" formControlName="comment" [placeholder]="'feature.dashboard.ticket-dialog-component.form.admin-comment.placeholder' | translate" required></textarea>
+    </mat-form-field>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>{{ 'feature.dashboard.ticket-dialog-component.action-button.cancel' | translate }}</button>
-  <button mat-button [mat-dialog-close]="validate()" cdkFocusInitial>{{ 'feature.dashboard.ticket-dialog-component.action-button.confirm' | translate }}</button>
+  <button mat-raised-button class="ticket-dialog-cancel" mat-dialog-close>{{ 'feature.dashboard.ticket-dialog-component.action-button.cancel' | translate }}</button>
+  <div class="ticket-dialog-validate-wrapper">
+    <div>
+      <button mat-raised-button class="ticket-dialog-validate" [mat-dialog-close]="validate()" [disabled]="!ticketDialogForm.valid">{{ 'feature.dashboard.ticket-dialog-component.action-button.confirm' | translate }}</button>
+    </div>
+  </div>
 </mat-dialog-actions>
