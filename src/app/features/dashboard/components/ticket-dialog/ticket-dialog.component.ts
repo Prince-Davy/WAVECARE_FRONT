@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, model } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder,FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -37,14 +37,20 @@ export class TicketDialogComponent {
 
   readonly dialogRef = inject(MatDialogRef<TicketDialogComponent>);
   readonly data = inject<TicketDialogData>(MAT_DIALOG_DATA);
-  readonly ticketDetailDTO = model(this.data.ticketDetailDTO);
+   readonly ticketDetailDTO = this.data.ticketDetailDTO;
 
-  comment = new FormGroup({
-    textarea: new FormControl(this.data.ticketDetailDTO.adminComment)
-  });
+  ticketDialogForm: FormGroup<any>;
+
+  constructor(private fb: FormBuilder) {
+    this.ticketDialogForm = this.fb.group({
+      status: [this.data.ticketDetailDTO.statusId, [Validators.required]],
+      comment: [this.data.ticketDetailDTO.adminComment, [Validators.required, Validators.maxLength(500)]]
+    })
+  }
 
   validate(): TicketdetailUpdateDTO {
-    this.data.ticketDetailDTO.adminComment = this.comment.value.textarea ?? '';
+    this.data.ticketDetailDTO.statusId = this.ticketDialogForm.value.status ?? '';
+    this.data.ticketDetailDTO.adminComment = this.ticketDialogForm.value.comment ?? '';
     return this.data.ticketDetailDTO;
   }
 }
