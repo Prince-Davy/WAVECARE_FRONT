@@ -1,20 +1,20 @@
 <h2 mat-dialog-title>
-  {{ 'feature.dashboard.ticket-dialog-component.title' | translate: { id: data.ticket.id} }}
+  {{ 'feature.dashboard.ticket-dialog-component.title' | translate: { id: data.ticketDetailDTO.id} }}
 </h2>
 <mat-dialog-content>
-  <p>{{ 'feature.dashboard.ticket-dialog-component.content.id' | translate: { id: data.ticket.id} }}</p>
+  <p>{{ 'feature.dashboard.ticket-dialog-component.content.id' | translate: { id: data.ticketDetailDTO.id} }}</p>
   <p>{{ 'feature.dashboard.ticket-dialog-component.content.subject' | translate: { subject:
-    'model.ticket.category.' + data.ticket.category | translate
+    'model.ticket.category.' + data.ticketDetailDTO.categoryLabel | translate
     } }}</p>
-  <p>{{ 'feature.dashboard.ticket-dialog-component.content.lastName' | translate: { lastName: data.ticket.lastName} }}</p>
-  <p>{{ 'feature.dashboard.ticket-dialog-component.content.firstName' | translate: { firstName: data.ticket.firstName} }}</p>
-  <p>{{ 'feature.dashboard.ticket-dialog-component.content.email' | translate: { email: data.ticket.mail} }}</p>
-  <p>{{ 'feature.dashboard.ticket-dialog-component.content.description' | translate: { description: data.ticket.description} }}</p>
+  <p>{{ 'feature.dashboard.ticket-dialog-component.content.lastName' | translate: { lastName: data.ticketDetailDTO.lastName} }}</p>
+  <p>{{ 'feature.dashboard.ticket-dialog-component.content.firstName' | translate: { firstName: data.ticketDetailDTO.firstName} }}</p>
+  <p>{{ 'feature.dashboard.ticket-dialog-component.content.email' | translate: { email: data.ticketDetailDTO.mail} }}</p>
+  <p>{{ 'feature.dashboard.ticket-dialog-component.content.description' | translate: { description: data.ticketDetailDTO.description} }}</p>
   <label for="status">{{ 'feature.dashboard.ticket-dialog-component.form.status.label' | translate }}</label>
   <mat-form-field>
-    <mat-select id="status" [(value)]="data.ticket.status" [aria-label]="'feature.dashboard.ticket-dialog-component.form.status.label' | translate" required>
+    <mat-select id="status" [(value)]="data.ticketDetailDTO.statusId" [aria-label]="'feature.dashboard.ticket-dialog-component.form.status.label' | translate" required>
       @for(status of data.statuses; track status) {
-      <mat-option [value]="status">{{ 'model.ticket.status.' + status | translate }}</mat-option>
+      <mat-option [value]="status.id">{{'model.ticket.status.' + status.label| translate }}</mat-option>
       }
     </mat-select>
   </mat-form-field>

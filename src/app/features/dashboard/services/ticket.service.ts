@@ -1,8 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Ticket } from '../models/ticket.interface';
 import { environment } from 'src/environments/environment';
+import { TicketStatusDTO } from '../models/ticket-status-dto';
+import { TicketViewDTO } from '../models/ticket-view-dto';
+import { TicketDetailDTO } from '../models/ticket-detail-dto';
+import { TicketdetailUpdateDTO } from '../models/ticket-detail-update-dto';
 
 export interface Page<T> {
   content: T[];
@@ -13,27 +16,28 @@ export interface Page<T> {
 
 @Injectable({ providedIn: 'root' })
 export class TicketService {
-  private readonly apiUrl = `${environment.apiUrl}/api/tickets`;
+  private readonly apiUrl = `${environment.apiUrl}/api`;
+  private readonly apiUrlTicket = `${this.apiUrl}/tickets`;
 
   constructor(private http: HttpClient) { }
 
-  getTickets(page = 0, size = 10): Observable<Page<Ticket>> {
+  getTickets(page = 0, size = 10): Observable<Page<TicketViewDTO>> {
     let params = new HttpParams()
       .set('page', page)
       .set('size', size);
 
-    return this.http.get<Page<Ticket>>(this.apiUrl, { params });
+    return this.http.get<Page<TicketViewDTO>>(this.apiUrlTicket, { params });
   }
 
-  getTicket(id: number): Observable<Ticket> {
-    return this.http.get<Ticket>(`${this.apiUrl}/${id}`);
+  getTicket(id: number): Observable<TicketDetailDTO> {
+    return this.http.get<TicketDetailDTO>(`${this.apiUrlTicket}/${id}`);
   }
 
-  getTicketStatuses(): Observable<Array<string>> {
-    return this.http.get<Array<string>>(`${this.apiUrl}/get-status`);
+  updateTicket(ticketdetailUpdateDTO: TicketdetailUpdateDTO): Observable<void> {
+    return this.http.put<void>(`${this.apiUrlTicket}/${ticketdetailUpdateDTO.id}`, { statusId: ticketdetailUpdateDTO.statusId, adminComment: ticketdetailUpdateDTO.adminComment });
   }
 
-  updateTicket(ticket: Ticket): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${ticket.id}`, { ticketStatus: ticket.status, adminComment: ticket.adminComment });
+  getTicketStatuses(): Observable<TicketStatusDTO[]> {
+    return this.http.get<TicketStatusDTO[]>(`${this.apiUrl}/statuses`);
   }
 }

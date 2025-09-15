@@ -11,6 +11,7 @@ import { RouterLink } from '@angular/router';
 import { CreateAssistanceTicketDTO } from '@app/features/assistance/models/assistance-ticket-dto';
 import { AssistanceService } from '@app/features/assistance/services/assistance.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { TicketCategoryDTO } from '../../models/assitance-ticket-category-dto';
 
 @Component({
   selector: 'app-assistance',
@@ -33,7 +34,7 @@ import { TranslateModule } from '@ngx-translate/core';
 export class AssistanceComponent {
   assistanceForm: FormGroup<any>;
   submissionSuccess: boolean | null = null;
-  ticketCategories: string[] = [];
+  ticketCategories: TicketCategoryDTO[] = [];
 
   /**
    * This regex matches if :
@@ -62,7 +63,7 @@ export class AssistanceComponent {
         firstName: this.assistanceForm.value.firstName,
         lastName: this.assistanceForm.value.lastName,
         mail: this.assistanceForm.value.mail,
-        category: this.assistanceForm.value.subject,
+        categoryId: this.assistanceForm.value.subject,
         description: this.assistanceForm.value.content
       } as CreateAssistanceTicketDTO;
 

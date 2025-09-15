@@ -1,11 +1,10 @@
-export interface Ticket {
+export interface TicketViewDTO {
   id: number;
   firstName: string;
   lastName: string;
   mail: string;
-  category: string;
+  categoryLabel: string;
   description: string;
-  status: string;
+  statusLabel: string;
   creationDate?: Date;
-  adminComment?: string;
 }

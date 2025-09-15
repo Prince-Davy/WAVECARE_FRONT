@@ -5,10 +5,12 @@ import { AuthTokenService } from './features/auth/services/auth-token.service';
 import { DashboardComponent } from './features/dashboard/abstract/dashboard-component.abstract';
 import { FooterComponent } from "./features/dashboard/components/footer/footer.component";
 import { NavbarComponent } from "./features/navigation/components/navbar/navbar.component";
+import { TicketSearchBarComponent } from "./features/dashboard/components/ticket-search-bar/ticket-search-bar.component";
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent, FooterComponent],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent, TicketSearchBarComponent,MatChipsModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
