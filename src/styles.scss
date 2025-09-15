@@ -52,3 +52,39 @@ mat-form-field {
 textarea {
   field-sizing: content
 }
+
+.mdc-snackbar {
+  .mdc-snackbar__surface {
+    border-radius: 5px !important;
+  }
+
+  .mat-mdc-snack-bar-actions {
+    padding: 8px 0;
+    margin-left: 50px;
+  }
+
+  .mat-mdc-snack-bar-action {
+    background-color: white;
+    height: -webkit-fill-available;
+  }
+
+  &.snack-bar-error {
+    .mdc-snackbar__surface {
+      background-color: #e20404 !important;
+    }
+
+    .mat-mdc-snack-bar-action {
+      color: #e20404 !important;
+    }
+  }
+
+  &.snack-bar-success {
+    .mdc-snackbar__surface {
+      background-color: #3c6000 !important;
+    }
+
+    .mat-mdc-snack-bar-action {
+      color: #3c6000 !important;
+    }
+  }
+}
