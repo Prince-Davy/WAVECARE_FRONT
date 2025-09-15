@@ -30,3 +30,22 @@ mat-card {
   overflow: unset;
   height: calc(100% - 90px); // the title size is roughly 70px + 20 px for some spacing at the bottom
 }
+
+.chip-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.button {
+  display: block;
+  color: white !important; // TODO remove once the angular theme is properly done
+  background-color: #005EA5 !important; // TODO remove once the angular theme is properly done
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  
+}
