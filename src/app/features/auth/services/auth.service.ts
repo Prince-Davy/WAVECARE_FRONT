@@ -11,8 +11,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = `${environment.apiUrl}/api/`;
-  private readonly AUTH_URL = `${environment.apiUrl}/api/login`;
+  private readonly API_URL = `${environment.apiUrl}/api`;
 
   constructor(private http: HttpClient, private tokenService: AuthTokenService) { }
 
@@ -28,7 +27,7 @@ export class AuthService {
         .set('Accept', 'application/json')
     };
     return this.http.post<LoginResponse>(
-      this.AUTH_URL,
+      `${this.API_URL}/login`,
       body,
       httpOptions)
       .pipe(

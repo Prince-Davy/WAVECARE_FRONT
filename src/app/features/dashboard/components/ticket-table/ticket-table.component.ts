@@ -77,17 +77,17 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
             ticketDetailDTO,
             statuses
           } as TicketDialogData,
+          disableClose: true,
         })
           .afterClosed()
           .subscribe((ticketdetailUpdateDTO: TicketdetailUpdateDTO) => {
-            console.log('The dialog was closed');
             if (ticketdetailUpdateDTO !== undefined) {
               console.log(ticketdetailUpdateDTO);
               this.ticketService.updateTicket(ticketdetailUpdateDTO)
                 .pipe(finalize(() => this.refreshTable()))
                 .subscribe({
                   error: (error: any) => {
-                    console.error("An error occurred when trying to update ticket.")
+                    console.error("An error occurred when trying to update ticket.", error)
                   }
                 });
             }
