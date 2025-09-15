@@ -6,6 +6,7 @@ export const PATH_TO_FORGOT_PASSWORD = 'forgot-password';
 export const PATH_TO_RESET_PASSWORD = 'reset-password';
 export const PATH_TO_ASSISTANCE = 'assistance';
 export const PATH_TO_TICKETS: string = 'tickets';
+export const PATH_TO_USERS: string = 'users';
 
 export const routes: Routes = [
   {
@@ -28,6 +29,11 @@ export const routes: Routes = [
     path: PATH_TO_TICKETS,
     canActivate: [AuthGuard],
     loadComponent: () => import('@app/features/dashboard/components/ticket-table/ticket-table.component').then(c => c.TicketTableComponent)
+  },
+  {
+    path: PATH_TO_USERS,
+    canActivate: [AuthGuard],
+    loadComponent: () => import('@app/features/dashboard/components/user-table/user-table.component').then(c => c.UserTableComponent)
   },
   {
     path: '',
