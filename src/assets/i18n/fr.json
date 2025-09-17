@@ -216,13 +216,8 @@
           "cancel": "ANNULER"
         }
       },
-      "navbar-component": {
-        "logo-alt": "Logo de l'application wavecare",
-        "menu": {
-          "ticket-management-dashboard": "Suivi des tickets",
-          "user-management-dashboard": "Gestion des profils"
-        },
-        "logout-button": "Déconnexion"
+      "user-table-component": {
+        "title": "Gestion des profils"
       },
       "footer-component": {
         "content": "© 2025 WaveCare. Tous droits réservés."
@@ -236,6 +231,16 @@
       },
       "notification-service": {
         "action-message": "FERMER"
+      }
+    },
+    "navigation": {
+      "navbar-component": {
+        "logo-alt": "Logo de l'application wavecare",
+        "menu": {
+          "ticket-management-dashboard": "Suivi des tickets",
+          "user-management-dashboard": "Gestion des profils"
+        },
+        "logout-button": "Déconnexion"
       }
     }
   },
