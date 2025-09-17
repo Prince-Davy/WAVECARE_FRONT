@@ -54,8 +54,11 @@ textarea {
 }
 
 .mdc-snackbar {
-  .mdc-snackbar__surface {
-    border-radius: 5px !important;
+  --mdc-snackbar-container-shape: 5px;
+
+  .mat-mdc-simple-snack-bar .mat-mdc-snack-bar-label {
+    --mdc-snackbar-supporting-text-weight: 500;
+    letter-spacing: 0.2px;
   }
 
   .mat-mdc-snack-bar-actions {
@@ -69,22 +72,12 @@ textarea {
   }
 
   &.snack-bar-error {
-    .mdc-snackbar__surface {
-      background-color: #e20404 !important;
-    }
-
-    .mat-mdc-snack-bar-action {
-      color: #e20404 !important;
-    }
+    --mdc-snackbar-container-color: #e20404;
+    --mat-snack-bar-button-color: #e20404;
   }
 
   &.snack-bar-success {
-    .mdc-snackbar__surface {
-      background-color: #3c6000 !important;
-    }
-
-    .mat-mdc-snack-bar-action {
-      color: #3c6000 !important;
-    }
+    --mdc-snackbar-container-color: #3c6000;
+    --mat-snack-bar-button-color: #3c6000;
   }
 }
