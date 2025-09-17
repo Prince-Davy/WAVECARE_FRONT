@@ -65,9 +65,8 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
           disableClose: true,
         })
           .afterClosed()
-          .subscribe((ticket: Ticket) => {
+          .subscribe((ticket: Ticket | undefined) => {
             if (ticket !== undefined) {
-              console.log(ticket);
               this.ticketService.updateTicket(ticket)
                 .pipe(finalize(() => this.refreshTable()))
                 .subscribe({
