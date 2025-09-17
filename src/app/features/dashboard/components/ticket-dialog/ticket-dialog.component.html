@@ -2,7 +2,7 @@
   {{ 'feature.dashboard.ticket-dialog-component.title' | translate: { id: data.ticketDetailDTO.id} }}
 </h2>
 <mat-dialog-content>
-  <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.id' | translate}}</span> {{ id: data.ticketDetailDTO.id }}</p>
+  <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.id' | translate}}</span> {{ data.ticketDetailDTO.id }}</p>
   <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.subject' | translate }}</span>{{ 'model.ticket.category.' + data.ticketDetailDTO.categoryLabel | translate }}
   <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.lastName' | translate }}</span>{{ data.ticketDetailDTO.lastName}}</p>
   <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.firstName' | translate }}</span>{{ data.ticketDetailDTO.firstName }}</p>
