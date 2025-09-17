@@ -1,0 +1,31 @@
+<div>
+  <div class="search-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Rechercher</mat-label>
+      <input matInput [(ngModel)]="inputValue" />
+    </mat-form-field>
+
+    <button mat-raised-button (click)="addKeyword()">
+      Rechercher
+    </button>
+  </div>
+
+  <div>
+    <div>
+      {{ resultCount }} résultat(s) trouvé(s)
+    </div>
+    <div>
+      <mat-chip *ngFor="let keyword of listKeywords" [removable]="true" (removed)="removeKeyword(keyword)">
+        {{ keyword }}
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip>
+    </div>
+    <div>
+      <button mat-raised-button (click)="removeAllKeywords()">
+        Réinitialiser
+      </button>
+    </div>
+  </div>
+</div>

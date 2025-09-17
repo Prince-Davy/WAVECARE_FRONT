@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { MatCardModule } from "@angular/material/card";
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
@@ -16,13 +16,12 @@ import { finalize, merge, zip } from 'rxjs';
 import { TicketDialogComponent, TicketDialogData } from '../ticket-dialog/ticket-dialog.component';
 import { TicketViewDTO } from '../../models/ticket-view-dto';
 import { TicketdetailUpdateDTO } from '../../models/ticket-detail-update-dto';
-import { MatChip, MatChipInputEvent } from "@angular/material/chips";
 import { MatInputModule } from "@angular/material/input";
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ENTER } from '@angular/cdk/keycodes';
+import { SearchBarComponent } from '../search-bar/ticket-search-bar.component';
 
 
 @Component({
@@ -31,7 +30,8 @@ import { ENTER } from '@angular/cdk/keycodes';
   imports: [
     MatTableModule, MatPaginatorModule, MatSortModule, DatePipe,
     TranslateModule, MatIconModule, MatTooltip, MatCardModule, FormsModule,
-    MatChip, MatInputModule,MatChipsModule,MatFormFieldModule,CommonModule],
+    MatInputModule, MatChipsModule, MatFormFieldModule, CommonModule, MatDialogModule,SearchBarComponent
+],
   templateUrl: './ticket-table.component.html',
   styleUrls: ['./ticket-table.component.scss'],
   providers: [
@@ -47,14 +47,11 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  isLoading: boolean = false; // TODO : Make a loader ?
+  isLoading: boolean = false;
   pageSizeOptions: number[] = [5, 10, 25, 50];
   resultsLength: number = 0;
   pageSize: number = this.pageSizeOptions[1];
-  matChipInputTokenEnd: any;
   listKeywords: string[] = [];
-  inputValue: string = '';
-  separatorKeysCodes: number[] = [ENTER];
 
   constructor(private ticketService: TicketService) {
     super();
@@ -117,37 +114,28 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
     this.dataSource = new MatTableDataSource(rows);
     this.resultsLength = totalElements;
     this.pageSize = pageSize;
+    this.applyMultiFilter();
+  }
+
+  onKeywordsChanged(keywords: string[]) {
+    this.listKeywords = keywords;
+    this.applyMultiFilter();
   }
   
-  addKeyword(): void {
-    const value = this.inputValue.trim();
-    if (value) {
-      this.listKeywords.push(value.toLowerCase());
-      this.applyMultiFilter();
-      this.inputValue = '';
-    }
-  }
 
-  removeKeyword(keyword: string): void {
-    const index = this.listKeywords.indexOf(keyword);
-
-    if (index >= 0) {
-      this.listKeywords.splice(index, 1);
-      this.applyMultiFilter();
-    }
-  }
-
-  private applyMultiFilter(): void {
+  applyMultiFilter(): void {
     this.dataSource.filterPredicate = (data: TicketViewDTO, filter: string): boolean => {
-      const keywords = filter.split('|');
+      const keywords = filter.split('|').map(k => k.toLowerCase().trim());
+
       return keywords.every(keyword =>
-        data.id.toString().includes(keyword) ||
-        data.firstName.toLowerCase().includes(keyword) ||
-        data.lastName.toLowerCase().includes(keyword) ||
-        data.mail.toLowerCase().includes(keyword)
+        data.id?.toString().includes(keyword) ||
+        data.firstName?.toLowerCase().includes(keyword) ||
+        data.lastName?.toLowerCase().includes(keyword) ||
+        data.mail?.toLowerCase().includes(keyword)
       );
     };
-    this.dataSource.filter = this.listKeywords.join('|');
-  }
 
+    this.dataSource.filter = this.listKeywords.join('|').toLowerCase().trim();
+    this.resultsLength = this.dataSource.filteredData.length;
+  }
 }

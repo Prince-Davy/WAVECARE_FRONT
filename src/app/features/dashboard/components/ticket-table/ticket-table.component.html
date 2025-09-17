@@ -1,29 +1,7 @@
 <div class="ticket-container">
   <h2 class="dashboard-title">{{'feature.dashboard.ticket-table-component.title' | translate}}</h2>
 
-
-  <mat-form-field appearance="outline">
-    <mat-label>Ajouter un mot-clé</mat-label>
-    <input
-      matInput
-      [(ngModel)]="inputValue"
-      placeholder="Tapez un mot-clé et appuyez sur Entrée"/>
-  </mat-form-field>
-
-  <div>
-    <button mat-raised-button class="button" (click)="addKeyword()">
-      Rechercher
-    </button>
-    <button mat-raised-button class="button" (click)="addKeyword()">
-      Reinitialiser
-    </button>
-    <mat-chip *ngFor="let keyword of listKeywords" [removable]="true" (removed)="removeKeyword(keyword)">
-      {{ keyword }}
-      <button matChipRemove>
-        <mat-icon>cancel</mat-icon>
-      </button>
-    </mat-chip>
-  </div>
+<app-search-bar [resultCount]="resultsLength" (keywordsChanged)="onKeywordsChanged($event)"></app-search-bar>
 
   <mat-card>
     <div class="table-wrapper">
