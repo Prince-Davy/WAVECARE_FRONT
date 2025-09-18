@@ -19,12 +19,12 @@
     </mat-form-field>
     <label for="comment">{{ 'feature.dashboard.ticket-dialog-component.form.admin-comment.label' | translate }}</label>
     <mat-form-field class="grey-form-field" appearance="outline" subscriptSizing="dynamic">
-      <textarea matInput mat-autosize id="comment" formControlName="comment" [placeholder]="'feature.dashboard.ticket-dialog-component.form.admin-comment.placeholder' | translate" required></textarea>
+      <textarea matInput mat-autosize id="comment" formControlName="comment" [placeholder]="'feature.dashboard.ticket-dialog-component.form.admin-comment.placeholder' | translate"></textarea>
     </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-raised-button class="ticket-dialog-cancel" mat-dialog-close>{{ 'feature.dashboard.ticket-dialog-component.action-button.cancel' | translate }}</button>
+  <button mat-raised-button class="ticket-dialog-cancel" [mat-dialog-close]="undefined">{{ 'feature.dashboard.ticket-dialog-component.action-button.cancel' | translate }}</button>
   <div class="ticket-dialog-validate-wrapper">
     <div>
       <button mat-raised-button class="ticket-dialog-validate" [mat-dialog-close]="validate()" [disabled]="!ticketDialogForm.valid">{{ 'feature.dashboard.ticket-dialog-component.action-button.confirm' | translate }}</button>

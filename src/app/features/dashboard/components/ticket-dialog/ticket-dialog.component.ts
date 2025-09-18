@@ -43,7 +43,7 @@ export class TicketDialogComponent {
 
   constructor(private fb: FormBuilder) {
     this.ticketDialogForm = this.fb.group({
-      status: [this.data.ticketDetailDTO.statusId, [Validators.required]],
+      status: [this.data.ticketDetailDTO.statusId,, [Validators.required]],
       comment: [this.data.ticketDetailDTO.adminComment, [Validators.required, Validators.maxLength(500)]]
     })
   }

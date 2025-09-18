@@ -6,7 +6,7 @@ import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-transla
 import { CustomTranslateLoader } from 'src/translate-loader';
 import { TicketDialogComponent, TicketDialogData } from './ticket-dialog.component';
 
-fdescribe('TicketDialogComponent', () => {
+describe('TicketDialogComponent', () => {
   let component: TicketDialogComponent;
   let fixture: ComponentFixture<TicketDialogComponent>;
 
