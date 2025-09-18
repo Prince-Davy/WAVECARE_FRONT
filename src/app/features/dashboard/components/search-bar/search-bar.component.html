@@ -1,29 +1,38 @@
-<div>
-  <div class="search-row">
-    <mat-form-field appearance="outline">
-      <mat-label>Rechercher</mat-label>
-      <input matInput [(ngModel)]="inputValue" />
-    </mat-form-field>
-
-    <button mat-raised-button (click)="addKeyword()">
-      Rechercher
-    </button>
+<div class="search-container">
+  <div class="search-bar-wrapper">
+    <div class="search-bar">
+      <span class="search-label">
+        <p>Rechercher</p>
+        <p>id, email, nom et/ou prénom</p>
+      </span>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search-input">
+        <input matInput [(ngModel)]="inputValue" placeholder="Rechercher un ticket" />
+      </mat-form-field>
+      <button mat-raised-button color="primary" class="search-button" (click)="addKeyword()">
+        Rechercher
+      </button>
+    </div>
   </div>
 
-  <div>
-    <div>
-      {{ resultCount }} résultat(s) trouvé(s)
+  <!-- Résultats + Chips + Réinitialiser -->
+  <div class="chip-row">
+    <div class="left-section">
+      <p class="results-text">Résultat : {{ totalResults }} tickets trouvés</p>
+      <div class="chip-list">
+        <mat-chip *ngFor="let keyword of listKeywords"
+                  [removable]="true"
+                  (removed)="removeKeyword(keyword)"
+                  class="custom-chip">
+          {{ keyword }}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+      </div>
     </div>
-    <div>
-      <mat-chip *ngFor="let keyword of listKeywords" [removable]="true" (removed)="removeKeyword(keyword)">
-        {{ keyword }}
-        <button matChipRemove>
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </mat-chip>
-    </div>
-    <div>
-      <button mat-raised-button (click)="removeAllKeywords()">
+
+    <div class="right-section">
+      <button mat-raised-button class="reset-button" (click)="removeAllKeywords()">
         Réinitialiser
       </button>
     </div>

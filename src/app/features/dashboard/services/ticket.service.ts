@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TicketStatusDTO } from '../models/ticket-status-dto';
 import { TicketViewDTO } from '../models/ticket-view-dto';
@@ -18,13 +18,20 @@ export interface Page<T> {
 export class TicketService {
   private readonly apiUrl = `${environment.apiUrl}/api`;
   private readonly apiUrlTicket = `${this.apiUrl}/tickets`;
+  private keywordsSubject = new BehaviorSubject<string[]>([]);
+
+  listKeywords$ = this.keywordsSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
-  getTickets(page = 0, size = 10): Observable<Page<TicketViewDTO>> {
+  getTickets(page = 0, size = 10, listKeywords: string[]): Observable<Page<TicketViewDTO>> {
     let params = new HttpParams()
       .set('page', page)
       .set('size', size);
+
+    listKeywords.forEach(keyword => {
+      params = params.append('listKeywords', keyword);
+    });
 
     return this.http.get<Page<TicketViewDTO>>(this.apiUrlTicket, { params });
   }
@@ -39,5 +46,9 @@ export class TicketService {
 
   getTicketStatuses(): Observable<TicketStatusDTO[]> {
     return this.http.get<TicketStatusDTO[]>(`${this.apiUrl}/statuses`);
+  }
+
+  updateListKeywords(listKeywords: string[]) {
+    this.keywordsSubject.next(listKeywords);
   }
 }

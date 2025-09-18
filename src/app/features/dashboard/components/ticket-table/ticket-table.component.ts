@@ -21,7 +21,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SearchBarComponent } from '../search-bar/ticket-search-bar.component';
+import { SearchBarComponent } from '../search-bar/search-bar.component';
 
 
 @Component({
@@ -64,6 +64,12 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
       });
 
     this.dataSource.paginator = this.paginator;
+
+    this.ticketService.listKeywords$.subscribe(keywords => {
+    this.listKeywords = keywords;
+    this.refreshTable();
+  });
+
   }
 
   openTicketDialog(ticketId: number) {
@@ -95,7 +101,7 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
 
   private refreshTable(): void {
     this.isLoading = true;
-    this.ticketService.getTickets(this.paginator.pageIndex, this.paginator.pageSize)
+    this.ticketService.getTickets(this.paginator.pageIndex, this.paginator.pageSize, this.listKeywords)
       .pipe(
         finalize(() => this.isLoading = false)
       )
@@ -114,28 +120,5 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
     this.dataSource = new MatTableDataSource(rows);
     this.resultsLength = totalElements;
     this.pageSize = pageSize;
-    this.applyMultiFilter();
-  }
-
-  onKeywordsChanged(keywords: string[]) {
-    this.listKeywords = keywords;
-    this.applyMultiFilter();
-  }
-  
-
-  applyMultiFilter(): void {
-    this.dataSource.filterPredicate = (data: TicketViewDTO, filter: string): boolean => {
-      const keywords = filter.split('|').map(k => k.toLowerCase().trim());
-
-      return keywords.every(keyword =>
-        data.id?.toString().includes(keyword) ||
-        data.firstName?.toLowerCase().includes(keyword) ||
-        data.lastName?.toLowerCase().includes(keyword) ||
-        data.mail?.toLowerCase().includes(keyword)
-      );
-    };
-
-    this.dataSource.filter = this.listKeywords.join('|').toLowerCase().trim();
-    this.resultsLength = this.dataSource.filteredData.length;
   }
 }
