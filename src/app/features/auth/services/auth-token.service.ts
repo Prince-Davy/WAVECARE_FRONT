@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ExtendedJwtPayload } from '@app/features/auth/models/extended-jwt-payload.interface';
 import { jwtDecode } from "jwt-decode";
 
@@ -9,18 +10,25 @@ export class AuthTokenService {
 
   private readonly SESSION_STORAGE_TOKEN_KEY = 'accessToken';
 
-  constructor() { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   getToken(): string | null {
-    return sessionStorage.getItem(this.SESSION_STORAGE_TOKEN_KEY);
+    if (isPlatformBrowser(this.platformId)) { // To avoid error wit SSR rendering that may consider 'sessionStorage' as undefined.
+      return sessionStorage.getItem(this.SESSION_STORAGE_TOKEN_KEY);
+    }
+    return null;
   }
 
   setToken(newToken: string) {
-    sessionStorage.setItem(this.SESSION_STORAGE_TOKEN_KEY, newToken);
+    if (isPlatformBrowser(this.platformId)) { // To avoid error wit SSR rendering that may consider 'sessionStorage' as undefined.
+      sessionStorage.setItem(this.SESSION_STORAGE_TOKEN_KEY, newToken);
+    }
   }
 
   removeToken() {
-    sessionStorage.removeItem(this.SESSION_STORAGE_TOKEN_KEY);
+    if (isPlatformBrowser(this.platformId)) { // To avoid error wit SSR rendering that may consider 'sessionStorage' as undefined.
+      sessionStorage.removeItem(this.SESSION_STORAGE_TOKEN_KEY);
+    }
   }
 
   /**
