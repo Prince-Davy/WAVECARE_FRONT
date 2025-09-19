@@ -63,13 +63,14 @@ export class AssistanceComponent {
         lastName: this.assistanceForm.value.lastName,
         mail: this.assistanceForm.value.mail,
         category: this.assistanceForm.value.subject,
-        content: this.assistanceForm.value.content
+        description: this.assistanceForm.value.content
       } as CreateAssistanceTicketDTO;
 
       this.assistanceService.submitTicket(ticketData)
         .subscribe({
           next: (result) => {
             console.log('Ticket submitted successfully', result);
+            this.assistanceForm.reset();
             this.submissionSuccess = true;
           },
           error: (error: HttpErrorResponse) => {
@@ -80,25 +81,5 @@ export class AssistanceComponent {
     } else {
       this.submissionSuccess = false;
     }
-  }
-
-  getErrorMessage(field: string): string {
-    const control = this.assistanceForm.get(field);
-    if (control?.hasError('required')) {
-      return 'Ce champ est obligatoire';
-    }
-    if (control?.hasError('pattern')) {
-      return 'Format invalide';
-    }
-    if (control?.hasError('email')) {
-      return 'Email invalide';
-    }
-    if (control?.hasError('minlength')) {
-      return `Minimum ${control.errors?.['minlength'].requiredLength} caractères`;
-    }
-    if (control?.hasError('maxlength')) {
-      return `Maximum ${control.errors?.['maxlength'].requiredLength} caractères`;
-    }
-    return '';
   }
 }

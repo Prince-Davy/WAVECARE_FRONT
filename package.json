@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "start:dev": "ng serve --configuration development",
+    "build:dev": "ng build --configuration development",
+    "start": "ng serve --configuration integration",
+    "build": "ng build --configuration integration",
     "test": "ng test",
     "serve:ssr:WAVECARE_FRONT": "node dist/wavecare-front/server/server.mjs"
   },

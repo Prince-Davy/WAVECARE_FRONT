@@ -51,13 +51,14 @@
 .custom-tab-button-underline {
   display: block;
   height: 2px;
-  background-color: #e6197a; // TODO : Implement logic to change color depending on the current route. Pink = current route, Transparent = other routes.
-}
 
-.custom-tab-button-underline-transparent {
-  display: block;
-  height: 2px;
-  background-color: transparent; // TODO : Implement logic to change color depending on the current route. Pink = current route, Transparent = other routes.
+  &.pink {
+    background-color: #e6197a;
+  }
+
+  &.transparent {
+    background-color: transparent;
+  }
 }
 
 .account-actions {

@@ -3,5 +3,5 @@ export interface CreateAssistanceTicketDTO {
   lastName: string;
   mail: string;
   category: string;
-  content: string;
+  description: string;
 }

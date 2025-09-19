@@ -12,7 +12,8 @@ import { DashboardComponent } from '@app/features/dashboard/abstract/dashboard-c
 import { CustomPaginator } from '@app/features/dashboard/classes/custom-paginator';
 import { Ticket } from '@app/features/dashboard/models/ticket.interface';
 import { Page, TicketService } from '@app/features/dashboard/services/ticket.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { NotificationService } from '@app/features/notification/services/notification.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { finalize, merge, zip } from 'rxjs';
 import { TicketDialogComponent, TicketDialogData } from '../ticket-dialog/ticket-dialog.component';
 
@@ -40,7 +41,7 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
   resultsLength: number = 0;
   pageSize: number = this.pageSizeOptions[1];
 
-  constructor(private ticketService: TicketService) {
+  constructor(private ticketService: TicketService, private notificationService: NotificationService, private translate: TranslateService) {
     super();
   }
 
@@ -61,17 +62,20 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
             ticket,
             statuses
           } as TicketDialogData,
+          disableClose: true,
         })
           .afterClosed()
-          .subscribe((ticket: Ticket) => {
-            console.log('The dialog was closed');
+          .subscribe((ticket: Ticket | undefined) => {
             if (ticket !== undefined) {
-              console.log(ticket);
               this.ticketService.updateTicket(ticket)
                 .pipe(finalize(() => this.refreshTable()))
                 .subscribe({
+                  next: () => {
+                    this.notificationService.openSuccessSnackBar(this.translate.instant('feature.dashboard.ticket-table-component.table.column.action.message.success', { id: ticket.id }));
+                  },
                   error: (error: any) => {
-                    console.error("An error occurred when trying to update ticket.")
+                    this.notificationService.openErrorSnackBar(this.translate.instant('feature.dashboard.ticket-table-component.table.column.action.message.error', { id: ticket.id }));
+                    console.error("An error occurred when trying to update ticket.", error)
                   }
                 });
             }

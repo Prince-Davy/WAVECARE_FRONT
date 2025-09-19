@@ -25,14 +25,7 @@
           "category": {
             "label": "Quel est l'objet de votre demande ?",
             "placeholder": "Sélectionnez une option",
-            "error-message": "Objet invalide",
-            "ticket-category": {
-              "ACCOUNT_ID": "Identifiant",
-              "ACCOUNT_PASSWORD": "Mot de passe",
-              "EXTERNAL_AUTHENTICATOR": "Pro Santé Connect",
-              "ACCOUNT_ACCESS": "Problème d'accès",
-              "OTHER": "Autre"
-            }
+            "error-message": "Objet invalide"
           },
           "content": {
             "label": "Description (2000 caractères max) :",
@@ -114,7 +107,7 @@
       "reset-password-component": {
         "logo-alt": "Logo de l'application wavecare",
         "title": "Réinitialisation de votre mot de passe",
-        "password-requirements": "Le mot de passe doit contenir :\n\nUn minimum de 12 caractères et un maximum de 20 caractères\nEt au moins :\n\n\tUne lettre majuscule (Exemple : A, B, C)\n\tUne lettre minuscule (Exemple : a, b, c)\n\tUn chiffre (Exemple : 1, 2, 3)\n\tUn caractère spécial (Exemple : #, €, $, &#64;, *, ‑)",
+        "password-requirements": "Le mot de passe doit contenir :\n\nUn minimum de 12 caractères et un maximum de 20 caractères\nEt au moins :\n\n\tUne lettre majuscule (Exemple : A, B, C)\n\tUne lettre minuscule (Exemple : a, b, c)\n\tUn chiffre (Exemple : 1, 2, 3)\n\tUn caractère spécial (Exemple : #, €, $, @, *, ‑)",
         "form": {
           "new-password": {
             "label": "Nouveau mot de passe :",
@@ -182,7 +175,11 @@
             },
             "action": {
               "label": "Action",
-              "tooltip": "Consulter / Modifier"
+              "tooltip": "Consulter / Modifier",
+              "message": {
+                "success": "Le ticket n°{{id}} a été modifié avec succés",
+                "error": "Échec de la modification du ticket n°{{id}}"
+              }
             }
           },
           "paginator": {
@@ -193,29 +190,34 @@
             "lastPage": "Dernière page",
             "of": "sur"
           }
-        },
-        "ticket": {
-          "status": {
-            "STANDBY": "En attente",
-            "PROCESS": "En cours",
-            "SOLVED": "Résolu"
-          },
-          "category": {
-            "ACCOUNT_ID": "Identifiant",
-            "ACCOUNT_PASSWORD": "Mot de passe",
-            "EXTERNAL_AUTHENTICATOR": "Pro Santé Connect",
-            "ACCOUNT_ACCESS": "Problème d'accès",
-            "OTHER": "Autre"
-          }
         }
       },
-      "navbar-component": {
-        "logo-alt": "Logo de l'application wavecare",
-        "menu": {
-          "ticket-management-dashboard": "Suivi des tickets",
-          "user-management-dashboard": "Gestion des profils"
+      "ticket-dialog-component": {
+        "title": "Ticket n°{{id}}",
+        "content": {
+          "id": "Id : ",
+          "subject": "Objet de la demande : ",
+          "lastName": "Nom : ",
+          "firstName": "Prénom : ",
+          "email": "Email : ",
+          "description": "Description : "
         },
-        "logout-button": "Déconnexion"
+        "form": {
+          "status": {
+            "label": "Statut : "
+          },
+          "admin-comment": {
+            "label": "Commentaire administrateur (500 caractères maximum) : ",
+            "placeholder": "Écrivez votre commentaire..."
+          }
+        },
+        "action-button": {
+          "confirm": "ENREGISTRER LES MODIFICATIONS",
+          "cancel": "ANNULER"
+        }
+      },
+      "user-table-component": {
+        "title": "Gestion des profils"
       },
       "footer-component": {
         "content": "© 2025 WaveCare. Tous droits réservés."
@@ -226,6 +228,35 @@
         "message": "Nous rencontrons actuellement des problèmes techniques.\nNos équipes travaillent activement à résoudre ce problème.\nNous vous remercions de votre patience et vous prions de nous excuser pour la gêne occasionnée.",
         "back-to-home": "Retour à l'accueil",
         "ticket": "Signaler le problème"
+      },
+      "notification-service": {
+        "action-message": "FERMER"
+      }
+    },
+    "navigation": {
+      "navbar-component": {
+        "logo-alt": "Logo de l'application wavecare",
+        "menu": {
+          "ticket-management-dashboard": "Suivi des tickets",
+          "user-management-dashboard": "Gestion des profils"
+        },
+        "logout-button": "Déconnexion"
+      }
+    }
+  },
+  "model": {
+    "ticket": {
+      "status": {
+        "STANDBY": "En attente",
+        "PROCESS": "En cours",
+        "SOLVED": "Résolu"
+      },
+      "category": {
+        "ACCOUNT_ID": "Identifiant",
+        "ACCOUNT_PASSWORD": "Mot de passe",
+        "EXTERNAL_AUTHENTICATOR": "Pro Santé Connect",
+        "ACCOUNT_ACCESS": "Problème d'accès",
+        "OTHER": "Autre"
       }
     }
   }
