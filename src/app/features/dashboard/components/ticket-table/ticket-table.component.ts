@@ -65,12 +65,6 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
       });
 
     this.dataSource.paginator = this.paginator;
-
-    this.ticketService.listKeywords$.subscribe(keywords => {
-    this.listKeywords = keywords;
-    this.refreshTable();
-  });
-
   }
 
   openTicketDialog(ticketId: number) {
@@ -124,5 +118,10 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
     this.dataSource = new MatTableDataSource(rows);
     this.resultsLength = totalElements;
     this.pageSize = pageSize;
+  }
+
+  keywordsChanged(currentListKeywords: string[]) {
+    this.listKeywords = currentListKeywords;
+    this.refreshTable();
   }
 }

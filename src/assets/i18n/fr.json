@@ -221,6 +221,15 @@
       },
       "footer-component": {
         "content": "© 2025 WaveCare. Tous droits réservés."
+      },
+      "search-bar": {
+        "search-bar-component": {
+          "search": "Rechercher",
+          "reset": "Réinitialiser",
+          "search-information": "id, email, nom et/ou prénom",
+          "result-found-first-part": "Résultat : ",
+          "result-found-second-part": " tickets trouvés"
+        }
       }
     },
     "notification": {

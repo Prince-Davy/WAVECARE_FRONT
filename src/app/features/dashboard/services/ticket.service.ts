@@ -18,9 +18,6 @@ export interface Page<T> {
 export class TicketService {
   private readonly apiUrl = `${environment.apiUrl}/api`;
   private readonly apiUrlTicket = `${this.apiUrl}/tickets`;
-  private keywordsSubject = new BehaviorSubject<string[]>([]);
-
-  listKeywords$ = this.keywordsSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -46,9 +43,5 @@ export class TicketService {
 
   getTicketStatuses(): Observable<TicketStatusDTO[]> {
     return this.http.get<TicketStatusDTO[]>(`${this.apiUrl}/statuses`);
-  }
-
-  updateListKeywords(listKeywords: string[]) {
-    this.keywordsSubject.next(listKeywords);
   }
 }

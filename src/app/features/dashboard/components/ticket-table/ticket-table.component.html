@@ -1,7 +1,11 @@
 <div class="ticket-container">
   <h2 class="dashboard-title">{{'feature.dashboard.ticket-table-component.title' | translate}}</h2>
 
-<app-search-bar [totalResults]="resultsLength"></app-search-bar>
+<app-search-bar 
+  [totalResults]="resultsLength" 
+  (keywordsChanged)="keywordsChanged($event)">
+</app-search-bar>
+
   <mat-card>
     <div class="table-wrapper">
       <table mat-table [dataSource]="dataSource">

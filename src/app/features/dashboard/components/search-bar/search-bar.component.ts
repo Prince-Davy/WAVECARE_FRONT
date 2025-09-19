@@ -28,9 +28,6 @@ export class SearchBarComponent {
   listKeywords: string[] = [];
   inputValue: string = '';
 
-  constructor(private ticketService: TicketService) {
-  }
-
   @Input() totalResults: number = 0;
   @Output() keywordsChanged = new EventEmitter<string[]>();
 
@@ -39,7 +36,7 @@ export class SearchBarComponent {
     if (trimmed && !this.listKeywords.includes(trimmed)) {
       if (this.listKeywords.length < 4) {
         this.listKeywords.push(trimmed);
-        this.ticketService.updateListKeywords(this.listKeywords);
+        this.keywordsChanged.emit(this.listKeywords);
       }
     }
     this.inputValue = '';
@@ -50,12 +47,12 @@ export class SearchBarComponent {
 
     if (index >= 0) {
       this.listKeywords.splice(index, 1);
-      this.ticketService.updateListKeywords(this.listKeywords);
+      this.keywordsChanged.emit(this.listKeywords);
     }
   }
 
   removeAllKeywords(): void {
     this.listKeywords = [];
-    this.ticketService.updateListKeywords(this.listKeywords);
+    this.keywordsChanged.emit(this.listKeywords);
   }
 }
