@@ -6,7 +6,6 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms'
 import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from '@angular/common';
-import { TicketService } from '../../services/ticket.service';
 
 
 @Component({
