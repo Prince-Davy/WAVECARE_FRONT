@@ -35,7 +35,7 @@ export class SearchBarComponent {
     const trimmed = this.inputValue?.trim();
     if (trimmed && !this.listKeywords.includes(trimmed)) {
       if (this.listKeywords.length < 4) {
-        this.listKeywords.push(trimmed);
+        this.listKeywords.push(trimmed.toLowerCase());
         this.keywordsChanged.emit(this.listKeywords);
       }
     }

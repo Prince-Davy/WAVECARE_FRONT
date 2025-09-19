@@ -226,7 +226,7 @@
         "search-bar-component": {
           "search": "Rechercher",
           "reset": "Réinitialiser",
-          "search-information": "id, email, nom et/ou prénom",
+          "search-informations": "id, email, nom et/ou prénom",
           "result-found-first-part": "Résultat : ",
           "result-found-second-part": " tickets trouvés"
         }
