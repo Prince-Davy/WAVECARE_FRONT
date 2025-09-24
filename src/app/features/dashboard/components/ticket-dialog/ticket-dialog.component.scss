@@ -32,12 +32,16 @@ textarea {
 }
 
 .ticket-dialog-validate {
-  color: white !important;
-  background-color: #005EA5 !important;
+  --mdc-protected-button-label-text-color: white;
+  --mdc-protected-button-container-color: #005EA5;
 
   &:disabled {
-    background-color: #E0E0E0 !important;
-    color: #626262 !important;
+    --mdc-protected-button-container-color: #E0E0E0;
+    --mdc-protected-button-label-text-color: #626262;
+  }
+
+  &:hover, &:focus {
+    --mdc-protected-button-container-color: #1469c0;
   }
 }
 

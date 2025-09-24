@@ -1,42 +1,36 @@
 <div class="search-container">
 
-  <div class="search-bar-wrapper">
-    <div class="search-bar">
-      <span class="search-label">
-        <p>{{'feature.dashboard.search-bar.search-bar-component.search' | translate}}</p>
-        <p>{{'feature.dashboard.search-bar.search-bar-component.search-informations' | translate}}</p>
-      </span>
-      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search-input">
-        <input matInput 
-          [(ngModel)]="inputValue" 
-          placeholder="Rechercher un ticket" 
-          (keyup.enter)="addKeyword()"/>
+  <div class="search-bar">
+    <span class="search-label">
+      <label for="search-bar">{{'feature.dashboard.search-bar.search-bar-component.search.label' | translate}}</label>
+      <span>{{'feature.dashboard.search-bar.search-bar-component.search-information' | translate}}</span>
+    </span>
+    <div class="search-actions">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <input id="search-bar" matInput [(ngModel)]="inputValue" [placeholder]="'feature.dashboard.search-bar.search-bar-component.search-input-placeholder' | translate" (keyup.enter)="addKeyword()" />
       </mat-form-field>
-      <button mat-raised-button color="primary" class="search-button" (click)="addKeyword()">
-        {{'feature.dashboard.search-bar.search-bar-component.search' | translate}}
+      <button mat-raised-button class="search-button" (click)="addKeyword()">
+        {{'feature.dashboard.search-bar.search-bar-component.search.button' | translate}}
       </button>
     </div>
   </div>
 
   <div class="chip-row">
     <div class="left-section">
-      <p class="results-text"> 
+      <p class="results-text">
         {{'feature.dashboard.search-bar.search-bar-component.result-found-first-part' | translate}}
         {{totalResults}}
         {{'feature.dashboard.search-bar.search-bar-component.result-found-second-part' | translate}}
       </p>
       <div class="chip-list">
         @for (keyword of listKeywords; track keyword) {
-        <mat-chip
-                  [removable]="true"
-                  (removed)="removeKeyword(keyword)"
-                  class="custom-chip">
+        <mat-chip [removable]="true" (removed)="removeKeyword(keyword)" class="custom-chip">
           {{ keyword }}
           <button matChipRemove>
-            <mat-icon>cancel</mat-icon>
+            <mat-icon tabindex=0>close</mat-icon>
           </button>
         </mat-chip>
-      }
+        }
       </div>
     </div>
 

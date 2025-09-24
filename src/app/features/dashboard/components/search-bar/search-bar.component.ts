@@ -1,11 +1,12 @@
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
-import {MatChipsModule} from '@angular/material/chips';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms'
-import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from '@angular/material/input';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
@@ -13,17 +14,18 @@ import { CommonModule } from '@angular/common';
   imports: [
     TranslateModule,
     MatFormFieldModule,
+    MatButtonModule,
     MatInputModule,
     MatChipsModule,
     FormsModule,
     MatIconModule,
     CommonModule
-],
+  ],
   templateUrl: './search-bar.component.html',
   styleUrl: './search-bar.component.scss'
 })
 export class SearchBarComponent {
-  
+
   listKeywords: string[] = [];
   inputValue: string = '';
 
