@@ -1,9 +1,13 @@
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatCardModule } from "@angular/material/card";
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from "@angular/material/input";
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -14,15 +18,10 @@ import { Page, TicketService } from '@app/features/dashboard/services/ticket.ser
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { finalize, merge, zip } from 'rxjs';
-import { TicketDialogComponent, TicketDialogData } from '../ticket-dialog/ticket-dialog.component';
+import { TicketDetailUpdateDTO } from '../../models/ticket-detail-update-dto';
 import { TicketViewDTO } from '../../models/ticket-view-dto';
-import { TicketdetailUpdateDTO } from '../../models/ticket-detail-update-dto';
-import { MatInputModule } from "@angular/material/input";
-import { MatChipsModule } from '@angular/material/chips';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { TicketDialogComponent, TicketDialogData } from '../ticket-dialog/ticket-dialog.component';
 
 
 @Component({
@@ -31,8 +30,8 @@ import { SearchBarComponent } from '../search-bar/search-bar.component';
   imports: [
     MatTableModule, MatPaginatorModule, MatSortModule, DatePipe,
     TranslateModule, MatIconModule, MatTooltip, MatCardModule, FormsModule,
-    MatInputModule, MatChipsModule, MatFormFieldModule, CommonModule, MatDialogModule,SearchBarComponent
-],
+    MatInputModule, MatChipsModule, MatFormFieldModule, CommonModule, MatDialogModule, SearchBarComponent
+  ],
   templateUrl: './ticket-table.component.html',
   styleUrls: ['./ticket-table.component.scss'],
   providers: [
@@ -78,9 +77,9 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
           disableClose: true,
         })
           .afterClosed()
-          .subscribe((ticketdetailUpdateDTO: TicketdetailUpdateDTO | undefined) => {
-            if (ticketdetailUpdateDTO !== undefined) {
-              this.ticketService.updateTicket(ticketdetailUpdateDTO)
+          .subscribe((ticketDetailUpdateDTO: TicketDetailUpdateDTO | undefined) => {
+            if (ticketDetailUpdateDTO !== undefined) {
+              this.ticketService.updateTicket(ticketDetailUpdateDTO)
                 .pipe(finalize(() => this.refreshTable()))
                 .subscribe({
                   next: () => {
@@ -97,8 +96,12 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
       });
   }
 
-  private refreshTable(): void {
+  private refreshTable(pageIndex?: number): void {
     this.isLoading = true;
+
+    if (pageIndex !== undefined) {
+      this.paginator.pageIndex = pageIndex;
+    }
     this.ticketService.getTickets(this.paginator.pageIndex, this.paginator.pageSize, this.listKeywords)
       .pipe(
         finalize(() => this.isLoading = false)
@@ -122,6 +125,6 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
 
   keywordsChanged(currentListKeywords: string[]) {
     this.listKeywords = currentListKeywords;
-    this.refreshTable();
+    this.refreshTable(0);
   }
 }

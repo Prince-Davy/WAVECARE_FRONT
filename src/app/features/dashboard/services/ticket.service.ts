@@ -1,11 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { TicketDetailDTO } from '../models/ticket-detail-dto';
+import { TicketDetailUpdateDTO } from '../models/ticket-detail-update-dto';
 import { TicketStatusDTO } from '../models/ticket-status-dto';
 import { TicketViewDTO } from '../models/ticket-view-dto';
-import { TicketDetailDTO } from '../models/ticket-detail-dto';
-import { TicketdetailUpdateDTO } from '../models/ticket-detail-update-dto';
 
 export interface Page<T> {
   content: T[];
@@ -37,8 +37,8 @@ export class TicketService {
     return this.http.get<TicketDetailDTO>(`${this.apiUrlTicket}/${id}`);
   }
 
-  updateTicket(ticketdetailUpdateDTO: TicketdetailUpdateDTO): Observable<void> {
-    return this.http.put<void>(`${this.apiUrlTicket}/${ticketdetailUpdateDTO.id}`, { statusId: ticketdetailUpdateDTO.statusId, adminComment: ticketdetailUpdateDTO.adminComment });
+  updateTicket(ticketDetailUpdateDTO: TicketDetailUpdateDTO): Observable<void> {
+    return this.http.put<void>(`${this.apiUrlTicket}/${ticketDetailUpdateDTO.id}`, { statusId: ticketDetailUpdateDTO.statusId, adminComment: ticketDetailUpdateDTO.adminComment });
   }
 
   getTicketStatuses(): Observable<TicketStatusDTO[]> {
