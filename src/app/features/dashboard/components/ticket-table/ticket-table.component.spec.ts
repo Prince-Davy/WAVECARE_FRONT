@@ -1,17 +1,17 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { of } from 'rxjs';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableHarness } from '@angular/material/table/testing';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatPaginatorHarness } from '@angular/material/paginator/testing';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { MatTableModule } from '@angular/material/table';
+import { MatTableHarness } from '@angular/material/table/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TicketTableComponent } from '@app/features/dashboard/components/ticket-table/ticket-table.component';
 import { TicketService } from '@app/features/dashboard/services/ticket.service';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { of } from 'rxjs';
 
 class FakeLoader implements TranslateLoader {
   getTranslation(lang: string) { return of({}); }
@@ -114,9 +114,9 @@ describe('TicketTableComponent', () => {
     const paginator = await loader.getHarness(MatPaginatorHarness);
 
     expect(await paginator.getPageSize()).toBe(2);
-    expect(await paginator.getRangeLabel()).toContain('1');    await paginator.goToNextPage();
+    expect(await paginator.getRangeLabel()).toContain('1'); await paginator.goToNextPage();
     fixture.detectChanges();
-    tick(); 
+    tick();
 
     expect(ticketServiceSpy.getTickets.calls.count()).toBeGreaterThanOrEqual(2);
   }));
