@@ -2,6 +2,6 @@ export interface CreateAssistanceTicketDTO {
   firstName: string;
   lastName: string;
   mail: string;
-  category: string;
+  categoryId: number;
   description: string;
 }
