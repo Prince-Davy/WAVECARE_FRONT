@@ -156,7 +156,7 @@
               "label": "Id"
             },
             "subject": {
-              "label": "Objet demandé"
+              "label": "Objet demande"
             },
             "lastName": {
               "label": "Nom"
@@ -174,7 +174,7 @@
               "label": "Date de création"
             },
             "action": {
-              "label": "Action",
+              "label": "Actions",
               "tooltip": "Consulter / Modifier",
               "message": {
                 "success": "Le ticket n°{{id}} a été modifié avec succés",
@@ -221,6 +221,19 @@
       },
       "footer-component": {
         "content": "© 2025 WaveCare. Tous droits réservés."
+      },
+      "search-bar": {
+        "search-bar-component": {
+          "search": {
+            "label": "Rechercher",
+            "button": "RECHERCHER"
+          },
+          "reset": "RÉINITIALISER",
+          "search-information": "id, email, nom et/ou prénom",
+          "search-input-placeholder": "Rechercher un ticket",
+          "result-found-first-part": "Résultat : ",
+          "result-found-second-part": " tickets trouvés"
+        }
       }
     },
     "notification": {

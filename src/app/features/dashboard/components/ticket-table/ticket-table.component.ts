@@ -1,26 +1,37 @@
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatCardModule } from "@angular/material/card";
-import { MatDialog } from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from "@angular/material/input";
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
 import { DashboardComponent } from '@app/features/dashboard/abstract/dashboard-component.abstract';
 import { CustomPaginator } from '@app/features/dashboard/classes/custom-paginator';
-import { Ticket } from '@app/features/dashboard/models/ticket.interface';
 import { Page, TicketService } from '@app/features/dashboard/services/ticket.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { finalize, merge, zip } from 'rxjs';
+import { TicketDetailUpdateDTO } from '../../models/ticket-detail-update-dto';
+import { TicketViewDTO } from '../../models/ticket-view-dto';
+import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { TicketDialogComponent, TicketDialogData } from '../ticket-dialog/ticket-dialog.component';
+
 
 @Component({
   selector: 'ticket-table',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatSortModule, DatePipe, TranslateModule, MatIconModule, MatTooltip, MatCardModule],
+  imports: [
+    MatTableModule, MatPaginatorModule, MatSortModule, DatePipe,
+    TranslateModule, MatIconModule, MatTooltip, MatCardModule, FormsModule,
+    MatInputModule, MatChipsModule, MatFormFieldModule, CommonModule, MatDialogModule, SearchBarComponent
+  ],
   templateUrl: './ticket-table.component.html',
   styleUrls: ['./ticket-table.component.scss'],
   providers: [
@@ -32,14 +43,15 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
   readonly dialog = inject(MatDialog);
 
   displayedColumns: string[] = ['id', 'subject', 'lastName', 'firstName', 'mail', 'status', 'date', 'action'];
-  dataSource: MatTableDataSource<Ticket> = new MatTableDataSource<Ticket>([]);
+  dataSource: MatTableDataSource<TicketViewDTO> = new MatTableDataSource<TicketViewDTO>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  isLoading: boolean = false; // TODO : Make a loader ?
+  isLoading: boolean = false;
   pageSizeOptions: number[] = [5, 10, 25, 50];
   resultsLength: number = 0;
   pageSize: number = this.pageSizeOptions[1];
+  listKeywords: string[] = [];
 
   constructor(private ticketService: TicketService, private notificationService: NotificationService, private translate: TranslateService) {
     super();
@@ -56,25 +68,25 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
 
   openTicketDialog(ticketId: number) {
     zip(this.ticketService.getTicketStatuses(), this.ticketService.getTicket(ticketId))
-      .subscribe(([statuses, ticket]) => {
+      .subscribe(([statuses, ticketDetailDTO]) => {
         this.dialog.open(TicketDialogComponent, {
           data: {
-            ticket,
+            ticketDetailDTO,
             statuses
           } as TicketDialogData,
           disableClose: true,
         })
           .afterClosed()
-          .subscribe((ticket: Ticket | undefined) => {
-            if (ticket !== undefined) {
-              this.ticketService.updateTicket(ticket)
+          .subscribe((ticketDetailUpdateDTO: TicketDetailUpdateDTO | undefined) => {
+            if (ticketDetailUpdateDTO !== undefined) {
+              this.ticketService.updateTicket(ticketDetailUpdateDTO)
                 .pipe(finalize(() => this.refreshTable()))
                 .subscribe({
                   next: () => {
-                    this.notificationService.openSuccessSnackBar(this.translate.instant('feature.dashboard.ticket-table-component.table.column.action.message.success', { id: ticket.id }));
+                    this.notificationService.openSuccessSnackBar(this.translate.instant('feature.dashboard.ticket-table-component.table.column.action.message.success', { id: ticketId }));
                   },
                   error: (error: any) => {
-                    this.notificationService.openErrorSnackBar(this.translate.instant('feature.dashboard.ticket-table-component.table.column.action.message.error', { id: ticket.id }));
+                    this.notificationService.openErrorSnackBar(this.translate.instant('feature.dashboard.ticket-table-component.table.column.action.message.error', { id: ticketId }));
                     console.error("An error occurred when trying to update ticket.", error)
                   }
                 });
@@ -84,14 +96,18 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
       });
   }
 
-  private refreshTable(): void {
+  private refreshTable(pageIndex?: number): void {
     this.isLoading = true;
-    this.ticketService.getTickets(this.paginator.pageIndex, this.paginator.pageSize)
+
+    if (pageIndex !== undefined) {
+      this.paginator.pageIndex = pageIndex;
+    }
+    this.ticketService.getTickets(this.paginator.pageIndex, this.paginator.pageSize, this.listKeywords)
       .pipe(
         finalize(() => this.isLoading = false)
       )
       .subscribe({
-        next: (result: Page<Ticket>) => {
+        next: (result: Page<TicketViewDTO>) => {
           this.updateRows(result.content, result.totalElements, result.size);
         },
         error: (error: HttpErrorResponse) => {
@@ -101,9 +117,14 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
       });
   }
 
-  private updateRows(rows: Ticket[], totalElements: number, pageSize: number) {
+  private updateRows(rows: TicketViewDTO[], totalElements: number, pageSize: number) {
     this.dataSource = new MatTableDataSource(rows);
     this.resultsLength = totalElements;
     this.pageSize = pageSize;
+  }
+
+  keywordsChanged(currentListKeywords: string[]) {
+    this.listKeywords = currentListKeywords;
+    this.refreshTable(0);
   }
 }

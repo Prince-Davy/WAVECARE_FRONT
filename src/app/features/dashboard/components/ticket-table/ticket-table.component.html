@@ -1,49 +1,56 @@
 <div class="ticket-container">
-  <h2 class="dashboard-title">{{'feature.dashboard.ticket-table-component.title' | translate}}</h2>
+  <div>
+    <h2 class="dashboard-title">{{'feature.dashboard.ticket-table-component.title' | translate}}</h2>
+  </div>
+  <div>
+    <app-search-bar [totalResults]="resultsLength" (keywordsChanged)="keywordsChanged($event)">
+    </app-search-bar>
+  </div>
+
   <mat-card>
     <div class="table-wrapper">
       <table mat-table [dataSource]="dataSource">
         <!-- Colonnes -->
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef>{{ 'feature.dashboard.ticket-table-component.table.column.id.label' | translate }}</th>
-          <td mat-cell *matCellDef="let ticket">{{ ticket.id }}</td>
+          <td mat-cell *matCellDef="let TicketViewDTO">{{ TicketViewDTO.id }}</td>
         </ng-container>
 
         <ng-container matColumnDef="subject">
           <th mat-header-cell *matHeaderCellDef>{{ 'feature.dashboard.ticket-table-component.table.column.subject.label' | translate }}</th>
-          <td mat-cell *matCellDef="let ticket">{{ 'model.ticket.category.' + ticket.category | translate }}</td>
+          <td mat-cell *matCellDef="let TicketViewDTO">{{ 'model.ticket.category.' + TicketViewDTO.categoryLabel | translate }}</td>
         </ng-container>
 
         <ng-container matColumnDef="lastName">
           <th mat-header-cell *matHeaderCellDef>{{ 'feature.dashboard.ticket-table-component.table.column.lastName.label' | translate }}</th>
-          <td mat-cell *matCellDef="let ticket">{{ ticket.lastName }}</td>
+          <td mat-cell *matCellDef="let TicketViewDTO">{{ TicketViewDTO.lastName }}</td>
         </ng-container>
 
         <ng-container matColumnDef="firstName">
           <th mat-header-cell *matHeaderCellDef>{{ 'feature.dashboard.ticket-table-component.table.column.firstName.label' | translate }}</th>
-          <td mat-cell *matCellDef="let ticket">{{ ticket.firstName }}</td>
+          <td mat-cell *matCellDef="let TicketViewDTO">{{ TicketViewDTO.firstName }}</td>
         </ng-container>
 
         <ng-container matColumnDef="mail">
           <th mat-header-cell *matHeaderCellDef>{{ 'feature.dashboard.ticket-table-component.table.column.mail.label' | translate }}</th>
-          <td mat-cell *matCellDef="let ticket">{{ ticket.mail }}</td>
+          <td mat-cell *matCellDef="let TicketViewDTO">{{ TicketViewDTO.mail }}</td>
         </ng-container>
 
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef>{{ 'feature.dashboard.ticket-table-component.table.column.status.label' | translate }}</th>
-          <td mat-cell *matCellDef="let ticket">{{ 'model.ticket.status.' + ticket.status | translate }}</td>
+          <td mat-cell *matCellDef="let TicketViewDTO">{{ 'model.ticket.status.' + TicketViewDTO.statusLabel | translate }}</td>
         </ng-container>
 
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef>{{ 'feature.dashboard.ticket-table-component.table.column.date.label' | translate }}</th>
-          <td mat-cell *matCellDef="let ticket">{{ ticket.creationDate | date:'dd/MM/yyyy - HH:mm' }}</td>
+          <td mat-cell *matCellDef="let TicketViewDTO">{{ TicketViewDTO.creationDate | date:'dd/MM/yyyy - HH:mm' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef>{{ 'feature.dashboard.ticket-table-component.table.column.action.label' | translate }}</th>
-          <td mat-cell *matCellDef="let ticket">
-            <mat-icon (click)="openTicketDialog(ticket.id)" tabindex=0 (keypress)="openTicketDialog(ticket.id)" [matTooltip]="'feature.dashboard.ticket-table-component.table.column.action.tooltip' | translate" matTooltipPosition="right"
-              class="material-symbols-outlined" aria-label="'feature.dashboard.ticket-table-component.table.column.action.tooltip' | translate">edit</mat-icon>
+          <td mat-cell *matCellDef="let TicketViewDTO">
+            <mat-icon (click)="openTicketDialog(TicketViewDTO.id)" tabindex=0 (keypress)="openTicketDialog(TicketViewDTO.id)" [matTooltip]="'feature.dashboard.ticket-table-component.table.column.action.tooltip' | translate"
+              matTooltipPosition="right" class="material-symbols-outlined" aria-label="'feature.dashboard.ticket-table-component.table.column.action.tooltip' | translate">edit</mat-icon>
           </td>
         </ng-container>
 

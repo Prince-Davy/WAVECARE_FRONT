@@ -23,17 +23,17 @@ describe('TicketDialogComponent', () => {
 
   beforeEach(async () => {
     mockData = {
-      ticket: {
+      ticketDetailDTO: {
         id: 1,
         firstName: 'John',
         lastName: 'Doe',
         mail: 'john.doe@example.com',
-        category: 'technical',
+        categoryLabel: 'technical',
         description: 'Some issue',
-        status: 'PROCESS',
+        statusId: 1,
         adminComment: 'Initial comment'
       },
-      statuses: ['STANDBY', 'PROCESS', 'SOLVED']
+      statuses: [{ id: 0, label: 'STANDBY' }, { id: 1, label: 'PROCESS' }, { id: 2, label: 'SOLVED' }]
     };
 
     await TestBed.configureTestingModule({
@@ -97,13 +97,13 @@ describe('TicketDialogComponent', () => {
     component.ticketDialogForm.setValue({ status: 'SOLVED', comment: 'All good now' });
     const updatedTicket = component.validate();
 
-    expect(updatedTicket.status).toBe('SOLVED');
+    expect(updatedTicket.statusId).toBe(0);
     expect(updatedTicket.adminComment).toBe('All good now');
   });
 
   it('should handle null or empty ticket values gracefully', () => {
-    component.data.ticket.status = null as any;
-    component.data.ticket.adminComment = '';
+    component.data.ticketDetailDTO.statusId = null as any;
+    component.data.ticketDetailDTO.adminComment = '';
     component.ticketDialogForm.setValue({ status: null, comment: '' });
     expect(component.ticketDialogForm.valid).toBeFalse();
   });
@@ -111,12 +111,12 @@ describe('TicketDialogComponent', () => {
   it('should not update ticket if form is invalid in validate()', () => {
     component.ticketDialogForm.setValue({ status: '', comment: '' });
     const result = component.validate();
-    expect(result.status).toBe('');
+    expect(result.statusId).toBe(0);
     expect(result.adminComment).toBe('');
   });
 
   it('should render translated title with ticket id', () => {
     const title = fixture.debugElement.query(By.css('.ticket-dialog-title')).nativeElement;
-    expect(title.textContent).toContain(mockData.ticket.id.toString());
+    expect(title.textContent).toContain(mockData.ticketDetailDTO.id.toString());
   });
 });
