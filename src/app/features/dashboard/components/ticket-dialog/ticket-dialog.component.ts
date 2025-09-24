@@ -6,12 +6,14 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { Ticket } from '@app/features/dashboard/models/ticket.interface';
 import { TranslateModule } from '@ngx-translate/core';
+import { TicketDetailDTO } from '../../models/ticket-detail-dto';
+import { TicketDetailUpdateDTO } from '../../models/ticket-detail-update-dto';
+import { TicketStatusDTO } from '../../models/ticket-status-dto';
 
 export interface TicketDialogData {
-  ticket: Ticket;
-  statuses: string[];
+  ticketDetailDTO: TicketDetailDTO;
+  statuses: TicketStatusDTO[];
 }
 
 @Component({
@@ -20,6 +22,7 @@ export interface TicketDialogData {
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    FormsModule,
     MatFormFieldModule,
     MatSelectModule,
     MatButtonModule,
@@ -34,20 +37,20 @@ export class TicketDialogComponent {
 
   readonly dialogRef = inject(MatDialogRef<TicketDialogComponent>);
   readonly data = inject<TicketDialogData>(MAT_DIALOG_DATA);
-  readonly ticket = this.data.ticket;
+  readonly ticketDetailDTO = this.data.ticketDetailDTO;
 
   ticketDialogForm: FormGroup<any>;
 
   constructor(private fb: FormBuilder) {
     this.ticketDialogForm = this.fb.group({
-      status: [this.data.ticket.status, [Validators.required]],
-      comment: [this.data.ticket.adminComment, [Validators.maxLength(500)]]
+      status: [this.data.ticketDetailDTO.statusId, [Validators.required]],
+      comment: [this.data.ticketDetailDTO.adminComment, [Validators.maxLength(500)]]
     })
   }
 
-  validate(): Ticket {
-    this.data.ticket.status = this.ticketDialogForm.value.status ?? '';
-    this.data.ticket.adminComment = this.ticketDialogForm.value.comment ?? '';
-    return this.data.ticket;
+  validate(): TicketDetailUpdateDTO {
+    this.data.ticketDetailDTO.statusId = this.ticketDialogForm.value.status ?? '';
+    this.data.ticketDetailDTO.adminComment = this.ticketDialogForm.value.comment ?? '';
+    return this.data.ticketDetailDTO;
   }
 }
