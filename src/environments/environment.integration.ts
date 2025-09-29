@@ -1,4 +1,4 @@
-// This environment refer to the integration environment that is deployed at :
+// This environment refer to the integration environment that is deployed at https://wavecare-app.innovation-factory.io/
 export const environment = {
-  apiUrl: "http://localhost:8080"
+  apiUrl: "https://integ.wavecare-app-back.innovation-factory.io"
 };
