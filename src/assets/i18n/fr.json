@@ -116,7 +116,7 @@
               "required": "Ce champs est obligatoire",
               "minlength": "Le mot de passe doit contenir au moins 12 caractères.",
               "maxlength": "Le mot de passe ne peut pas dépasser 20 caractères.",
-              "pattern": "Le mot de passe doit contenir une majuscule, une minuscule, un chiffre et un caractère spécial."
+              "pattern": "Mot de passe non conforme"
             },
             "hide-password-button": "Afficher ou masquer mon mot de passe"
           },
@@ -124,7 +124,7 @@
             "label": "Confirmation du mot de passe :",
             "placeholder": "Confirmation du mot de passe",
             "error-message": {
-              "must-match": "Les mots de passe ne correspondent pas."
+              "must-match": "Les deux mots de passe ne sont pas identiques"
             },
             "hide-password-button": "Afficher ou masquer mon mot de passe"
           },
