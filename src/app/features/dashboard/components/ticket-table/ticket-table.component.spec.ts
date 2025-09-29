@@ -28,9 +28,9 @@ describe('TicketTableComponent', () => {
       firstName: 'Jean',
       lastName: 'Dupont',
       mail: 'jean.dupont@example.com',
-      category: 'ACCOUNT_ID',
+      categoryLabel: 'ACCOUNT_ID',
       description: 'Test ticket',
-      status: 'STANDBY',
+      statusLabel: 'STANDBY',
       creationDate: new Date('2025-03-15T10:20:00Z')
     },
     {
@@ -38,9 +38,9 @@ describe('TicketTableComponent', () => {
       firstName: 'Max',
       lastName: 'Dupont',
       mail: 'max.dupont@example.com',
-      category: 'OTHER',
+      categoryLabel: 'OTHER',
       description: 'Another ticket',
-      status: 'PROCESS',
+      statusLabel: 'PROCESS',
       creationDate: new Date('2025-03-16T12:30:00Z')
     }
   ];
@@ -73,16 +73,16 @@ describe('TicketTableComponent', () => {
     fixture.detectChanges();
   });
 
-  it('crée le composant', () => {
+  it('creates the component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('affiche les colonnes attendues', () => {
+  it('displays the expected columns', () => {
     const expected = ['id', 'subject', 'lastName', 'firstName', 'mail', 'status', 'date', 'action'];
     expect(component.displayedColumns).toEqual(expected);
   });
 
-  it('charge et affiche les tickets dans la table (MatTableHarness)', async () => {
+  it('loads and displays tickets in the table (MatTableHarness)', async () => {
     ticketServiceSpy.getTickets.and.returnValue(
       of({ content: mockTickets, totalElements: 2, totalPages: 1, size: 10 })
     );
@@ -99,7 +99,7 @@ describe('TicketTableComponent', () => {
     expect(text[1].some(cell => cell.includes('Max'))).toBeTrue();
   });
 
-  it('pagine avec MatPaginatorHarness et rappelle le service', fakeAsync(async () => {
+  it('paginates with MatPaginatorHarness and recalls the service', fakeAsync(async () => {
     ticketServiceSpy.getTickets.and.returnValues(
       of({ content: mockTickets, totalElements: 20, totalPages: 10, size: 2 }), // page 0
       of({ content: mockTickets, totalElements: 20, totalPages: 10, size: 2 }) // page 1
@@ -121,7 +121,7 @@ describe('TicketTableComponent', () => {
     expect(ticketServiceSpy.getTickets.calls.count()).toBeGreaterThanOrEqual(2);
   }));
 
-  it('clique sur l’icône "edit" -> appelle openTicketDialog(id)', () => {
+  it('clicks on the "edit" icon -> calls openTicketDialog(id)', () => {
     ticketServiceSpy.getTickets.and.returnValue(
       of({ content: [mockTickets[0]], totalElements: 1, totalPages: 1, size: 10 })
     );
@@ -139,7 +139,7 @@ describe('TicketTableComponent', () => {
     expect(component.openTicketDialog).toHaveBeenCalledOnceWith(1);
   });
 
-  it('keypress Enter/Space sur l’icône -> appelle openTicketDialog(id)', () => {
+  it('keypress Enter/Space on the icon -> calls openTicketDialog(id)', () => {
     ticketServiceSpy.getTickets.and.returnValue(
       of({ content: [mockTickets[0]], totalElements: 1, totalPages: 1, size: 10 })
     );
