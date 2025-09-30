@@ -62,7 +62,7 @@ describe('TicketDialogComponent', () => {
 
   it('should initialize the form with ticket data', () => {
     expect(component.ticketDialogForm.value).toEqual({
-      status: 'PROCESS',
+      status: 1,
       comment: 'Initial comment'
     });
   });
@@ -92,7 +92,7 @@ describe('TicketDialogComponent', () => {
     component.ticketDialogForm.setValue({ status: 'SOLVED', comment: 'All good now' });
     const updatedTicket = component.validate();
 
-    expect(updatedTicket.statusId).toBe(0);
+    expect(updatedTicket.statusId).toBe(2);
     expect(updatedTicket.adminComment).toBe('All good now');
   });
 
