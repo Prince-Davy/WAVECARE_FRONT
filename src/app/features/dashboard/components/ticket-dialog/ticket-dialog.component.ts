@@ -47,10 +47,13 @@ export class TicketDialogComponent {
       comment: [this.data.ticketDetailDTO.adminComment, [Validators.maxLength(500)]]
     })
   }
-
+    
   validate(): TicketDetailUpdateDTO {
-    this.data.ticketDetailDTO.statusId = this.ticketDialogForm.value.status ?? '';
-    this.data.ticketDetailDTO.adminComment = this.ticketDialogForm.value.comment ?? '';
+    const formValue = this.ticketDialogForm.value;
+    const selectedStatus = this.data.statuses.find(s => s.label === formValue.status);
+    this.data.ticketDetailDTO.statusId = selectedStatus?.id ?? 0;
+    this.data.ticketDetailDTO.adminComment = formValue.comment ?? '';
     return this.data.ticketDetailDTO;
   }
+
 }
