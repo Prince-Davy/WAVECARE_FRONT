@@ -26,22 +26,7 @@ variables:
   - name: dockerfilePath
     value: $(Build.SourcesDirectory)/Dockerfile
   - name: kubernetesNamespaceInteg
-    value: 'lge-wavecare'
-  # - name: deploymentName
-  #   value: 'wavecare'
-  # - name: deploymentIntegName
-  #   value: 'wavecare'
-  # - name : kubernetesNamespace
-  #   value : 'lge-wavecare'
-  # - name : kubernetesIntegNamespace
-  #   value : 'lge-wavecare'
-  # - name : kubernetesSecret
-  #   value : 'wavecare-config'
-  # - name : kubernetesIntegSecret
-  #   value : 'wavecare-config'
-  # - name : kubernetesConfigMap #Création automatique du configmap
-  #   value : 'integ-wavecare-auto-configmap'
-
+    value: 'lge-wavecare-app'
  # Include specific variables of Quality and Security
   - name: SKIP_DOXYGEN
     value: false
