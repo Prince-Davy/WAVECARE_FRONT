@@ -75,14 +75,14 @@ ingress:
       # more_set_headers "X-Forwarded-Host $host";
       # more_set_headers "Forwarded $proxy_add_forwarded";
   hosts:
-    - host: wavecare-app.innovation-factory.io
+    - host: integ.wavecare-app.innovation-factory.io
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls:
-    - secretName: wavecare-app.innovation-factory.io-secret
+    - secretName: integ.wavecare-app.innovation-factory.io-secret
       hosts:
-        - wavecare-app.innovation-factory.io
+        - integ.wavecare-app.innovation-factory.io
       
 
 # Setup your application's resources here.
