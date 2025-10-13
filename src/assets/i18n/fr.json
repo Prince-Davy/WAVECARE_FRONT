@@ -200,7 +200,9 @@
           "lastName": "Nom : ",
           "firstName": "Prénom : ",
           "email": "Email : ",
-          "description": "Description : "
+          "description": "Description : ",
+          "creationDate": "Date de création : ",
+          "updatedAt": "Dernière modification : "
         },
         "form": {
           "status": {
