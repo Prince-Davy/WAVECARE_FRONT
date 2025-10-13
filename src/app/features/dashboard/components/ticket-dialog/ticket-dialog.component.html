@@ -1,3 +1,6 @@
+<button mat-icon-button [mat-dialog-close]="undefined" class="close-button" aria-label="Fermer">
+  <mat-icon>close</mat-icon>
+</button>
 <h2 class="ticket-dialog-title" mat-dialog-title>
   {{ 'feature.dashboard.ticket-dialog-component.title' | translate: { id: data.ticketDetailDTO.id} }}
 </h2>
@@ -11,7 +14,7 @@
   <form [formGroup]="ticketDialogForm">
     <label for="status">{{ 'feature.dashboard.ticket-dialog-component.form.status.label' | translate }}</label>
     <mat-form-field class="grey-form-field" appearance="outline" subscriptSizing="dynamic">
-      <mat-select id="status" formControlName="status" [aria-label]="'feature.dashboard.ticket-dialog-component.form.status.label' | translate" required>
+      <mat-select #statusInput id="status" formControlName="status" [aria-label]="'feature.dashboard.ticket-dialog-component.form.status.label' | translate" required>
         @for(status of data.statuses; track status) {
         <mat-option [value]="status.id">{{ 'model.ticket.status.' + status.label | translate }}</mat-option>
         }

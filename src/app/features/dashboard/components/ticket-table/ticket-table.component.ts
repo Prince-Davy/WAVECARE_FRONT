@@ -75,6 +75,7 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
             statuses
           } as TicketDialogData,
           disableClose: true,
+          autoFocus: false
         })
           .afterClosed()
           .subscribe((ticketDetailUpdateDTO: TicketDetailUpdateDTO | undefined) => {
