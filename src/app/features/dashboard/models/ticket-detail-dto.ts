@@ -7,4 +7,5 @@ export interface TicketDetailDTO {
   description: string;
   statusId: number;
   adminComment: string;
+  creationDate: Date;
 }
