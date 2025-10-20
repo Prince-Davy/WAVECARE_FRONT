@@ -200,7 +200,7 @@
           "lastName": "Nom : ",
           "firstName": "Prénom : ",
           "email": "Email : ",
-          "description": "Description : ",
+          "description": "Description de la demande : ",
           "creationDate": "Date de création : ",
           "updatedAt": "Dernière modification : "
         },
@@ -220,7 +220,7 @@
           }
         },
         "action-button": {
-          "confirm": "ENREGISTRER LES MODIFICATIONS",
+          "confirm": "VALIDER LES MODIFICATIONS",
           "cancel": "ANNULER"
         }
       },
