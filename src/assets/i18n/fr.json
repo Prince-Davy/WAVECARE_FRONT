@@ -149,7 +149,7 @@
     },
     "dashboard": {
       "ticket-table-component": {
-        "title": "Suivi des Tickets",
+        "title": "Suivi des tickets",
         "table": {
           "column": {
             "id": {
@@ -240,7 +240,10 @@
           "search-information": "id, email, nom et/ou prénom",
           "search-input-placeholder": "Rechercher un ticket",
           "result-found-first-part": "Résultat : ",
-          "result-found-second-part": " tickets trouvés"
+          "result-found-second-part": {
+            "singular": " ticket trouvé",
+            "plural": " tickets trouvés"
+          }
         }
       }
     },

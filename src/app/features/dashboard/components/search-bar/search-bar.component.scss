@@ -48,7 +48,7 @@ mat-form-field {
 .chip-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   flex-wrap: wrap;
   width: 100%;
 
@@ -73,7 +73,7 @@ mat-form-field {
 
 .results-text {
   margin: 0;
-  font-weight: bold;
+  //font-weight: bold;
 }
 
 .chip-list {
