@@ -26,6 +26,10 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class SearchBarComponent {
 
+  getTranslationResultsFound(results: number): string {
+    return results > 1 ? 'feature.dashboard.search-bar.search-bar-component.result-found-second-part.plural' : 'feature.dashboard.search-bar.search-bar-component.result-found-second-part.singular'
+  }
+
   listKeywords: string[] = [];
   inputValue: string = '';
 
