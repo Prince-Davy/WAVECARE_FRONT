@@ -12,8 +12,9 @@
   <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.email' | translate }}</span>{{ data.ticketDetailDTO.mail }}</p>
   <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.creationDate' | translate }}</span>{{ data.ticketDetailDTO.creationDate  | date:'short'}}</p>
   <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.description' | translate }}</span>{{ data.ticketDetailDTO.description}}</p>
+  <p><span class="required-label">{{ 'feature.dashboard.ticket-dialog-component.form.required.label.first' | translate }}<span class="required-label" style="color:red;"> * </span>{{ 'feature.dashboard.ticket-dialog-component.form.required.label.second' | translate }}</span></p>
   <form [formGroup]="ticketDialogForm">
-    <label for="status">{{ 'feature.dashboard.ticket-dialog-component.form.status.label' | translate }}</label>
+    <label for="status">{{ 'feature.dashboard.ticket-dialog-component.form.status.label' | translate }}<span style="color:red;">*</span></label>
     <mat-form-field class="grey-form-field" appearance="outline" subscriptSizing="dynamic">
       <mat-select #statusInput id="status" formControlName="status" [aria-label]="'feature.dashboard.ticket-dialog-component.form.status.label' | translate" required>
         @for(status of data.statuses; track status) {
