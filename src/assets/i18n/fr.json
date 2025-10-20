@@ -211,6 +211,12 @@
           "admin-comment": {
             "label": "Commentaire administrateur (500 caractères maximum) : ",
             "placeholder": "Écrivez votre commentaire..."
+          },
+          "required": {
+            "label": {
+              "first": "Les champs marqués d'une astérisque (",
+              "second": ") sont obligatoires."
+            }
           }
         },
         "action-button": {
