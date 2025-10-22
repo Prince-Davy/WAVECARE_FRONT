@@ -7,13 +7,7 @@ import { TicketDetailDTO } from '../models/ticket-detail-dto';
 import { TicketDetailUpdateDTO } from '../models/ticket-detail-update-dto';
 import { TicketStatusDTO } from '../models/ticket-status-dto';
 import { TicketViewDTO } from '../models/ticket-view-dto';
-
-export interface Page<T> {
-  content: T[];
-  totalElements: number;
-  totalPages: number;
-  size: number;
-}
+import { Page } from '../models/page';
 
 @Injectable({ providedIn: 'root' })
 export class TicketService {
