@@ -45,13 +45,14 @@ export class AuthService {
   }
 
   forgotPassword(email: string): Observable<any> {
-    const body = { email: email };
+    const params = new HttpParams().set('email', email);
 
-    return this.http.post(`${this.API_URL}/password-reset/request`, body.toString(), {
+    return this.http.post(`${this.API_URL}/password-reset/request`, undefined, {
       headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded'
-      }),
-      responseType: 'text'
+      },),
+      params: params,
+      responseType: 'text',
     });
   }
 
