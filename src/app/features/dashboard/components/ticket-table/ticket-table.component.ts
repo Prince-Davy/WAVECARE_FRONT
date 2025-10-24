@@ -109,6 +109,7 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
       )
       .subscribe({
         next: (result: Page<TicketViewDTO>) => {
+          result.content = result.content.sort((a: TicketViewDTO, b:TicketViewDTO) => { return (a.statusLabel === "SOLVED" ? 1 : 0) - (b.statusLabel === "SOLVED" ? 1 : 0);});
           this.updateRows(result.content, result.totalElements, result.size);
         },
         error: (error: HttpErrorResponse) => {
