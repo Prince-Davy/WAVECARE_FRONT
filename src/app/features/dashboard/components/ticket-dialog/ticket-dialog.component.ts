@@ -51,7 +51,6 @@ export class TicketDialogComponent implements AfterViewInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.statusInput.focus();
-      console.log(this.data.ticketDetailDTO)
     })
   }
 
