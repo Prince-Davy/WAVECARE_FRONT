@@ -171,7 +171,7 @@
               "label": "Statut"
             },
             "date": {
-              "label": "Date de création"
+              "label": "Date de modification"
             },
             "action": {
               "label": "Actions",
@@ -225,7 +225,45 @@
         }
       },
       "user-table-component": {
-        "title": "Gestion des profils"
+        "title": "Gestion des profils",
+        "table": {
+          "column": {
+            "firstName": {
+              "label": "Prénom"
+            },
+            "lastName": {
+              "label": "Nom"
+            },
+            "email": {
+              "label": "Mail"
+            },
+            "role": {
+              "label": "Role"
+            },
+            "status": {
+              "label": "Statut"
+            },
+            "creationDate": {
+              "label": "Date de création"
+            },
+            "update": {
+              "label": "Modifier",
+              "tooltip": "Modifier"
+            },
+            "delete": {
+              "label": "Supprimer",
+              "tooltip": "Supprimer"
+            }
+          },
+          "paginator": {
+            "itemsPerPage": "Nombre de lignes par page ",
+            "nextPage": "Suivant",
+            "previousPage": "Précédent",
+            "firstPage": "Première page",
+            "lastPage": "Dernière page",
+            "of": "sur"
+          }
+        }
       },
       "footer-component": {
         "content": "© 2025 WaveCare. Tous droits réservés."
@@ -281,6 +319,12 @@
         "EXTERNAL_AUTHENTICATOR": "Pro Santé Connect",
         "ACCOUNT_ACCESS": "Problème d'accès",
         "OTHER": "Autre"
+      }
+    },
+    "user": {
+      "status": {
+        "locked": "Bloqué",
+        "active": "Actif"
       }
     }
   }
