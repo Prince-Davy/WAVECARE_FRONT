@@ -20,7 +20,7 @@
       <p class="results-text">
         {{'feature.dashboard.search-bar.search-bar-component.result-found-first-part' | translate}}
         {{totalResults}}
-        {{'feature.dashboard.search-bar.search-bar-component.result-found-second-part' | translate}}
+        {{ getTranslationResultsFound(totalResults) | translate}}
       </p>
       <div class="chip-list">
         @for (keyword of listKeywords; track keyword) {
