@@ -14,14 +14,15 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
 import { DashboardComponent } from '@app/features/dashboard/abstract/dashboard-component.abstract';
 import { CustomPaginator } from '@app/features/dashboard/classes/custom-paginator';
-import { Page, TicketService } from '@app/features/dashboard/services/ticket.service';
+import { SearchBarComponent } from '@app/features/dashboard/components/search-bar/search-bar.component';
+import { TicketDialogComponent, TicketDialogData } from '@app/features/dashboard/components/ticket-dialog/ticket-dialog.component';
+import { Page } from '@app/features/dashboard/models/page';
+import { TicketDetailUpdateDTO } from '@app/features/dashboard/models/ticket-detail-update-dto';
+import { TicketViewDTO } from '@app/features/dashboard/models/ticket-view-dto';
+import { TicketService } from '@app/features/dashboard/services/ticket.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { finalize, merge, zip } from 'rxjs';
-import { TicketDetailUpdateDTO } from '../../models/ticket-detail-update-dto';
-import { TicketViewDTO } from '../../models/ticket-view-dto';
-import { SearchBarComponent } from '../search-bar/search-bar.component';
-import { TicketDialogComponent, TicketDialogData } from '../ticket-dialog/ticket-dialog.component';
 
 
 @Component({

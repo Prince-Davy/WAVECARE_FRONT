@@ -62,10 +62,10 @@ export class TicketDialogComponent implements AfterViewInit {
       comment: [this.data.ticketDetailDTO.adminComment, [Validators.maxLength(500)]]
     })
   }
-    
+
   validate(): TicketDetailUpdateDTO {
     const formValue = this.ticketDialogForm.value;
-    const selectedStatus = this.data.statuses.find(s => s.label === formValue.status);
+    const selectedStatus = this.data.statuses.find(s => s.id === formValue.status);
     this.data.ticketDetailDTO.statusId = selectedStatus?.id ?? 0;
     this.data.ticketDetailDTO.adminComment = formValue.comment ?? '';
     return this.data.ticketDetailDTO;

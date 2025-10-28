@@ -7,4 +7,5 @@ export interface TicketViewDTO {
   description: string;
   statusLabel: string;
   creationDate?: Date;
+  lastModifiedDate?:Date;
 }

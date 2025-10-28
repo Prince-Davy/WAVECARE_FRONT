@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CreateAssistanceTicketDTO } from '@app/features/assistance/models/assistance-ticket-dto';
+import { TicketCategoryDTO } from '@app/features/assistance/models/assitance-ticket-category-dto';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { TicketCategoryDTO } from '@app/features/assistance/models/assitance-ticket-category-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +19,6 @@ export class AssistanceService {
   }
 
   getTicketCategories(): Observable<TicketCategoryDTO[]> {
-    return this.http.get<TicketCategoryDTO[]>(`${this.apiUrl}/categories`);
+    return this.http.get<TicketCategoryDTO[]>(`${this.apiUrl}/ticket-categories`);
   }
 }

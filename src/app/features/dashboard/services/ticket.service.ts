@@ -1,25 +1,20 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TicketDetailDTO } from '../models/ticket-detail-dto';
 import { TicketDetailUpdateDTO } from '../models/ticket-detail-update-dto';
 import { TicketStatusDTO } from '../models/ticket-status-dto';
 import { TicketViewDTO } from '../models/ticket-view-dto';
-
-export interface Page<T> {
-  content: T[];
-  totalElements: number;
-  totalPages: number;
-  size: number;
-}
+import { Page } from '../models/page';
 
 @Injectable({ providedIn: 'root' })
 export class TicketService {
   private readonly apiUrl = `${environment.apiUrl}/api`;
   private readonly apiUrlTicket = `${this.apiUrl}/tickets`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authTokenService: AuthTokenService) { }
 
   getTickets(page = 0, size = 10, listKeywords: string[]): Observable<Page<TicketViewDTO>> {
     let params = new HttpParams()
@@ -30,18 +25,34 @@ export class TicketService {
       params = params.append('listKeywords', keyword);
     });
 
-    return this.http.get<Page<TicketViewDTO>>(this.apiUrlTicket, { params });
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authTokenService.getToken()}`
+    });
+
+    return this.http.get<Page<TicketViewDTO>>(this.apiUrlTicket, { headers, params });
   }
 
   getTicket(id: number): Observable<TicketDetailDTO> {
-    return this.http.get<TicketDetailDTO>(`${this.apiUrlTicket}/${id}`);
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authTokenService.getToken()}`
+    });
+
+    return this.http.get<TicketDetailDTO>(`${this.apiUrlTicket}/${id}`, { headers });
   }
 
   updateTicket(ticketDetailUpdateDTO: TicketDetailUpdateDTO): Observable<void> {
-    return this.http.put<void>(`${this.apiUrlTicket}/${ticketDetailUpdateDTO.id}`, { statusId: ticketDetailUpdateDTO.statusId, adminComment: ticketDetailUpdateDTO.adminComment });
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authTokenService.getToken()}`
+    });
+
+    return this.http.put<void>(`${this.apiUrlTicket}/${ticketDetailUpdateDTO.id}`, { statusId: ticketDetailUpdateDTO.statusId, adminComment: ticketDetailUpdateDTO.adminComment }, { headers });
   }
 
   getTicketStatuses(): Observable<TicketStatusDTO[]> {
-    return this.http.get<TicketStatusDTO[]>(`${this.apiUrl}/statuses`);
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authTokenService.getToken()}`
+    });
+
+    return this.http.get<TicketStatusDTO[]>(`${this.apiUrl}/ticket-statuses`, { headers });
   }
 }

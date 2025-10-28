@@ -69,7 +69,7 @@ export class ResetPasswordComponent implements OnInit {
   loadUserInfoFromToken() {
     if (!this.token) return;
 
-    this.authService.getUserInfoFromToken(this.token).subscribe({
+    this.authService.readToken(this.token).subscribe({
       next: (data) => {
         this.userId = data.id;
         this.email = data.email;
@@ -121,7 +121,7 @@ export class ResetPasswordComponent implements OnInit {
     const newPassword = this.resetForm.get('newPassword')?.value;
     const payload = { userName: this.email, newPassword };
 
-    this.authService.updatePassword(this.userId, payload).subscribe({
+    this.authService.updatePassword(this.token, this.userId, payload).subscribe({
       next: (response) => {
         this.isError = false;
         this.message = this.translate.instant('feature.auth.***REMOVED***-component.form.submit.message.success');
