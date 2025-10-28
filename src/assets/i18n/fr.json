@@ -149,7 +149,7 @@
     },
     "dashboard": {
       "ticket-table-component": {
-        "title": "Suivi des Tickets",
+        "title": "Suivi des tickets",
         "table": {
           "column": {
             "id": {
@@ -200,7 +200,9 @@
           "lastName": "Nom : ",
           "firstName": "Prénom : ",
           "email": "Email : ",
-          "description": "Description : "
+          "description": "Description de la demande : ",
+          "creationDate": "Date de création : ",
+          "updatedAt": "Dernière modification : "
         },
         "form": {
           "status": {
@@ -209,10 +211,16 @@
           "admin-comment": {
             "label": "Commentaire administrateur (500 caractères maximum) : ",
             "placeholder": "Écrivez votre commentaire..."
+          },
+          "required": {
+            "label": {
+              "first": "Les champs marqués d'une astérisque (",
+              "second": ") sont obligatoires."
+            }
           }
         },
         "action-button": {
-          "confirm": "ENREGISTRER LES MODIFICATIONS",
+          "confirm": "VALIDER LES MODIFICATIONS",
           "cancel": "ANNULER"
         }
       },
@@ -270,7 +278,10 @@
           "search-information": "id, email, nom et/ou prénom",
           "search-input-placeholder": "Rechercher un ticket",
           "result-found-first-part": "Résultat : ",
-          "result-found-second-part": " tickets trouvés"
+          "result-found-second-part": {
+            "singular": " ticket trouvé",
+            "plural": " tickets trouvés"
+          }
         }
       }
     },
