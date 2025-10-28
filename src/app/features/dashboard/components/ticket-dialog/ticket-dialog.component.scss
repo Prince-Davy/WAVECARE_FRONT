@@ -10,7 +10,7 @@ p {
   margin-block-start: 0em;
   margin-block-end: 0.5em;
 
-  span {
+  span.bold {
     font-weight: bold;
   }
 }
@@ -63,5 +63,5 @@ textarea {
 }
 
 .required-label {
-  font-weight: normal !important;
+  color:red;
 }

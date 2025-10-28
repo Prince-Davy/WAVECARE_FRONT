@@ -6,15 +6,16 @@
 </h2>
 <mat-dialog-content>
   <!-- <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.id' | translate}}</span> {{ data.ticketDetailDTO.id }}</p> -->
-  <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.subject' | translate }}</span>{{ 'model.ticket.category.' + data.ticketDetailDTO.categoryLabel | translate }}
-  <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.lastName' | translate }}</span>{{ data.ticketDetailDTO.lastName}}</p>
-  <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.firstName' | translate }}</span>{{ data.ticketDetailDTO.firstName }}</p>
-  <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.email' | translate }}</span>{{ data.ticketDetailDTO.mail }}</p>
-  <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.creationDate' | translate }}</span>{{ data.ticketDetailDTO.creationDate  | date:'short'}}</p>
-  <p><span>{{ 'feature.dashboard.ticket-dialog-component.content.description' | translate }}</span>{{ data.ticketDetailDTO.description}}</p>
-  <p><span class="required-label">{{ 'feature.dashboard.ticket-dialog-component.form.required.label.first' | translate }}<span class="required-label" style="color:red;"> * </span>{{ 'feature.dashboard.ticket-dialog-component.form.required.label.second' | translate }}</span></p>
+  <p><span class="bold">{{ 'feature.dashboard.ticket-dialog-component.content.subject' | translate }}</span>{{ 'model.ticket.category.' + data.ticketDetailDTO.categoryLabel | translate }}
+  <p><span class="bold">{{ 'feature.dashboard.ticket-dialog-component.content.lastName' | translate }}</span>{{ data.ticketDetailDTO.lastName}}</p>
+  <p><span class="bold">{{ 'feature.dashboard.ticket-dialog-component.content.firstName' | translate }}</span>{{ data.ticketDetailDTO.firstName }}</p>
+  <p><span class="bold">{{ 'feature.dashboard.ticket-dialog-component.content.email' | translate }}</span>{{ data.ticketDetailDTO.mail }}</p>
+  <p><span class="bold">{{ 'feature.dashboard.ticket-dialog-component.content.creationDate' | translate }}</span>{{ data.ticketDetailDTO.creationDate  | date:'dd/MM/yyyy - HH:mm'}}</p>
+  <p><span class="bold">{{ 'feature.dashboard.ticket-dialog-component.content.description' | translate }}</span>{{ data.ticketDetailDTO.description}}</p>
+  <br>
+  <p><span>{{ 'feature.dashboard.ticket-dialog-component.form.required.label.first' | translate }}<span class="required-label"> * </span>{{ 'feature.dashboard.ticket-dialog-component.form.required.label.second' | translate }}</span></p>
   <form [formGroup]="ticketDialogForm">
-    <label for="status">{{ 'feature.dashboard.ticket-dialog-component.form.status.label' | translate }}<span style="color:red;">*</span></label>
+    <label for="status">{{ 'feature.dashboard.ticket-dialog-component.form.status.label' | translate }}<span class="required-label">*</span></label>
     <mat-form-field class="grey-form-field" appearance="outline" subscriptSizing="dynamic">
       <mat-select #statusInput id="status" formControlName="status" [aria-label]="'feature.dashboard.ticket-dialog-component.form.status.label' | translate" required>
         @for(status of data.statuses; track status) {
