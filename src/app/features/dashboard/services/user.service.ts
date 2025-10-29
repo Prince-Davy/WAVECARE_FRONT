@@ -13,10 +13,14 @@ export class UserService {
 
   constructor(private http: HttpClient, private authTokenService: AuthTokenService) { }
 
-  getUsers(page: number, size: number): Observable<Page<UserViewDTO>> {
+  getUsers(page: number, size: number, listKeywords: string[]): Observable<Page<UserViewDTO>> {
     let params = new HttpParams()
       .set('page', page)
       .set('size', size);
+	  
+	  listKeywords.forEach(keyword => {
+	        params = params.append('listKeywords', keyword);
+	      });
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.authTokenService.getToken()}`

@@ -12,12 +12,14 @@ import { UserViewDTO } from '@app/features/dashboard/models/user-view-dto';
 import { UserService } from '@app/features/dashboard/services/user.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { finalize, merge } from 'rxjs';
+import { SearchBarComponent } from '@app/features/dashboard/components/search-bar/search-bar.component';
+
 
 @Component({
   selector: 'app-user-table',
   imports: [
     MatTableModule, MatPaginatorModule, DatePipe, TranslateModule,
-    MatIconModule, MatTooltip, MatCardModule
+    MatIconModule, MatTooltip, MatCardModule, SearchBarComponent
   ],
   templateUrl: './user-table.component.html',
   styleUrl: './user-table.component.scss'
@@ -33,6 +35,7 @@ export class UserTableComponent extends DashboardComponent {
   pageSizeOptions: number[] = [5, 10, 25, 50];
   resultsLength: number = 0;
   pageSize: number = this.pageSizeOptions[1];
+  listKeywords: string[] = [];
 
   constructor(private userService: UserService) {
     super();
@@ -43,7 +46,6 @@ export class UserTableComponent extends DashboardComponent {
       .subscribe(() => {
         this.refreshTable();
       });
-
     this.dataSource.paginator = this.paginator;
   }
 
@@ -53,7 +55,7 @@ export class UserTableComponent extends DashboardComponent {
     if (pageIndex !== undefined) {
       this.paginator.pageIndex = pageIndex;
     }
-    this.userService.getUsers(this.paginator.pageIndex, this.paginator.pageSize)
+    this.userService.getUsers(this.paginator.pageIndex, this.paginator.pageSize, this.listKeywords)
       .pipe(
         finalize(() => this.isLoading = false)
       )
@@ -80,5 +82,10 @@ export class UserTableComponent extends DashboardComponent {
 
   openDeleteUserDialog(id: string) {
     alert("id = " + id);
+  }
+  
+  keywordsChanged(currentListKeywords: string[]) {
+    this.listKeywords = currentListKeywords;
+    this.refreshTable(0);
   }
 }
