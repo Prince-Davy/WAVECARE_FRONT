@@ -46,6 +46,7 @@
       "auth-component": {
         "logo-alt": "Logo de l'application wavecare",
         "title": "WaveCare",
+        "connect": "Connexion",
         "description": "Je me connecte avec mon Email :",
         "form": {
           "username": {
