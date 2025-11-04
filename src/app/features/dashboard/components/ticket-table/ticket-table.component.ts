@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from "@angular/material/input";
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
 import { DashboardComponent } from '@app/features/dashboard/abstract/dashboard-component.abstract';
@@ -43,9 +43,10 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
 
   readonly dialog = inject(MatDialog);
 
-  displayedColumns: string[] = ['id', 'subject', 'lastName', 'firstName', 'mail', 'status', 'date', 'action'];
+  displayedColumns: string[] = ['id', 'subject', 'lastName', 'firstName', 'mail', 'status', 'lastModifiedDate', 'action'];
   dataSource: MatTableDataSource<TicketViewDTO> = new MatTableDataSource<TicketViewDTO>([]);
 
+  @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   isLoading: boolean = false;
@@ -59,12 +60,16 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
   }
 
   ngAfterViewInit(): void {
-    merge(this.paginator.initialized, this.paginator.page)
-      .subscribe(() => {
-        this.refreshTable();
-      });
+    if (this.sort && this.paginator) {
+      merge(this.paginator.page, this.sort.sortChange)
+        .subscribe(() => this.refreshTable());
+    }
+
+
+    this.refreshTable(0); // charge la première page au démarrage
 
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   openTicketDialog(ticketId: number) {
@@ -98,29 +103,51 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
       });
   }
 
-  private refreshTable(pageIndex?: number): void {
-    this.isLoading = true;
+	private refreshTable(pageIndex?: number): void {
+		this.isLoading = true;
 
-    if (pageIndex !== undefined) {
-      this.paginator.pageIndex = pageIndex;
-    }
-    this.ticketService.getTickets(this.paginator.pageIndex, this.paginator.pageSize, this.listKeywords)
-      .pipe(
-        finalize(() => this.isLoading = false)
-      )
-      .subscribe({
-        next: (result: Page<TicketViewDTO>) => {
-          this.updateRows(result.content, result.totalElements, result.size);
-        },
-        error: (error: HttpErrorResponse) => {
-          console.error('An error occurred while loading tickets;', error);
-          this.updateRows([], 0, 0);
-        }
-      });
-  }
+		if (pageIndex !== undefined) {
+			this.paginator.pageIndex = pageIndex;
+		}
+
+		// Mapping des champs Angular vers les champs backend
+		const sortFieldMap: Record<string, string> = {
+			subject: 'ticketCategoryEntity.label',
+			status: 'ticketStatusEntity.label'
+		};
+
+		const sortFields: { field: string; direction: 'asc' | 'desc' }[] = [];
+		if (this.sort?.active && this.sort?.direction) {
+			const field = sortFieldMap[this.sort.active] ?? this.sort.active;
+			const direction = this.sort.direction as 'asc' | 'desc';
+			sortFields.push({ field, direction });
+		} else {
+			sortFields.push(
+				{ field: 'ticketStatusEntity.id', direction: 'asc' },
+				{ field: 'lastModifiedDate', direction: 'desc' }
+			);
+		}
+
+		this.ticketService.getTickets(
+			this.paginator.pageIndex,
+			this.paginator.pageSize,
+			this.listKeywords,
+			sortFields
+		)
+			.pipe(finalize(() => this.isLoading = false))
+			.subscribe({
+				next: (result: Page<TicketViewDTO>) => {
+					this.updateRows(result.content, result.totalElements, result.size);
+				},
+				error: (error: HttpErrorResponse) => {
+					console.error('An error occurred while loading tickets:', error);
+					this.updateRows([], 0, 0);
+				}
+			});
+	}
 
   private updateRows(rows: TicketViewDTO[], totalElements: number, pageSize: number) {
-    this.dataSource = new MatTableDataSource(rows);
+    this.dataSource.data = rows;
     this.resultsLength = totalElements;
     this.pageSize = pageSize;
   }

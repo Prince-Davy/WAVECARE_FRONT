@@ -171,7 +171,7 @@
             "status": {
               "label": "Statut"
             },
-            "date": {
+            "lastModifiedDate": {
               "label": "Date de modification"
             },
             "action": {
