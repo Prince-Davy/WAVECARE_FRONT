@@ -3,7 +3,7 @@
     <h2 class="dashboard-title">{{'feature.dashboard.ticket-table-component.title' | translate}}</h2>
   </div>
   <div>
-    <app-search-bar [totalResults]="resultsLength" (keywordsChanged)="keywordsChanged($event)">
+    <app-search-bar [totalResults]="resultsLength" (keywordsChanged)="keywordsChanged($event)" (resetRequested)="resetTable()">
     </app-search-bar>
   </div>
 

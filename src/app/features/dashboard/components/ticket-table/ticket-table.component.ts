@@ -156,4 +156,14 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
     this.listKeywords = currentListKeywords;
     this.refreshTable(0);
   }
+  
+
+  resetTable(): void {
+    this.listKeywords = [];
+    this.sort.active = '';
+    this.sort.direction = '';
+    this.paginator.pageIndex = 0;
+    this.refreshTable(0);
+  }
+
 }
