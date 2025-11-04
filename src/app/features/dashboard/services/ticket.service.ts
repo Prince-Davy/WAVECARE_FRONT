@@ -16,21 +16,30 @@ export class TicketService {
 
   constructor(private http: HttpClient, private authTokenService: AuthTokenService) { }
 
-  getTickets(page = 0, size = 10, listKeywords: string[]): Observable<Page<TicketViewDTO>> {
-    let params = new HttpParams()
-      .set('page', page)
-      .set('size', size);
+	getTickets(
+		page = 0,
+		size = 10,
+		listKeywords: string[],
+		sortFields: { field: string; direction: 'asc' | 'desc' }[] = []
+	): Observable<Page<TicketViewDTO>> {
+		let params = new HttpParams()
+			.set('page', page)
+			.set('size', size);
 
-    listKeywords.forEach(keyword => {
-      params = params.append('listKeywords', keyword);
-    });
+		listKeywords.forEach(keyword => {
+			params = params.append('listKeywords', keyword);
+		});
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.authTokenService.getToken()}`
-    });
+		sortFields.forEach(sort => {
+			params = params.append('sort', `${sort.field},${sort.direction}`);
+		});
 
-    return this.http.get<Page<TicketViewDTO>>(this.apiUrlTicket, { headers, params });
-  }
+		const headers = new HttpHeaders({
+			Authorization: `Bearer ${this.authTokenService.getToken()}`,
+		});
+
+		return this.http.get<Page<TicketViewDTO>>(this.apiUrlTicket, { headers, params });
+	}
 
   getTicket(id: number): Observable<TicketDetailDTO> {
     const headers = new HttpHeaders({
