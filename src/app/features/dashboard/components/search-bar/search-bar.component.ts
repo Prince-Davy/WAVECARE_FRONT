@@ -40,7 +40,7 @@ export class SearchBarComponent {
 	@Output() resetRequested = new EventEmitter<void>();
 
 	onReset(): void {
-		this.listKeywords = [];
+		this.removeAllKeywords();
 		this.resetRequested.emit();
 	}
 
@@ -63,5 +63,10 @@ export class SearchBarComponent {
       this.listKeywords.splice(index, 1);
       this.keywordsChanged.emit(this.listKeywords);
     }
+  }
+
+  removeAllKeywords(): void {
+    this.listKeywords = [];
+    this.keywordsChanged.emit(this.listKeywords);
   }
 }
