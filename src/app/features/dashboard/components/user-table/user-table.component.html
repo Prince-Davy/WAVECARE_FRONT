@@ -48,7 +48,7 @@
         <ng-container matColumnDef="delete">
           <th mat-header-cell *matHeaderCellDef>{{ 'feature.dashboard.user-table-component.table.column.delete.label' | translate }}</th>
           <td mat-cell *matCellDef="let user">
-            <mat-icon (click)="openDeleteUserDialog(user.id)" tabindex=0 (keypress)="openDeleteUserDialog(user.id)" [matTooltip]="'feature.dashboard.user-table-component.table.column.delete.tooltip' | translate"
+            <mat-icon (click)="openDeleteUserDialog(user)" tabindex=0 (keypress)="openDeleteUserDialog(user)" [matTooltip]="'feature.dashboard.user-table-component.table.column.delete.tooltip' | translate"
               matTooltipPosition="right" class="material-symbols" aria-label="'feature.dashboard.user-table-component.table.column.delete.tooltip' | translate">delete</mat-icon>
           </td>
         </ng-container>

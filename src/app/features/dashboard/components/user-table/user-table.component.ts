@@ -18,6 +18,7 @@ import { UserDialogComponent, UserDialogData } from '../user-dialog/user-dialog.
 import { UserDetailUpdateDTO } from '../../models/user-detail-update';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from '@app/features/notification/services/notification.service';
+import { DeleteUserDialogComponent } from '../delete-user-dialog/delete-user-dialog.component';
 
 
 @Component({
@@ -67,20 +68,20 @@ export class UserTableComponent extends DashboardComponent {
     if (pageIndex !== undefined) {
       this.paginator.pageIndex = pageIndex;
     }
-	
-	// Récupération des infos de tri
-	const sortField = this.sort?.active || 'creationDate'; // fallback si rien
-	const sortDirection = this.sort?.direction || 'asc';
 
-	this.userService.getUsers(
-	    this.paginator.pageIndex,
-	    this.paginator.pageSize,
-	    this.listKeywords,
-	    sortField,
-	    sortDirection
-	  ).pipe(
-        finalize(() => this.isLoading = false)
-      )
+    // Récupération des infos de tri
+    const sortField = this.sort?.active || 'creationDate'; // fallback si rien
+    const sortDirection = this.sort?.direction || 'asc';
+
+    this.userService.getUsers(
+      this.paginator.pageIndex,
+      this.paginator.pageSize,
+      this.listKeywords,
+      sortField,
+      sortDirection
+    ).pipe(
+      finalize(() => this.isLoading = false)
+    )
       .subscribe({
         next: (result: Page<UserViewDTO>) => {
           this.updateRows(result.content, result.totalElements, result.size);
@@ -93,51 +94,67 @@ export class UserTableComponent extends DashboardComponent {
   }
 
   private updateRows(rows: UserViewDTO[], totalElements: number, pageSize: number) {
-	this.dataSource.data = rows;
+    this.dataSource.data = rows;
     this.resultsLength = totalElements;
     this.pageSize = pageSize;
   }
 
   openUpdateUserDialog(userId: number) {
-	zip(this.userService.getUserRoles(), this.userService.getUser(userId))
-	      .subscribe(([roles, userDetailDTO]) => {
-	        this.dialog.open(UserDialogComponent, {
-	          data: {
-	            userDetailDTO,
-	            roles
-	          } as UserDialogData,
-	          disableClose: true,
-	          autoFocus: false
-	        })
-	          .afterClosed()
-	          .subscribe((userDetailUpdateDTO: UserDetailUpdateDTO | undefined) => {
-	            if (userDetailUpdateDTO !== undefined) {
-	              this.userService.updateUser(userDetailUpdateDTO)
-	                .pipe(finalize(() => this.refreshTable()))
-	                .subscribe({
-	                  next: () => {
-	                    this.notificationService.openSuccessSnackBar(this.translate.instant('feature.dashboard.user-table-component.table.column.action.message.success', { id: userId }));
-	                  },
-	                  error: (error: any) => {
-	                    this.notificationService.openErrorSnackBar(this.translate.instant('feature.dashboard.user-table-component.table.column.action.message.error', { id: userId }));
-	                    console.error("An error occurred when trying to update ticket.", error)
-	                  }
-	                });
-	            }
-	          });;
+    zip(this.userService.getUserRoles(), this.userService.getUser(userId))
+      .subscribe(([roles, userDetailDTO]) => {
+        this.dialog.open(UserDialogComponent, {
+          data: {
+            userDetailDTO,
+            roles
+          } as UserDialogData,
+          disableClose: true,
+          autoFocus: false
+        })
+          .afterClosed()
+          .subscribe((userDetailUpdateDTO: UserDetailUpdateDTO | undefined) => {
+            if (userDetailUpdateDTO !== undefined) {
+              this.userService.updateUser(userDetailUpdateDTO)
+                .pipe(finalize(() => this.refreshTable()))
+                .subscribe({
+                  next: () => {
+                    this.notificationService.openSuccessSnackBar(this.translate.instant('feature.dashboard.user-table-component.table.column.action.update.message.success'));
+                  },
+                  error: (error: any) => {
+                    this.notificationService.openErrorSnackBar(this.translate.instant('feature.dashboard.user-table-component.table.column.action.update.message.error'));
+                  }
+                });
+            }
+          });;
 
-	      });
+      });
   }
 
-  openDeleteUserDialog(id: string) {
-    alert("id = " + id);
+    openDeleteUserDialog(user: any) {
+    const dialogRef = this.dialog.open(DeleteUserDialogComponent, {
+      data: user
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.userService.deleteUser(user.id)
+        .pipe(finalize(() => this.refreshTable()))
+        .subscribe({
+          next: () => {
+            this.notificationService.openSuccessSnackBar(this.translate.instant('feature.dashboard.user-table-component.table.column.action.delete.message.success', { lastName: user.lastName, firstName: user.firstName }));
+          },
+          error: (err) => {
+            this.notificationService.openSuccessSnackBar(this.translate.instant('feature.dashboard.user-table-component.table.column.action.delete.message.error', { lastName: user.lastName, firstName: user.firstName }));
+          }
+        });
+      }
+    });
   }
-  
+
   keywordsChanged(currentListKeywords: string[]) {
     this.listKeywords = currentListKeywords;
     this.refreshTable(0);
   }
-  
+
   resetTable(): void {
     this.listKeywords = [];
     this.sort.active = '';

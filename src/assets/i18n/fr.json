@@ -256,10 +256,19 @@
               "tooltip": "Supprimer"
             },
             "action": {
-              "message": {
-                "success": "Le profil a été modifié avec succés",
-                "error": "Echec de l'enregistrement des modifications du profil"
+              "update": {
+                "message": {
+                  "success": "Le profil a été modifié avec succés",
+                  "error": "Echec de l'enregistrement des modifications du profil"
+                }
+              },
+              "delete": {
+                "message": {
+                  "success": "Le profil de l'utilisateur {{lastName}} {{firstName}} a été supprimé avec succès",
+                  "error": "Echec de suppression du profil de l'utilisateur {{lastName}} {{firstName}}"
+                }
               }
+
             }
           },
           "paginator": {
@@ -280,7 +289,7 @@
           },
           "lastName": {
             "label": "Nom : "
-            },
+          },
           "firstName": {
             "label": "Prenom : "
           },
@@ -296,6 +305,14 @@
         },
         "action-button": {
           "confirm": "VALIDER LES MODIFICATIONS",
+          "cancel": "ANNULER"
+        }
+      },
+      "delete-user-dialog-component": {
+        "title": "Supprimer un profil",
+        "question": "Êtes-vous sûr de vouloir supprimer cette utilisateur ? Cette action est irréversible.",
+        "action-button": {
+          "confirm": "VALIDER",
           "cancel": "ANNULER"
         }
       },
@@ -360,7 +377,7 @@
         "locked": "Bloqué",
         "active": "Actif"
       },
-      "role" : {
+      "role": {
         "administrator": "Administrateur",
         "radiologist": "Radiologue",
         "radio_operator": "Opérateur radiologie"

@@ -1,0 +1,11 @@
+<h2 class="user-dialog-title" mat-dialog-title>
+  {{ 'feature.dashboard.delete-user-dialog-component.title' | translate }}
+</h2>
+<mat-dialog-content>
+  <p>{{ data.firstName }} {{ data.lastName }} - {{ data.email }}</p>
+  <p>{{ 'feature.dashboard.delete-user-dialog-component.question' | translate }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">{{ 'feature.dashboard.delete-user-dialog-component.action-button.cancel' | translate }}</button>
+  <button mat-raised-button color="warn" (click)="onConfirm()">{{ 'feature.dashboard.delete-user-dialog-component.action-button.confirm' | translate }}</button>
+</mat-dialog-actions>
