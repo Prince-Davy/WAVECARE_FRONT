@@ -1,0 +1,40 @@
+<button mat-icon-button [mat-dialog-close]="undefined" class="close-button" aria-label="Fermer">
+  <mat-icon>close</mat-icon>
+</button>
+<h2 class="user-dialog-title" mat-dialog-title>
+  {{ 'feature.dashboard.user-dialog-component.title' | translate }}
+</h2>
+<mat-dialog-content>
+
+  <p><span>{{ 'feature.dashboard.user-dialog-component.form.required.label.first' | translate }}<span class="required-label"> * </span>{{ 'feature.dashboard.user-dialog-component.form.required.label.second' | translate }}</span></p>
+  <form [formGroup]="userDialogForm">
+    <label for="lastName">{{ 'feature.dashboard.user-dialog-component.form.lastName.label' | translate }}</label>
+    <mat-form-field class="grey-form-field" appearance="outline" subscriptSizing="dynamic">
+      <input matInput mat-autosize id="lastName" formControlName="lastName"/>
+    </mat-form-field>
+    <label for="firstName">{{ 'feature.dashboard.user-dialog-component.form.firstName.label' | translate }}</label>
+    <mat-form-field class="grey-form-field" appearance="outline" subscriptSizing="dynamic">
+      <input matInput mat-autosize id="firstName" formControlName="firstName"/>
+    </mat-form-field>
+    <label for="email">{{ 'feature.dashboard.user-dialog-component.form.email.label' | translate }}</label>
+    <mat-form-field class="grey-form-field" appearance="outline" subscriptSizing="dynamic">
+      <input matInput mat-autosize id="email" formControlName="email"/>
+    </mat-form-field>
+    <label for="role">{{ 'feature.dashboard.user-dialog-component.form.role.label' | translate }}<span class="required-label">*</span></label>
+    <mat-form-field class="grey-form-field" appearance="outline" subscriptSizing="dynamic">
+      <mat-select #roleInput id="role" formControlName="role" [aria-label]="'feature.dashboard.user-dialog-component.form.role.label' | translate" required>
+        @for(role of data.roles; track role) {
+        <mat-option [value]="role">{{ 'model.user.role.' + role | translate }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button class="user-dialog-cancel" [mat-dialog-close]="undefined">{{ 'feature.dashboard.user-dialog-component.action-button.cancel' | translate }}</button>
+  <div class="user-dialog-validate-wrapper">
+    <div>
+      <button mat-raised-button class="user-dialog-validate" [mat-dialog-close]="validate()" [disabled]="!userDialogForm.valid">{{ 'feature.dashboard.user-dialog-component.action-button.confirm' | translate }}</button>
+    </div>
+  </div>
+</mat-dialog-actions>

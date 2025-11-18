@@ -24,7 +24,7 @@
 
         <ng-container matColumnDef="role">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'feature.dashboard.user-table-component.table.column.role.label' | translate }}</th>
-          <td mat-cell *matCellDef="let user">{{ user.role | translate }}</td>
+          <td mat-cell *matCellDef="let user">{{ 'model.user.role.' + user.role | translate }}</td>
         </ng-container>
 
         <ng-container matColumnDef="locked">

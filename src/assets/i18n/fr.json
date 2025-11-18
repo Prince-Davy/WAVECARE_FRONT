@@ -254,6 +254,12 @@
             "delete": {
               "label": "Supprimer",
               "tooltip": "Supprimer"
+            },
+            "action": {
+              "message": {
+                "success": "Le profil a été modifié avec succés",
+                "error": "Echec de l'enregistrement des modifications du profil"
+              }
             }
           },
           "paginator": {
@@ -264,6 +270,33 @@
             "lastPage": "Dernière page",
             "of": "sur"
           }
+        }
+      },
+      "user-dialog-component": {
+        "title": "Modifier un profil",
+        "form": {
+          "role": {
+            "label": "Role : "
+          },
+          "lastName": {
+            "label": "Nom : "
+            },
+          "firstName": {
+            "label": "Prenom : "
+          },
+          "email": {
+            "label": "Email : "
+          },
+          "required": {
+            "label": {
+              "first": "Les champs marqués d'une astérisque (",
+              "second": ") sont obligatoires."
+            }
+          }
+        },
+        "action-button": {
+          "confirm": "VALIDER LES MODIFICATIONS",
+          "cancel": "ANNULER"
         }
       },
       "footer-component": {
@@ -326,6 +359,11 @@
       "status": {
         "locked": "Bloqué",
         "active": "Actif"
+      },
+      "role" : {
+        "administrator": "Administrateur",
+        "radiologist": "Radiologue",
+        "radio_operator": "Opérateur radiologie"
       }
     }
   }
