@@ -1,0 +1,63 @@
+.user-dialog-title {
+  color: #005EA5;
+  font-weight: bold;
+  padding-left: 0.75em;
+  letter-spacing: 1px;
+}
+
+p {
+  white-space: pre-wrap;
+  margin-block-start: 0em;
+  margin-block-end: 0.5em;
+
+  span.bold {
+    font-weight: bold;
+  }
+}
+
+form {
+  margin-top: 1.5em;
+}
+
+mat-form-field {
+  margin-top: 5px;
+}
+
+.user-dialog-cancel {
+  border: #005EA5 1px solid;
+}
+
+.user-dialog-validate {
+  --mdc-protected-button-label-text-color: white;
+  --mdc-protected-button-container-color: #005EA5;
+
+  &:disabled {
+    --mdc-protected-button-container-color: #E0E0E0;
+    --mdc-protected-button-label-text-color: #626262;
+  }
+
+  &:hover, &:focus {
+    --mdc-protected-button-container-color: #1469c0;
+  }
+}
+
+.user-dialog-validate-wrapper {
+  margin-left: 10px;
+}
+
+.user-dialog-validate-wrapper:has(.user-dialog-validate:disabled) {
+  div {
+    cursor: not-allowed;
+  }
+}
+
+.close-button {
+  position:absolute;
+  top:10px;
+  right:10px;
+  z-index:1000;
+}
+
+.required-label {
+  color:red;
+}

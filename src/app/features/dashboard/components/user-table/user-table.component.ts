@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -12,8 +12,12 @@ import { Page } from '@app/features/dashboard/models/page';
 import { UserViewDTO } from '@app/features/dashboard/models/user-view-dto';
 import { UserService } from '@app/features/dashboard/services/user.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { finalize, merge } from 'rxjs';
+import { finalize, merge, zip } from 'rxjs';
 import { SearchBarComponent } from '@app/features/dashboard/components/search-bar/search-bar.component';
+import { UserDialogComponent, UserDialogData } from '../user-dialog/user-dialog.component';
+import { UserDetailUpdateDTO } from '../../models/user-detail-update';
+import { MatDialog } from '@angular/material/dialog';
+import { NotificationService } from '@app/features/notification/services/notification.service';
 
 
 @Component({
@@ -26,6 +30,7 @@ import { SearchBarComponent } from '@app/features/dashboard/components/search-ba
   styleUrl: './user-table.component.scss'
 })
 export class UserTableComponent extends DashboardComponent {
+  readonly dialog = inject(MatDialog);
 
   displayedColumns: string[] = ['firstName', 'lastName', 'email', 'role', 'locked', 'creationDate', 'update', 'delete'];
   dataSource: MatTableDataSource<UserViewDTO> = new MatTableDataSource<UserViewDTO>([]);
@@ -39,7 +44,7 @@ export class UserTableComponent extends DashboardComponent {
   pageSize: number = this.pageSizeOptions[1];
   listKeywords: string[] = [];
 
-  constructor(private userService: UserService, private translate: TranslateService) {
+  constructor(private userService: UserService, private notificationService: NotificationService, private translate: TranslateService) {
     super();
   }
 
@@ -93,8 +98,35 @@ export class UserTableComponent extends DashboardComponent {
     this.pageSize = pageSize;
   }
 
-  openUpdateUserDialog(id: string) {
-    alert("id = " + id);
+  openUpdateUserDialog(userId: number) {
+	zip(this.userService.getUserRoles(), this.userService.getUser(userId))
+	      .subscribe(([roles, userDetailDTO]) => {
+	        this.dialog.open(UserDialogComponent, {
+	          data: {
+	            userDetailDTO,
+	            roles
+	          } as UserDialogData,
+	          disableClose: true,
+	          autoFocus: false
+	        })
+	          .afterClosed()
+	          .subscribe((userDetailUpdateDTO: UserDetailUpdateDTO | undefined) => {
+	            if (userDetailUpdateDTO !== undefined) {
+	              this.userService.updateUser(userDetailUpdateDTO)
+	                .pipe(finalize(() => this.refreshTable()))
+	                .subscribe({
+	                  next: () => {
+	                    this.notificationService.openSuccessSnackBar(this.translate.instant('feature.dashboard.user-table-component.table.column.action.message.success', { id: userId }));
+	                  },
+	                  error: (error: any) => {
+	                    this.notificationService.openErrorSnackBar(this.translate.instant('feature.dashboard.user-table-component.table.column.action.message.error', { id: userId }));
+	                    console.error("An error occurred when trying to update ticket.", error)
+	                  }
+	                });
+	            }
+	          });;
+
+	      });
   }
 
   openDeleteUserDialog(id: string) {
