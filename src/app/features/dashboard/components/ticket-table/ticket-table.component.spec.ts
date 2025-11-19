@@ -78,7 +78,7 @@ describe('TicketTableComponent', () => {
   });
 
   it('displays the expected columns', () => {
-    const expected = ['id', 'subject', 'lastName', 'firstName', 'mail', 'status', 'date', 'action'];
+    const expected = ['id', 'subject', 'lastName', 'firstName', 'mail', 'status', 'lastModifiedDate', 'action'];
     expect(component.displayedColumns).toEqual(expected);
   });
 
