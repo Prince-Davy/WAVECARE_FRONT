@@ -26,7 +26,8 @@ describe('TicketDialogComponent', () => {
         categoryLabel: 'technical',
         description: 'Some issue',
         statusId: 1,
-        adminComment: 'Initial comment'
+        adminComment: 'Initial comment',
+        creationDate: new Date()
       },
       statuses: [{ id: 0, label: 'STANDBY' }, { id: 1, label: 'PROCESS' }, { id: 2, label: 'SOLVED' }]
     };
