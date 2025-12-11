@@ -40,8 +40,9 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
-            "scripts": [],
-            "server": "src/main.server.ts",
+            "scripts": []
+          },
+          "server": {
             "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts"
@@ -49,6 +50,11 @@
           },
           "configurations": {
             "integration": {
+              "optimization": {
+                "fonts": {
+                  "inline": false
+                }
+              },
               "budgets": [
                 {
                   "type": "initial",
@@ -70,7 +76,11 @@
               ]
             },
             "development": {
-              "optimization": false,
+              "optimization": {
+                "fonts": {
+                  "inline": false
+                }
+              },
               "extractLicenses": false,
               "sourceMap": true,
               "fileReplacements": [
