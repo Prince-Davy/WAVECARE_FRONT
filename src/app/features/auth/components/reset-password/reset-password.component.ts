@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, AbstractControlOptions, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +14,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   selector: 'app-***REMOVED***',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -22,7 +21,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     MatButtonModule,
     TranslateModule,
     RouterLink
-  ],
+],
   templateUrl: './***REMOVED***.component.html',
   styleUrls: ['./***REMOVED***.component.scss']
 })

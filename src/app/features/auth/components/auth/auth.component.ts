@@ -1,5 +1,5 @@
 // auth.component.ts
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,7 +18,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   selector: 'app-auth',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatCardModule,
@@ -28,7 +27,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     MatIconModule,
     RouterLink,
     TranslateModule
-  ],
+],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
 
