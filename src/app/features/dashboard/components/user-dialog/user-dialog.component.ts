@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,7 +19,6 @@ export interface UserDialogData {
 @Component({
   selector: 'app-user-dialog',
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     FormsModule,
@@ -30,7 +29,7 @@ export interface UserDialogData {
     MatInputModule,
     MatIcon,
     TranslateModule
-  ],
+],
   templateUrl: './user-dialog.component.html',
   styleUrl: './user-dialog.component.scss'
 })

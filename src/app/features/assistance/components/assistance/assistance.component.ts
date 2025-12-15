@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -17,7 +17,6 @@ import { TicketCategoryDTO } from '../../models/assitance-ticket-category-dto';
   selector: 'app-assistance',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatCardModule,
@@ -27,7 +26,7 @@ import { TicketCategoryDTO } from '../../models/assitance-ticket-category-dto';
     MatSelectModule,
     TranslateModule,
     RouterLink
-  ],
+],
   templateUrl: './assistance.component.html',
   styleUrls: ['./assistance.component.scss']
 })

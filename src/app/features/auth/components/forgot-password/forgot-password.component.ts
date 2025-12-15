@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -16,14 +16,13 @@ import { TranslateModule } from '@ngx-translate/core';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    CommonModule,
     MatCardModule,
     MatInputModule,
     MatButtonModule,
     MatFormFieldModule,
     TranslateModule,
     RouterLink
-  ],
+],
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.scss']
 })
