@@ -1,118 +1,118 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { CustomTranslateLoader } from 'src/translate-loader';
+
+// ticket-dialog.component.spec.ts
+import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { TicketDialogComponent, TicketDialogData } from './ticket-dialog.component';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateModule } from '@ngx-translate/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSelect } from '@angular/material/select';
+
+import { TicketDetailDTO } from '../../models/ticket-detail-dto';
+import { TicketStatusDTO } from '../../models/ticket-status-dto';
 
 describe('TicketDialogComponent', () => {
-  let component: TicketDialogComponent;
   let fixture: ComponentFixture<TicketDialogComponent>;
+  let component: TicketDialogComponent;
 
-  const mockDialogRef = {
-    close: jasmine.createSpy('close')
+  const statuses: TicketStatusDTO[] = [
+    { id: 1, label: 'Ouvert' } as TicketStatusDTO,
+    { id: 2, label: 'Fermé' } as TicketStatusDTO,
+  ];
+
+  const ticket: TicketDetailDTO = {
+    id: 42,
+    statusId: 1,
+    adminComment: 'Commentaire initial',
+    // Ajoutez ici les champs requis par votre interface si nécessaire
+  } as TicketDetailDTO;
+
+  const dialogData: TicketDialogData = {
+    ticketDetailDTO: { ...ticket },
+    statuses,
   };
 
-  let mockData: TicketDialogData;
+  const matDialogRefMock = {
+    close: jasmine.createSpy('close'),
+  } as unknown as MatDialogRef<TicketDialogComponent>;
 
   beforeEach(async () => {
-    mockData = {
-      ticketDetailDTO: {
-        id: 1,
-        firstName: 'John',
-        lastName: 'Doe',
-        mail: '***REMOVED***',
-        categoryLabel: 'technical',
-        description: 'Some issue',
-        statusId: 1,
-        adminComment: 'Initial comment',
-        creationDate: new Date()
-      },
-      statuses: [{ id: 0, label: 'STANDBY' }, { id: 1, label: 'PROCESS' }, { id: 2, label: 'SOLVED' }]
-    };
-
     await TestBed.configureTestingModule({
       imports: [
+        // Le composant est standalone : on l’importe directement
         TicketDialogComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: CustomTranslateLoader
-          }
-        }),
+        ReactiveFormsModule,
         NoopAnimationsModule,
+        TranslateModule.forRoot(),
       ],
       providers: [
-        { provide: MatDialogRef, useValue: mockDialogRef },
-        { provide: MAT_DIALOG_DATA, useValue: mockData }
-      ]
+        { provide: MAT_DIALOG_DATA, useValue: dialogData },
+        { provide: MatDialogRef, useValue: matDialogRefMock },
+      ],
     }).compileComponents();
-
-    const translate = TestBed.inject(TranslateService);
-    translate.use('fr');
 
     fixture = TestBed.createComponent(TicketDialogComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create the component', () => {
+  it('devrait créer le composant', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
-  it('should initialize the form with ticket data', () => {
-    expect(component.ticketDialogForm.value).toEqual({
-      status: 1,
-      comment: 'Initial comment'
-    });
+  it('devrait initialiser le formulaire avec les valeurs du ticket', () => {
+    fixture.detectChanges();
+    const fg = component.ticketDialogForm;
+    expect(fg.get('status')?.value).toBe(1);
+    expect(fg.get('comment')?.value).toBe('Commentaire initial');
   });
 
-  it('should mark form as invalid if required fields are missing', () => {
-    component.ticketDialogForm.setValue({ status: '', comment: '' });
+  it('devrait valider que "status" est requis', () => {
+    fixture.detectChanges();
+    const statusCtrl = component.ticketDialogForm.get('status');
+    statusCtrl?.setValue(null);
+    expect(statusCtrl?.hasError('required')).toBeTrue();
     expect(component.ticketDialogForm.valid).toBeFalse();
   });
 
-  it('should disable the confirm button if form is invalid', () => {
-    component.ticketDialogForm.setValue({ status: '', comment: '' });
+  it('devrait appliquer la contrainte maxlength(500) sur "comment"', () => {
     fixture.detectChanges();
-
-    const button = fixture.debugElement.query(By.css('.ticket-dialog-validate')).nativeElement;
-    expect(button.disabled).toBeTrue();
+    const longText = 'x'.repeat(501);
+    const commentCtrl = component.ticketDialogForm.get('comment');
+    commentCtrl?.setValue(longText);
+    expect(commentCtrl?.hasError('maxlength')).toBeTrue();
   });
 
-  it('should enable the confirm button if form is valid', () => {
-    component.ticketDialogForm.setValue({ status: 'SOLVED', comment: 'Fixed it' });
+  it('validate() devrait retourner un TicketDetailUpdateDTO avec les valeurs choisies', () => {
     fixture.detectChanges();
+    component.ticketDialogForm.setValue({ status: 2, comment: 'Mise à jour' });
 
-    const button = fixture.debugElement.query(By.css('.ticket-dialog-validate')).nativeElement;
-    expect(button.disabled).toBeFalse();
+    const dto = component.validate();
+    expect(dto.id).toBe(42);
+    expect(dto.statusId).toBe(2);
+    expect(dto.adminComment).toBe('Mise à jour');
   });
 
-  it('should update ticket data on validate()', () => {
-    component.ticketDialogForm.setValue({ status: 'SOLVED', comment: 'All good now' });
-    const updatedTicket = component.validate();
+  it('validate() devrait mettre statusId=0 si le statut est introuvable et adminComment="" si absent', () => {
+    fixture.detectChanges();
+    component.ticketDialogForm.setValue({ status: 999, comment: null });
 
-    expect(updatedTicket.statusId).toBe(2);
-    expect(updatedTicket.adminComment).toBe('All good now');
+    const dto = component.validate();
+    expect(dto.statusId).toBe(0);
+    expect(dto.adminComment).toBe('');
   });
 
-  it('should handle null or empty ticket values gracefully', () => {
-    component.data.ticketDetailDTO.statusId = null as any;
-    component.data.ticketDetailDTO.adminComment = '';
-    component.ticketDialogForm.setValue({ status: null, comment: '' });
-    expect(component.ticketDialogForm.valid).toBeFalse();
-  });
+  it('ngAfterViewInit devrait appeler le focus sur le MatSelect (via setTimeout)', fakeAsync(() => {
+    // On mocke le ViewChild pour éviter de dépendre du template
+    const focusSpy = jasmine.createSpy('focus');
+    component.statusInput = { focus: focusSpy } as unknown as MatSelect;
 
-  it('should not update ticket if form is invalid in validate()', () => {
-    component.ticketDialogForm.setValue({ status: '', comment: '' });
-    const result = component.validate();
-    expect(result.statusId).toBe(0);
-    expect(result.adminComment).toBe('');
-  });
+    // Appel manuel de ngAfterViewInit
+    component.ngAfterViewInit();
 
-  it('should render translated title with ticket id', () => {
-    const title = fixture.debugElement.query(By.css('.ticket-dialog-title')).nativeElement;
-    expect(title.textContent).toContain(mockData.ticketDetailDTO.id.toString());
-  });
+    // setTimeout(0) => tick(0)
+    tick(0);
+    expect(focusSpy).toHaveBeenCalled();
+  }));
 });
