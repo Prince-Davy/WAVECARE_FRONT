@@ -11,7 +11,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatTooltip } from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { DashboardComponent } from '@app/features/dashboard/abstract/dashboard-component.abstract';
 import { CustomPaginator } from '@app/features/dashboard/classes/custom-paginator';
 import { SearchBarComponent } from '@app/features/dashboard/components/search-bar/search-bar.component';
@@ -22,7 +22,7 @@ import { TicketViewDTO } from '@app/features/dashboard/models/ticket-view-dto';
 import { TicketService } from '@app/features/dashboard/services/ticket.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { finalize, merge, zip } from 'rxjs';
+import { finalize, merge, startWith, zip } from 'rxjs';
 
 
 @Component({
@@ -30,7 +30,7 @@ import { finalize, merge, zip } from 'rxjs';
   standalone: true,
   imports: [
     MatTableModule, MatPaginatorModule, MatSortModule, DatePipe,
-    TranslateModule, MatIconModule, MatTooltip, MatCardModule, FormsModule,
+    TranslateModule, MatIconModule, MatTooltipModule, MatCardModule, FormsModule,
     MatInputModule, MatChipsModule, MatFormFieldModule, CommonModule, MatDialogModule, SearchBarComponent
   ],
   templateUrl: './ticket-table.component.html',
@@ -59,18 +59,18 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
     super();
   }
 
+
   ngAfterViewInit(): void {
-    if (this.sort && this.paginator) {
-      merge(this.paginator.page, this.sort.sortChange)
-        .subscribe(() => this.refreshTable());
-    }
-
-
-    this.refreshTable(0); // charge la première page au démarrage
-
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    merge(
+      this.paginator.page,
+      this.sort.sortChange
+    )
+      .pipe(
+        startWith({}),
+      )
+      .subscribe(() => this.refreshTable());
   }
+
 
   openTicketDialog(ticketId: number) {
     zip(this.ticketService.getTicketStatuses(), this.ticketService.getTicket(ticketId))
@@ -103,48 +103,57 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
       });
   }
 
-	private refreshTable(pageIndex?: number): void {
-		this.isLoading = true;
 
-		if (pageIndex !== undefined) {
-			this.paginator.pageIndex = pageIndex;
-		}
+  private refreshTable(pageIndex?: number): void {
+    this.isLoading = true;
 
-		// Mapping des champs Angular vers les champs backend
-		const sortFieldMap: Record<string, string> = {
-			subject: 'ticketCategoryEntity.label',
-			status: 'ticketStatusEntity.label'
-		};
+    if (pageIndex !== undefined) {
+      this.paginator.pageIndex = pageIndex;
+    }
 
-		const sortFields: { field: string; direction: 'asc' | 'desc' }[] = [];
-		if (this.sort?.active && this.sort?.direction) {
-			const field = sortFieldMap[this.sort.active] ?? this.sort.active;
-			const direction = this.sort.direction as 'asc' | 'desc';
-			sortFields.push({ field, direction });
-		} else {
-			sortFields.push(
-				{ field: 'ticketStatusEntity.id', direction: 'asc' },
-				{ field: 'lastModifiedDate', direction: 'desc' }
-			);
-		}
+    const sortFieldMap: Record<string, string> = {
+      subject: 'ticketCategoryEntity.label',
+      status: 'ticketStatusEntity.label',
+    };
 
-		this.ticketService.getTickets(
-			this.paginator.pageIndex,
-			this.paginator.pageSize,
-			this.listKeywords,
-			sortFields
-		)
-			.pipe(finalize(() => this.isLoading = false))
-			.subscribe({
-				next: (result: Page<TicketViewDTO>) => {
-					this.updateRows(result.content, result.totalElements, result.size);
-				},
-				error: (error: HttpErrorResponse) => {
-					console.error('An error occurred while loading tickets:', error);
-					this.updateRows([], 0, 0);
-				}
-			});
-	}
+    const sortFields: { field: string; direction: 'asc' | 'desc' }[] = [];
+    if (this.sort?.active && this.sort?.direction) {
+      const field = sortFieldMap[this.sort.active] ?? this.sort.active;
+      const direction = this.sort.direction as 'asc' | 'desc';
+      sortFields.push({ field, direction });
+    } else {
+      sortFields.push(
+        { field: 'ticketStatusEntity.id', direction: 'asc' },
+        { field: 'lastModifiedDate', direction: 'desc' }
+      );
+    }
+
+    this.ticketService.getTickets(
+      this.paginator.pageIndex,
+      this.paginator.pageSize,
+      this.listKeywords,
+      sortFields
+    )
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (result: Page<TicketViewDTO>) => {
+          this.dataSource.data = result.content ?? [];
+          const total = result.totalElements ?? 0;
+          const size = result.size ?? this.pageSize;
+          this.resultsLength = total;
+          this.pageSize = size;
+          this.paginator.length = total;
+          this.paginator.pageSize = size;
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('An error occurred while loading tickets:', error);
+          this.dataSource.data = [];
+          this.resultsLength = 0;
+          this.paginator.length = 0;
+        }
+      });
+  }
+
 
   private updateRows(rows: TicketViewDTO[], totalElements: number, pageSize: number) {
     this.dataSource.data = rows;
@@ -156,7 +165,7 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
     this.listKeywords = currentListKeywords;
     this.refreshTable(0);
   }
-  
+
 
   resetTable(): void {
     this.listKeywords = [];
