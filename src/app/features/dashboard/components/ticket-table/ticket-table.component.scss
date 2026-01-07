@@ -3,9 +3,8 @@
 }
 
 .ticket-container {
-  display: grid;
-  grid-template-rows: 5% 15% 79%;
-  grid-template-columns: 100%;
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 
