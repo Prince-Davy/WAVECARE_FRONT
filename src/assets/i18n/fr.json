@@ -172,7 +172,7 @@
               "label": "Statut"
             },
             "lastModifiedDate": {
-              "label": "Date de modification"
+              "label": "Date & heure de modification"
             },
             "action": {
               "label": "Actions",
@@ -360,9 +360,9 @@
   "model": {
     "ticket": {
       "status": {
-        "STANDBY": "En attente",
+        "STANDBY": "Ouvert",
         "PROCESS": "En cours",
-        "SOLVED": "Résolu"
+        "SOLVED": "Clôturé"
       },
       "category": {
         "ACCOUNT_ID": "Identifiant",
