@@ -64,7 +64,7 @@ service:
 # TLS is used for certificate configuration. When setting it up, remove the `[]`
 ingress:
   enabled: true
-  disableWhitelist: true
+  #disableWhitelist: true
   className: ""
   annotations: {}
     # kubernetes.io/ingress.class: nginx
