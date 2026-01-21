@@ -121,11 +121,6 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
       const field = sortFieldMap[this.sort.active] ?? this.sort.active;
       const direction = this.sort.direction as 'asc' | 'desc';
       sortFields.push({ field, direction });
-    } else {
-      sortFields.push(
-        { field: 'ticketStatusEntity.id', direction: 'asc' },
-        { field: 'lastModifiedDate', direction: 'desc' }
-      );
     }
 
     this.ticketService.getTickets(
