@@ -20,13 +20,14 @@ import { UserDetailUpdateDTO } from '../../models/user-detail-update';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { DeleteUserDialogComponent } from '../delete-user-dialog/delete-user-dialog.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-user-table',
   standalone: true,
   imports: [
     MatTableModule, MatPaginatorModule, DatePipe, TranslateModule,
-    MatIconModule, MatTooltipModule, MatCardModule, SearchBarComponent, MatSortModule
+    MatIconModule, MatTooltipModule, MatCardModule, SearchBarComponent, MatSortModule, MatButtonModule
   ],
   templateUrl: './user-table.component.html',
   styleUrl: './user-table.component.scss'
@@ -97,6 +98,54 @@ export class UserTableComponent extends DashboardComponent {
         }
       });
   }
+  
+openCreateUserDialog() {
+  // 1) On récupère les rôles (et on pourrait charger d’autres données si besoin)
+  this.userService.getUserRoles().subscribe(roles => {
+
+    // 2) DTO minimal pour la création (adapte selon ton modèle)
+    const emptyUser: UserDetailUpdateDTO = {
+      id: undefined as any,            // ou supprime si non requis par ton backend
+      email: '',
+      firstName: '',
+      lastName: '',
+      role: roles?.[0] ?? '0',         // valeur initiale
+      // ajoute ici les champs requis par ton API si nécessaire
+    };
+
+    // 3) Ouverture du dialog en mode création
+    this.dialog.open(UserDialogComponent, {
+      data: {
+        userDetailDTO: emptyUser,
+        roles,
+        mode: 'create'
+      } as UserDialogData,
+      disableClose: true,
+      autoFocus: false
+    })
+    .afterClosed()
+    .subscribe((userDetailCreateDTO: UserDetailUpdateDTO | undefined) => {
+      if (userDetailCreateDTO !== undefined) {
+        // 4) Appel service de création
+        this.userService.createUser(userDetailCreateDTO)
+          .pipe(finalize(() => this.refreshTable(0)))
+          .subscribe({
+            next: () => {
+              this.notificationService.openSuccessSnackBar(
+                this.translate.instant('feature.dashboard.user-table-component.action.create.message.success')
+              );
+            },
+            error: () => {
+              this.notificationService.openErrorSnackBar(
+                this.translate.instant('feature.dashboard.user-table-component.action.create.message.error')
+              );
+            }
+          });
+      }
+    });
+
+  });
+}
 
   openUpdateUserDialog(userId: number) {
     zip(this.userService.getUserRoles(), this.userService.getUser(userId))

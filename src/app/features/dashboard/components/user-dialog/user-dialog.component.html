@@ -1,9 +1,13 @@
 <button mat-icon-button [mat-dialog-close]="undefined" class="close-button" aria-label="Fermer">
   <mat-icon>close</mat-icon>
 </button>
+
 <h2 class="user-dialog-title" mat-dialog-title>
-  {{ 'feature.dashboard.user-dialog-component.title' | translate }}
+  {{ (data.mode === 'create'
+      ? 'feature.dashboard.user-dialog-component.title.create'
+      : 'feature.dashboard.user-dialog-component.title.update') | translate }}
 </h2>
+
 <mat-dialog-content>
 
   <p><span>{{ 'feature.dashboard.user-dialog-component.form.required.label.first' | translate }}<span class="required-label"> * </span>{{ 'feature.dashboard.user-dialog-component.form.required.label.second' | translate }}</span></p>
