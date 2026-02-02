@@ -16,7 +16,7 @@
   <p><span>{{ 'feature.dashboard.ticket-dialog-component.form.required.label.first' | translate }}<span class="required-label"> * </span>{{ 'feature.dashboard.ticket-dialog-component.form.required.label.second' | translate }}</span></p>
   <form [formGroup]="ticketDialogForm">
     <label for="status">{{ 'feature.dashboard.ticket-dialog-component.form.status.label' | translate }}<span class="required-label">*</span></label>
-    <mat-form-field class="grey-form-field" appearance="outline" subscriptSizing="dynamic">
+    <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
       <mat-select #statusInput id="status" formControlName="status" [aria-label]="'feature.dashboard.ticket-dialog-component.form.status.label' | translate" required>
         @for(status of data.statuses; track status) {
         <mat-option [value]="status.id">{{ 'model.ticket.status.' + status.label | translate }}</mat-option>
@@ -24,7 +24,7 @@
       </mat-select>
     </mat-form-field>
     <label for="comment">{{ 'feature.dashboard.ticket-dialog-component.form.admin-comment.label' | translate }}</label>
-    <mat-form-field class="grey-form-field" appearance="outline" subscriptSizing="dynamic">
+    <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
       <textarea matInput mat-autosize id="comment" formControlName="comment" [placeholder]="'feature.dashboard.ticket-dialog-component.form.admin-comment.placeholder' | translate"></textarea>
     </mat-form-field>
   </form>
