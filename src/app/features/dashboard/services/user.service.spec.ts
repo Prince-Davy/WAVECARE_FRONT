@@ -150,4 +150,30 @@ describe('UserService', () => {
             req.flush(null);
         });
     });
+
+
+    describe('createUser', () => {
+
+        it('should create a user with the provided payload', () => {
+
+            const userCreate: UserDetailUpdateDTO = {
+                firstName: 'New',
+                lastName: 'User',
+                email: 'new.***REMOVED***',
+                role: 'USER'
+            };
+
+
+
+            service.createUser(userCreate).subscribe();
+            const req = httpMock.expectOne(apiUrl);
+            expect(req.request.method).toBe('POST');
+            expect(req.request.headers.get('Authorization')).toBe(`Bearer ${mockToken}`);
+            expect(req.request.body).toEqual(userCreate);
+            req.flush(null);
+        });
+
+    });
+
 });
+

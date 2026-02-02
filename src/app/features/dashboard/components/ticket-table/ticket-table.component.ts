@@ -21,6 +21,7 @@ import { TicketDetailUpdateDTO } from '@app/features/dashboard/models/ticket-det
 import { TicketViewDTO } from '@app/features/dashboard/models/ticket-view-dto';
 import { TicketService } from '@app/features/dashboard/services/ticket.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
+import { Pad4Pipe } from '@app/shared/pipes/pad4.pide';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { finalize, merge, startWith, zip } from 'rxjs';
 
@@ -31,7 +32,7 @@ import { finalize, merge, startWith, zip } from 'rxjs';
   imports: [
     MatTableModule, MatPaginatorModule, MatSortModule, DatePipe,
     TranslateModule, MatIconModule, MatTooltipModule, MatCardModule, FormsModule,
-    MatInputModule, MatChipsModule, MatFormFieldModule, CommonModule, MatDialogModule, SearchBarComponent
+    MatInputModule, MatChipsModule, MatFormFieldModule, CommonModule, MatDialogModule, SearchBarComponent, Pad4Pipe
   ],
   templateUrl: './ticket-table.component.html',
   styleUrls: ['./ticket-table.component.scss'],
@@ -169,5 +170,10 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
     this.paginator.pageIndex = 0;
     this.refreshTable(0);
   }
+
+  getFormattedSequence(index: number): string {
+    return (index + 1).toString().padStart(4, '0');
+  }
+
 
 }

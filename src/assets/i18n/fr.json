@@ -268,7 +268,6 @@
                   "error": "Echec de suppression du profil de l'utilisateur {{lastName}} {{firstName}}"
                 }
               }
-
             }
           },
           "paginator": {
@@ -279,10 +278,22 @@
             "lastPage": "Dernière page",
             "of": "sur"
           }
+        },
+        "action": {
+          "create": {
+            "button": "CREER UN PROFIL",
+            "message": {
+              "success": "Le profil a été créé avec succès",
+              "error": "Echec de la création du profil"
+            }
+          }
         }
       },
       "user-dialog-component": {
-        "title": "Modifier un profil",
+        "title": {
+          "create": "Créer un profil",
+          "update": "Modifier un profil"
+        },
         "form": {
           "role": {
             "label": "Role : "

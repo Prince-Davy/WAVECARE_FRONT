@@ -1,6 +1,7 @@
 export interface UserDetailUpdateDTO {
-  id: string;
+  id?: string;
   firstName: string;
   lastName: string;
   role: string;
+  email?: string;
 }

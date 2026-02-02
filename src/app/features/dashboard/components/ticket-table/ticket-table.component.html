@@ -1,6 +1,6 @@
-<div class="ticket-container">
+<div class="table-container">
   <div>
-    <h1 class="dashboard-title">{{'feature.dashboard.ticket-table-component.title' | translate}}</h1>
+    <h1 class="title">{{'feature.dashboard.ticket-table-component.title' | translate}}</h1>
   </div>
   <div>
     <app-search-bar [totalResults]="resultsLength" (keywordsChanged)="keywordsChanged($event)" (resetRequested)="resetTable()">
@@ -13,7 +13,7 @@
         <!-- Colonnes -->
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'feature.dashboard.ticket-table-component.table.column.id.label' | translate }}</th>
-          <td mat-cell *matCellDef="let ticket">{{ ticket.id }}</td>
+          <td mat-cell *matCellDef="let ticket">{{ ticket.id | pad4 }}</td>
         </ng-container>
 
         <ng-container matColumnDef="subject">

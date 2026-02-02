@@ -56,6 +56,26 @@ textarea {
   field-sizing: content
 }
 
+.actions-section {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mat-mdc-raised-button.action-button {
+  background-color: white;
+  border: #005EA5 1px solid;
+}
+
+.title {
+  color: #005EA5;
+}
+
 .mdc-snackbar {
   --mdc-snackbar-container-shape: 5px;
 

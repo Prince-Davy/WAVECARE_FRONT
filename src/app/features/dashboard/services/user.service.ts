@@ -73,10 +73,10 @@ export class UserService {
 		const headers = new HttpHeaders({
 			Authorization: `Bearer ${this.authTokenService.getToken()}`
 		});
-		return this.http.put<void>(`${this.apiUrlUsers}/${userDetailUpdateDTO.id}`, { lastName: userDetailUpdateDTO.lastName, firstName: userDetailUpdateDTO.firstName,role: userDetailUpdateDTO.role }, { headers });
+		return this.http.put<void>(`${this.apiUrlUsers}/${userDetailUpdateDTO.id}`, { lastName: userDetailUpdateDTO.lastName, firstName: userDetailUpdateDTO.firstName, role: userDetailUpdateDTO.role, email: userDetailUpdateDTO.email }, { headers });
 	}
 
-	
+
 	/**
 	 * Supprime un utilisateur par son ID
 	 * @param userId ID de l'utilisateur à supprimer
@@ -88,4 +88,10 @@ export class UserService {
 		return this.http.delete<void>(`${this.apiUrlUsers}/${userId}`, { headers });
 	}
 
+	createUser(payload: UserDetailUpdateDTO) {
+		const headers = new HttpHeaders({
+			Authorization: `Bearer ${this.authTokenService.getToken()}`
+		});
+		return this.http.post<void>(this.apiUrlUsers, payload, { headers });
+	}
 }
