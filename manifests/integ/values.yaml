@@ -104,7 +104,6 @@ resources:
 # Use key-value pairs to define the deployment's environment variables.  
 env:
   NODE_ENV: "integ"
-  API_URL: '{{ requiredEnv "API_URL" }}'
 
   #PORT: 8501
 
