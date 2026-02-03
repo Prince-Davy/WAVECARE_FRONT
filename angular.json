@@ -48,49 +48,19 @@
             }
           },
           "configurations": {
-            "integration": {
+            "production": {
               "optimization": {
-                "fonts": {
-                  "inline": false
-                }
+                "scripts": true,
+                "styles": true,
+                "fonts": false
               },
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "1MB",
-                  "maximumError": "2MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "8kB",
-                  "maximumError": "16kB"
-                }
-              ],
-              "outputHashing": "all",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.integration.ts"
-                }
-              ]
+              "sourceMap": false
             },
             "development": {
-              "optimization": {
-                "fonts": {
-                  "inline": false
-                }
-              },
-              "extractLicenses": false,
-              "sourceMap": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.development.ts"
-                }
-              ]
+              "optimization": false,
+              "sourceMap": true
             }
-          },
-          "defaultConfiguration": "integration"
+          }
         },
         "serve": {
           "builder": "@angular/build:dev-server",
