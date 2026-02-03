@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { TicketDetailDTO } from '../models/ticket-detail-dto';
 import { TicketDetailUpdateDTO } from '../models/ticket-detail-update-dto';
 import { TicketStatusDTO } from '../models/ticket-status-dto';
@@ -11,8 +10,7 @@ import { Page } from '../models/page';
 
 @Injectable({ providedIn: 'root' })
 export class TicketService {
-  private readonly apiUrl = `${environment.apiUrl}/api`;
-  private readonly apiUrlTicket = `${this.apiUrl}/tickets`;
+  private readonly apiUrlTicket = `/api/tickets`;
 
   constructor(private http: HttpClient, private authTokenService: AuthTokenService) { }
 
@@ -62,6 +60,6 @@ export class TicketService {
       Authorization: `Bearer ${this.authTokenService.getToken()}`
     });
 
-    return this.http.get<TicketStatusDTO[]>(`${this.apiUrl}/ticket-statuses`, { headers });
+    return this.http.get<TicketStatusDTO[]>(`/ticket-statuses`, { headers });
   }
 }

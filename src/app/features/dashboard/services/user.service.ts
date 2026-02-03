@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AuthTokenService } from "@app/features/auth/services/auth-token.service";
-import { environment } from "@environments/environment";
+
 import { Observable } from "rxjs";
 import { Page } from "../models/page";
 import { UserViewDTO } from "../models/user-view-dto";
@@ -10,8 +10,8 @@ import { UserDetailUpdateDTO } from "../models/user-detail-update";
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-	private readonly apiUrl = `${environment.apiUrl}/api`;
-	private readonly apiUrlUsers = `${this.apiUrl}/users`;
+
+	private readonly apiUrlUsers = `/api/users`;
 
 	constructor(private http: HttpClient, private authTokenService: AuthTokenService) { }
 

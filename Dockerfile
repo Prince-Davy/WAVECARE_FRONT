@@ -1,26 +1,22 @@
-
-FROM node:24-alpine AS build
-
+FROM node:25-alpine AS build
 WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm install
-
 COPY . .
 RUN npm run build
 
-FROM node:24-alpine AS server
-
+# -------- Runtime --------
+FROM node:25-alpine AS server
 WORKDIR /app
 
-COPY --from=build /app/dist /app/dist
-COPY --from=build /app/package*.json ./
+COPY --from=build --chown=node:node /app/dist /app/dist
+COPY --from=build --chown=node:node /app/node_modules /app/node_modules
 
-
-RUN npm install --omit=dev
+COPY --chown=node:node docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 USER node
-
 EXPOSE 4000
-CMD ["node", "dist/wavecare-front/server/server.mjs"]
+
+ENTRYPOINT ["/entrypoint.sh"]

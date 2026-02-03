@@ -4,14 +4,12 @@ import { LoginCredentials, LoginResponse } from '@app/features/auth/models/auth.
 import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
 import { Observable } from 'rxjs';
 import { tap, timeout } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = `${environment.apiUrl}/api`;
 
   constructor(private http: HttpClient, private tokenService: AuthTokenService) { }
 
@@ -27,7 +25,7 @@ export class AuthService {
         .set('Accept', 'application/json')
     };
     return this.http.post<LoginResponse>(
-      `${this.API_URL}/***REMOVED***`,
+      `api/***REMOVED***`,
       body,
       httpOptions)
       .pipe(
@@ -47,7 +45,7 @@ export class AuthService {
   forgotPassword(email: string): Observable<any> {
     const params = new HttpParams().set('email', email);
 
-    return this.http.post(`${this.API_URL}/password-reset/request`, undefined, {
+    return this.http.post(`api/password-reset/request`, undefined, {
       headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded'
       },),
@@ -60,7 +58,7 @@ export class AuthService {
     const params = new HttpParams().set('token', token);
 
     return this.http.get<{ id: string, email: string }>(
-      `${this.API_URL}/password-reset/token`, { params }
+      `api/password-reset/token`, { params }
     );
   }
 
@@ -72,7 +70,7 @@ export class AuthService {
 
     const params = new HttpParams().set('token', token!);
 
-    return this.http.put(`${this.API_URL}/user/${userId}/password`, payload, {
+    return this.http.put(`api/user/${userId}/password`, payload, {
       headers: headers,
       params: params,
       responseType: 'text'
@@ -81,7 +79,7 @@ export class AuthService {
 
   deleteToken(token: string): Observable<any> {
     const params = new HttpParams().set('token', token);
-    return this.http.delete(`${this.API_URL}/password-reset/token`, {
+    return this.http.delete(`api/password-reset/token`, {
       params: params,
       responseType: 'text'
     });
