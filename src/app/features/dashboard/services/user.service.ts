@@ -7,6 +7,8 @@ import { Page } from "../models/page";
 import { UserViewDTO } from "../models/user-view-dto";
 import { UserDetailDTO } from "../models/user-detail-dto";
 import { UserDetailUpdateDTO } from "../models/user-detail-update";
+import { AdvancedFilters } from "../components/search-bar/filters/advanced-filters.component";
+import { UserFilters } from "../models/user-filters";
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -15,30 +17,40 @@ export class UserService {
 
 	constructor(private http: HttpClient, private authTokenService: AuthTokenService) { }
 
-	getUsers(
-		page: number,
-		size: number,
-		listKeywords: string[],
-		sortField?: string,
-		sortDirection?: string): Observable<Page<UserViewDTO>> {
-		let params = new HttpParams()
-			.set('page', page)
-			.set('size', size);
+  getUsers(
+    page: number,
+    size: number,
+    sortField?: string,
+    sortDirection?: string,
+    filters?: UserFilters
+  ): Observable<Page<UserViewDTO>> {
+  
+    const sort = sortField && sortDirection
+      ? `${sortField},${sortDirection}`
+      : null;
+  
+    const paramsObj: Record<string, string> = {
+      page: String(page),
+      size: String(size),
+    };
+  
+    if (filters) {
+      paramsObj['filter'] = JSON.stringify(filters);
+    }
+  
+    if (sort) {
+      paramsObj['sort'] = sort;
+    }
+  
+    const params = new HttpParams({ fromObject: paramsObj });
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authTokenService.getToken()}`
+    });
+  
+    return this.http.get<Page<UserViewDTO>>(this.apiUrlUsers, { headers, params });
+  }
 
-		if (sortField && sortDirection) {
-			params = params.set('sort', `${sortField},${sortDirection}`);
-		}
-
-		listKeywords.forEach(keyword => {
-			params = params.append('listKeywords', keyword);
-		});
-
-		const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.authTokenService.getToken()}`
-		});
-
-		return this.http.get<Page<UserViewDTO>>(this.apiUrlUsers, { headers, params });
-	}
 
 	/**
 	 * Récupère les détails d'un utilisateur par son ID

@@ -69,14 +69,16 @@
 
 .logout-button {
   display: block;
-  color: white !important; // TODO remove once the angular theme is properly done
-  background-color: #005EA5 !important; // TODO remove once the angular theme is properly done
+  color: white !important;
+  background-color: #005EA5 !important;
   border: none;
   padding: 8px 16px;
-  border-radius: 9999px;
+  border-radius: 4px; 
   cursor: pointer;
+}
 
-  &:hover, &:focus {
-    background-color: #d32f2f !important;
-  }
+.logout-button:hover,
+.logout-button:focus {
+   background-color: #d32f2f !important;
+
 }

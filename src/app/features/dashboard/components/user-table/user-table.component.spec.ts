@@ -162,7 +162,7 @@ describe('UserTableComponent', () => {
 
   it("change les données lors du changement de page", () => {
     userServiceSpy.getUsers.and.callFake(
-      (page: number, size: number, listKeywords: string[]) : Observable<Page<UserViewDTO>> => {
+      (page: number, size: number) : Observable<Page<UserViewDTO>> => {
         const start = page * size;
         const end = start + size;
         const pageContent = mockUsers.slice(start, end);
@@ -171,12 +171,12 @@ describe('UserTableComponent', () => {
     )
 
     let resultPage0: any;
-    userServiceSpy.getUsers(0, 1, []).subscribe(response => resultPage0 = response);
+    userServiceSpy.getUsers(0, 1).subscribe(response => resultPage0 = response);
     expect(resultPage0.content.length).toBe(1);
     expect(resultPage0.content[0].id).toBe(mockUsers[0].id);
 
     let resultPage1: any;
-    userServiceSpy.getUsers(1, 1, []).subscribe(response => resultPage1 = response);
+    userServiceSpy.getUsers(1, 1).subscribe(response => resultPage1 = response);
     expect(resultPage1.content.length).toBe(1);
     expect(resultPage1.content[0].id).toBe(mockUsers[1].id);
   })

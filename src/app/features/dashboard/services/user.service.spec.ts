@@ -7,6 +7,7 @@ import { Page } from '../models/page';
 import { UserViewDTO } from '../models/user-view-dto';
 import { UserDetailDTO } from '../models/user-detail-dto';
 import { UserDetailUpdateDTO } from '../models/user-detail-update';
+import { UserFilters } from '../models/user-filters';
 
 describe('UserService', () => {
     let service: UserService;
@@ -46,21 +47,28 @@ describe('UserService', () => {
                 totalPages: 1,
                 size: 10
             };
-            const keywords = ['admin', 'active'];
+            let filters: UserFilters = {
+              keywords: ['Victor']
+            }
 
-            service.getUsers(0, 10, keywords).subscribe(result => {
+            service.getUsers(0, 10, undefined, undefined, filters).subscribe(result => {
                 expect(result).toEqual(mockPage);
             });
 
             const req = httpMock.expectOne(req => req.url === apiUrl && req.params.get('page') === '0');
             expect(req.request.headers.get('Authorization')).toBe(`Bearer ${mockToken}`);
             expect(req.request.params.get('size')).toBe('10');
-            expect(req.request.params.getAll('listKeywords')).toEqual(keywords);
+            
+            const filterParam = req.request.params.get('filter');
+            expect(filterParam).not.toBeNull();
+            const parsedFilter = JSON.parse(filterParam!);
+            expect(parsedFilter.keywords).toEqual(filters.keywords);
+
             req.flush(mockPage);
         });
 
         it('should include sort parameters when provided', () => {
-            service.getUsers(0, 10, [], 'firstName', 'ASC').subscribe();
+            service.getUsers(0, 10, 'firstName', 'ASC', {}).subscribe();
 
             const req = httpMock.expectOne(req => req.url === apiUrl);
             expect(req.request.params.get('sort')).toBe('firstName,ASC');
@@ -68,7 +76,7 @@ describe('UserService', () => {
         });
 
         it('should not include sort parameter when sortField is missing', () => {
-            service.getUsers(0, 10, [], '', 'ASC').subscribe();
+            service.getUsers(0, 10, '', 'ASC', {}).subscribe();
 
             const req = httpMock.expectOne(req => req.url === apiUrl);
             expect(req.request.params.has('sort')).toBeFalse();

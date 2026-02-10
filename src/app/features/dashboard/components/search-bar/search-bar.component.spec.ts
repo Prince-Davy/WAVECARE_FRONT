@@ -57,6 +57,26 @@ describe('SearchBarComponent', () => {
     expect(component.listKeywords.length).toBe(1);
   });
 
+  it('supprime un role lorsque removeRoleFilter() est appelée', () => {
+    component.advancedFilters.role = ['testRole', 'exampleRole'];
+    component.removeRoleFilter('testRole');
+    expect(component.advancedFilters.role).not.toContain('testRole');
+    expect(component.advancedFilters.role?.length).toBe(1);
+  });
+
+  it('supprime un statut lorsque removeStatusFilter() est appelée', () => {
+    component.advancedFilters.status = ['testStatus', 'exampleStatus'];
+    component.removeStatusFilter('testStatus');
+    expect(component.advancedFilters.status).not.toContain('testStatus');
+    expect(component.advancedFilters.status?.length).toBe(1);
+  });
+
+  it('supprime la date lorsque removeDateFilter() est appelée', () => {
+    component.advancedFilters.createdDate = '01/01/2026'
+    component.removeDateFilter();
+    expect(component.advancedFilters.createdDate).toBe('');
+  });
+
   it('émet keywordsChanged lorsqu\'un mot-clé est ajouté', () => {
     spyOn(component.keywordsChanged, 'emit');
     component.inputValue = 'test';
@@ -75,6 +95,18 @@ describe('SearchBarComponent', () => {
     component.listKeywords = ['test', 'example'];
     component.removeAllKeywords();
     expect(component.listKeywords.length).toBe(0);
+  });
+
+  it('réinitialise tous les filtres avancés lorsque removeAllKeywords() est appelée', () => {
+    component.advancedFilters = {
+      role: ['testRole'],
+      status: ['testStatus'],
+      createdDate: '01/01/2026'
+    }
+    component.removeAllKeywords();
+    expect(component.advancedFilters.role?.length).toBe(0);
+    expect(component.advancedFilters.status?.length).toBe(0);
+    expect(component.advancedFilters.createdDate).toBe('');
   });
 
   it('émet keywordsChanged lorsque tous les mots-clés sont réinitialisés', () => {

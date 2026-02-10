@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
@@ -7,6 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
+import { AdvancedFiltersComponent, AdvancedFilters } from './filters/advanced-filters.component';
+import { FilterUtils } from '@app/features/utils/filter.utils';
 
 
 @Component({
@@ -18,7 +20,8 @@ import { TranslateModule } from '@ngx-translate/core';
     MatInputModule,
     MatChipsModule,
     FormsModule,
-    MatIconModule
+    MatIconModule,
+    AdvancedFiltersComponent
 ],
   templateUrl: './search-bar.component.html',
   styleUrl: './search-bar.component.scss'
@@ -31,16 +34,34 @@ export class SearchBarComponent {
 
   listKeywords: string[] = [];
   inputValue: string = '';
+  isFiltersOpen: boolean = false;
+  advancedFilters: AdvancedFilters = {};
 
   @Input() totalResults: number = 0;
+  @Input() showAdvancedFilters: boolean = false;
   @Output() keywordsChanged = new EventEmitter<string[]>();
-  
+  @Output() filtersChanged = new EventEmitter<AdvancedFilters>();
 
 	@Output() resetRequested = new EventEmitter<void>();
 
 	onReset(): void {
 		this.removeAllKeywords();
+		this.isFiltersOpen = false;
 		this.resetRequested.emit();
+	}
+
+	toggleFilters(): void {
+		this.isFiltersOpen = !this.isFiltersOpen;
+	}
+
+	onAdvancedFiltersChanged(filters: AdvancedFilters): void {
+		this.advancedFilters = filters;
+		this.filtersChanged.emit(filters);
+	}
+
+	onAdvancedFiltersReset(): void {
+		this.advancedFilters = {};
+		this.filtersChanged.emit({});
 	}
 
 
@@ -64,8 +85,47 @@ export class SearchBarComponent {
     }
   }
 
+  removeRoleFilter(filter: string): void {
+    const index = this.advancedFilters.role?.indexOf(filter) ?? -1;
+    if (index >= 0) {
+      this.advancedFilters.role?.splice(index, 1);
+      this.filtersChanged.emit(this.advancedFilters);
+    }
+  }
+
+  removeStatusFilter(filter: string): void {
+    const index = this.advancedFilters.status?.indexOf(filter) ?? -1;
+    if (index >= 0) {
+      this.advancedFilters.status?.splice(index, 1);
+      this.filtersChanged.emit(this.advancedFilters);
+    }
+  }
+
+  removeDateFilter(): void {
+    this.advancedFilters.createdDate = ''
+    this.filtersChanged.emit(this.advancedFilters);
+  }
+
+  getRoleLabel(role: string): string {
+    return FilterUtils.getRoleLabel(role);
+  }
+
+  getStatusLabel(status: string): string {
+    return FilterUtils.getStatusLabel(status);
+  }
+
+  formatDate(dateInput: string | Date | null): string {
+    return FilterUtils.formatDate(dateInput);
+  }
+
   removeAllKeywords(): void {
     this.listKeywords = [];
+    this.advancedFilters = {
+      role: [],
+      status: [],
+      createdDate: ''
+    }
     this.keywordsChanged.emit(this.listKeywords);
+    // this.filtersChanged.emit(this.advancedFilters);
   }
 }

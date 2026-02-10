@@ -14,6 +14,16 @@
     </div>
   </div>
 
+  <!-- Advanced Filters -->
+  @if (showAdvancedFilters) {
+  <app-advanced-filters 
+    [isOpen]="isFiltersOpen" 
+    (toggleOpen)="toggleFilters()" 
+    (filtersChanged)="onAdvancedFiltersChanged($event)"
+    (reset)="onAdvancedFiltersReset()">
+  </app-advanced-filters>
+  }
+
   <div class="chip-row">
     <div class="left-section">
       <p class="results-text">
@@ -25,6 +35,30 @@
         @for (keyword of listKeywords; track keyword) {
         <mat-chip [removable]="true" (removed)="removeKeyword(keyword)" class="custom-chip">
           {{ keyword }}
+          <button matChipRemove>
+            <mat-icon tabindex=0>close</mat-icon>
+          </button>
+        </mat-chip>
+        }
+        @for (roleFilter of advancedFilters.role; track roleFilter) {
+        <mat-chip [removable]="true" (removed)="removeRoleFilter(roleFilter)" class="custom-chip">
+          {{ getRoleLabel(roleFilter) | translate}}
+          <button matChipRemove>
+            <mat-icon tabindex=0>close</mat-icon>
+          </button>
+        </mat-chip>
+        }
+        @for (statusFilter of advancedFilters.status; track statusFilter) {
+        <mat-chip [removable]="true" (removed)="removeStatusFilter(statusFilter)" class="custom-chip">
+          {{ getStatusLabel(statusFilter) | translate}}
+          <button matChipRemove>
+            <mat-icon tabindex=0>close</mat-icon>
+          </button>
+        </mat-chip>
+        }
+        @if (advancedFilters.createdDate) {
+        <mat-chip [removable]="true" (removed)="removeDateFilter()" class="custom-chip">
+          {{ formatDate(advancedFilters.createdDate) }}
           <button matChipRemove>
             <mat-icon tabindex=0>close</mat-icon>
           </button>

@@ -345,6 +345,20 @@
             "plural": " tickets trouvés"
           }
         }
+      },
+      "advanced-filters": {
+        "title": "Filtres avancés",
+        "roles": {
+          "title": "Rôle"
+        },
+        "status": {
+          "title": "Statut"
+        },
+        "createdDate": {
+          "title": "Date de création",
+          "placeholder": "jj/mm/aaaa"
+        },
+        "apply": "APPLIQUER LES FILTRES"
       }
     },
     "notification": {
@@ -386,7 +400,9 @@
     "user": {
       "status": {
         "locked": "Bloqué",
-        "active": "Actif"
+        "active": "Actif",
+        "to_validate": "À valider",
+        "blocked": "Bloqué"
       },
       "role": {
         "administrator": "Administrateur",
