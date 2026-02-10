@@ -6,8 +6,8 @@
         </button>
   </div>
   <div>
-    <app-search-bar [totalResults]="resultsLength" (keywordsChanged)="keywordsChanged($event)"
-      (resetRequested)="resetTable()">
+    <app-search-bar [totalResults]="resultsLength" [showAdvancedFilters]="true"
+      (keywordsChanged)="keywordsChanged($event)"(filtersChanged)="advancedFiltersChanged($event)" (resetRequested)="resetTable()">
     </app-search-bar>
   </div>
 

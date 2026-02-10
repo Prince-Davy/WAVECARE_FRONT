@@ -20,6 +20,8 @@ import { UserDetailUpdateDTO } from '../../models/user-detail-update';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { DeleteUserDialogComponent } from '../delete-user-dialog/delete-user-dialog.component';
+import { AdvancedFilters } from '@app/features/dashboard/components/search-bar/filters/advanced-filters.component';
+import { UserFilters } from '../../models/user-filters';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
@@ -46,6 +48,8 @@ export class UserTableComponent extends DashboardComponent {
   resultsLength: number = 0;
   pageSize: number = this.pageSizeOptions[1];
   listKeywords: string[] = [];
+  advancedFilters: AdvancedFilters = {};
+  filters: UserFilters = {};
 
   constructor(
     private userService: UserService,
@@ -68,16 +72,26 @@ export class UserTableComponent extends DashboardComponent {
       this.paginator.pageIndex = pageIndex;
     }
 
-    // ✅ Tri côté serveur (fallback sur creationDate asc)
-    const sortField = this.sort?.active || 'creationDate';
-    const sortDirection = (this.sort?.direction || 'asc') as 'asc' | 'desc';
+    const sortField = this.sort?.active || 'creationDate'; // fallback si rien
+    const sortDirection = this.sort?.direction || 'asc';
+
+
+    this.filters = {
+      ...this.filters,
+      keywords: this.listKeywords ?? this.filters.keywords,
+      roles: this.advancedFilters?.role ?? this.filters.roles,
+      statuses: this.advancedFilters?.status ?? this.filters.statuses,
+      creationDate: this.advancedFilters?.createdDate ?? this.filters.creationDate,
+    };
 
     this.userService.getUsers(
       this.paginator.pageIndex,
       this.paginator.pageSize,
-      this.listKeywords,
       sortField,
-      sortDirection
+      sortDirection,
+      this.filters
+    ).pipe(
+      finalize(() => this.isLoading = false)
     )
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
@@ -216,8 +230,20 @@ openCreateUserDialog() {
     this.refreshTable(0);
   }
 
+  advancedFiltersChanged(filters: AdvancedFilters): void {
+    this.advancedFilters = filters;
+    this.refreshTable(0);
+  }
+
+  applyFilters(filters: { role?: string[]; status?: string[]; createdDate?: string }): void {
+    this.advancedFilters = filters;
+    this.refreshTable(0);
+  }
+
   resetTable(): void {
     this.listKeywords = [];
+    this.advancedFilters = {};
+    this.filters = {};
     this.sort.active = '';
     this.sort.direction = '';
     this.paginator.pageIndex = 0;
