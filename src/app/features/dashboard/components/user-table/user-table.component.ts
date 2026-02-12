@@ -23,6 +23,7 @@ import { DeleteUserDialogComponent } from '../delete-user-dialog/delete-user-dia
 import { AdvancedFilters } from '@app/features/dashboard/components/search-bar/filters/advanced-filters.component';
 import { UserFilters } from '../../models/user-filters';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
 
 @Component({
   selector: 'app-user-table',
@@ -48,15 +49,18 @@ export class UserTableComponent extends DashboardComponent {
   resultsLength: number = 0;
   pageSize: number = this.pageSizeOptions[1];
   listKeywords: string[] = [];
+  currentUserId!: string;
   advancedFilters: AdvancedFilters = {};
   filters: UserFilters = {};
 
   constructor(
     private userService: UserService,
     private notificationService: NotificationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private authTokenService: AuthTokenService
   ) {
     super();
+    this.currentUserId = this.authTokenService.getUserIdFromToken() ?? '';
   }
 
   ngAfterViewInit(): void {
@@ -87,6 +91,7 @@ export class UserTableComponent extends DashboardComponent {
     this.userService.getUsers(
       this.paginator.pageIndex,
       this.paginator.pageSize,
+      this.listKeywords,
       sortField,
       sortDirection,
       this.filters
@@ -194,10 +199,19 @@ openCreateUserDialog() {
       });
   }
 
+  isCurrentUser(user: any): boolean {
+  return user?.id === this.currentUserId;
+  }
+
   openDeleteUserDialog(user: any) {
-    const dialogRef = this.dialog.open(DeleteUserDialogComponent, {
-      data: user
-    });
+  if (this.isCurrentUser(user)) {
+    this.notificationService.openErrorSnackBar(
+      this.translate.instant('feature.dashboard.user-table-component.table.column.action.delete.message.self.error')
+    );
+    return;
+  }
+
+    const dialogRef = this.dialog.open(DeleteUserDialogComponent, { data: user });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
