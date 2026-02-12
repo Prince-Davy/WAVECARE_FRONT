@@ -18,12 +18,12 @@ export class UserService {
 	constructor(private http: HttpClient, private authTokenService: AuthTokenService) { }
 
   getUsers(
-    page: number,
-    size: number,
-    sortField?: string,
-    sortDirection?: string,
-    filters?: UserFilters
-  ): Observable<Page<UserViewDTO>> {
+	page: number,
+	size: number,
+	listKeywords: string[],
+	sortField?: string,
+	sortDirection?: string,
+	filters?: UserFilters  ): Observable<Page<UserViewDTO>> {
   
     const sort = sortField && sortDirection
       ? `${sortField},${sortDirection}`

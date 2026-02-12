@@ -54,4 +54,35 @@ export class AuthTokenService {
 
     return decodedToken.name ? `${decodedToken.name}` : `${decodedToken.given_name} ${decodedToken.family_name}`;
   }
+
+  getUserIdFromToken(): string | null {
+  const token = this.getToken();
+  if (!token) return null;
+
+  const parts = token.split('.');
+  if (parts.length !== 3) return null;
+
+  try {
+    const payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const json = decodeURIComponent(
+      atob(payload)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    const decoded = JSON.parse(json);
+    return (decoded.sub ?? null)?.toString();
+  } catch {
+    return null;
+  }
+}
+
+  getUserId(): string | null {
+    const token = this.getToken();
+    if (!token) {
+      return null;
+    }
+    const decodedToken: ExtendedJwtPayload = jwtDecode(token);
+    return (decodedToken.sub ?? null) as string | null;
+  }
 }
