@@ -7,8 +7,8 @@ import { Page } from "../models/page";
 import { UserViewDTO } from "../models/user-view-dto";
 import { UserDetailDTO } from "../models/user-detail-dto";
 import { UserDetailUpdateDTO } from "../models/user-detail-update";
-import { AdvancedFilters } from "../components/search-bar/filters/advanced-filters.component";
 import { UserFilters } from "../models/user-filters";
+import { UserCreateDTO } from "../components/user-dialog/user-dialog.component";
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -70,9 +70,11 @@ export class UserService {
 	 * @returns Observable<string[]> La liste des rôles utilisateurs
 	 */
 	getUserRoles(): Observable<string[]> {
-		const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.authTokenService.getToken()}`
-		});
+		const token = this.authTokenService.getToken();
+
+		const headers = token
+			? new HttpHeaders({ Authorization: `Bearer ${token}` })
+			: new HttpHeaders();
 
 		return this.http.get<string[]>(`${this.apiUrlUsers}/roles`, { headers });
 	}
@@ -100,7 +102,7 @@ export class UserService {
 		return this.http.delete<void>(`${this.apiUrlUsers}/${userId}`, { headers });
 	}
 
-	createUser(payload: UserDetailUpdateDTO) {
+	createUser(payload: UserCreateDTO): Observable<void> {
 		const headers = new HttpHeaders({
 			Authorization: `Bearer ${this.authTokenService.getToken()}`
 		});
