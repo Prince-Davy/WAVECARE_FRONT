@@ -12,13 +12,21 @@ import { UserDetailDTO } from '../../models/user-detail-dto';
 import { UserDetailUpdateDTO } from '../../models/user-detail-update';
 
 export interface UserDialogData {
-  userDetailDTO: UserDetailDTO;
+  user: UserCreateDTO |UserDetailDTO;
   roles: string[];
   mode?: 'create' | 'update';
 }
 
+export interface UserCreateDTO {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+}
+
 @Component({
   selector: 'app-user-dialog',
+  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -29,6 +37,7 @@ export interface UserDialogData {
     MatDialogModule,
     MatInputModule,
     MatIcon,
+    MatDialogModule,
     TranslateModule
 ],
   templateUrl: './user-dialog.component.html',
@@ -37,7 +46,7 @@ export interface UserDialogData {
 export class UserDialogComponent implements AfterViewInit {
   readonly dialogRef = inject(MatDialogRef<UserDialogComponent>);
   readonly data = inject<UserDialogData>(MAT_DIALOG_DATA);
-  readonly userDetailDTO = this.data.userDetailDTO;
+  readonly user = this.data.user;
 
   userDialogForm: FormGroup<any>;
 
@@ -53,22 +62,34 @@ export class UserDialogComponent implements AfterViewInit {
 
   constructor(private fb: FormBuilder) {
     const isCreate = this.data.mode === 'create';
+
     this.userDialogForm = this.fb.group({
-      lastName: [this.data.userDetailDTO.lastName, [Validators.required]],
-      firstName: [this.data.userDetailDTO.firstName, [Validators.required]],
-      email: [{ value: this.data.userDetailDTO.email, disabled: !isCreate }, [Validators.required, Validators.email]],
-      role: [this.data.userDetailDTO.role, [Validators.required]]
+      lastName: [this.data.user.lastName ?? '', Validators.required],
+      firstName: [this.data.user.firstName ?? '', Validators.required],
+      email: [{ value: this.data.user.email ?? '', disabled: !isCreate }, [Validators.required, Validators.email]],
+      role: [this.data.user.role ?? this.data.roles?.[0] ?? '0', Validators.required]
     });
   }
 
-  validate(): UserDetailUpdateDTO {
+  validate():  UserCreateDTO | UserDetailUpdateDTO {
     const formValue = this.userDialogForm.getRawValue();
-    const selectedRoles = this.data.roles.find(s => s === formValue.role);
-    this.data.userDetailDTO.role = selectedRoles ?? "0";
-    this.data.userDetailDTO.lastName = formValue.lastName ?? '';
-    this.data.userDetailDTO.firstName = formValue.firstName ?? '';  
-    this.data.userDetailDTO.email = formValue.email ?? this.data.userDetailDTO.email;
 
-    return this.data.userDetailDTO;
+    if (this.data.mode === 'create') {
+        return { firstName: formValue.firstName, lastName: formValue.lastName, email: formValue.email, role: formValue.role };
+      }
+
+    const updateUser = this.data.user as UserDetailUpdateDTO;
+    return { id: updateUser.id, firstName: formValue.firstName, lastName: formValue.lastName, role: formValue.role, email: updateUser.email };
+
+    /*
+    const selectedRoles = this.data.roles.find(s => s === formValue.role);
+
+      this.data.user.role = selectedRoles ?? "0";
+      this.data.user.lastName = formValue.lastName ?? '';
+      this.data.user.firstName = formValue.firstName ?? '';  
+      this.data.user.email = formValue.email ?? this.data.user.email;
+
+      return this.data.user;
+      */
   }
 }
