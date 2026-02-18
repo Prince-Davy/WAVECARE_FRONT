@@ -31,6 +31,8 @@
         {{totalResults}}
         {{ getTranslationResultsFound(totalResults) | translate}}
       </p>
+    </div>
+
       <div class="chip-list">
         @for (keyword of listKeywords; track keyword) {
         <mat-chip [removable]="true" (removed)="removeKeyword(keyword)" class="custom-chip">
@@ -65,8 +67,6 @@
         </mat-chip>
         }
       </div>
-    </div>
-
     <div class="right-section">
       <button mat-raised-button class="action-button" (click)="onReset()">
         {{'feature.dashboard.search-bar.search-bar-component.reset' | translate}}
