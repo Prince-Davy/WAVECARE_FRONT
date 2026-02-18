@@ -57,10 +57,11 @@ mat-form-field {
 
 .chip-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
+  gap: 10%;
+  padding: 10px;
 }
 
 .chip-row .left-section .results-text,
