@@ -20,7 +20,8 @@
     [isOpen]="isFiltersOpen" 
     (toggleOpen)="toggleFilters()" 
     (filtersChanged)="onAdvancedFiltersChanged($event)"
-    (reset)="onAdvancedFiltersReset()">
+    (reset)="onAdvancedFiltersReset()"
+    [filters]="advancedFilters">
   </app-advanced-filters>
   }
 
@@ -68,9 +69,11 @@
         }
       </div>
     <div class="right-section">
+    @if (showResetButton) {
       <button mat-raised-button class="action-button" (click)="onReset()">
         {{'feature.dashboard.search-bar.search-bar-component.reset' | translate}}
       </button>
+    }
     </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -59,6 +59,7 @@ export interface AdvancedFilters {
 })
 export class AdvancedFiltersComponent implements OnInit {
   @Input() isOpen: boolean = false;
+  @Input() filters: AdvancedFilters = {};
   @Output() filtersChanged = new EventEmitter<AdvancedFilters>();
   @Output() toggleOpen = new EventEmitter<void>();
   @Output() reset = new EventEmitter<void>();
@@ -87,6 +88,31 @@ export class AdvancedFiltersComponent implements OnInit {
       next: roles => this.roles = roles,
       error: err => console.error('Erreur chargement rôles', err)
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['filters'] && this.filters) {
+      const f = this.filters;
+      // set roles
+      this.filtersForm.get('roles')?.setValue(f.role ?? []);
+      // set statuses
+      this.filtersForm.get('statuses')?.setValue(f.status ?? []);
+      // set createdDate (convert dd-MM-yyyy string back to Date for the datepicker if present)
+      if (f.createdDate) {
+        const parts = f.createdDate.split('-');
+        if (parts.length === 3) {
+          const day = Number(parts[0]);
+          const month = Number(parts[1]) - 1;
+          const year = Number(parts[2]);
+          this.filtersForm.get('createdDate')?.setValue(new Date(year, month, day));
+        } else {
+          this.filtersForm.get('createdDate')?.setValue('');
+        }
+      } else {
+        this.filtersForm.get('createdDate')?.setValue('');
+      }
+      this.cdr.markForCheck();
+    }
   }
 
 

@@ -36,6 +36,14 @@ export class SearchBarComponent {
   inputValue: string = '';
   isFiltersOpen: boolean = false;
   advancedFilters: AdvancedFilters = {};
+  get showResetButton(): boolean {
+    const hasKeywords = Array.isArray(this.listKeywords) && this.listKeywords.length > 0;
+    const af = this.advancedFilters || {} as any;
+    const hasRole = Array.isArray(af.role) && af.role.length > 0;
+    const hasStatus = Array.isArray(af.status) && af.status.length > 0;
+    const hasDate = !!af.createdDate && af.createdDate !== '';
+    return hasKeywords || hasRole || hasStatus || hasDate;
+  }
 
   @Input() totalResults: number = 0;
   @Input() showAdvancedFilters: boolean = false;
@@ -55,8 +63,8 @@ export class SearchBarComponent {
 	}
 
 	onAdvancedFiltersChanged(filters: AdvancedFilters): void {
-		this.advancedFilters = filters;
-		this.filtersChanged.emit(filters);
+    this.advancedFilters = filters;
+    this.filtersChanged.emit(filters);
 	}
 
 	onAdvancedFiltersReset(): void {
