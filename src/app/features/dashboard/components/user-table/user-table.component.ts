@@ -38,7 +38,7 @@ import { AuthTokenService } from '@app/features/auth/services/auth-token.service
 export class UserTableComponent extends DashboardComponent {
   readonly dialog = inject(MatDialog);
 
-  displayedColumns: string[] = ['firstName', 'lastName', 'email', 'role', 'locked', 'creationDate', 'update', 'delete'];
+  displayedColumns: string[] = ['lastName', 'firstName', 'email', 'role', 'locked', 'creationDate', 'update', 'delete'];
   dataSource: MatTableDataSource<UserViewDTO> = new MatTableDataSource<UserViewDTO>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;

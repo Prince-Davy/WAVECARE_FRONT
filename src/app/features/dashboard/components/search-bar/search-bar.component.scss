@@ -99,10 +99,18 @@ mat-form-field {
 }
 
 .custom-chip {
-  --mdc-chip-elevated-container-color: #E6197A;
   --mat-sys-outline: #E6197A;
-  --mdc-chip-label-text-color: white;
 }
+
+.mdc-evolution-chip {
+  background-color: #E6197A !important;
+  border-color: #E6197A !important;
+}
+
+:host ::ng-deep .custom-chip .mdc-evolution-chip__text-label {
+  color: white !important;
+}
+
 .custom-chip mat-icon {
   color: white;
 }
