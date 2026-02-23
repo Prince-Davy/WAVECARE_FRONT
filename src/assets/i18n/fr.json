@@ -236,16 +236,16 @@
               "label": "Nom"
             },
             "email": {
-              "label": "Mail"
+              "label": "Email"
             },
             "role": {
-              "label": "Role"
+              "label": "Rôle"
             },
             "status": {
               "label": "Statut"
             },
             "creationDate": {
-              "label": "Date de création"
+              "label": "Date création"
             },
             "update": {
               "label": "Modifier",
