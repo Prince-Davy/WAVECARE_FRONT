@@ -289,6 +289,36 @@
           }
         }
       },
+      "patient-table-component": {
+        "title": "Recherche du patient",
+        "search": {
+          "search-information": "NNS, nom et/ou prénom",
+          "helper-text": "Consulter N°NNS ",
+          "placeholder": ""
+
+        },
+        "table": {
+          "column": {
+            "id": { "label": "Id" },
+            "lastName": { "label": "Nom" },
+            "firstName": { "label": "Prénom" },
+            "ins": { "label": "N°NNS" },
+            "birthDate": { "label": "Date de naissance" },
+            "action": {
+              "label": "Action",
+              "tooltip": "Consulter"
+            }
+          },
+          "paginator": {
+            "itemsPerPage": "Nombre de lignes par page ",
+            "nextPage": "Suivant",
+            "previousPage": "Précédent",
+            "firstPage": "Première page",
+            "lastPage": "Dernière page",
+            "of": "sur"
+          }
+        }
+      },
       "user-dialog-component": {
         "title": {
           "create": "Créer un profil",
@@ -376,7 +406,8 @@
         "logo-alt": "Logo de l'application wavecare",
         "menu": {
           "ticket-management-dashboard": "Suivi des tickets",
-          "user-management-dashboard": "Gestion des profils"
+          "user-management-dashboard": "Gestion des profils",
+          "patient-management-dashboard": "Recherche patients"
         },
         "logout-button": "Déconnexion"
       }

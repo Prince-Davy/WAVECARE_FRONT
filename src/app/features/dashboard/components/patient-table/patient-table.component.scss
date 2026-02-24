@@ -1,0 +1,40 @@
+.table-container {
+  padding: 32px 40px;
+}
+
+.title {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0 0 24px 0;
+}
+
+.search-section {
+  margin-bottom: 18px;
+}
+
+.table-wrapper {
+  overflow: auto;
+}
+
+.action-icon {
+  cursor: pointer;
+  user-select: none;
+}
+
+
+.header-search {
+  display: flex;
+  align-items: first baseline;
+  justify-content: space-between; /* écarte titre à gauche / input à droite */
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.header-search .title {
+  margin: 0;
+}
+
+.header-search app-search-bar {
+  width: 450px; /* Ajuste à ton besoin */
+  display: block;
+}
