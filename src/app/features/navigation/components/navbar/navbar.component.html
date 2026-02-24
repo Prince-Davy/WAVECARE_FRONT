@@ -14,6 +14,11 @@
     <span class="custom-tab-button-label">{{'feature.navigation.navbar-component.menu.user-management-dashboard' | translate}}</span>
     <span class="custom-tab-button-underline" [class]="router.url === PATH_TO_USERS_FOR_HTML ? 'pink' : 'transparent'"></span>
   </a>
+
+  <a class="custom-tab-button" [routerLink]="PATH_TO_PATIENTS_FOR_HTML" href="#">
+    <span class="custom-tab-button-label">{{'feature.navigation.navbar-component.menu.patient-management-dashboard' | translate}}</span>
+    <span class="custom-tab-button-underline" [class]="router.url === PATH_TO_PATIENTS_FOR_HTML ? 'pink' : 'transparent'"></span>
+  </a>
   <span class="spacer"></span>
   <div class="account-actions">
     <div class="user-info">

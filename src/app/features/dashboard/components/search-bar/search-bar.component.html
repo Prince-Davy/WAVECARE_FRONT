@@ -2,13 +2,14 @@
   <div class="search-bar">
     <span class="search-label">
       <label for="search-bar">{{'feature.dashboard.search-bar.search-bar-component.search.label' | translate}}</label>
-      <span>{{'feature.dashboard.search-bar.search-bar-component.search-information' | translate}}</span>
+      <span>{{infoKey | translate}}</span>
+
     </span>
     <div class="search-actions">
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <input id="search-bar" matInput [(ngModel)]="inputValue" [placeholder]="'feature.dashboard.search-bar.search-bar-component.search-input-placeholder' | translate" (keyup.enter)="addKeyword()" />
+        <input id="search-bar" matInput [(ngModel)]="inputValue" [placeholder]="placeholderKey | translate" (keyup.enter)="onSearch()" />
       </mat-form-field>
-      <button mat-raised-button class="search-button" (click)="addKeyword()">
+      <button mat-raised-button class="search-button" (click)="onSearch()">
         {{'feature.dashboard.search-bar.search-bar-component.search.button' | translate}}
       </button>
     </div>

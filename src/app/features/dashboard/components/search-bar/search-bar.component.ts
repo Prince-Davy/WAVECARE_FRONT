@@ -45,6 +45,16 @@ export class SearchBarComponent {
     return hasKeywords || hasRole || hasStatus || hasDate;
   }
 
+    @Input() mode: 'chips' | 'simple' = 'chips';
+
+  // Personnalisation labels (patients vs tickets)
+  @Input() placeholderKey = 'feature.dashboard.search-bar.search-bar-component.search-input-placeholder';
+  @Input() infoKey = 'feature.dashboard.search-bar.search-bar-component.search-information';
+
+
+  // Pour le mode simple : un seul terme (pas de chips obligatoires)
+  @Output() simpleSearch = new EventEmitter<string>();
+
   @Input() totalResults: number = 0;
   @Input() showAdvancedFilters: boolean = false;
   @Output() keywordsChanged = new EventEmitter<string[]>();
@@ -52,11 +62,41 @@ export class SearchBarComponent {
 
 	@Output() resetRequested = new EventEmitter<void>();
 
-	onReset(): void {
+	/*
+  onReset(): void {
 		this.removeAllKeywords();
 		this.isFiltersOpen = false;
 		this.resetRequested.emit();
 	}
+  */
+
+  onReset(): void {
+  this.inputValue = '';          
+  this.removeAllKeywords();
+  this.isFiltersOpen = false;
+
+  // si mode simple : déclencher une recherche vide (retour liste complète)
+  if (this.mode === 'simple') {
+    this.simpleSearch.emit('');
+  }
+
+  this.resetRequested.emit();
+}
+
+  onSearch(): void {
+  const trimmed = (this.inputValue ?? '').trim();
+
+  // Mode patient/simple : on émet directement la valeur
+  if (this.mode === 'simple') {
+
+    this.listKeywords = trimmed ? [trimmed.toLowerCase()] : [];
+    this.simpleSearch.emit(trimmed);
+    return;
+  }
+
+  // Mode actuel : chips
+  this.addKeyword();
+}
 
 	toggleFilters(): void {
 		this.isFiltersOpen = !this.isFiltersOpen;
