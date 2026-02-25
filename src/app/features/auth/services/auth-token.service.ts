@@ -2,6 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ExtendedJwtPayload } from '@app/features/auth/models/extended-jwt-payload.interface';
 import { jwtDecode } from "jwt-decode";
+import { Roles } from '@app/features/auth/models/roles.model';
 
 @Injectable({
   providedIn: 'root'
@@ -56,26 +57,26 @@ export class AuthTokenService {
   }
 
   getUserIdFromToken(): string | null {
-  const token = this.getToken();
-  if (!token) return null;
+    const token = this.getToken();
+    if (!token) return null;
 
-  const parts = token.split('.');
-  if (parts.length !== 3) return null;
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
 
-  try {
-    const payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
-    const json = decodeURIComponent(
-      atob(payload)
-        .split('')
-        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
-    );
-    const decoded = JSON.parse(json);
-    return (decoded.sub ?? null)?.toString();
-  } catch {
-    return null;
+    try {
+      const payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      const json = decodeURIComponent(
+        atob(payload)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      const decoded = JSON.parse(json);
+      return (decoded.sub ?? null)?.toString();
+    } catch {
+      return null;
+    }
   }
-}
 
   getUserId(): string | null {
     const token = this.getToken();
@@ -85,4 +86,36 @@ export class AuthTokenService {
     const decodedToken: ExtendedJwtPayload = jwtDecode(token);
     return (decodedToken.sub ?? null) as string | null;
   }
+
+  getUserRoles(): string[] {
+    const token = this.getToken();
+    if (!token) return [];
+
+    const decoded: any = jwtDecode(token);
+
+    const realmRoles = decoded?.realm_access?.roles ?? [];
+    const clientRoles = decoded?.resource_access?.wavecare_web?.roles ?? [];
+
+    // important : normalisation en UPPERCASE
+    return [...realmRoles, ...clientRoles]
+      .filter(Boolean)
+      .map((r: string) => r.toUpperCase());
+  }
+
+  hasRole(role: string): boolean {
+    return this.getUserRoles().includes(role.toUpperCase());
+  }
+
+  isAdministrator(): boolean {
+    return this.hasRole(Roles.ADMINISTRATOR);
+  }
+
+  isRadiologist(): boolean {
+    return this.hasRole(Roles.RADIOLOGIST);
+  }
+
+  isRadioOperator(): boolean {
+    return this.hasRole(Roles.RADIO_OPERATOR);
+  }
+
 }
