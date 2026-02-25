@@ -1,0 +1,117 @@
+/* ============================
+   Fil d'Ariane – moderne/UX
+   ============================ */
+
+/* Thème (override possible via :host-context(body[data-theme='dark'])) */
+.inner-breadcrumb {
+  /* Variables themables */
+  --bc-link: var(--mdc-theme-primary, #005ea5);
+  --bc-link-hover: color-mix(in oklab, var(--bc-link), #000 12%);
+  --bc-text: var(--mdc-theme-on-surface, #1f2937);
+  --bc-muted: var(--mdc-theme-on-surface-variant, #6b7280);
+  --bc-focus: 2px solid var(--mdc-theme-primary, #005ea5);
+  --bc-gap: .25rem;
+  --bc-font: var(--mdc-typography-body2, 400 0.95rem/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif);
+  --bc-label-max: 60ch; /* troncature du dernier segment */
+
+  display: block;
+  font: var(--bc-font);
+  color: var(--bc-text);
+}
+
+/* Liste : suppression puces/marges + layout horizontal */
+.inner-breadcrumb__list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  display: flex;
+  align-items: center;
+  gap: var(--bc-gap);
+  line-height: 1.4;
+}
+
+/* Item : neutralise tout marker potentiel + base layout */
+.inner-breadcrumb__item {
+  list-style: none !important;
+  margin: 0;
+  padding: 0;
+  &::marker { content: none !important; }
+
+  display: inline-flex;
+  align-items: center;
+  min-width: 0; /* permet la troncature */
+}
+
+/* Lien (segments cliquables) */
+.inner-breadcrumb__link {
+  color: var(--bc-link);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0 .125rem;
+  border-radius: 6px;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+
+  &:hover {
+    color: var(--bc-link-hover);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  &:active {
+    transform: translateY(0.5px);
+  }
+  &:focus-visible {
+    outline: var(--bc-focus);
+    outline-offset: 2px;
+  }
+}
+
+/* Élément courant (non cliquable) */
+.inner-breadcrumb__current {
+  font-weight: 700;
+  color: var(--bc-text);
+  max-inline-size: var(--bc-label-max);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Séparateur chevron Material */
+.inner-breadcrumb__sep {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+  color: var(--bc-muted);
+  margin: 0 .125rem;
+  vertical-align: middle;
+}
+
+/* Mode sombre (si tu as un switch global) */
+:host-context(body[data-theme='dark']) .inner-breadcrumb {
+  --bc-text: #e5e7eb;
+  --bc-muted: #9ca3af;
+  --bc-link: #8cc8ff;
+  --bc-link-hover: #b3dcff;
+}
+
+/* Densité compacte : ajoute la classe .inner-breadcrumb--dense sur le nav si besoin */
+.inner-breadcrumb--dense {
+  --bc-font: var(--mdc-typography-body2, 400 0.9rem/1.3 system-ui, sans-serif);
+  --bc-gap: .2rem;
+
+  .inner-breadcrumb__sep { font-size: 16px; height: 16px; width: 16px; }
+}
+
+/* Responsive : sur mobile, on tronque plus agressivement le dernier segment */
+@media (max-width: 480px) {
+  .inner-breadcrumb {
+    --bc-label-max: 18ch;
+  }
+}
+
+/* Préférence utilisateur : pas d’animations transitoires */
+@media (prefers-reduced-motion: reduce) {
+  .inner-breadcrumb__link { transition: none; }
+}

@@ -1,4 +1,21 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
+
+// utility to parse dd/MM/yyyy strings into Date objects
+function parseBirthDate(value: string): Date {
+  if (!value) {
+    return new Date(NaN);
+  }
+  const parts = value.split('/');
+  if (parts.length === 3) {
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parseInt(parts[2], 10);
+    return new Date(year, month, day);
+  }
+  // fallback to native parser
+  return new Date(value);
+}
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
@@ -13,15 +30,15 @@ import { finalize, merge, startWith } from 'rxjs';
 import { DashboardComponent } from '@app/features/dashboard/abstract/dashboard-component.abstract';
 import { Page } from '@app/features/dashboard/models/page';
 import { SearchBarComponent } from '@app/features/dashboard/components/search-bar/search-bar.component';
-import { PatientService } from '@app/features/auth/services/patient.service';
+import { PatientService } from '@app/features/dashboard/services/patient.service';
 
 
 export interface PatientDTO {
   id: number;
   lastName: string;
   firstName: string;
-  ins: string;         
-  birthDate: string;
+  ins: string;
+  birthDate: Date; // converted from backend string
 }
 
 export interface PatientFilters {
@@ -42,6 +59,7 @@ export interface PatientFilters {
     MatTooltipModule,
     TranslateModule,
     SearchBarComponent,
+    RouterModule
   ],
   providers: [PatientService],
   templateUrl: './patient-table.component.html',
@@ -64,7 +82,9 @@ export class PatientTableComponent extends DashboardComponent implements AfterVi
   listKeywords: string[] = [];
   filters: PatientFilters = {};
 
-  constructor(private readonly patientService: PatientService) {
+  constructor(private readonly patientService: PatientService,
+              private router: Router,
+              public route: ActivatedRoute) {
     super();
   }
 
@@ -100,7 +120,11 @@ export class PatientTableComponent extends DashboardComponent implements AfterVi
       finalize(() => (this.isLoading = false))
     ).subscribe({
       next: (result: Page<PatientDTO>) => {
-        this.dataSource.data = result.content ?? [];
+        // transform birthDate string to Date for the date pipe
+        this.dataSource.data = (result.content ?? []).map(p => ({
+          ...p,
+          birthDate: parseBirthDate(p.birthDate as unknown as string)
+        } as PatientDTO));
         const total = result.totalElements ?? 0;
         const size = result.size ?? this.pageSize;
 
@@ -153,10 +177,10 @@ export class PatientTableComponent extends DashboardComponent implements AfterVi
   }
 
   consultPatient(patient: PatientDTO): void {
-    // Ici vous branchez l’action "œil":
-    // - navigation vers un détail patient
-    // - ouverture d’un dialog
-    // - etc.
-    console.log('Consult patient:', patient);
+    // naviguer vers patient detail page
+    this.router.navigate([patient.id], {
+      relativeTo: this.route,
+      queryParamsHandling: 'preserve'
+    });
   }
 }

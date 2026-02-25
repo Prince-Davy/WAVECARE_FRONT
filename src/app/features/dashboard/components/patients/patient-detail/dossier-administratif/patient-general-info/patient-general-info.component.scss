@@ -1,0 +1,9 @@
+/* styling for the general info block can stay here if needed */
+.general-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  /* left border colour matches logo pink/magenta */
+  border-left: 4px solid #e6197a;
+  padding-left: 1rem;
+}

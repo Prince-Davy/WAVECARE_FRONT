@@ -1,0 +1,60 @@
+<mat-card class="section">
+
+  <mat-card-header>
+    @if (!editMode) {
+      <mat-card-subtitle>
+        {{ 'feature.dashboard.patient.detail.contact.subtitle' | translate }}
+      </mat-card-subtitle>
+    }
+  </mat-card-header>
+
+  <mat-card-content>
+
+    <!-- MODE ÉDITION -->
+    @if (editMode) {
+      <form [formGroup]="form" (ngSubmit)="submit()" class="grid">
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'feature.dashboard.patient.detail.contact.form.firstName.label' | translate }}</mat-label>
+          <input matInput formControlName="firstName" aria-label="{{ 'feature.dashboard.patient.detail.contact.form.firstName.label' | translate }}" placeholder="{{ 'feature.dashboard.patient.detail.contact.form.firstName.label' | translate }}" />
+          @if(form.controls['firstName'].hasError('required')) {
+            <mat-error>{{ 'feature.common.error.required' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'feature.dashboard.patient.detail.contact.form.lastName.label' | translate }}</mat-label>
+          <input matInput formControlName="lastName" aria-label="{{ 'feature.dashboard.patient.detail.contact.form.lastName.label' | translate }}" placeholder="{{ 'feature.dashboard.patient.detail.contact.form.lastName.label' | translate }}" />
+          @if(form.controls['lastName'].hasError('required')) {
+            <mat-error>{{ 'feature.common.error.required' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'feature.dashboard.patient.detail.contact.form.phone.label' | translate }}</mat-label>
+          <input matInput formControlName="phone" aria-label="{{ 'feature.dashboard.patient.detail.contact.form.phone.label' | translate }}" placeholder="{{ 'feature.dashboard.patient.detail.contact.form.phone.label' | translate }}" />
+          @if(form.controls['phone'].hasError('required')) {
+            <mat-error>{{ 'feature.common.error.required' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" type="submit">
+            {{ 'feature.common.button.save' | translate }}
+          </button>
+        </div>
+      </form>
+    }
+
+    <!-- MODE LECTURE -->
+    @else {
+      <div class="details-grid">
+        <div><strong>{{ 'feature.dashboard.patient.detail.contact.details.firstName' | translate }}</strong> : {{ contactConfiance.firstName }}</div>
+        <div><strong>{{ 'feature.dashboard.patient.detail.contact.details.lastName' | translate }}</strong> : {{ contactConfiance.lastName }}</div>
+        <div><strong>{{ 'feature.dashboard.patient.detail.contact.details.phone' | translate }}</strong> : {{ contactConfiance.phone | phoneFormat }}</div>
+      </div>
+    }
+
+  </mat-card-content>
+
+</mat-card>

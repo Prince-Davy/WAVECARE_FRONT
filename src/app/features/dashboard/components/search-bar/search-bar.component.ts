@@ -44,7 +44,6 @@ export class SearchBarComponent {
     const hasDate = !!af.createdDate && af.createdDate !== '';
     return hasKeywords || hasRole || hasStatus || hasDate;
   }
-
     @Input() mode: 'chips' | 'simple' = 'chips';
 
   // Personnalisation labels (patients vs tickets)

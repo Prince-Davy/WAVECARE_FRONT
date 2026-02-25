@@ -21,7 +21,7 @@ import { TicketDetailUpdateDTO } from '@app/features/dashboard/models/ticket-det
 import { TicketViewDTO } from '@app/features/dashboard/models/ticket-view-dto';
 import { TicketService } from '@app/features/dashboard/services/ticket.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
-import { Pad4Pipe } from '@app/shared/pipes/pad4.pide';
+import { Pad4Pipe } from '@app/features/dashboard/pipes/pad4.pide';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { finalize, merge, startWith, zip } from 'rxjs';
 

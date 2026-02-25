@@ -39,14 +39,25 @@ export const routes: Routes = [
   {
     path: PATH_TO_PATIENTS,
     canActivate: [AuthGuard],
-    loadComponent: () => import('@app/features/dashboard/components/patient-table/patient-table.component').then(c => c.PatientTableComponent)
+    loadComponent: () => import('@app/features/dashboard/components/patients/patients.component').then(c => c.PatientsComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('@app/features/dashboard/components/patients/patient-table/patient-table.component').then(c => c.PatientTableComponent)
+      },
+      {
+        path: ':id',
+        loadComponent: () => import('@app/features/dashboard/components/patients/patient-detail/patient-detail.component').then(c => c.PatientDetailComponent)
+      }
+    ]
   },
-  
   {
     path: '',
     redirectTo: PATH_TO_TICKETS,
     pathMatch: "full"
   },
+  // fin des routes principales
+
   {
     path: '**',
     loadComponent: () => import('@app/features/notification/components/not-found/not-found.component').then(c => c.NotFoundComponent)

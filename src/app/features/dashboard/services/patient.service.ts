@@ -1,19 +1,27 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthTokenService } from './auth-token.service';
-import { PatientFilters, PatientDTO } from '@app/features/dashboard/components/patient-table/patient-table.component';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
+import { PatientFilters, PatientDTO } from '@app/features/dashboard/components/patients/patient-table/patient-table.component';
 import { Observable } from 'rxjs';
 import { Page } from '@app/features/dashboard/models/page';
+import { PatientDetailDto } from '@app/features/dashboard/models/patient-detail.dto';
 
-@Injectable({
-  providedIn: 'root',
-})
+
+
+@Injectable({ providedIn: 'root' })
 export class PatientService {
-  private readonly apiUrlPatients = `/api/patients`;
+  private readonly apiUrl = '/api/patients';
 
-  constructor(private readonly http: HttpClient, private readonly authTokenService: AuthTokenService) {}
+  constructor(private readonly http: HttpClient, private authTokenService: AuthTokenService) {}
 
-  getPatients(
+  getPatientDetail(id: string): Observable<PatientDetailDto> {
+    const headers = new HttpHeaders({
+			Authorization: `Bearer ${this.authTokenService.getToken()}`
+		});
+
+    return this.http.get<PatientDetailDto>(`${this.apiUrl}/${id}`, { headers });
+  }
+    getPatients(
     page: number,
     size: number,
     listKeywords: string[],
@@ -37,6 +45,6 @@ export class PatientService {
       Authorization: `Bearer ${this.authTokenService.getToken()}`
     });
 
-    return this.http.get<Page<PatientDTO>>(this.apiUrlPatients, { headers, params });
+    return this.http.get<Page<PatientDTO>>(this.apiUrl, { headers, params });
   }
 }

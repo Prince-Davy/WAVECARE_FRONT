@@ -1,0 +1,15 @@
+import { Component, Input } from '@angular/core';
+import { PatientDetailDto } from '@app/features/dashboard/models/patient-detail.dto';
+
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-patient-dossier-medical',
+  templateUrl: './patient-dossier-medical.component.html',
+  styleUrls: ['./patient-dossier-medical.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
+})
+export class PatientDossierMedicalComponent {
+  @Input() patient!: PatientDetailDto;
+}

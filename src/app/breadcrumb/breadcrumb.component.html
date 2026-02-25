@@ -1,0 +1,25 @@
+<nav class="inner-breadcrumb" aria-label="Fil d'Ariane">
+  <ul class="inner-breadcrumb__list" role="list">
+    @for (item of items(); track item.key ?? item.labelKey; let last = $last) {
+      <li class="inner-breadcrumb__item">
+        @if (item.link && !last) {
+          <a
+            [routerLink]="item.link"
+            queryParamsHandling="preserve"
+            class="inner-breadcrumb__link"
+            [attr.aria-label]="item.ariaLabel ?? (item.labelKey | translate:item.context)">
+            {{ item.labelKey | translate:item.context }}
+          </a>
+        } @else {
+          <span class="inner-breadcrumb__current" aria-current="page">
+            {{ item.labelKey | translate:item.context }}
+          </span>
+        }
+
+        @if (!last) {
+          <mat-icon class="inner-breadcrumb__sep" aria-hidden="true">chevron_right</mat-icon>
+        }
+      </li>
+    }
+  </ul>
+</nav>
