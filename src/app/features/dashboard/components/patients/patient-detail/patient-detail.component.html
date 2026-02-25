@@ -1,0 +1,36 @@
+@if (patient) {
+<div class="table-container">
+  
+<app-patient-breadcrumb
+  [items]="[
+    { labelKey: 'feature.dashboard.patient.detail.breadcrumb.searchPatients', link: ['/patients'] },
+    { labelKey: 'feature.dashboard.patient.detail.breadcrumb.patientFile', context: { ins: patient.ins } }
+  ]">
+</app-patient-breadcrumb>
+
+  <!-- Informations générales -->
+  <h2 class="title">{{ 'feature.dashboard.patient.detail.title' | translate:{ins: patient.ins} }}</h2>
+  <h3>{{ 'feature.dashboard.patient.detail.generalInfo.heading' | translate }}</h3>
+  <app-patient-general-info [patient]="patient!"></app-patient-general-info>
+
+  <mat-tab-group [(selectedIndex)]="selectedIndex">
+    <mat-tab [label]="'feature.dashboard.patient.detail.tab.administratif' | translate">
+      <ng-template matTabContent>
+        <app-patient-dossier-administratif [patient]="patient!"></app-patient-dossier-administratif>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab [label]="'feature.dashboard.patient.detail.tab.medical' | translate">
+      <ng-template matTabContent>
+        <app-patient-dossier-medical [patient]="patient!"></app-patient-dossier-medical>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab [label]="'feature.dashboard.patient.detail.tab.diagnostic' | translate">
+      <ng-template matTabContent>
+        <app-patient-analyse-diagnostic [patient]="patient!"></app-patient-analyse-diagnostic>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+}

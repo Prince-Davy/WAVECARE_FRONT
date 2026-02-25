@@ -289,15 +289,14 @@
           }
         }
       },
-      "patient-table-component": {
-        "title": "Recherche du patient",
-        "search": {
-          "search-information": "NNS, nom et/ou prénom",
-          "helper-text": "Consulter N°NNS ",
-          "placeholder": ""
-
-        },
+      "patient": {
         "table": {
+          "title": "Recherche du patient",
+          "search": {
+            "search-information": "NNS, nom et/ou prénom",
+            "helper-text": "Consulter N°NNS ",
+            "placeholder": ""
+          },
           "column": {
             "id": { "label": "Id" },
             "lastName": { "label": "Nom" },
@@ -317,8 +316,100 @@
             "lastPage": "Dernière page",
             "of": "sur"
           }
+        },
+        "detail": {
+          "breadcrumb": {
+            "searchPatients": "Recherche patients",
+            "patientFile": "Dossier patient N° INS {{ins}}"
+          },
+          "title": "Dossier patient N° INS {{ins}}",
+          "generalInfo": {
+            "heading": "Informations générales",
+            "label": {
+              "firstName": "Prénom :",
+              "lastName": "Nom :",
+              "nss": "NSS :",
+              "birthDate": "Date de naissance :"
+            }
+          },
+          "tab": {
+            "administratif": "Dossier Administratif",
+            "medical": "Dossier Médical",
+            "diagnostic": "Analyse et Diagnostic"
+          },
+          "identite": {
+            "subtitle": "Identité du patient",
+            "form": {
+              "firstName": { "label": "Prénom(s) de naissance" },
+              "birthName": { "label": "Nom de naissance" },
+              "maritalName": { "label": "Nom marital" },
+              "maritalStatus": { "label": "Statut marital",
+                "options": {
+                  "SINGLE": "Célibataire",
+                  "MARRIED": "Marié(e)",
+                  "DIVORCED": "Divorcé(e)",
+                  "WIDOWED": "Veuf(ve)",
+                  "SEPARATED": "Séparé(e)"
+                }
+              },
+              "birthDate": { "label": "Date de naissance" },
+              "birthPlace": { "label": "Lieu de naissance (code INSEE)" },
+              "nationality": { "label": "Nationalité" },
+              "gender": { "label": "Genre",
+                "options": {
+                  "MALE": "Homme",
+                  "FEMALE": "Femme",
+                  "OTHER": "Autre",
+                  "UNKNOWN": "Inconnu"
+                }
+              },
+              "address": { "label": "Adresse" },
+              "phone": { "label": "Numéro de téléphone" },
+              "email": { "label": "E-mail", "error": { "invalid": "Email invalide" } },
+              "nss": { "label": "NSS / NIR" }
+            },
+            "details": {
+              "firstName": "Prénom(s)",
+              "birthName": "Nom de naissance",
+              "maritalName": "Nom marital",
+              "maritalStatus": "Statut marital",
+              "birthDate": "Date de naissance",
+              "birthPlace": "Lieu de naissance (code INSEE)",
+              "nationality": "Nationalité",
+              "gender": "Sexe",
+              "address": "Adresse",
+              "phone": "Numéro de téléphone",
+              "email": "E-mail",
+              "nss": "NSS / NIR"
+            }
+          },
+          "contact": {
+            "subtitle": "Contact(s) personne de confiance",
+            "form": {
+              "firstName": { "label": "Prénom" },
+              "lastName": { "label": "Nom" },
+              "phone": { "label": "Téléphone" }
+            },
+            "details": {
+              "firstName": "Prénom",
+              "lastName": "Nom",
+              "phone": "Téléphone"
+            }
+          },
+          "couverture": {
+            "subtitle": "Couverture santé",
+            "form": {
+              "insurance": { "label": "Nom mutuelle" },
+              "policy": { "label": "Numéro police" }
+            },
+            "details": {
+              "insurance": "Nom mutuelle",
+              "policy": "Numéro police"
+            }
+          }
         }
       },
+
       "user-dialog-component": {
         "title": {
           "create": "Créer un profil",
@@ -376,6 +467,16 @@
           }
         }
       },
+      "common": {
+        "button": {
+          "edit": "Modifier",
+          "cancel": "Annuler",
+          "save": "Enregistrer"
+        },
+        "error": {
+          "required": "Champ requis"
+        }
+      },
       "advanced-filters": {
         "title": "Filtres avancés",
         "roles": {
@@ -399,7 +500,8 @@
       },
       "notification-service": {
         "action-message": "FERMER"
-      }
+      },
+      "logo-alt": "Logo de l'application wavecare"
     },
     "navigation": {
       "navbar-component": {

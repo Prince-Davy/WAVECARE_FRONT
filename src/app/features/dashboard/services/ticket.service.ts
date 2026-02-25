@@ -60,6 +60,6 @@ export class TicketService {
       Authorization: `Bearer ${this.authTokenService.getToken()}`
     });
 
-    return this.http.get<TicketStatusDTO[]>(`/ticket-statuses`, { headers });
+    return this.http.get<TicketStatusDTO[]>(`/api/ticket-statuses`, { headers });
   }
 }
