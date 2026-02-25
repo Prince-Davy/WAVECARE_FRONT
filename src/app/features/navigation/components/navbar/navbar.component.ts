@@ -9,6 +9,7 @@ import { AuthTokenService } from '@app/features/auth/services/auth-token.service
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { NavigationService } from '../../services/navigation.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'navbar',
@@ -18,7 +19,8 @@ import { NavigationService } from '../../services/navigation.service';
     MatButtonModule,
     RouterLink,
     TranslateModule,
-    MatIconModule
+    MatIconModule,
+    CommonModule
 ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']

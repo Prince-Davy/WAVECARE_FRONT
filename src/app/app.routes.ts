@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from '@app/features/auth/guards/auth.guard';
+import { administratorGuard, radiologistGuard } from '@app/features/auth/guards/role.guard';
 
 export const PATH_TO_LOGIN = '***REMOVED***';
 export const PATH_TO_FORGOT_PASSWORD = '***REMOVED***';
@@ -28,17 +29,17 @@ export const routes: Routes = [
   },
   {
     path: PATH_TO_TICKETS,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, administratorGuard],
     loadComponent: () => import('@app/features/dashboard/components/ticket-table/ticket-table.component').then(c => c.TicketTableComponent)
   },
   {
     path: PATH_TO_USERS,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, administratorGuard],
     loadComponent: () => import('@app/features/dashboard/components/user-table/user-table.component').then(c => c.UserTableComponent)
   },
   {
     path: PATH_TO_PATIENTS,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, radiologistGuard],
     loadComponent: () => import('@app/features/dashboard/components/patients/patients.component').then(c => c.PatientsComponent),
     children: [
       {
