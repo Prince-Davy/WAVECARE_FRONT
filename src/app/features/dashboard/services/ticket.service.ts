@@ -33,7 +33,7 @@ export class TicketService {
 		});
 
 		const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.authTokenService.getToken()}`,
+			Authorization: `Bearer ${this.authTokenService.token()}`,
 		});
 
 		return this.http.get<Page<TicketViewDTO>>(this.apiUrlTicket, { headers, params });
@@ -41,7 +41,7 @@ export class TicketService {
 
   getTicket(id: number): Observable<TicketDetailDTO> {
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.authTokenService.getToken()}`
+      Authorization: `Bearer ${this.authTokenService.token()}`
     });
 
     return this.http.get<TicketDetailDTO>(`${this.apiUrlTicket}/${id}`, { headers });
@@ -49,7 +49,7 @@ export class TicketService {
 
   updateTicket(ticketDetailUpdateDTO: TicketDetailUpdateDTO): Observable<void> {
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.authTokenService.getToken()}`
+      Authorization: `Bearer ${this.authTokenService.token()}`
     });
 
     return this.http.put<void>(`${this.apiUrlTicket}/${ticketDetailUpdateDTO.id}`, { statusId: ticketDetailUpdateDTO.statusId, adminComment: ticketDetailUpdateDTO.adminComment }, { headers });
@@ -57,7 +57,7 @@ export class TicketService {
 
   getTicketStatuses(): Observable<TicketStatusDTO[]> {
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.authTokenService.getToken()}`
+      Authorization: `Bearer ${this.authTokenService.token()}`
     });
 
     return this.http.get<TicketStatusDTO[]>(`/api/ticket-statuses`, { headers });

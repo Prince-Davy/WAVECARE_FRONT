@@ -16,7 +16,7 @@ export class PatientService {
 
   getPatientDetail(id: string): Observable<PatientDetailDto> {
     const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.authTokenService.getToken()}`
+			Authorization: `Bearer ${this.authTokenService.token()}`
 		});
 
     return this.http.get<PatientDetailDto>(`${this.apiUrl}/${id}`, { headers });
@@ -42,7 +42,7 @@ export class PatientService {
     const params = new HttpParams({ fromObject: paramsObj });
 
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.authTokenService.getToken()}`
+      Authorization: `Bearer ${this.authTokenService.token()}`
     });
 
     return this.http.get<Page<PatientDTO>>(this.apiUrl, { headers, params });

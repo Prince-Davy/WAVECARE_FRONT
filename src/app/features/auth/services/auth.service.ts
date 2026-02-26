@@ -31,7 +31,7 @@ export class AuthService {
       .pipe(
         tap(response => {
           if (response.access_token) {
-            this.tokenService.setToken(response.access_token);
+            this.tokenService.setTokens(response);
           }
         }),
         timeout(10000)
@@ -39,7 +39,7 @@ export class AuthService {
   }
 
   logout() {
-    this.tokenService.removeToken();
+    this.tokenService.removeTokens();
   }
 
   forgotPassword(email: string): Observable<any> {
