@@ -1,4 +1,4 @@
-import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, inject, provideAppInitializer, LOCALE_ID } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from '@app/app.routes';
@@ -7,10 +7,10 @@ import { CustomTranslateLoader } from 'src/translate-loader';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ConfigService } from './config.service';
 import { apiBaseUrlInterceptor } from './api-base-url.interceptor';
-import { AuthInterceptor } from './features/auth/components/auth/auth.interceptor';
 import { initAuthFactory } from './features/auth/components/auth/init-auth.factory';
 import { AuthTokenService } from './features/auth/services/auth-token.service';
 import { NavigationService } from './features/navigation/services/navigation.service';
+import { authInterceptor } from './features/auth/components/auth/auth.interceptor';
 
 
 
@@ -32,10 +32,10 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(
       withFetch(), 
-      withInterceptors([apiBaseUrlInterceptor])
+      withInterceptors([apiBaseUrlInterceptor, authInterceptor])
     ),
     provideAppInitializer(initConfig),
     provideAppInitializer(() => initAuthFactory(inject(AuthTokenService), inject(NavigationService))()),
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+
   ]
 };
