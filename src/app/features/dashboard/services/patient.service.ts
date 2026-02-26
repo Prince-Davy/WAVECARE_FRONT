@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
 import { PatientFilters, PatientDTO } from '@app/features/dashboard/components/patients/patient-table/patient-table.component';
 import { Observable } from 'rxjs';
@@ -15,11 +15,7 @@ export class PatientService {
   constructor(private readonly http: HttpClient, private authTokenService: AuthTokenService) {}
 
   getPatientDetail(id: string): Observable<PatientDetailDto> {
-    const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.authTokenService.token()}`
-		});
-
-    return this.http.get<PatientDetailDto>(`${this.apiUrl}/${id}`, { headers });
+    return this.http.get<PatientDetailDto>(`${this.apiUrl}/${id}`);
   }
     getPatients(
     page: number,
@@ -41,10 +37,6 @@ export class PatientService {
 
     const params = new HttpParams({ fromObject: paramsObj });
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.authTokenService.token()}`
-    });
-
-    return this.http.get<Page<PatientDTO>>(this.apiUrl, { headers, params });
+    return this.http.get<Page<PatientDTO>>(this.apiUrl, { params });
   }
 }

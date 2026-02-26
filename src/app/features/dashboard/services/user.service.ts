@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AuthTokenService } from "@app/features/auth/services/auth-token.service";
 
@@ -44,11 +44,7 @@ export class UserService {
   
     const params = new HttpParams({ fromObject: paramsObj });
   
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.authTokenService.token()}`
-    });
-  
-    return this.http.get<Page<UserViewDTO>>(this.apiUrlUsers, { headers, params });
+    return this.http.get<Page<UserViewDTO>>(this.apiUrlUsers, { params });
   }
 
 
@@ -58,11 +54,7 @@ export class UserService {
 	 * @returns Observable<UserDetailDTO> Les détails de l'utilisateur
 	 */
 	getUser(id: number): Observable<UserDetailDTO> {
-		const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.authTokenService.token()}`
-		});
-
-		return this.http.get<UserDetailDTO>(`${this.apiUrlUsers}/${id}`, { headers });
+		return this.http.get<UserDetailDTO>(`${this.apiUrlUsers}/${id}`);
 	}
 
 	/**
@@ -70,13 +62,8 @@ export class UserService {
 	 * @returns Observable<string[]> La liste des rôles utilisateurs
 	 */
 	getUserRoles(): Observable<string[]> {
-		const token = this.authTokenService.token();
-
-		const headers = token
-			? new HttpHeaders({ Authorization: `Bearer ${token}` })
-			: new HttpHeaders();
-
-		return this.http.get<string[]>(`${this.apiUrlUsers}/roles`, { headers });
+	return this.http.get<string[]>(`${this.apiUrlUsers}/roles`);
+	
 	}
 
 	/**
@@ -84,10 +71,7 @@ export class UserService {
 	 * @param userDetailUpdateDTO les informations de l'utilisateur à mettre à jour
 	 */
 	updateUser(userDetailUpdateDTO: UserDetailUpdateDTO): Observable<void> {
-		const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.authTokenService.token()}`
-		});
-		return this.http.put<void>(`${this.apiUrlUsers}/${userDetailUpdateDTO.id}`, { lastName: userDetailUpdateDTO.lastName, firstName: userDetailUpdateDTO.firstName, role: userDetailUpdateDTO.role, email: userDetailUpdateDTO.email }, { headers });
+		return this.http.put<void>(`${this.apiUrlUsers}/${userDetailUpdateDTO.id}`, { lastName: userDetailUpdateDTO.lastName, firstName: userDetailUpdateDTO.firstName, role: userDetailUpdateDTO.role, email: userDetailUpdateDTO.email });
 	}
 
 
@@ -96,16 +80,10 @@ export class UserService {
 	 * @param userId ID de l'utilisateur à supprimer
 	 */
 	deleteUser(userId: string): Observable<void> {
-		const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.authTokenService.token()}`
-		});
-		return this.http.delete<void>(`${this.apiUrlUsers}/${userId}`, { headers });
+		return this.http.delete<void>(`${this.apiUrlUsers}/${userId}`);
 	}
 
 	createUser(payload: UserCreateDTO): Observable<void> {
-		const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.authTokenService.token()}`
-		});
-		return this.http.post<void>(this.apiUrlUsers, payload, { headers });
+		return this.http.post<void>(this.apiUrlUsers, payload);
 	}
 }
