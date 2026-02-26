@@ -45,7 +45,7 @@ export class UserService {
     const params = new HttpParams({ fromObject: paramsObj });
   
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.authTokenService.getToken()}`
+      Authorization: `Bearer ${this.authTokenService.token()}`
     });
   
     return this.http.get<Page<UserViewDTO>>(this.apiUrlUsers, { headers, params });
@@ -59,7 +59,7 @@ export class UserService {
 	 */
 	getUser(id: number): Observable<UserDetailDTO> {
 		const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.authTokenService.getToken()}`
+			Authorization: `Bearer ${this.authTokenService.token()}`
 		});
 
 		return this.http.get<UserDetailDTO>(`${this.apiUrlUsers}/${id}`, { headers });
@@ -70,7 +70,7 @@ export class UserService {
 	 * @returns Observable<string[]> La liste des rôles utilisateurs
 	 */
 	getUserRoles(): Observable<string[]> {
-		const token = this.authTokenService.getToken();
+		const token = this.authTokenService.token();
 
 		const headers = token
 			? new HttpHeaders({ Authorization: `Bearer ${token}` })
@@ -85,7 +85,7 @@ export class UserService {
 	 */
 	updateUser(userDetailUpdateDTO: UserDetailUpdateDTO): Observable<void> {
 		const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.authTokenService.getToken()}`
+			Authorization: `Bearer ${this.authTokenService.token()}`
 		});
 		return this.http.put<void>(`${this.apiUrlUsers}/${userDetailUpdateDTO.id}`, { lastName: userDetailUpdateDTO.lastName, firstName: userDetailUpdateDTO.firstName, role: userDetailUpdateDTO.role, email: userDetailUpdateDTO.email }, { headers });
 	}
@@ -97,14 +97,14 @@ export class UserService {
 	 */
 	deleteUser(userId: string): Observable<void> {
 		const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.authTokenService.getToken()}`
+			Authorization: `Bearer ${this.authTokenService.token()}`
 		});
 		return this.http.delete<void>(`${this.apiUrlUsers}/${userId}`, { headers });
 	}
 
 	createUser(payload: UserCreateDTO): Observable<void> {
 		const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.authTokenService.getToken()}`
+			Authorization: `Bearer ${this.authTokenService.token()}`
 		});
 		return this.http.post<void>(this.apiUrlUsers, payload, { headers });
 	}

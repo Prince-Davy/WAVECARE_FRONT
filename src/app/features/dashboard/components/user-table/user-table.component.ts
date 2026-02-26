@@ -61,7 +61,7 @@ export class UserTableComponent extends DashboardComponent {
     private authTokenService: AuthTokenService
   ) {
     super();
-    this.currentUserId = this.authTokenService.getUserIdFromToken() ?? '';
+    this.currentUserId = this.authTokenService.getUserId() ?? '';
   }
 
   ngAfterViewInit(): void {
