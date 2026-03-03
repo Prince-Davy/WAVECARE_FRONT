@@ -54,6 +54,16 @@ export class SearchBarComponent {
   // Pour le mode simple : un seul terme (pas de chips obligatoires)
   @Output() simpleSearch = new EventEmitter<string>();
 
+    @Input() mode: 'chips' | 'simple' = 'chips';
+
+  // Personnalisation labels (patients vs tickets)
+  @Input() placeholderKey = 'feature.dashboard.search-bar.search-bar-component.search-input-placeholder';
+  @Input() infoKey = 'feature.dashboard.search-bar.search-bar-component.search-information';
+
+
+  // Pour le mode simple : un seul terme (pas de chips obligatoires)
+  @Output() simpleSearch = new EventEmitter<string>();
+
   @Input() totalResults: number = 0;
   @Input() showAdvancedFilters: boolean = false;
   @Output() keywordsChanged = new EventEmitter<string[]>();

@@ -1,0 +1,90 @@
+<div class="table-container">
+    <h1 class="title">
+      {{ 'feature.dashboard.patient-table-component.title' | translate }}
+    </h1>
+    
+    <div>
+      <app-search-bar
+        [totalResults]="resultsLength"
+        [showAdvancedFilters]="false"
+        mode="simple"
+        [placeholderKey]="'feature.dashboard.patient-table-component.search.placeholder'"
+        [infoKey]="'feature.dashboard.patient-table-component.search.search-information'"
+        (simpleSearch)="onPatientSearch($event)"
+        (resetRequested)="resetTable()">
+      </app-search-bar>
+    </div>
+
+  <mat-card>
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'feature.dashboard.patient-table-component.table.column.id.label' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let patient">{{ patient.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'feature.dashboard.patient-table-component.table.column.lastName.label' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let patient">{{ patient.lastName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="firstName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'feature.dashboard.patient-table-component.table.column.firstName.label' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let patient">{{ patient.firstName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ins">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'feature.dashboard.patient-table-component.table.column.ins.label' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let patient">{{ patient.ins }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="birthDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'feature.dashboard.patient-table-component.table.column.birthDate.label' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let patient">
+            {{ patient.birthDate | date:'dd/MM/yyyy' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ 'feature.dashboard.patient-table-component.table.column.action.label' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let patient">
+            <mat-icon
+              class="material-symbols-outlined action-icon"
+              tabindex="0"
+              [matTooltip]="'feature.dashboard.patient-table-component.table.column.action.tooltip' | translate"
+              matTooltipPosition="right"
+              aria-label="consult"
+              (click)="consultPatient(patient)"
+              (keydown.enter)="consultPatient(patient)">
+              visibility
+            </mat-icon>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+    </div>
+
+    <mat-paginator
+      [length]="resultsLength"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      showFirstLastButtons>
+    </mat-paginator>
+  </mat-card>
+</div>
