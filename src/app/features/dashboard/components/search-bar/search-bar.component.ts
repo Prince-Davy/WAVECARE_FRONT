@@ -13,6 +13,7 @@ import { FilterUtils } from '@app/features/utils/filter.utils';
 
 @Component({
   selector: 'app-search-bar',
+  standalone: true,
   imports: [
     TranslateModule,
     MatFormFieldModule,
@@ -22,9 +23,9 @@ import { FilterUtils } from '@app/features/utils/filter.utils';
     FormsModule,
     MatIconModule,
     AdvancedFiltersComponent
-],
+  ],
   templateUrl: './search-bar.component.html',
-  styleUrl: './search-bar.component.scss'
+  styleUrls: ['./search-bar.component.scss']
 })
 export class SearchBarComponent {
 
@@ -49,17 +50,6 @@ export class SearchBarComponent {
   // Personnalisation labels (patients vs tickets)
   @Input() placeholderKey = 'feature.dashboard.search-bar.search-bar-component.search-input-placeholder';
   @Input() infoKey = 'feature.dashboard.search-bar.search-bar-component.search-information';
-
-
-  // Pour le mode simple : un seul terme (pas de chips obligatoires)
-  @Output() simpleSearch = new EventEmitter<string>();
-
-    @Input() mode: 'chips' | 'simple' = 'chips';
-
-  // Personnalisation labels (patients vs tickets)
-  @Input() placeholderKey = 'feature.dashboard.search-bar.search-bar-component.search-input-placeholder';
-  @Input() infoKey = 'feature.dashboard.search-bar.search-bar-component.search-information';
-
 
   // Pour le mode simple : un seul terme (pas de chips obligatoires)
   @Output() simpleSearch = new EventEmitter<string>();

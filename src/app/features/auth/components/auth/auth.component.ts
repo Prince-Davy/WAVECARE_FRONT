@@ -58,8 +58,8 @@ export class AuthComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authTokenService.isTokenValid()) {
-      this.navigationService.navigateToHome()
+    if (this.authTokenService.isAuthenticated()) {
+      this.navigationService.navigateToHome();
     }
   }
   get username() {

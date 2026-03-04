@@ -1,15 +1,14 @@
 import { inject } from '@angular/core';
-import { CanActivateFn } from '@angular/router';
+import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { AuthTokenService } from '../services/auth-token.service';
-import { NavigationService } from '@app/features/navigation/services/navigation.service';
+import { PATH_TO_LOGIN } from '@app/app.routes';
 
-export const authGuard: CanActivateFn = async () => {
+export const authGuard: CanActivateFn = async (): Promise<boolean | UrlTree> => {
   const auth = inject(AuthTokenService);
-  const nav = inject(NavigationService);
+  const router = inject(Router);
   const ok = await auth.tryAutoRefresh();
-  if (ok && auth.isTokenValid()) {
+  if (ok && auth.isAuthenticated()) {
     return true;
   }
-  nav.navigateToLogin();
-  return false;
+  return router.createUrlTree([PATH_TO_LOGIN]);
 };

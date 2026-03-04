@@ -12,6 +12,9 @@ import {
   STORAGE_STRATEGY,
 } from './auth-config';
 
+// route constants needed for role-based default navigation
+import { PATH_TO_TICKETS, PATH_TO_PATIENTS, PATH_TO_ASSISTANCE, PATH_TO_LOGIN } from '@app/app.routes';
+
 interface JwtPayload {
   exp?: number;
   sub?: string;
@@ -27,23 +30,64 @@ interface JwtPayload {
 export class AuthTokenService {
   token: WritableSignal<string | null> = signal(null);
   refresh: WritableSignal<string | null> = signal(null);
-  roles = computed<string[]>(() => {
+
+  /** decoded JWT payload or null if not available/parsing failed */
+  payload = computed<JwtPayload | null>(() => {
     const t = this.token();
     if (!t) {
-      return [];
+      return null;
     }
     try {
-      const payload = decodeJwt<JwtPayload>(t);
-      const realmRoles = payload.realm_access?.roles || [];
-      const clientRoles =
-        payload.resource_access?.[CLIENT_ID]?.roles || [];
-      return Array.from(new Set([...realmRoles, ...clientRoles]));
+      return decodeJwt<JwtPayload>(t);
     } catch {
-      return [];
+      return null;
     }
   });
 
+  /** user object derived from payload for easy consumption */
+  user = computed(() => {
+    const p = this.payload();
+    if (!p) {
+      return null;
+    }
+    return {
+      id: p.sub ?? null,
+      username: p.preferred_username ?? null,
+      name:
+        p.name ||
+        [p.given_name, p.family_name].filter(Boolean).join(' ') ||
+        null,
+    };
+  });
+
+  /** expiration timestamp (seconds since epoch) or null */
+  expiresAt = computed<number | null>(() => {
+    const p = this.payload();
+    return p?.exp ?? null;
+  });
+
+  /** true when there is a token that hasn't expired yet */
+  isAuthenticated = computed(() => {
+    const exp = this.expiresAt();
+    if (!exp) {
+      return false;
+    }
+    const now = Math.floor(Date.now() / 1000);
+    return exp > now;
+  });
+
+  roles = computed<string[]>(() => {
+    const p = this.payload();
+    if (!p) {
+      return [];
+    }
+    const realmRoles = p.realm_access?.roles || [];
+    const clientRoles = p.resource_access?.[CLIENT_ID]?.roles || [];
+    return Array.from(new Set([...realmRoles, ...clientRoles]));
+  });
+
   private storage: Storage | null = null;
+  private refreshTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     private http: HttpClient,
@@ -53,6 +97,20 @@ export class AuthTokenService {
       this.storage =
         STORAGE_STRATEGY === 'local' ? localStorage : sessionStorage;
       this.initFromStorage();
+
+      // listen to other tabs making changes
+      window.addEventListener('storage', (ev) => {
+        if (ev.storageArea !== this.storage) {
+          return;
+        }
+        if (ev.key === 'access_token') {
+          this.token.set(ev.newValue);
+          this.scheduleRefresh();
+        }
+        if (ev.key === 'refresh_token') {
+          this.refresh.set(ev.newValue);
+        }
+      });
     }
   }
 
@@ -64,6 +122,7 @@ export class AuthTokenService {
     const refresh = this.storage.getItem('refresh_token');
     this.token.set(access);
     this.refresh.set(refresh);
+    this.scheduleRefresh();
   }
 
   private persistTokens(): void {
@@ -82,27 +141,17 @@ export class AuthTokenService {
     }
   }
 
+  /** legacy helper, mostly replaced by computed `isAuthenticated` */
   isTokenValid(): boolean {
-    const t = this.token();
-    if (!t) {
-      return false;
-    }
-    try {
-      const payload = decodeJwt<JwtPayload>(t);
-      if (!payload.exp) {
-        return false;
-      }
-      const now = Math.floor(Date.now() / 1000);
-      return payload.exp > now + 5; // 5s leeway
-    } catch {
-      return false;
-    }
+    // keep a small leeway to avoid clock skew
+    return this.isAuthenticated() && (this.expiresAt()! > Math.floor(Date.now() / 1000) + 5);
   }
 
   setTokens(tokens: { access_token: string; refresh_token: string }): void {
     this.token.set(tokens.access_token);
     this.refresh.set(tokens.refresh_token);
     this.persistTokens();
+    this.scheduleRefresh();
   }
 
   removeTokens(): void {
@@ -112,6 +161,7 @@ export class AuthTokenService {
       this.storage.removeItem('access_token');
       this.storage.removeItem('refresh_token');
     }
+    this.clearRefreshTimer();
   }
 
   /**
@@ -145,6 +195,32 @@ export class AuthTokenService {
 
   private ongoingRefresh: Promise<boolean> | null = null;
 
+  /** schedule a proactive refresh 60 seconds before expiration */
+  private scheduleRefresh(): void {
+    this.clearRefreshTimer();
+    const exp = this.expiresAt();
+    if (!exp) {
+      return;
+    }
+    const now = Math.floor(Date.now() / 1000);
+    const msUntil = (exp - now - 60) * 1000;
+    if (msUntil <= 0) {
+      // already too close or expired, trigger immediately
+      void this.tryAutoRefresh();
+      return;
+    }
+    this.refreshTimer = setTimeout(() => {
+      void this.tryAutoRefresh();
+    }, msUntil);
+  }
+
+  private clearRefreshTimer(): void {
+    if (this.refreshTimer !== null) {
+      clearTimeout(this.refreshTimer);
+      this.refreshTimer = null;
+    }
+  }
+
   /**
    * try an auto-refresh if the current token is invalid and a refresh token exists
    * returns true if after the call the token is valid
@@ -172,7 +248,7 @@ export class AuthTokenService {
    * ensure that token expiration is not imminent, refresh if it is
    */
   async ensureFreshToken(): Promise<void> {
-    if (!this.isTokenValid()) {
+    if (!this.isAuthenticated()) {
       await this.tryAutoRefresh();
     }
   }
@@ -221,7 +297,25 @@ export class AuthTokenService {
   isRadioOperator(): boolean {
     return this.hasRole('radio_operator');
   }
+
+  /**
+   * Return the canonical "home" route for the currently authenticated user.
+   * This encapsulates the role‑based logic used throughout the app.
+   */
+  getDefaultRoute(): string {
+    if (this.isAdministrator()) {
+      return PATH_TO_TICKETS;
+    }
+    if (this.isRadiologist()) {
+      return PATH_TO_PATIENTS;
+    }
+    if (this.isRadioOperator()) {
+      return PATH_TO_ASSISTANCE;
+    }
+    return PATH_TO_LOGIN;
+  }
 }
+
 
 // helper for HttpParams to encode like UrlEncoded
 class HttpUrlEncodedEncoder implements HttpParameterCodec {
