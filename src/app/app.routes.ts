@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './features/auth/guards/auth.guard';
 import { administratorGuard, radiologistGuard, radioOperatorGuard } from './features/auth/guards/role.guard';
+import { homeRedirectGuard } from './guards/home-redirect.guard';
 
 export const PATH_TO_LOGIN = 'login';
 export const PATH_TO_FORGOT_PASSWORD = 'forgot-password';
@@ -54,8 +55,9 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: PATH_TO_TICKETS,
-    pathMatch: "full"
+    canActivate: [homeRedirectGuard],
+    loadComponent: () => import('@app/features/auth/components/auth/auth.component').then(c => c.AuthComponent),
+    // guard may return UrlTree to a home route or true to show login component
   },
   // fin des routes principales
 
