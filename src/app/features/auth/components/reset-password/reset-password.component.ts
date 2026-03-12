@@ -9,6 +9,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { NavigationService } from '@app/features/navigation/services/navigation.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-***REMOVED***',
@@ -68,18 +69,15 @@ export class ResetPasswordComponent implements OnInit {
   loadUserInfoFromToken() {
     if (!this.token) return;
 
-    this.authService.readToken(this.token).subscribe({
-      next: (data) => {
-        this.userId = data.id;
-        this.email = data.email;
-        this.isError = false;
-      },
-      error: (error) => {
-        this.isError = true;
-        this.message = this.translate.instant('feature.auth.***REMOVED***-component.message.error.expired-link');
-        console.error('Error while trying to recover the user information from the token.', error);
-      }
-    });
+    this.authService.readToken(this.token)
+      .pipe(
+        tap(data => {
+          this.userId = data.id;
+          this.email = data.email;
+          this.isError = false;
+        })
+      )
+      .subscribe();
   }
 
   passwordMatchValidator(form: FormGroup): ValidationErrors | null {
@@ -120,28 +118,26 @@ export class ResetPasswordComponent implements OnInit {
     const newPassword = this.resetForm.get('newPassword')?.value;
     const payload = { userName: this.email, newPassword };
 
-    this.authService.updatePassword(this.token, this.userId, payload).subscribe({
-      next: (response) => {
-        this.isError = false;
-        this.message = this.translate.instant('feature.auth.***REMOVED***-component.form.submit.message.success');
+    this.authService.updatePassword(this.token, this.userId, payload)
+      .pipe(
+        tap(response => {
+          this.isError = false;
+          this.message = this.translate.instant('feature.auth.***REMOVED***-component.form.submit.message.success');
 
-        if (this.token) {
-          this.authService.deleteToken(this.token).subscribe({
-            next: () => console.log('Token was successfully removed'),
-            error: (error) => console.error('Error while trying to delete the token', error)
-          });
-        }
+          if (this.token) {
+            this.authService.deleteToken(this.token)
+              .pipe(
+                tap(() => console.log('Token was successfully removed'))
+              )
+              .subscribe();
+          }
 
-        setTimeout(() => {
-          this.navigationService.navigateToLogin();
-        }, 2000);
-      },
-      error: (error) => {
-        console.error('Error while trying to update password', error);
-        this.isError = true;
-        this.message = this.translate.instant('feature.auth.***REMOVED***-component.form.submit.message.error.technical');
-      }
-    });
+          setTimeout(() => {
+            this.navigationService.navigateToLogin();
+          }, 2000);
+        })
+      )
+      .subscribe();
   }
 
   private markFormGroupTouched() {

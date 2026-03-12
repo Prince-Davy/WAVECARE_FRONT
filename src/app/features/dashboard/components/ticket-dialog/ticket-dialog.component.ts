@@ -6,11 +6,14 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TicketDetailDTO } from '../../models/ticket-detail-dto';
 import { TicketDetailUpdateDTO } from '../../models/ticket-detail-update-dto';
 import { TicketStatusDTO } from '../../models/ticket-status-dto';
 import { MatIcon } from '@angular/material/icon';
+import { TicketService } from '../../services/ticket.service';
+import { NotificationService } from '@app/features/notification/services/notification.service';
+import { finalize, tap } from 'rxjs';
 
 export interface TicketDialogData {
   ticketDetailDTO: TicketDetailDTO;
@@ -44,6 +47,7 @@ export class TicketDialogComponent implements AfterViewInit {
   readonly ticketDetailDTO = this.data.ticketDetailDTO;
 
   ticketDialogForm: FormGroup<any>;
+  isSubmitting: boolean = false;
 
   @ViewChild('statusInput') statusInput!: MatSelect;
 
@@ -55,7 +59,12 @@ export class TicketDialogComponent implements AfterViewInit {
   }
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private ticketService: TicketService,
+    private notificationService: NotificationService,
+    private translate: TranslateService
+  ) {
     this.ticketDialogForm = this.fb.group({
       status: [this.data.ticketDetailDTO.statusId, [Validators.required]],
       comment: [this.data.ticketDetailDTO.adminComment, [Validators.maxLength(500)]]
@@ -68,6 +77,31 @@ export class TicketDialogComponent implements AfterViewInit {
     this.data.ticketDetailDTO.statusId = selectedStatus?.id ?? 0;
     this.data.ticketDetailDTO.adminComment = formValue.comment ?? '';
     return this.data.ticketDetailDTO;
+  }
+
+  submit(): void {
+    if (this.ticketDialogForm.invalid || this.isSubmitting) {
+      this.ticketDialogForm.markAllAsTouched();
+      return;
+    }
+
+    this.isSubmitting = true;
+    const payload = this.validate();
+    this.ticketService
+      .updateTicket(payload)
+      .pipe(
+        tap(() => {
+          this.notificationService.openSuccessSnackBar(
+            this.translate.instant('feature.dashboard.ticket-table-component.table.column.action.message.success', {
+              id: this.data.ticketDetailDTO.id
+            })
+          );
+        }),
+        finalize(() => {
+          this.isSubmitting = false;
+        })
+      )
+      .subscribe(() => this.dialogRef.close(true));
   }
 
 }

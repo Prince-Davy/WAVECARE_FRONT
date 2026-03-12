@@ -38,7 +38,7 @@
   <button mat-raised-button class="user-dialog-cancel" [mat-dialog-close]="undefined">{{ 'feature.dashboard.user-dialog-component.action-button.cancel' | translate }}</button>
   <div class="user-dialog-validate-wrapper">
     <div>
-      <button mat-raised-button class="user-dialog-validate" [mat-dialog-close]="validate()" [disabled]="!userDialogForm.valid">{{ 'feature.dashboard.user-dialog-component.action-button.confirm' | translate }}</button>
+      <button mat-raised-button class="user-dialog-validate" (click)="submit()" [disabled]="!userDialogForm.valid || isSubmitting">{{ 'feature.dashboard.user-dialog-component.action-button.confirm' | translate }}</button>
     </div>
   </div>
 </mat-dialog-actions>

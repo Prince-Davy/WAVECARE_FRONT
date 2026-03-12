@@ -23,7 +23,7 @@ import { TicketService } from '@app/features/dashboard/services/ticket.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { Pad4Pipe } from '@app/features/dashboard/pipes/pad4.pide';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { finalize, merge, startWith, zip } from 'rxjs';
+import { finalize, merge, startWith, tap, zip } from 'rxjs';
 
 
 @Component({
@@ -85,19 +85,9 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
           autoFocus: false
         })
           .afterClosed()
-          .subscribe((ticketDetailUpdateDTO: TicketDetailUpdateDTO | undefined) => {
-            if (ticketDetailUpdateDTO !== undefined) {
-              this.ticketService.updateTicket(ticketDetailUpdateDTO)
-                .pipe(finalize(() => this.refreshTable()))
-                .subscribe({
-                  next: () => {
-                    this.notificationService.openSuccessSnackBar(this.translate.instant('feature.dashboard.ticket-table-component.table.column.action.message.success', { id: ticketId }));
-                  },
-                  error: (error: any) => {
-                    this.notificationService.openErrorSnackBar(this.translate.instant('feature.dashboard.ticket-table-component.table.column.action.message.error', { id: ticketId }));
-                    console.error("An error occurred when trying to update ticket.", error)
-                  }
-                });
+          .subscribe((updated?: boolean) => {
+            if (updated) {
+              this.refreshTable();
             }
           });;
 
@@ -130,9 +120,9 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
       this.listKeywords,
       sortFields
     )
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe({
-        next: (result: Page<TicketViewDTO>) => {
+      .pipe(
+        finalize(() => this.isLoading = false),
+        tap((result: Page<TicketViewDTO>) => {
           this.dataSource.data = result.content ?? [];
           const total = result.totalElements ?? 0;
           const size = result.size ?? this.pageSize;
@@ -140,14 +130,9 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
           this.pageSize = size;
           this.paginator.length = total;
           this.paginator.pageSize = size;
-        },
-        error: (error: HttpErrorResponse) => {
-          console.error('An error occurred while loading tickets:', error);
-          this.dataSource.data = [];
-          this.resultsLength = 0;
-          this.paginator.length = 0;
-        }
-      });
+        })
+      )
+      .subscribe();
   }
 
 

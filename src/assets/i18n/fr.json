@@ -543,5 +543,29 @@
         "radio_operator": "Opérateur radiologie"
       }
     }
+  },
+  "error": {
+    "notFound": "Ressource introuvable.",
+    "badRequest": "La requête est invalide.",
+    "http": {
+      "<statusCode>": "Une erreur HTTP est survenue (code {{statusCode}})."
+    },
+    "forbidden": "Vous n'avez pas les droits nécessaires pour effectuer cette action.",
+    "internal": "Une erreur interne est survenue. Veuillez réessayer plus tard.",
+    "validation": {
+      "default": "Certaines données sont invalides.",
+      "method": "Les données envoyées ne respectent pas les contraintes de validation de la méthode."
+    },
+    "keycloak": {
+      "token": "Le jeton d'authentification est invalide ou expiré.",
+      "email": {
+        "conflict": "Cette adresse e-mail est déjà utilisée."
+      },
+      "conflict": "Conflit avec les données d'identité.",
+      "notFound": "Utilisateur Keycloak introuvable.",
+      "unauthorized": "Authentification Keycloak requise.",
+      "forbidden": "Action non autorisée par Keycloak.",
+      "technical": "Une erreur technique est survenue avec le service d'identité."
+    }
   }
 }

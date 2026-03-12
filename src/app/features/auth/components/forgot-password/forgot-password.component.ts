@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
 import { PATH_TO_ASSISTANCE } from '@app/app.routes';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-***REMOVED***',
@@ -51,16 +52,14 @@ export class ForgotPasswordComponent {
 
     const email = this.form.value.email!;
 
-    this.authService.forgotPassword(email).subscribe({
-      next: (response) => {
-        console.log('Success:', response);
-        this.resetRequestSuccess = true;
-        this.form.reset();
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log('Failure:', error);
-        this.resetRequestSuccess = false;
-      }
-    });
+    this.authService.forgotPassword(email)
+      .pipe(
+        tap(response => {
+          console.log('Success:', response);
+          this.resetRequestSuccess = true;
+          this.form.reset();
+        })
+      )
+      .subscribe();
   }
 }

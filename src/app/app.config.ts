@@ -11,6 +11,7 @@ import { initAuthFactory } from './features/auth/components/auth/init-auth.facto
 import { AuthTokenService } from './features/auth/services/auth-token.service';
 import { NavigationService } from './features/navigation/services/navigation.service';
 import { authInterceptor } from './features/auth/components/auth/auth.interceptor';
+import { problemDetailInterceptor } from './core/interceptors/problem-detail.interceptor';
 
 
 
@@ -31,8 +32,8 @@ export const appConfig: ApplicationConfig = {
       loader: provideTranslateLoader(CustomTranslateLoader)
     }),
     provideHttpClient(
-      withFetch(), 
-      withInterceptors([apiBaseUrlInterceptor, authInterceptor])
+      withFetch(),
+      withInterceptors([apiBaseUrlInterceptor, authInterceptor, problemDetailInterceptor])
     ),
     provideAppInitializer(initConfig),
     provideAppInitializer(() => initAuthFactory(inject(AuthTokenService), inject(NavigationService))()),

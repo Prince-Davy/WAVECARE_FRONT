@@ -5,6 +5,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelect } from '@angular/material/select';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { UserService } from '../../services/user.service';
+import { NotificationService } from '@app/features/notification/services/notification.service';
+import { of } from 'rxjs';
 
 import { UserDetailDTO } from '../../models/user-detail-dto';
 import { UserDetailUpdateDTO } from '../../models/user-detail-update';
@@ -16,6 +19,13 @@ describe('UserDialogComponent', () => {
   const matDialogRefMock = {
     close: jasmine.createSpy('close'),
   } as unknown as MatDialogRef<UserDialogComponent>;
+  const userServiceMock = {
+    createUser: jasmine.createSpy('createUser').and.returnValue(of(void 0)),
+    updateUser: jasmine.createSpy('updateUser').and.returnValue(of(void 0)),
+  };
+  const notificationServiceMock = {
+    openSuccessSnackBar: jasmine.createSpy('openSuccessSnackBar')
+  };
 
   afterEach(() => {
     (matDialogRefMock.close as jasmine.Spy).calls.reset();
@@ -49,6 +59,8 @@ describe('UserDialogComponent', () => {
         providers: [
           { provide: MAT_DIALOG_DATA, useValue: dialogData },
           { provide: MatDialogRef, useValue: matDialogRefMock },
+          { provide: UserService, useValue: userServiceMock },
+          { provide: NotificationService, useValue: notificationServiceMock },
         ],
       }).compileComponents();
 
@@ -152,6 +164,8 @@ describe('UserDialogComponent', () => {
         providers: [
           { provide: MAT_DIALOG_DATA, useValue: dialogData },
           { provide: MatDialogRef, useValue: matDialogRefMock },
+          { provide: UserService, useValue: userServiceMock },
+          { provide: NotificationService, useValue: notificationServiceMock },
         ],
       }).compileComponents();
 

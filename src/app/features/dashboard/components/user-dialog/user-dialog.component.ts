@@ -6,10 +6,13 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatIcon } from '@angular/material/icon';
 import { UserDetailDTO } from '../../models/user-detail-dto';
 import { UserDetailUpdateDTO } from '../../models/user-detail-update';
+import { UserService } from '../../services/user.service';
+import { NotificationService } from '@app/features/notification/services/notification.service';
+import { finalize, tap } from 'rxjs';
 
 export interface UserDialogData {
   user: UserCreateDTO |UserDetailDTO;
@@ -49,6 +52,7 @@ export class UserDialogComponent implements AfterViewInit {
   readonly user = this.data.user;
 
   userDialogForm: FormGroup<any>;
+  isSubmitting: boolean = false;
 
   @ViewChild('roleInput') roleInput!: MatSelect;
 
@@ -60,7 +64,12 @@ export class UserDialogComponent implements AfterViewInit {
   }
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private notificationService: NotificationService,
+    private translate: TranslateService
+  ) {
     const isCreate = this.data.mode === 'create';
 
     this.userDialogForm = this.fb.group({
@@ -91,5 +100,34 @@ export class UserDialogComponent implements AfterViewInit {
 
       return this.data.user;
       */
+  }
+
+  submit(): void {
+    if (this.userDialogForm.invalid || this.isSubmitting) {
+      this.userDialogForm.markAllAsTouched();
+      return;
+    }
+
+    const payload = this.validate();
+    const isCreate = this.data.mode === 'create';
+    const request$ = isCreate
+      ? this.userService.createUser(payload as UserCreateDTO)
+      : this.userService.updateUser(payload as UserDetailUpdateDTO);
+
+    this.isSubmitting = true;
+    request$
+      .pipe(
+        tap(() => {
+          const messageKey = isCreate
+            ? 'feature.dashboard.user-table-component.action.create.message.success'
+            : 'feature.dashboard.user-table-component.table.column.action.update.message.success';
+
+          this.notificationService.openSuccessSnackBar(this.translate.instant(messageKey));
+        }),
+        finalize(() => {
+          this.isSubmitting = false;
+        })
+      )
+      .subscribe(() => this.dialogRef.close(true));
   }
 }

@@ -25,7 +25,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { finalize, merge, startWith } from 'rxjs';
+import { finalize, merge, startWith, tap } from 'rxjs';
 
 import { DashboardComponent } from '@app/features/dashboard/abstract/dashboard-component.abstract';
 import { Page } from '@app/features/dashboard/models/page';
@@ -117,9 +117,8 @@ export class PatientTableComponent extends DashboardComponent implements AfterVi
       sortDirection,
       this.filters
     ).pipe(
-      finalize(() => (this.isLoading = false))
-    ).subscribe({
-      next: (result: Page<PatientDTO>) => {
+      finalize(() => (this.isLoading = false)),
+      tap((result: Page<PatientDTO>) => {
         // transform birthDate string to Date for the date pipe
         this.dataSource.data = (result.content ?? []).map(p => ({
           ...p,
@@ -133,14 +132,8 @@ export class PatientTableComponent extends DashboardComponent implements AfterVi
 
         this.paginator.length = total;
         this.paginator.pageSize = size;
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('An error occurred while loading patients;', error);
-        this.dataSource.data = [];
-        this.resultsLength = 0;
-        this.paginator.length = 0;
-      }
-    });
+      })
+    ).subscribe();
   }
 
   onPatientSearch(value: string) {

@@ -33,7 +33,7 @@
   <button mat-raised-button class="ticket-dialog-cancel" [mat-dialog-close]="undefined">{{ 'feature.dashboard.ticket-dialog-component.action-button.cancel' | translate }}</button>
   <div class="ticket-dialog-validate-wrapper">
     <div>
-      <button mat-raised-button class="ticket-dialog-validate" [mat-dialog-close]="validate()" [disabled]="!ticketDialogForm.valid">{{ 'feature.dashboard.ticket-dialog-component.action-button.confirm' | translate }}</button>
+      <button mat-raised-button class="ticket-dialog-validate" (click)="submit()" [disabled]="!ticketDialogForm.valid || isSubmitting">{{ 'feature.dashboard.ticket-dialog-component.action-button.confirm' | translate }}</button>
     </div>
   </div>
 </mat-dialog-actions>
