@@ -12,6 +12,7 @@ import { CreateAssistanceTicketDTO } from '@app/features/assistance/models/assis
 import { AssistanceService } from '@app/features/assistance/services/assistance.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { TicketCategoryDTO } from '../../models/assitance-ticket-category-dto';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-assistance',
@@ -67,17 +68,14 @@ export class AssistanceComponent {
       } as CreateAssistanceTicketDTO;
 
       this.assistanceService.submitTicket(ticketData)
-        .subscribe({
-          next: (result) => {
+        .pipe(
+          tap((result) => {
             console.log('Ticket submitted successfully', result);
             this.assistanceForm.reset();
             this.submissionSuccess = true;
-          },
-          error: (error: HttpErrorResponse) => {
-            console.error('An error occurred while trying to submit the ticket', error);
-            this.submissionSuccess = false;
-          }
-        });
+          })
+        )
+        .subscribe();
     } else {
       this.submissionSuccess = false;
     }

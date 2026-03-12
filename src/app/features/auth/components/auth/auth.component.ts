@@ -13,6 +13,7 @@ import { AuthTokenService } from '@app/features/auth/services/auth-token.service
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { NavigationService } from '@app/features/navigation/services/navigation.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -73,22 +74,14 @@ export class AuthComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value).subscribe({
-        next: (response) => {
-          console.log("You are logged in");
-          this.navigationService.navigateToHome();
-        },
-        error: (error) => {
-          if (error.status === 429) {
-            // Scenario 2: Lockout
-            this.isLockoutModalOpen = true;
-          } else if (error.status === 401) {
-            this.errorMessage = this.translate.instant('feature.auth.auth-component.form.submit.error-message.auth-error');
-          } else {
-            this.errorMessage = this.translate.instant('feature.auth.auth-component.form.submit.error-message.server-error');
-          }
-        }
-      });
+      this.authService.login(this.loginForm.value)
+        .pipe(
+          tap((response) => {
+            console.log("You are logged in");
+            this.navigationService.navigateToHome();
+          })
+        )
+        .subscribe();
     }
   }
 

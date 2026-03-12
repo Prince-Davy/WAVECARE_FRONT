@@ -13,6 +13,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { TranslateModule } from '@ngx-translate/core';
 import { FilterUtils } from '@app/features/utils/filter.utils';
 import { UserService } from '@app/features/dashboard/services/user.service';
+import { tap } from 'rxjs';
 
 export interface AdvancedFilters {
   role?: string[];
@@ -84,10 +85,9 @@ export class AdvancedFiltersComponent implements OnInit {
 
   
   ngOnInit(): void {
-    this.userService.getUserRoles().subscribe({
-      next: roles => this.roles = roles,
-      error: err => console.error('Erreur chargement rôles', err)
-    });
+    this.userService.getUserRoles()
+      .pipe(tap(roles => this.roles = roles))
+      .subscribe();
   }
 
   ngOnChanges(changes: SimpleChanges): void {

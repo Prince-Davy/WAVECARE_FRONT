@@ -8,6 +8,9 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelect } from '@angular/material/select';
+import { TicketService } from '../../services/ticket.service';
+import { NotificationService } from '@app/features/notification/services/notification.service';
+import { of } from 'rxjs';
 
 import { TicketDetailDTO } from '../../models/ticket-detail-dto';
 import { TicketStatusDTO } from '../../models/ticket-status-dto';
@@ -36,6 +39,12 @@ describe('TicketDialogComponent', () => {
   const matDialogRefMock = {
     close: jasmine.createSpy('close'),
   } as unknown as MatDialogRef<TicketDialogComponent>;
+  const ticketServiceMock = {
+    updateTicket: jasmine.createSpy('updateTicket').and.returnValue(of(void 0)),
+  };
+  const notificationServiceMock = {
+    openSuccessSnackBar: jasmine.createSpy('openSuccessSnackBar')
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -49,6 +58,8 @@ describe('TicketDialogComponent', () => {
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
         { provide: MatDialogRef, useValue: matDialogRefMock },
+        { provide: TicketService, useValue: ticketServiceMock },
+        { provide: NotificationService, useValue: notificationServiceMock },
       ],
     }).compileComponents();
 

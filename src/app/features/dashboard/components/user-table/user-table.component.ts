@@ -13,7 +13,7 @@ import { Page } from '@app/features/dashboard/models/page';
 import { UserViewDTO } from '@app/features/dashboard/models/user-view-dto';
 import { UserService } from '@app/features/dashboard/services/user.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { finalize, merge, startWith, zip } from 'rxjs';
+import { finalize, merge, startWith, tap, zip } from 'rxjs';
 import { SearchBarComponent } from '@app/features/dashboard/components/search-bar/search-bar.component';
 import { UserCreateDTO, UserDialogComponent, UserDialogData } from '../user-dialog/user-dialog.component';
 import { UserDetailUpdateDTO } from '../../models/user-detail-update';
@@ -97,26 +97,18 @@ export class UserTableComponent extends DashboardComponent {
       sortDirection,
       this.filters
     ).pipe(
-      finalize(() => this.isLoading = false)
+      finalize(() => this.isLoading = false),
+      tap((result: Page<UserViewDTO>) => {
+        this.dataSource.data = result.content ?? [];
+        const total = result.totalElements ?? 0;
+        const size = result.size ?? this.pageSize;
+        this.resultsLength = total;
+        this.pageSize = size;
+        this.paginator.length = total;
+        this.paginator.pageSize = size;
+      })
     )
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe({
-        next: (result: Page<UserViewDTO>) => {
-          this.dataSource.data = result.content ?? [];
-          const total = result.totalElements ?? 0;
-          const size = result.size ?? this.pageSize;
-          this.resultsLength = total;
-          this.pageSize = size;
-          this.paginator.length = total;
-          this.paginator.pageSize = size;
-        },
-        error: (error: HttpErrorResponse) => {
-          console.error('An error occurred while loading users;', error);
-          this.dataSource.data = [];
-          this.resultsLength = 0;
-          this.paginator.length = 0;
-        }
-      });
+      .subscribe();
   }
   
 openCreateUserDialog() {
@@ -132,19 +124,10 @@ openCreateUserDialog() {
       data: { user: empty, roles, mode: 'create' } as UserDialogData,
       disableClose: true,
       autoFocus: false
-    }).afterClosed().subscribe((payload?: UserCreateDTO) => {
-      if (!payload) return;
-
-      this.userService.createUser(payload)
-        .pipe(finalize(() => this.refreshTable(0)))
-        .subscribe({
-          next: () => this.notificationService.openSuccessSnackBar(
-            this.translate.instant('feature.dashboard.user-table-component.action.create.message.success')
-          ),
-          error: () => this.notificationService.openErrorSnackBar(
-            this.translate.instant('feature.dashboard.user-table-component.action.create.message.error')
-          )
-        });
+    }).afterClosed().subscribe((created?: boolean) => {
+      if (created) {
+        this.refreshTable(0);
+      }
     });
   });
 }
@@ -163,19 +146,10 @@ openUpdateUserDialog(userId: number) {
       data: { user: payload, roles, mode: 'update' } as UserDialogData,
       disableClose: true,
       autoFocus: false
-    }).afterClosed().subscribe((update?: UserDetailUpdateDTO) => {
-      if (!update) return;
-
-      this.userService.updateUser(update as any) // ou adapte la signature
-        .pipe(finalize(() => this.refreshTable()))
-        .subscribe({
-          next: () => this.notificationService.openSuccessSnackBar(
-            this.translate.instant('feature.dashboard.user-table-component.table.column.action.update.message.success')
-          ),
-          error: () => this.notificationService.openErrorSnackBar(
-            this.translate.instant('feature.dashboard.user-table-component.table.column.action.update.message.error')
-          )
-        });
+    }).afterClosed().subscribe((updated?: boolean) => {
+      if (updated) {
+        this.refreshTable();
+      }
     });
   });
 }
@@ -197,25 +171,18 @@ openUpdateUserDialog(userId: number) {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.userService.deleteUser(user.id)
-          .pipe(finalize(() => this.refreshTable()))
-          .subscribe({
-            next: () => {
+          .pipe(
+            tap(() => {
               this.notificationService.openSuccessSnackBar(
                 this.translate.instant('feature.dashboard.user-table-component.table.column.action.delete.message.success', {
                   lastName: user.lastName,
                   firstName: user.firstName
                 })
               );
-            },
-            error: () => {
-              this.notificationService.openErrorSnackBar( // ✅ error -> openErrorSnackBar
-                this.translate.instant('feature.dashboard.user-table-component.table.column.action.delete.message.error', {
-                  lastName: user.lastName,
-                  firstName: user.firstName
-                })
-              );
-            }
-          });
+            }),
+            finalize(() => this.refreshTable())
+          )
+          .subscribe();
       }
     });
   }
