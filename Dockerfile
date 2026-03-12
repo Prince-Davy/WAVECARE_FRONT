@@ -1,4 +1,5 @@
 FROM node:25-alpine AS build
+RUN apk update && apk upgrade
 WORKDIR /app
 
 COPY package*.json ./
@@ -8,6 +9,7 @@ RUN npm run build
 
 # -------- Runtime --------
 FROM node:25-alpine AS server
+RUN apk update && apk upgrade
 WORKDIR /app
 
 COPY --from=build --chown=node:node /app/dist /app/dist
