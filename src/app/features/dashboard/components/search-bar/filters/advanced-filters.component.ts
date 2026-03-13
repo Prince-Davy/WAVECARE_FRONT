@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, effect, output, input, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,8 +12,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { TranslateModule } from '@ngx-translate/core';
 import { FilterUtils } from '@app/features/utils/filter.utils';
-import { UserService } from '@app/features/dashboard/services/user.service';
-import { tap } from 'rxjs';
+import { UsersService } from '@app/api/generated/users/users.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 export interface AdvancedFilters {
   role?: string[];
@@ -58,12 +58,12 @@ export interface AdvancedFilters {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AdvancedFiltersComponent implements OnInit {
-  @Input() isOpen: boolean = false;
-  @Input() filters: AdvancedFilters = {};
-  @Output() filtersChanged = new EventEmitter<AdvancedFilters>();
-  @Output() toggleOpen = new EventEmitter<void>();
-  @Output() reset = new EventEmitter<void>();
+export class AdvancedFiltersComponent {
+  readonly isOpen = input(false);
+  readonly filters = input<AdvancedFilters>({});
+  readonly filtersChanged = output<AdvancedFilters>();
+  readonly toggleOpen = output<void>();
+  readonly reset = output<void>();
 
   filtersForm: FormGroup;
   appliedFilters: { roles: string[]; statuses: string[]; createdDate: string | null } = {
@@ -72,47 +72,38 @@ export class AdvancedFiltersComponent implements OnInit {
     createdDate: null
   };
   
-  roles: string[] = [];
+  private readonly usersApi = inject(UsersService);
+  readonly roles = toSignal(this.usersApi.getRoles(), { initialValue: [] as string[] });
   statuses = ['active', 'locked'];
 
-  constructor(private readonly fb: FormBuilder, private readonly cdr: ChangeDetectorRef, private readonly userService: UserService) {
+  constructor(private readonly fb: FormBuilder, private readonly cdr: ChangeDetectorRef) {
     this.filtersForm = this.fb.group({
       roles: this.fb.control<string[]>([]),
       statuses: this.fb.control<string[]>([]),
       createdDate: this.fb.control<string | Date | null>('')
     });
-  }
 
-  
-  ngOnInit(): void {
-    this.userService.getUserRoles()
-      .pipe(tap(roles => this.roles = roles))
-      .subscribe();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['filters'] && this.filters) {
-      const f = this.filters;
-      // set roles
-      this.filtersForm.get('roles')?.setValue(f.role ?? []);
-      // set statuses
-      this.filtersForm.get('statuses')?.setValue(f.status ?? []);
-      // set createdDate (convert dd-MM-yyyy string back to Date for the datepicker if present)
-      if (f.createdDate) {
-        const parts = f.createdDate.split('-');
-        if (parts.length === 3) {
-          const day = Number(parts[0]);
-          const month = Number(parts[1]) - 1;
-          const year = Number(parts[2]);
-          this.filtersForm.get('createdDate')?.setValue(new Date(year, month, day));
+    effect(() => {
+      const f = this.filters();
+      if (f) {
+        this.filtersForm.get('roles')?.setValue(f.role ?? []);
+        this.filtersForm.get('statuses')?.setValue(f.status ?? []);
+        if (f.createdDate) {
+          const parts = f.createdDate.split('-');
+          if (parts.length === 3) {
+            const day = Number(parts[0]);
+            const month = Number(parts[1]) - 1;
+            const year = Number(parts[2]);
+            this.filtersForm.get('createdDate')?.setValue(new Date(year, month, day));
+          } else {
+            this.filtersForm.get('createdDate')?.setValue('');
+          }
         } else {
           this.filtersForm.get('createdDate')?.setValue('');
         }
-      } else {
-        this.filtersForm.get('createdDate')?.setValue('');
+        this.cdr.markForCheck();
       }
-      this.cdr.markForCheck();
-    }
+    });
   }
 
 

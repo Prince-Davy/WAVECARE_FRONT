@@ -1,6 +1,6 @@
 // auth.component.ts
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -33,7 +33,7 @@ import { tap } from 'rxjs';
   styleUrl: './auth.component.scss',
 
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent {
 
   readonly PATH_TO_FORGOT_PASSWORD_FOR_HTML = `/${PATH_TO_FORGOT_PASSWORD}`;
   readonly PATH_TO_ASSISTANCE_FOR_HTML = `/${PATH_TO_ASSISTANCE}`;
@@ -56,13 +56,12 @@ export class AuthComponent implements OnInit {
       username: ['', [Validators.required]],
       password: ['', [Validators.required]]
     });
-  }
 
-  ngOnInit(): void {
     if (this.authTokenService.isAuthenticated()) {
       this.navigationService.navigateToHome();
     }
   }
+
   get username() {
     return this.***REMOVED***Form.get('username');
   }

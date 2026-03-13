@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, Input, Output} from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
@@ -45,21 +45,21 @@ export class SearchBarComponent {
     const hasDate = !!af.createdDate && af.createdDate !== '';
     return hasKeywords || hasRole || hasStatus || hasDate;
   }
-    @Input() mode: 'chips' | 'simple' = 'chips';
+    readonly mode = input<'chips' | 'simple'>('chips');
 
   // Personnalisation labels (patients vs tickets)
-  @Input() placeholderKey = 'feature.dashboard.search-bar.search-bar-component.search-input-placeholder';
-  @Input() infoKey = 'feature.dashboard.search-bar.search-bar-component.search-information';
+  readonly placeholderKey = input('feature.dashboard.search-bar.search-bar-component.search-input-placeholder');
+  readonly infoKey = input('feature.dashboard.search-bar.search-bar-component.search-information');
 
   // Pour le mode simple : un seul terme (pas de chips obligatoires)
-  @Output() simpleSearch = new EventEmitter<string>();
+  readonly simpleSearch = output<string>();
 
-  @Input() totalResults: number = 0;
-  @Input() showAdvancedFilters: boolean = false;
-  @Output() keywordsChanged = new EventEmitter<string[]>();
-  @Output() filtersChanged = new EventEmitter<AdvancedFilters>();
+  readonly totalResults = input(0);
+  readonly showAdvancedFilters = input(false);
+  readonly keywordsChanged = output<string[]>();
+  readonly filtersChanged = output<AdvancedFilters>();
 
-	@Output() resetRequested = new EventEmitter<void>();
+	readonly resetRequested = output<void>();
 
 	/*
   onReset(): void {
@@ -75,7 +75,7 @@ export class SearchBarComponent {
   this.isFiltersOpen = false;
 
   // si mode simple : déclencher une recherche vide (retour liste complète)
-  if (this.mode === 'simple') {
+  if (this.mode() === 'simple') {
     this.simpleSearch.emit('');
   }
 
@@ -86,7 +86,7 @@ export class SearchBarComponent {
   const trimmed = (this.inputValue ?? '').trim();
 
   // Mode patient/simple : on émet directement la valeur
-  if (this.mode === 'simple') {
+  if (this.mode() === 'simple') {
 
     this.listKeywords = trimmed ? [trimmed.toLowerCase()] : [];
     this.simpleSearch.emit(trimmed);

@@ -1,9 +1,10 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
-import { PatientService } from '@app/features/dashboard/services/patient.service';
-import { PatientDetailDto } from '@app/features/dashboard/models/patient-detail.dto';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { PatientsService } from '@app/api/generated/patients/patients.service';
+import type { PatientDTO } from '@app/api/model';
 import { PatientDossierAdministratifComponent } from './dossier-administratif/patient-dossier-administratif.component';
 import { PatientDossierMedicalComponent } from './dossier-medical/patient-dossier-medical.component';
 import { PatientAnalyseDiagnosticComponent } from './analyse-diagnostic/patient-analyse-diagnostic.component';
@@ -19,17 +20,20 @@ import { BreadcrumbComponent } from '@app/breadcrumb/breadcrumb.component';
   standalone: true,
   imports: [CommonModule, RouterModule, MatTabsModule, PatientDossierAdministratifComponent, PatientDossierMedicalComponent, PatientAnalyseDiagnosticComponent, TranslateModule, PatientGeneralInfoComponent, BreadcrumbComponent]
 })
-export class PatientDetailComponent implements OnInit {
-  patient: PatientDetailDto | undefined;
+export class PatientDetailComponent {
+
+  private readonly route = inject(ActivatedRoute);
+  private readonly patientsService = inject(PatientsService);
+
+  private readonly patientId = computed(() => Number(this.route.snapshot.paramMap.get('id') || '0'));
+
+  private readonly _patientResource = rxResource({
+    params: () => this.patientId(),
+    stream: ({ params: id }) => this.patientsService.getPatientById(id),
+  });
+
+  readonly patient = computed<PatientDTO | undefined>(() => this._patientResource.value());
+
   selectedTab: 'administratif' | 'medical' | 'diagnostic' = 'administratif';
   selectedIndex: number = 0;
-
-  constructor(private route: ActivatedRoute, private patientService: PatientService) { }
-
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id') || '';
-    this.patientService.getPatientDetail(id).subscribe(patient => {
-      this.patient = patient;
-    });
-  }
 }

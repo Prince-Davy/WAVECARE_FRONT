@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+﻿import { Component, computed, inject } from '@angular/core';
 import { RouterOutlet, NavigationEnd, Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthTokenService } from './features/auth/services/auth-token.service';
 import { FooterComponent } from "./features/dashboard/components/footer/footer.component";
 import { NavbarComponent } from "./features/navigation/components/navbar/navbar.component";
 import { MatChipsModule } from '@angular/material/chips';
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -14,32 +15,22 @@ import { filter } from 'rxjs/operators';
 })
 export class AppComponent {
 
-  dashboardMode = false;
+  private readonly router = inject(Router);
 
-  private router = inject(Router);
+  private readonly fullPageRoutes = ['/***REMOVED***', '/***REMOVED***', '/***REMOVED***', '/assistance'];
+
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      map(e => e.urlAfterRedirects)
+    ),
+    { initialValue: '' }
+  );
+
+  readonly dashboardMode = computed(() => {
+    const url = this.currentUrl();
+    return url ? !this.fullPageRoutes.some(prefix => url.startsWith(prefix)) : false;
+  });
 
   constructor(public tokenService: AuthTokenService) { }
-
-  ngOnInit(): void {
-
-    this.router.events
-      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-      .subscribe(event => {
-
-        const url = event.urlAfterRedirects;
-
-        // 👉 Toutes les pages du dashboard affichent la navbar
-        const fullPageRoutes = [
-          '/***REMOVED***',
-          '/***REMOVED***',
-          '/***REMOVED***',
-          '/assistance'
-        ];
-
-        // Si l’URL commence par l’une de ces routes → mode plein écran
-        const isFullPage = fullPageRoutes.some(prefix => url.startsWith(prefix));
-
-        this.dashboardMode = !isFullPage;
-      });
-  }
 }

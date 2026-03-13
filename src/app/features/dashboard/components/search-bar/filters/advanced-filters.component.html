@@ -1,19 +1,19 @@
 <div class="advanced-filters-wrapper">
   <div class="filters-toggle" (click)="toggleFilters()">
     <span class="toggle-text">
-      {{ isOpen ? '–' : '+' }} {{ 'feature.dashboard.advanced-filters.title' | translate }}
+      {{ isOpen() ? '–' : '+' }} {{ 'feature.dashboard.advanced-filters.title' | translate }}
     </span>
-    <mat-icon class="toggle-icon" [class.open]="isOpen">expand_more</mat-icon>
+    <mat-icon class="toggle-icon" [class.open]="isOpen()">expand_more</mat-icon>
   </div>
 
-  @if (isOpen) {
+  @if (isOpen()) {
   <div class="filters-container">
     <form [formGroup]="filtersForm">
       <div class="filters-grid">
         <!-- Rôles -->
         <div class="filter-column">
           <h3 class="filter-title">{{ 'feature.dashboard.advanced-filters.roles.title' | translate }}</h3>
-          @for (role of roles; track role) {
+          @for (role of roles(); track role) {
             <mat-checkbox
               class="checkbox-option"
               [checked]="filtersForm.value.roles?.includes(role)"

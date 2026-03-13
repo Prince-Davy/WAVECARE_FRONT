@@ -3,14 +3,13 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { UserTableComponent } from './user-table.component';
 import { UserService } from '../../services/user.service';
 import { Observable, of } from 'rxjs';
-import { UserViewDTO } from '../../models/user-view-dto';
+import type { UserDTO, PagedUserDTO } from '@app/api/model';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatTableHarness } from '@angular/material/table/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MatPaginatorHarness } from '@angular/material/paginator/testing';
 import { By } from '@angular/platform-browser';
-import { Page } from '../../models/page';
 
 class FakeLoader implements TranslateLoader {
   getTranslation(lang: string) {return of({});}
@@ -21,7 +20,7 @@ describe('UserTableComponent', () => {
   let fixture: ComponentFixture<UserTableComponent>;
   let userServiceSpy: jasmine.SpyObj<UserService>;
 
-  const mockUsers: UserViewDTO[] = [
+  const mockUsers: UserDTO[] = [
     {
         id: "0",
         firstName: "Prénom 1",
@@ -29,7 +28,6 @@ describe('UserTableComponent', () => {
         email: "email1@email.com",
         role: "USER",
         locked: false,
-        creationDate: new Date()
     },
     {
         id: "1",
@@ -38,7 +36,6 @@ describe('UserTableComponent', () => {
         email: "email2@email.com",
         role: "USER",
         locked: false,
-        creationDate: new Date()
     }
   ];
 
@@ -162,7 +159,7 @@ describe('UserTableComponent', () => {
 
   it("change les données lors du changement de page", () => {
     userServiceSpy.getUsers.and.callFake(
-      (page: number, size: number) : Observable<Page<UserViewDTO>> => {
+      (page: number, size: number) : Observable<PagedUserDTO> => {
         const start = page * size;
         const end = start + size;
         const pageContent = mockUsers.slice(start, end);

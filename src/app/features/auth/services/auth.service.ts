@@ -1,9 +1,10 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { LoginCredentials, LoginResponse } from '@app/features/auth/models/auth.interface';
+import { Injectable, inject } from '@angular/core';
 import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
 import { Observable } from 'rxjs';
 import { tap, timeout } from 'rxjs/operators';
+import { UsersService } from '@app/api/generated/users/users.service';
+import { PasswordResetService } from '@app/api/generated/password-reset/password-reset.service';
+import type { TokenResponse } from '@app/api/model';
 
 
 @Injectable({
@@ -11,27 +12,19 @@ import { tap, timeout } from 'rxjs/operators';
 })
 export class AuthService {
 
-  constructor(private http: HttpClient, private tokenService: AuthTokenService) { }
+  private readonly usersApi = inject(UsersService);
+  private readonly passwordResetApi = inject(PasswordResetService);
+  private readonly tokenService = inject(AuthTokenService);
 
-  ***REMOVED***(credentials: LoginCredentials): Observable<LoginResponse> {
-    const body = {
-      username: credentials.username,
-      password: credentials.password
-    }
-
-    const httpOptions = {
-      headers: new HttpHeaders()
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
-    };
-    return this.http.post<LoginResponse>(
-      `api/***REMOVED***`,
-      body,
-      httpOptions)
+  ***REMOVED***(credentials: { username: string; password: string }): Observable<TokenResponse> {
+    return this.usersApi.***REMOVED***(credentials)
       .pipe(
         tap(response => {
-          if (response.access_token) {
-            this.tokenService.setTokens(response);
+          if (response.access_token && response.refresh_token) {
+            this.tokenService.setTokens({
+              access_token: response.access_token,
+              refresh_token: response.refresh_token,
+            });
           }
         }),
         timeout(10000)
@@ -42,46 +35,21 @@ export class AuthService {
     this.tokenService.removeTokens();
   }
 
-  forgotPassword(email: string): Observable<any> {
-    const params = new HttpParams().set('email', email);
+  forgotPassword(email: string): Observable<string> {
+    return this.passwordResetApi.requestPasswordReset({ email });
+  }
 
-    return this.http.post(`api/password-reset/request`, undefined, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },),
-      params: params,
-      responseType: 'text',
+  readToken(token: string): Observable<{ id: string; email: string }> {
+    return this.passwordResetApi.getUserInfoByToken({ token }) as Observable<{ id: string; email: string }>;
+  }
+
+  updatePassword(token: string | null, userId: string, payload: { userName: string; newPassword: string }): Observable<string> {
+    return this.usersApi.updatePassword(userId, payload, {
+      params: { token: token! },
     });
   }
 
-  readToken(token: string): Observable<{ id: string, email: string }> {
-    const params = new HttpParams().set('token', token);
-
-    return this.http.get<{ id: string, email: string }>(
-      `api/password-reset/token`, { params }
-    );
-  }
-
-  updatePassword(token: string | null, userId: string, payload: { userName: string; newPassword: string }): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept': 'text/plain'
-    });
-
-    const params = new HttpParams().set('token', token!);
-
-    return this.http.put(`api/user/${userId}/password`, payload, {
-      headers: headers,
-      params: params,
-      responseType: 'text'
-    })
-  }
-
-  deleteToken(token: string): Observable<any> {
-    const params = new HttpParams().set('token', token);
-    return this.http.delete(`api/password-reset/token`, {
-      params: params,
-      responseType: 'text'
-    });
+  deleteToken(token: string): Observable<unknown> {
+    return this.passwordResetApi.deleteToken({ token });
   }
 }

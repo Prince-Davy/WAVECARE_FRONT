@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AbstractControl, AbstractControlOptions, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,6 +9,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { NavigationService } from '@app/features/navigation/services/navigation.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs';
 
 @Component({
@@ -27,7 +28,7 @@ import { tap } from 'rxjs';
   styleUrls: ['./***REMOVED***.component.scss']
 })
 
-export class ResetPasswordComponent implements OnInit {
+export class ResetPasswordComponent {
   resetForm: FormGroup;
   token: string | null = null;
   userId: string = '';
@@ -51,17 +52,16 @@ export class ResetPasswordComponent implements OnInit {
       ]],
       confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator } as AbstractControlOptions);
-  }
 
-  ngOnInit() {
     this.token = this.route.snapshot.queryParamMap.get('token');
     if (this.token && this.token.trim() !== '') {
       this.loadUserInfoFromToken();
     } else {
-      // Doing this because during OnInit the translation service isn't loaded yet. Once its loaded, we can set the message.
-      this.translate.onTranslationChange.subscribe(
-        () => this.message = this.translate.instant('feature.auth.***REMOVED***-component.message.error.invalid-link')
-      );
+      this.translate.onTranslationChange
+        .pipe(takeUntilDestroyed())
+        .subscribe(
+          () => this.message = this.translate.instant('feature.auth.***REMOVED***-component.message.error.invalid-link')
+        );
       this.isError = true;
     }
   }

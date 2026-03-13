@@ -1,5 +1,5 @@
 
-import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
+import { Component, afterNextRender, inject, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -8,24 +8,19 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatIcon } from '@angular/material/icon';
-import { UserDetailDTO } from '../../models/user-detail-dto';
-import { UserDetailUpdateDTO } from '../../models/user-detail-update';
-import { UserService } from '../../services/user.service';
+import { UsersService } from '@app/api/generated/users/users.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { finalize, tap } from 'rxjs';
+import type { UserDTO } from '@app/api/model';
 
 export interface UserDialogData {
-  user: UserCreateDTO |UserDetailDTO;
+  user: UserDTO;
   roles: string[];
   mode?: 'create' | 'update';
 }
 
-export interface UserCreateDTO {
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string;
-}
+// Backward compat alias
+export type UserCreateDTO = UserDTO;
 
 @Component({
   selector: 'app-user-dialog',
@@ -46,7 +41,7 @@ export interface UserCreateDTO {
   templateUrl: './user-dialog.component.html',
   styleUrl: './user-dialog.component.scss'
 })
-export class UserDialogComponent implements AfterViewInit {
+export class UserDialogComponent {
   readonly dialogRef = inject(MatDialogRef<UserDialogComponent>);
   readonly data = inject<UserDialogData>(MAT_DIALOG_DATA);
   readonly user = this.data.user;
@@ -54,19 +49,12 @@ export class UserDialogComponent implements AfterViewInit {
   userDialogForm: FormGroup<any>;
   isSubmitting: boolean = false;
 
-  @ViewChild('roleInput') roleInput!: MatSelect;
-
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.roleInput.focus();
-    })
-  }
+  readonly roleInput = viewChild.required<MatSelect>('roleInput');
 
 
   constructor(
     private fb: FormBuilder,
-    private userService: UserService,
+    private usersApi: UsersService,
     private notificationService: NotificationService,
     private translate: TranslateService
   ) {
@@ -78,16 +66,18 @@ export class UserDialogComponent implements AfterViewInit {
       email: [{ value: this.data.user.email ?? '', disabled: !isCreate }, [Validators.required, Validators.email]],
       role: [this.data.user.role ?? this.data.roles?.[0] ?? '0', Validators.required]
     });
+
+    afterNextRender(() => this.roleInput().focus());
   }
 
-  validate():  UserCreateDTO | UserDetailUpdateDTO {
+  validate(): UserDTO {
     const formValue = this.userDialogForm.getRawValue();
 
     if (this.data.mode === 'create') {
         return { firstName: formValue.firstName, lastName: formValue.lastName, email: formValue.email, role: formValue.role };
       }
 
-    const updateUser = this.data.user as UserDetailUpdateDTO;
+    const updateUser = this.data.user;
     return { id: updateUser.id, firstName: formValue.firstName, lastName: formValue.lastName, role: formValue.role, email: updateUser.email };
 
     /*
@@ -111,8 +101,13 @@ export class UserDialogComponent implements AfterViewInit {
     const payload = this.validate();
     const isCreate = this.data.mode === 'create';
     const request$ = isCreate
-      ? this.userService.createUser(payload as UserCreateDTO)
-      : this.userService.updateUser(payload as UserDetailUpdateDTO);
+      ? this.usersApi.createUser(payload)
+      : this.usersApi.updateUser(payload.id!, {
+          lastName: payload.lastName,
+          firstName: payload.firstName,
+          role: payload.role,
+          email: payload.email,
+        });
 
     this.isSubmitting = true;
     request$

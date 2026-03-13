@@ -1,7 +1,7 @@
 
 import { DatePipe } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, DestroyRef, afterNextRender, effect, inject, viewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -9,14 +9,12 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DashboardComponent } from '@app/features/dashboard/abstract/dashboard-component.abstract';
-import { Page } from '@app/features/dashboard/models/page';
-import { UserViewDTO } from '@app/features/dashboard/models/user-view-dto';
-import { UserService } from '@app/features/dashboard/services/user.service';
+import { UserStore } from '@app/features/dashboard/stores/user.store';
+import { UsersService } from '@app/api/generated/users/users.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { finalize, merge, startWith, tap, zip } from 'rxjs';
 import { SearchBarComponent } from '@app/features/dashboard/components/search-bar/search-bar.component';
-import { UserCreateDTO, UserDialogComponent, UserDialogData } from '../user-dialog/user-dialog.component';
-import { UserDetailUpdateDTO } from '../../models/user-detail-update';
+import { UserDialogComponent, UserDialogData } from '../user-dialog/user-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { DeleteUserDialogComponent } from '../delete-user-dialog/delete-user-dialog.component';
@@ -24,6 +22,7 @@ import { AdvancedFilters } from '@app/features/dashboard/components/search-bar/f
 import { UserFilters } from '../../models/user-filters';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
+import type { UserDTO } from '@app/api/model';
 
 @Component({
   selector: 'app-user-table',
@@ -39,10 +38,10 @@ export class UserTableComponent extends DashboardComponent {
   readonly dialog = inject(MatDialog);
 
   displayedColumns: string[] = ['lastName', 'firstName', 'email', 'role', 'locked', 'creationDate', 'update', 'delete'];
-  dataSource: MatTableDataSource<UserViewDTO> = new MatTableDataSource<UserViewDTO>([]);
+  dataSource: MatTableDataSource<UserDTO> = new MatTableDataSource<UserDTO>([]);
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  readonly paginator = viewChild(MatPaginator);
+  readonly sort = viewChild(MatSort);
 
   isLoading: boolean = false;
   pageSizeOptions: number[] = [5, 10, 25, 50];
@@ -55,30 +54,42 @@ export class UserTableComponent extends DashboardComponent {
   
 
   constructor(
-    private userService: UserService,
+    private userStore: UserStore,
+    private usersApi: UsersService,
     private notificationService: NotificationService,
     private translate: TranslateService,
     private authTokenService: AuthTokenService
   ) {
     super();
     this.currentUserId = this.authTokenService.getUserId() ?? '';
-  }
+    const destroyRef = inject(DestroyRef);
 
-  ngAfterViewInit(): void {
-    merge(this.paginator.page, this.sort.sortChange)
-      .pipe(startWith({}))
-      .subscribe(() => this.refreshTable());
+    effect(() => {
+      this.dataSource.data = this.userStore.users();
+      this.resultsLength = this.userStore.totalElements();
+      this.pageSize = this.userStore.pageSize();
+      this.isLoading = this.userStore.loading();
+      const p = this.paginator();
+      if (p) {
+        p.length = this.userStore.totalElements();
+        p.pageSize = this.userStore.pageSize();
+      }
+    });
+
+    afterNextRender(() => {
+      merge(this.paginator()!.page, this.sort()!.sortChange)
+        .pipe(startWith({}), takeUntilDestroyed(destroyRef))
+        .subscribe(() => this.refreshTable());
+    });
   }
 
   private refreshTable(pageIndex?: number): void {
-    this.isLoading = true;
-
     if (pageIndex !== undefined) {
-      this.paginator.pageIndex = pageIndex;
+      this.paginator()!.pageIndex = pageIndex;
     }
 
-    const sortField = this.sort?.active || 'creationDate'; // fallback si rien
-    const sortDirection = this.sort?.direction || 'asc';
+    const sortField = this.sort()?.active || 'creationDate'; // fallback si rien
+    const sortDirection = this.sort()?.direction || 'asc';
 
 
     this.filters = {
@@ -89,31 +100,19 @@ export class UserTableComponent extends DashboardComponent {
       creationDate: this.advancedFilters?.createdDate ?? this.filters.creationDate,
     };
 
-    this.userService.getUsers(
-      this.paginator.pageIndex,
-      this.paginator.pageSize,
+    this.userStore.load(
+      this.paginator()!.pageIndex,
+      this.paginator()!.pageSize,
       this.listKeywords,
       sortField,
       sortDirection,
       this.filters
-    ).pipe(
-      finalize(() => this.isLoading = false),
-      tap((result: Page<UserViewDTO>) => {
-        this.dataSource.data = result.content ?? [];
-        const total = result.totalElements ?? 0;
-        const size = result.size ?? this.pageSize;
-        this.resultsLength = total;
-        this.pageSize = size;
-        this.paginator.length = total;
-        this.paginator.pageSize = size;
-      })
-    )
-      .subscribe();
+    );
   }
   
 openCreateUserDialog() {
-  this.userService.getUserRoles().subscribe(roles => {
-    const empty: UserCreateDTO = {
+  this.usersApi.getRoles().subscribe(roles => {
+    const empty: UserDTO = {
       firstName: '',
       lastName: '',
       email: '',
@@ -133,8 +132,8 @@ openCreateUserDialog() {
 }
 
 openUpdateUserDialog(userId: number) {
-  zip(this.userService.getUserRoles(), this.userService.getUser(userId)).subscribe(([roles, dto]) => {
-    const payload: UserDetailUpdateDTO = {
+  zip(this.usersApi.getRoles(), this.usersApi.getUser(String(userId))).subscribe(([roles, dto]) => {
+    const payload: UserDTO = {
       id: dto.id,
       firstName: dto.firstName,
       lastName: dto.lastName,
@@ -170,7 +169,7 @@ openUpdateUserDialog(userId: number) {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.userService.deleteUser(user.id)
+        this.usersApi.deleteUser(user.id)
           .pipe(
             tap(() => {
               this.notificationService.openSuccessSnackBar(
@@ -206,9 +205,9 @@ openUpdateUserDialog(userId: number) {
     this.listKeywords = [];
     this.advancedFilters = {};
     this.filters = {};
-    this.sort.active = '';
-    this.sort.direction = '';
-    this.paginator.pageIndex = 0;
+    this.sort()!.active = '';
+    this.sort()!.direction = '';
+    this.paginator()!.pageIndex = 0;
     this.refreshTable(0);
   }
 }

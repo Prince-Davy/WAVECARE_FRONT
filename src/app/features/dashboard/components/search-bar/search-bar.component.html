@@ -2,12 +2,12 @@
   <div class="search-bar">
     <span class="search-label">
       <label for="search-bar">{{'feature.dashboard.search-bar.search-bar-component.search.label' | translate}}</label>
-      <span>{{infoKey | translate}}</span>
+      <span>{{infoKey() | translate}}</span>
 
     </span>
     <div class="search-actions">
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <input id="search-bar" matInput [(ngModel)]="inputValue" [placeholder]="placeholderKey | translate" (keyup.enter)="onSearch()" />
+        <input id="search-bar" matInput [(ngModel)]="inputValue" [placeholder]="placeholderKey() | translate" (keyup.enter)="onSearch()" />
       </mat-form-field>
       <button mat-raised-button class="search-button" (click)="onSearch()">
         {{'feature.dashboard.search-bar.search-bar-component.search.button' | translate}}
@@ -16,7 +16,7 @@
   </div>
 
   <!-- Advanced Filters -->
-  @if (showAdvancedFilters) {
+  @if (showAdvancedFilters()) {
   <app-advanced-filters 
     [isOpen]="isFiltersOpen" 
     (toggleOpen)="toggleFilters()" 
@@ -30,8 +30,8 @@
     <div class="left-section">
       <p class="results-text">
         {{'feature.dashboard.search-bar.search-bar-component.result-found-first-part' | translate}}
-        {{totalResults}}
-        {{ getTranslationResultsFound(totalResults) | translate}}
+        {{totalResults()}}
+        {{ getTranslationResultsFound(totalResults()) | translate}}
       </p>
     </div>
 
