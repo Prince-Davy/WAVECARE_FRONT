@@ -1,7 +1,7 @@
 <mat-card class="section">
 
   <mat-card-header>
-    @if (!editMode) {
+    @if (!editMode()) {
       <mat-card-subtitle>
         {{ 'feature.dashboard.patient.detail.couverture.subtitle' | translate }}
       </mat-card-subtitle>
@@ -12,7 +12,7 @@
   <mat-card-content>
 
     <!-- MODE ÉDITION -->
-    @if (editMode) {
+    @if (editMode()) {
       <form [formGroup]="form" (ngSubmit)="submit()" class="grid">
 
         <mat-form-field appearance="outline">
@@ -43,8 +43,8 @@
     <!-- MODE LECTURE -->
     @else {
       <div class="details-grid">
-        <div><strong>{{ 'feature.dashboard.patient.detail.couverture.details.insurance' | translate }}</strong> : {{ couvertureSante.insurance }}</div>
-        <div><strong>{{ 'feature.dashboard.patient.detail.couverture.details.policy' | translate }}</strong> : {{ couvertureSante.policy }}</div>
+        <div><strong>{{ 'feature.dashboard.patient.detail.couverture.details.insurance' | translate }}</strong> : {{ couvertureSante()?.insurance }}</div>
+        <div><strong>{{ 'feature.dashboard.patient.detail.couverture.details.policy' | translate }}</strong> : {{ couvertureSante()?.policy }}</div>
       </div>
     }
 

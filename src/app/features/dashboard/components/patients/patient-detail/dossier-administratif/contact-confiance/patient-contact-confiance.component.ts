@@ -1,10 +1,10 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, effect, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PatientDetailDto } from '@app/features/dashboard/models/patient-detail.dto';
+import { PatientDTO } from '@app/api/model';
 
 import { MatCardModule } from '@angular/material/card';
 import { TranslateModule } from '@ngx-translate/core';
@@ -17,10 +17,10 @@ import { PhoneFormatPipe } from '@app/features/dashboard/pipes/phone-format.pipe
   standalone: true,
   imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule,TranslateModule, PhoneFormatPipe]
 })
-export class PatientContactConfianceComponent implements OnChanges {
-  @Input() contactConfiance!: PatientDetailDto['trustedContact'];
-  @Input() editMode = false;
-  @Output() update = new EventEmitter<Partial<PatientDetailDto['trustedContact']>>();
+export class PatientContactConfianceComponent {
+  readonly contactConfiance = input.required<PatientDTO['trustedContact']>();
+  readonly editMode = input(false);
+  readonly update = output<Partial<PatientDTO['trustedContact']>>();
 
   form: FormGroup;
 
@@ -30,16 +30,17 @@ export class PatientContactConfianceComponent implements OnChanges {
       lastName: ['', Validators.required],
       phone: ['', Validators.required]
     });
-  }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['contactConfiance'] && this.contactConfiance) {
-      this.form.patchValue({
-        firstName: this.contactConfiance.firstName,
-        lastName: this.contactConfiance.lastName,
-        phone: this.contactConfiance.phone
-      });
-    }
+    effect(() => {
+      const c = this.contactConfiance();
+      if (c) {
+        this.form.patchValue({
+          firstName: c.firstName,
+          lastName: c.lastName,
+          phone: c.phone
+        });
+      }
+    });
   }
 
   submit() {

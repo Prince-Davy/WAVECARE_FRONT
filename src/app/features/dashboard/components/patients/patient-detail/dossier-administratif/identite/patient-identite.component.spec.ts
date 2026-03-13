@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PatientIdentiteComponent } from './patient-identite.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { PatientDetailDto } from '@app/features/dashboard/models/patient-detail.dto';
+import type { PatientDTO } from '@app/api/model';
 
 describe('PatientIdentiteComponent', () => {
   let component: PatientIdentiteComponent;
@@ -23,18 +23,18 @@ describe('PatientIdentiteComponent', () => {
   });
 
   it('should populate form when patient input changes including maritalStatus', () => {
-    const patient: PatientDetailDto = {
-      id: '123',
+    const patient: PatientDTO = {
+      id: 123,
       firstName: 'A',
       lastName: 'C',
       ins: 'INS123',
       birthName: 'B',
       maritalName: 'X',
-      maritalStatus: 'MARRIED',
-      birthDate: new Date('2000-01-01'),
+      maritalStatus: 'MARRIED' as any,
+      birthDate: '2000-01-01',
       birthPlace: 'L',
       nationality: 'FR',
-      gender: 'FEMALE',
+      gender: 'FEMALE' as any,
       address: 'Addr',
       phone: '000',
       email: 'e@e.com',

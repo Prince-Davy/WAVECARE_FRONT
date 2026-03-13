@@ -1,4 +1,5 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, DestroyRef, afterNextRender, effect, inject, viewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 // utility to parse dd/MM/yyyy strings into Date objects
 function parseBirthDate(value: string): Date {
@@ -17,7 +18,6 @@ function parseBirthDate(value: string): Date {
 }
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -25,26 +25,16 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { finalize, merge, startWith, tap } from 'rxjs';
+import { merge, startWith } from 'rxjs';
 
 import { DashboardComponent } from '@app/features/dashboard/abstract/dashboard-component.abstract';
-import { Page } from '@app/features/dashboard/models/page';
 import { SearchBarComponent } from '@app/features/dashboard/components/search-bar/search-bar.component';
-import { PatientService } from '@app/features/dashboard/services/patient.service';
+import { PatientStore, PatientFilters } from '@app/features/dashboard/stores/patient.store';
+import type { PatientDTO } from '@app/api/model';
 
-
-export interface PatientDTO {
-  id: number;
-  lastName: string;
-  firstName: string;
-  ins: string;
-  birthDate: Date; // converted from backend string
-}
-
-export interface PatientFilters {
-  keywords?: string[];
-  birthDate?: string;
-}
+// Re-export for backward compat with components that imported from here
+export type { PatientFilters } from '@app/features/dashboard/stores/patient.store';
+export type { PatientDTO } from '@app/api/model';
 
 @Component({
   selector: 'app-patient-table',
@@ -61,17 +51,17 @@ export interface PatientFilters {
     SearchBarComponent,
     RouterModule
   ],
-  providers: [PatientService],
+  providers: [],
   templateUrl: './patient-table.component.html',
   styleUrl: './patient-table.component.scss',
 })
-export class PatientTableComponent extends DashboardComponent implements AfterViewInit {
+export class PatientTableComponent extends DashboardComponent {
 
   displayedColumns: string[] = ['id', 'lastName', 'firstName', 'ins', 'birthDate', 'action'];
   dataSource: MatTableDataSource<PatientDTO> = new MatTableDataSource<PatientDTO>([]);
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  readonly paginator = viewChild(MatPaginator);
+  readonly sort = viewChild(MatSort);
 
   isLoading = false;
 
@@ -82,58 +72,55 @@ export class PatientTableComponent extends DashboardComponent implements AfterVi
   listKeywords: string[] = [];
   filters: PatientFilters = {};
 
-  constructor(private readonly patientService: PatientService,
+  constructor(private readonly patientStore: PatientStore,
               private router: Router,
               public route: ActivatedRoute) {
     super();
-  }
+    const destroyRef = inject(DestroyRef);
 
-  ngAfterViewInit(): void {
-    merge(this.paginator.page, this.sort.sortChange)
-      .pipe(startWith({}))
-      .subscribe(() => this.refreshTable());
+    effect(() => {
+      this.dataSource.data = (this.patientStore.patients() ?? []).map(p => ({
+        ...p,
+        birthDate: parseBirthDate(p.birthDate as string)
+      })) as any[];
+      this.resultsLength = this.patientStore.totalElements();
+      this.pageSize = this.patientStore.pageSize();
+      this.isLoading = this.patientStore.loading();
+      const pg = this.paginator();
+      if (pg) {
+        pg.length = this.patientStore.totalElements();
+        pg.pageSize = this.patientStore.pageSize();
+      }
+    });
+
+    afterNextRender(() => {
+      merge(this.paginator()!.page, this.sort()!.sortChange)
+        .pipe(startWith({}), takeUntilDestroyed(destroyRef))
+        .subscribe(() => this.refreshTable());
+    });
   }
 
   private refreshTable(pageIndex?: number): void {
-    this.isLoading = true;
-
     if (pageIndex !== undefined) {
-      this.paginator.pageIndex = pageIndex;
+      this.paginator()!.pageIndex = pageIndex;
     }
 
-    const sortField = this.sort?.active || 'id';
-    const sortDirection = this.sort?.direction || 'asc';
+    const sortField = this.sort()?.active || 'id';
+    const sortDirection = this.sort()?.direction || 'asc';
 
     this.filters = {
       ...this.filters,
       keywords: this.listKeywords ?? this.filters.keywords,
     };
 
-    this.patientService.getPatients(
-      this.paginator.pageIndex,
-      this.paginator.pageSize,
+    this.patientStore.load(
+      this.paginator()!.pageIndex,
+      this.paginator()!.pageSize,
       this.listKeywords,
       sortField,
       sortDirection,
       this.filters
-    ).pipe(
-      finalize(() => (this.isLoading = false)),
-      tap((result: Page<PatientDTO>) => {
-        // transform birthDate string to Date for the date pipe
-        this.dataSource.data = (result.content ?? []).map(p => ({
-          ...p,
-          birthDate: parseBirthDate(p.birthDate as unknown as string)
-        } as PatientDTO));
-        const total = result.totalElements ?? 0;
-        const size = result.size ?? this.pageSize;
-
-        this.resultsLength = total;
-        this.pageSize = size;
-
-        this.paginator.length = total;
-        this.paginator.pageSize = size;
-      })
-    ).subscribe();
+    );
   }
 
   onPatientSearch(value: string) {
@@ -163,9 +150,9 @@ export class PatientTableComponent extends DashboardComponent implements AfterVi
   resetTable(): void {
     this.listKeywords = [];
     this.filters = {};
-    this.sort.active = '';
-    this.sort.direction = '';
-    this.paginator.pageIndex = 0;
+    this.sort()!.active = '';
+    this.sort()!.direction = '';
+    this.paginator()!.pageIndex = 0;
     this.refreshTable(0);
   }
 

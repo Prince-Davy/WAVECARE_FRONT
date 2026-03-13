@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PatientDetailDto } from '@app/features/dashboard/models/patient-detail.dto'; 
+import { PatientDTO } from '@app/api/model'; 
 
 
 @Component({
@@ -9,5 +9,5 @@ import { PatientDetailDto } from '@app/features/dashboard/models/patient-detail.
   styleUrls: ['./patient-analyse-diagnostic.component.scss']
 })
 export class PatientAnalyseDiagnosticComponent {
-  @Input() patient!: PatientDetailDto;
+  readonly patient = input.required<PatientDTO>();
 }

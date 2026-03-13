@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { PatientDetailDto } from '@app/features/dashboard/models/patient-detail.dto';
+import { PatientDTO } from '@app/api/model';
 import { NssFormatPipe } from '@app/features/dashboard/pipes/nss-format.pipe';
 
 @Component({
@@ -12,5 +12,5 @@ import { NssFormatPipe } from '@app/features/dashboard/pipes/nss-format.pipe';
   imports: [CommonModule, TranslateModule, NssFormatPipe]
 })
 export class PatientGeneralInfoComponent {
-  @Input() patient!: PatientDetailDto;
+  readonly patient = input.required<PatientDTO>();
 }

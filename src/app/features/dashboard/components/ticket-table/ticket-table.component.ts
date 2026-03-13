@@ -1,6 +1,6 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
+import { Component, DestroyRef, afterNextRender, effect, inject, viewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from "@angular/material/card";
 import { MatChipsModule } from '@angular/material/chips';
@@ -16,14 +16,14 @@ import { DashboardComponent } from '@app/features/dashboard/abstract/dashboard-c
 import { CustomPaginator } from '@app/features/dashboard/classes/custom-paginator';
 import { SearchBarComponent } from '@app/features/dashboard/components/search-bar/search-bar.component';
 import { TicketDialogComponent, TicketDialogData } from '@app/features/dashboard/components/ticket-dialog/ticket-dialog.component';
-import { Page } from '@app/features/dashboard/models/page';
-import { TicketDetailUpdateDTO } from '@app/features/dashboard/models/ticket-detail-update-dto';
-import { TicketViewDTO } from '@app/features/dashboard/models/ticket-view-dto';
-import { TicketService } from '@app/features/dashboard/services/ticket.service';
+import { TicketStore } from '@app/features/dashboard/stores/ticket.store';
+import { TicketsService } from '@app/api/generated/tickets/tickets.service';
+import { TicketStatusesService } from '@app/api/generated/ticket-statuses/ticket-statuses.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { Pad4Pipe } from '@app/features/dashboard/pipes/pad4.pide';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { finalize, merge, startWith, tap, zip } from 'rxjs';
+import { merge, startWith, zip } from 'rxjs';
+import type { TicketViewDTO } from '@app/api/model';
 
 
 @Component({
@@ -40,15 +40,15 @@ import { finalize, merge, startWith, tap, zip } from 'rxjs';
     { provide: MatPaginatorIntl, useClass: CustomPaginator }
   ]
 })
-export class TicketTableComponent extends DashboardComponent implements AfterViewInit {
+export class TicketTableComponent extends DashboardComponent {
 
   readonly dialog = inject(MatDialog);
 
   displayedColumns: string[] = ['id', 'subject', 'lastName', 'firstName', 'mail', 'status', 'lastModifiedDate', 'action'];
-  dataSource: MatTableDataSource<TicketViewDTO> = new MatTableDataSource<TicketViewDTO>([]);
+  dataSource = new MatTableDataSource<TicketViewDTO>([]);
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  readonly sort = viewChild(MatSort);
+  readonly paginator = viewChild(MatPaginator);
 
   isLoading: boolean = false;
   pageSizeOptions: number[] = [5, 10, 25, 50];
@@ -56,25 +56,32 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
   pageSize: number = this.pageSizeOptions[1];
   listKeywords: string[] = [];
 
-  constructor(private ticketService: TicketService, private notificationService: NotificationService, private translate: TranslateService) {
+  constructor(private ticketStore: TicketStore, private ticketsApi: TicketsService, private ticketStatusesApi: TicketStatusesService, private notificationService: NotificationService, private translate: TranslateService) {
     super();
-  }
+    const destroyRef = inject(DestroyRef);
 
+    effect(() => {
+      this.dataSource.data = this.ticketStore.tickets();
+      this.resultsLength = this.ticketStore.totalElements();
+      this.pageSize = this.ticketStore.pageSize();
+      this.isLoading = this.ticketStore.loading();
+      const p = this.paginator();
+      if (p) {
+        p.length = this.ticketStore.totalElements();
+        p.pageSize = this.ticketStore.pageSize();
+      }
+    });
 
-  ngAfterViewInit(): void {
-    merge(
-      this.paginator.page,
-      this.sort.sortChange
-    )
-      .pipe(
-        startWith({}),
-      )
-      .subscribe(() => this.refreshTable());
+    afterNextRender(() => {
+      merge(this.paginator()!.page, this.sort()!.sortChange)
+        .pipe(startWith({}), takeUntilDestroyed(destroyRef))
+        .subscribe(() => this.refreshTable());
+    });
   }
 
 
   openTicketDialog(ticketId: number) {
-    zip(this.ticketService.getTicketStatuses(), this.ticketService.getTicket(ticketId))
+    zip(this.ticketStatusesApi.getAllStatuses(), this.ticketsApi.getTicket(ticketId))
       .subscribe(([statuses, ticketDetailDTO]) => {
         this.dialog.open(TicketDialogComponent, {
           data: {
@@ -96,10 +103,8 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
 
 
   private refreshTable(pageIndex?: number): void {
-    this.isLoading = true;
-
     if (pageIndex !== undefined) {
-      this.paginator.pageIndex = pageIndex;
+      this.paginator()!.pageIndex = pageIndex;
     }
 
     const sortFieldMap: Record<string, string> = {
@@ -108,31 +113,18 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
     };
 
     const sortFields: { field: string; direction: 'asc' | 'desc' }[] = [];
-    if (this.sort?.active && this.sort?.direction) {
-      const field = sortFieldMap[this.sort.active] ?? this.sort.active;
-      const direction = this.sort.direction as 'asc' | 'desc';
+    if (this.sort()?.active && this.sort()?.direction) {
+      const field = sortFieldMap[this.sort()!.active] ?? this.sort()!.active;
+      const direction = this.sort()!.direction as 'asc' | 'desc';
       sortFields.push({ field, direction });
     }
 
-    this.ticketService.getTickets(
-      this.paginator.pageIndex,
-      this.paginator.pageSize,
+    this.ticketStore.load(
+      this.paginator()!.pageIndex,
+      this.paginator()!.pageSize,
       this.listKeywords,
       sortFields
-    )
-      .pipe(
-        finalize(() => this.isLoading = false),
-        tap((result: Page<TicketViewDTO>) => {
-          this.dataSource.data = result.content ?? [];
-          const total = result.totalElements ?? 0;
-          const size = result.size ?? this.pageSize;
-          this.resultsLength = total;
-          this.pageSize = size;
-          this.paginator.length = total;
-          this.paginator.pageSize = size;
-        })
-      )
-      .subscribe();
+    );
   }
 
 
@@ -150,9 +142,9 @@ export class TicketTableComponent extends DashboardComponent implements AfterVie
 
   resetTable(): void {
     this.listKeywords = [];
-    this.sort.active = '';
-    this.sort.direction = '';
-    this.paginator.pageIndex = 0;
+    this.sort()!.active = '';
+    this.sort()!.direction = '';
+    this.paginator()!.pageIndex = 0;
     this.refreshTable(0);
   }
 

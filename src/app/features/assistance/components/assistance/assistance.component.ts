@@ -1,6 +1,5 @@
 
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -8,11 +7,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
-import { CreateAssistanceTicketDTO } from '@app/features/assistance/models/assistance-ticket-dto';
-import { AssistanceService } from '@app/features/assistance/services/assistance.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TicketsService } from '@app/api/generated/tickets/tickets.service';
+import { TicketCategoriesService } from '@app/api/generated/ticket-categories/ticket-categories.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { TicketCategoryDTO } from '../../models/assitance-ticket-category-dto';
 import { tap } from 'rxjs';
+import type { TicketCreateDTO } from '@app/api/model';
 
 @Component({
   selector: 'app-assistance',
@@ -34,7 +34,9 @@ import { tap } from 'rxjs';
 export class AssistanceComponent {
   assistanceForm: FormGroup<any>;
   submissionSuccess: boolean | null = null;
-  ticketCategories: TicketCategoryDTO[] = [];
+
+  private readonly categoriesService = inject(TicketCategoriesService);
+  readonly ticketCategories = toSignal(this.categoriesService.getAllCategories(), { initialValue: [] });
 
   /**
    * This regex matches if :
@@ -45,7 +47,7 @@ export class AssistanceComponent {
    */
   private readonly NAME_REGEX: RegExp = /^(?=.*[\p{L}])(?!.* {2})(?!.*-{3})[\p{L}\- ]+$/u;
 
-  constructor(private fb: FormBuilder, private assistanceService: AssistanceService) {
+  constructor(private fb: FormBuilder, private ticketsService: TicketsService) {
     this.assistanceForm = this.fb.group({
       lastName: ['', [Validators.required, Validators.pattern(this.NAME_REGEX), Validators.maxLength(50)]],
       firstName: ['', [Validators.required, Validators.pattern(this.NAME_REGEX), Validators.maxLength(50)]],
@@ -53,21 +55,19 @@ export class AssistanceComponent {
       subject: ['', Validators.required],
       content: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(2000)]]
     });
-
-    this.assistanceService.getTicketCategories().subscribe((categories) => this.ticketCategories = categories);
   }
 
   onSubmit() {
     if (this.assistanceForm.valid) {
-      const ticketData: CreateAssistanceTicketDTO = {
+      const ticketData: TicketCreateDTO = {
         firstName: this.assistanceForm.value.firstName,
         lastName: this.assistanceForm.value.lastName,
         mail: this.assistanceForm.value.mail,
         categoryId: this.assistanceForm.value.subject,
         description: this.assistanceForm.value.content
-      } as CreateAssistanceTicketDTO;
+      };
 
-      this.assistanceService.submitTicket(ticketData)
+      this.ticketsService.createTicket(ticketData)
         .pipe(
           tap((result) => {
             console.log('Ticket submitted successfully', result);

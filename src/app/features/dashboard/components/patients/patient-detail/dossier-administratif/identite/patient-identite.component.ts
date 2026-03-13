@@ -1,11 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, effect, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
-import { PatientDetailDto } from '@app/features/dashboard/models/patient-detail.dto';
+import { PatientDTO } from '@app/api/model';
 
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -20,10 +20,10 @@ import { PhoneFormatPipe } from '@app/features/dashboard/pipes/phone-format.pipe
   standalone: true,
   imports: [CommonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, ReactiveFormsModule, MatCardModule, TranslateModule, NssFormatPipe, PhoneFormatPipe]
 })
-export class PatientIdentiteComponent implements OnChanges {
-  @Input() patient!: PatientDetailDto;
-  @Input() editMode = false;
-  @Output() update = new EventEmitter<Partial<PatientDetailDto>>();
+export class PatientIdentiteComponent {
+  readonly patient = input.required<PatientDTO>();
+  readonly editMode = input(false);
+  readonly update = output<Partial<PatientDTO>>();
 
   form: FormGroup;
 
@@ -58,25 +58,26 @@ export class PatientIdentiteComponent implements OnChanges {
       email: [''],
       nss: ['']
     });
-  }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['patient'] && this.patient) {
-      this.form.patchValue({
-        firstName: this.patient.firstName,
-        birthName: this.patient.birthName,
-        maritalName: this.patient.maritalName,
-        maritalStatus: (this.patient as any).maritalStatus, // may be undefined when old data
-        birthDate: this.patient.birthDate,
-        birthPlace: this.patient.birthPlace,
-        nationality: this.patient.nationality,
-        gender: this.patient.gender,
-        address: this.patient.address,
-        phone: this.patient.phone,
-        email: this.patient.email,
-        nss: this.patient.nss
-      });
-    }
+    effect(() => {
+      const p = this.patient();
+      if (p) {
+        this.form.patchValue({
+          firstName: p.firstName,
+          birthName: p.birthName,
+          maritalName: p.maritalName,
+          maritalStatus: (p as any).maritalStatus,
+          birthDate: p.birthDate,
+          birthPlace: p.birthPlace,
+          nationality: p.nationality,
+          gender: p.gender,
+          address: p.address,
+          phone: p.phone,
+          email: p.email,
+          nss: p.nss
+        });
+      }
+    });
   }
 
   submit() {

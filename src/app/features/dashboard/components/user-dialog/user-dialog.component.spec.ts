@@ -1,16 +1,14 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UserDialogComponent, UserDialogData } from './user-dialog.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSelect } from '@angular/material/select';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { UserService } from '../../services/user.service';
+import { UsersService } from '@app/api/generated/users/users.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { of } from 'rxjs';
 
-import { UserDetailDTO } from '../../models/user-detail-dto';
-import { UserDetailUpdateDTO } from '../../models/user-detail-update';
+import type { UserDTO } from '@app/api/model';
 
 describe('UserDialogComponent', () => {
   let fixture: ComponentFixture<UserDialogComponent>;
@@ -33,19 +31,18 @@ describe('UserDialogComponent', () => {
   });
 
   describe('En mode update', () => {
-    const userBase: UserDetailDTO = {
+    const userBase: UserDTO = {
       id: "10",
       lastName: 'Doe',
       firstName: 'John',
       email: 'john.doe@example.com',
       role: 'USER',
       locked: false,
-      creationDate: new Date(),
-    } as UserDetailDTO;
+    } as UserDTO;
 
     beforeEach(async () => {
       const dialogData: UserDialogData = {
-        userDetailDTO: { ...userBase },
+        user: { ...userBase },
         roles: [...rolesBase],
       };
 
@@ -59,7 +56,7 @@ describe('UserDialogComponent', () => {
         providers: [
           { provide: MAT_DIALOG_DATA, useValue: dialogData },
           { provide: MatDialogRef, useValue: matDialogRefMock },
-          { provide: UserService, useValue: userServiceMock },
+          { provide: UsersService, useValue: userServiceMock },
           { provide: NotificationService, useValue: notificationServiceMock },
         ],
       }).compileComponents();
@@ -106,11 +103,11 @@ describe('UserDialogComponent', () => {
       emailCtrl?.disable();
     });
 
-    it('validate() devrait retourner un UserDetailUpdateDTO avec les valeurs choisies', () => {
+    it('validate() devrait retourner un UserDTO avec les valeurs choisies', () => {
       component.userDialogForm.get('lastName')?.setValue('Smith');
       component.userDialogForm.get('firstName')?.setValue('Alice');
       component.userDialogForm.get('role')?.setValue('ADMIN');
-      const dto: UserDetailUpdateDTO = component.validate();
+      const dto: UserDTO = component.validate();
       expect(dto.id).toBe("10");
       expect(dto.lastName).toBe('Smith');
       expect(dto.firstName).toBe('Alice');
@@ -126,30 +123,21 @@ describe('UserDialogComponent', () => {
       expect(dto.lastName).toBe('');
       expect(dto.firstName).toBe('');
     });
-
-    it('ngAfterViewInit devrait appeler focus() sur le MatSelect (via setTimeout)', fakeAsync(() => {
-      const focusSpy = jasmine.createSpy('focus');
-      component.roleInput = { focus: focusSpy } as unknown as MatSelect;
-      component.ngAfterViewInit();
-      tick(0);
-      expect(focusSpy).toHaveBeenCalled();
-    }));
   });
 
   describe('En mode création', () => {
-    const userCreateBase: UserDetailDTO = {
-      id: null,
+    const userCreateBase: UserDTO = {
+      id: undefined,
       lastName: '',
       firstName: '',
       email: '',
       role: 'USER',
       locked: false,
-      creationDate: null,
-    } as unknown as UserDetailDTO;
+    } as unknown as UserDTO;
 
     beforeEach(async () => {
       const dialogData: UserDialogData = {
-        userDetailDTO: { ...userCreateBase },
+        user: { ...userCreateBase },
         roles: [...rolesBase],
         mode: 'create',
       };
@@ -164,7 +152,7 @@ describe('UserDialogComponent', () => {
         providers: [
           { provide: MAT_DIALOG_DATA, useValue: dialogData },
           { provide: MatDialogRef, useValue: matDialogRefMock },
-          { provide: UserService, useValue: userServiceMock },
+          { provide: UsersService, useValue: userServiceMock },
           { provide: NotificationService, useValue: notificationServiceMock },
         ],
       }).compileComponents();

@@ -30,6 +30,9 @@
       ],
       "@services/*": [
         "src/app/features/dashboard/services/*"
+      ],
+      "@api/*": [
+        "src/app/api/*"
       ]
     }
   },

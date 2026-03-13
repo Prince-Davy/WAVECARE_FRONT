@@ -1,7 +1,7 @@
-import { Injectable, OnDestroy } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { MatPaginatorIntl } from "@angular/material/paginator";
 import { TranslateService } from "@ngx-translate/core";
-import { Subscription } from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Custom Paginator use to handle the I18N translation with ngx-translate.
@@ -21,18 +21,17 @@ import { Subscription } from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
-export class CustomPaginator extends MatPaginatorIntl implements OnDestroy {
+export class CustomPaginator extends MatPaginatorIntl {
   private readonly PAGINATOR_LABEL_DENOMINATION = `feature.dashboard.ticket-table-component.table.paginator`;
 
-  private translateSubscription: Subscription = new Subscription();
   private ofLabel: string | undefined;
 
   constructor(private translate: TranslateService) {
     super();
 
-    this.translateSubscription = this.translate.onLangChange.subscribe(() => {
-      this.getAndInitTranslations();
-    });
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.getAndInitTranslations());
     this.getAndInitTranslations();
   }
 
@@ -55,8 +54,4 @@ export class CustomPaginator extends MatPaginatorIntl implements OnDestroy {
     const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
     return `${startIndex + 1} - ${endIndex} ${this.ofLabel} ${length}`;
   };
-
-  ngOnDestroy() {
-    this.translateSubscription.unsubscribe();
-  }
 }

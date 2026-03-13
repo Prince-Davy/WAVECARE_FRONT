@@ -1,19 +1,16 @@
 
 // ticket-dialog.component.spec.ts
 import { TestBed } from '@angular/core/testing';
-import { ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture } from '@angular/core/testing';
 import { TicketDialogComponent, TicketDialogData } from './ticket-dialog.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatSelect } from '@angular/material/select';
-import { TicketService } from '../../services/ticket.service';
+import { TicketsService } from '@app/api/generated/tickets/tickets.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { of } from 'rxjs';
 
-import { TicketDetailDTO } from '../../models/ticket-detail-dto';
-import { TicketStatusDTO } from '../../models/ticket-status-dto';
+import { TicketDetailDTO, TicketStatusDTO } from '@app/api/model';
 
 describe('TicketDialogComponent', () => {
   let fixture: ComponentFixture<TicketDialogComponent>;
@@ -58,7 +55,7 @@ describe('TicketDialogComponent', () => {
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
         { provide: MatDialogRef, useValue: matDialogRefMock },
-        { provide: TicketService, useValue: ticketServiceMock },
+        { provide: TicketsService, useValue: ticketServiceMock },
         { provide: NotificationService, useValue: notificationServiceMock },
       ],
     }).compileComponents();
@@ -113,17 +110,4 @@ describe('TicketDialogComponent', () => {
     expect(dto.statusId).toBe(0);
     expect(dto.adminComment).toBe('');
   });
-
-  it('ngAfterViewInit devrait appeler le focus sur le MatSelect (via setTimeout)', fakeAsync(() => {
-    // On mocke le ViewChild pour éviter de dépendre du template
-    const focusSpy = jasmine.createSpy('focus');
-    component.statusInput = { focus: focusSpy } as unknown as MatSelect;
-
-    // Appel manuel de ngAfterViewInit
-    component.ngAfterViewInit();
-
-    // setTimeout(0) => tick(0)
-    tick(0);
-    expect(focusSpy).toHaveBeenCalled();
-  }));
 });

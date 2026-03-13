@@ -49,7 +49,7 @@
         <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
           <mat-select id="subject" [placeholder]="'feature.assistance.assistance-component.form.category.placeholder' | translate" formControlName="subject"
             [aria-label]="'feature.assistance.assistance-component.form.category.label' | translate" required>
-            @for(category of ticketCategories; track category) {
+            @for(category of ticketCategories(); track category) {
             <mat-option [value]="category.id">{{ 'model.ticket.category.' + category.label| translate }}</mat-option>
             }
           </mat-select>

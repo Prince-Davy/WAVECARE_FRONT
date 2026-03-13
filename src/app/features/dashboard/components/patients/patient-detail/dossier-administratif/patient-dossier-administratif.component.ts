@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PatientDetailDto } from '@app/features/dashboard/models/patient-detail.dto';
+import { PatientDTO } from '@app/api/model';
 import { PatientIdentiteComponent } from './identite/patient-identite.component';
 import { PatientContactConfianceComponent } from './contact-confiance/patient-contact-confiance.component';
 import { PatientCouvertureSanteComponent } from './couverture-sante/patient-couverture-sante.component';
@@ -14,5 +14,5 @@ import { PatientCouvertureSanteComponent } from './couverture-sante/patient-couv
   imports: [CommonModule, PatientIdentiteComponent, PatientContactConfianceComponent, PatientCouvertureSanteComponent]
 })
 export class PatientDossierAdministratifComponent {
-  @Input() patient!: PatientDetailDto;
+  readonly patient = input.required<PatientDTO>();
 }

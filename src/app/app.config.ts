@@ -12,14 +12,12 @@ import { AuthTokenService } from './features/auth/services/auth-token.service';
 import { NavigationService } from './features/navigation/services/navigation.service';
 import { authInterceptor } from './features/auth/components/auth/auth.interceptor';
 import { problemDetailInterceptor } from './core/interceptors/problem-detail.interceptor';
-
-
+import { provideTanStackQuery, QueryClient } from '@tanstack/angular-query-experimental';
 
 function initConfig() {
   const cfg = inject(ConfigService);
   return cfg.load();
 }
-
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -35,8 +33,15 @@ export const appConfig: ApplicationConfig = {
       withFetch(),
       withInterceptors([apiBaseUrlInterceptor, authInterceptor, problemDetailInterceptor])
     ),
+    provideTanStackQuery(new QueryClient({
+      defaultOptions: {
+        queries: {
+          staleTime: 30_000,
+          refetchOnWindowFocus: false,
+        },
+      },
+    })),
     provideAppInitializer(initConfig),
     provideAppInitializer(() => initAuthFactory(inject(AuthTokenService), inject(NavigationService))()),
-
   ]
 };
