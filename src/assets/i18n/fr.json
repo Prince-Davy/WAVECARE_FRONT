@@ -559,7 +559,7 @@
     "auth": {
       "account": {
         "locked": "Votre compte est temporairement verrouillé. Veuillez réessayer plus tard.",
-        "disabled": "Votre compte est désactivé. Veuillez contacter un administrateur."
+        "failed": "Échec de l'authentification. Veuillez vérifier vos identifiants et réessayer."
       },
       "email": {
         "invalid": "Aucun compte n'est associé à cet e-mail."
