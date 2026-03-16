@@ -1,6 +1,6 @@
 {
   "name": "wavecare-front",
-  "version": "0.0.0",
+  "version": "1.14.0",
   "scripts": {
     "start": "ng serve",
     "start:dev": "ng serve --configuration=development",
