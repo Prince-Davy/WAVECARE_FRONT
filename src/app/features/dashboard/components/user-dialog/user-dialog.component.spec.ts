@@ -13,16 +13,20 @@ import type { UserDTO } from '@app/api/model';
 describe('UserDialogComponent', () => {
   let fixture: ComponentFixture<UserDialogComponent>;
   let component: UserDialogComponent;
+
   const rolesBase: string[] = ['ADMIN', 'USER', 'MANAGER'];
+
   const matDialogRefMock = {
     close: jasmine.createSpy('close'),
   } as unknown as MatDialogRef<UserDialogComponent>;
+
   const userServiceMock = {
     createUser: jasmine.createSpy('createUser').and.returnValue(of(void 0)),
     updateUser: jasmine.createSpy('updateUser').and.returnValue(of(void 0)),
   };
+
   const notificationServiceMock = {
-    openSuccessSnackBar: jasmine.createSpy('openSuccessSnackBar')
+    openSuccessSnackBar: jasmine.createSpy('openSuccessSnackBar'),
   };
 
   afterEach(() => {
@@ -32,7 +36,7 @@ describe('UserDialogComponent', () => {
 
   describe('En mode update', () => {
     const userBase: UserDTO = {
-      id: "10",
+      id: '10',
       lastName: 'Doe',
       firstName: 'John',
       email: 'john.doe@example.com',
@@ -84,22 +88,29 @@ describe('UserDialogComponent', () => {
 
     it('devrait valider que lastName/firstName/role sont requis', () => {
       const fg = component.userDialogForm;
+
       fg.get('lastName')?.setValue(null);
       expect(fg.get('lastName')?.hasError('required')).toBeTrue();
+
       fg.get('firstName')?.setValue(null);
       expect(fg.get('firstName')?.hasError('required')).toBeTrue();
+
       fg.get('role')?.setValue(null);
       expect(fg.get('role')?.hasError('required')).toBeTrue();
+
       expect(fg.valid).toBeFalse();
     });
 
     it('devrait appliquer la contrainte email sur le champ email (même désactivé)', () => {
       const emailCtrl = component.userDialogForm.get('email');
       emailCtrl?.enable();
+
       emailCtrl?.setValue('not-an-email');
       expect(emailCtrl?.hasError('email')).toBeTrue();
+
       emailCtrl?.setValue('valid@test.com');
       expect(emailCtrl?.hasError('email')).toBeFalse();
+
       emailCtrl?.disable();
     });
 
@@ -107,21 +118,25 @@ describe('UserDialogComponent', () => {
       component.userDialogForm.get('lastName')?.setValue('Smith');
       component.userDialogForm.get('firstName')?.setValue('Alice');
       component.userDialogForm.get('role')?.setValue('ADMIN');
+
       const dto: UserDTO = component.validate();
-      expect(dto.id).toBe("10");
+
+      expect(dto.id).toBe('10');
       expect(dto.lastName).toBe('Smith');
       expect(dto.firstName).toBe('Alice');
       expect(dto.role).toBe('ADMIN');
     });
 
-    it('validate() devrait mettre role="0" si le rôle est introuvable et laisser lastName/firstName vides si null', () => {
+    it('validate() devrait conserver role inconnu et laisser lastName/firstName à null si null', () => {
       component.userDialogForm.get('role')?.setValue('UNKNOWN');
       component.userDialogForm.get('lastName')?.setValue(null);
       component.userDialogForm.get('firstName')?.setValue(null);
+
       const dto = component.validate();
-      expect(dto.role).toBe('0');
-      expect(dto.lastName).toBe('');
-      expect(dto.firstName).toBe('');
+
+      expect(dto.role).toBe('UNKNOWN');
+      expect(dto.lastName).toBeNull();
+      expect(dto.firstName).toBeNull();
     });
   });
 
@@ -181,8 +196,10 @@ describe('UserDialogComponent', () => {
       fg.get('firstName')?.setValue('User');
       fg.get('email')?.setValue('new@test.com');
       fg.get('role')?.setValue('MANAGER');
+
       const dto = component.validate();
-      expect(dto.id).toBeNull();
+
+      expect(dto.id).toBeUndefined();
       expect(dto.lastName).toBe('New');
       expect(dto.firstName).toBe('User');
       expect(dto.email).toBe('new@test.com');

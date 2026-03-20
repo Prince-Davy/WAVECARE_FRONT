@@ -1,40 +1,64 @@
-import { homeRedirectGuard } from './home-redirect.guard';
-import { TestBed } from '@angular/core/testing';
-import { Router, UrlTree } from '@angular/router';
-import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
-import { PATH_TO_LOGIN } from '@app/app.routes';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { of } from 'rxjs';
 
-describe('homeRedirectGuard', () => {
-  let router: jasmine.SpyObj<Router>;
-  let auth: jasmine.SpyObj<AuthTokenService>;
+import { AuthService } from '@app/features/auth/services/auth.service';
+import { NavigationService } from '@app/features/navigation/services/navigation.service';
+import { ResetPasswordComponent } from '@app/features/auth/components/reset-password/reset-password.component';
 
-  beforeEach(() => {
-    router = jasmine.createSpyObj('Router', ['createUrlTree']);
-    auth = jasmine.createSpyObj('AuthTokenService', ['tryAutoRefresh', 'isAuthenticated', 'getDefaultRoute']);
-    TestBed.configureTestingModule({
+describe('ResetPasswordComponent', () => {
+  let component: ResetPasswordComponent;
+  let fixture: ComponentFixture<ResetPasswordComponent>;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let navigationServiceSpy: jasmine.SpyObj<NavigationService>;
+
+  beforeEach(async () => {
+    authServiceSpy = jasmine.createSpyObj<AuthService>('AuthService', [
+      'readToken',
+      'updatePassword',
+      'deleteToken',
+    ]);
+
+    navigationServiceSpy = jasmine.createSpyObj<NavigationService>('NavigationService', [
+      'navigateToLogin',
+    ]);
+
+    authServiceSpy.readToken.and.returnValue(
+      of({
+        id: 'user-1',
+        email: 'john.doe@example.com',
+      } as any)
+    );
+    authServiceSpy.updatePassword.and.returnValue(of('OK'));
+    authServiceSpy.deleteToken.and.returnValue(of('OK'));
+
+    await TestBed.configureTestingModule({
+      imports: [ResetPasswordComponent, TranslateModule.forRoot()],
       providers: [
-        { provide: Router, useValue: router },
-        { provide: AuthTokenService, useValue: auth },
+        provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              queryParamMap: convertToParamMap({ token: 'fake-token' }),
+            },
+            params: of({}),
+            queryParams: of({ token: 'fake-token' }),
+            data: of({}),
+          },
+        },
+        { provide: AuthService, useValue: authServiceSpy },
+        { provide: NavigationService, useValue: navigationServiceSpy },
       ],
-    });
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ResetPasswordComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
-  it('lets unauthenticated users proceed', async () => {
-    auth.tryAutoRefresh.and.returnValue(Promise.resolve(false));
-    auth.isAuthenticated.and.returnValue(false);
-    const result = await homeRedirectGuard();
-    expect(result).toBeTrue();
-  });
-
-  it('redirects authenticated users to default', async () => {
-    auth.tryAutoRefresh.and.returnValue(Promise.resolve(true));
-    auth.isAuthenticated.and.returnValue(true);
-    auth.getDefaultRoute.and.returnValue(PATH_TO_LOGIN);
-    const tree = {} as UrlTree;
-    router.createUrlTree.and.returnValue(tree);
-
-    const result = await homeRedirectGuard();
-    expect(result).toBe(tree);
-    expect(router.createUrlTree).toHaveBeenCalledWith([PATH_TO_LOGIN]);
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

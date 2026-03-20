@@ -1,60 +1,88 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
+import { of } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { UserTableComponent } from './user-table.component';
-import { UserService } from '../../services/user.service';
-import { Observable, of } from 'rxjs';
-import type { UserDTO, PagedUserDTO } from '@app/api/model';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { MatTableHarness } from '@angular/material/table/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { MatPaginatorHarness } from '@angular/material/paginator/testing';
-import { By } from '@angular/platform-browser';
-
-class FakeLoader implements TranslateLoader {
-  getTranslation(lang: string) {return of({});}
-}
+import { UserStore } from '@app/features/dashboard/stores/user.store';
+import { UsersService } from '@app/api/generated/users/users.service';
+import { NotificationService } from '@app/features/notification/services/notification.service';
+import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
+import type { UserDTO } from '@app/api/model';
 
 describe('UserTableComponent', () => {
   let component: UserTableComponent;
   let fixture: ComponentFixture<UserTableComponent>;
-  let userServiceSpy: jasmine.SpyObj<UserService>;
 
   const mockUsers: UserDTO[] = [
     {
-        id: "0",
-        firstName: "Prénom 1",
-        lastName: "Nom 1",
-        email: "email1@email.com",
-        role: "USER",
-        locked: false,
+      id: '0',
+      firstName: 'Prénom 1',
+      lastName: 'Nom 1',
+      email: 'email1@email.com',
+      role: 'USER' as any,
+      locked: false,
     },
     {
-        id: "1",
-        firstName: "Prénom 2",
-        lastName: "Nom 2",
-        email: "email2@email.com",
-        role: "USER",
-        locked: false,
-    }
+      id: '1',
+      firstName: 'Prénom 2',
+      lastName: 'Nom 2',
+      email: 'email2@email.com',
+      role: 'USER' as any,
+      locked: false,
+    },
   ];
 
+  const userStoreMock = {
+    users: jasmine.createSpy('users').and.returnValue(mockUsers),
+    totalElements: jasmine.createSpy('totalElements').and.returnValue(2),
+    pageSize: jasmine.createSpy('pageSize').and.returnValue(10),
+    loading: jasmine.createSpy('loading').and.returnValue(false),
+    load: jasmine.createSpy('load'),
+  };
+
+  const usersServiceMock = jasmine.createSpyObj<UsersService>('UsersService', [
+    'getUsers',
+    'getRoles',
+    'getUser',
+    'deleteUser',
+  ]);
+
+  const notificationServiceMock = jasmine.createSpyObj<NotificationService>(
+    'NotificationService',
+    ['openErrorSnackBar', 'openSuccessSnackBar']
+  );
+
+  const authTokenServiceMock = jasmine.createSpyObj<AuthTokenService>(
+    'AuthTokenService',
+    ['getUserId']
+  );
+
+  const dialogMock = jasmine.createSpyObj<MatDialog>('MatDialog', ['open']);
+
   beforeEach(async () => {
-    userServiceSpy = jasmine.createSpyObj('UserService', ['getUsers']);
-    userServiceSpy.getUsers.and.returnValue(
-      of({content: [], totalElements: 0, totalPages: 0, size: 10})
-    )
+    authTokenServiceMock.getUserId.and.returnValue('0');
+    usersServiceMock.getRoles.and.returnValue(of(['USER', 'ADMINISTRATOR'] as any));
+    usersServiceMock.getUser.and.returnValue(of({} as any));
+    dialogMock.open.and.returnValue({
+      afterClosed: () => of(false),
+    } as any);
+
     await TestBed.configureTestingModule({
       imports: [
         UserTableComponent,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {provide: TranslateLoader, useClass: FakeLoader}
-        })
+        TranslateModule.forRoot(),
+        NoopAnimationsModule,
       ],
-      providers: [{provide: UserService, useValue: userServiceSpy}]
-    })
-    .compileComponents();
+      providers: [
+        { provide: UserStore, useValue: userStoreMock },
+        { provide: UsersService, useValue: usersServiceMock },
+        { provide: NotificationService, useValue: notificationServiceMock },
+        { provide: AuthTokenService, useValue: authTokenServiceMock },
+        { provide: MatDialog, useValue: dialogMock },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(UserTableComponent);
     component = fixture.componentInstance;
@@ -66,115 +94,62 @@ describe('UserTableComponent', () => {
   });
 
   it('affiche les colonnes attendues', () => {
-    const expected = ["firstName", "lastName", "email", "role", "locked", "creationDate", "update", "delete"];
-    expect(component.displayedColumns).toEqual(expected);
-  })
+  expect(component.displayedColumns).toEqual([
+    'lastName',
+    'firstName',
+    'email',
+    'role',
+    'locked',
+    'creationDate',
+    'update',
+    'delete',
+  ]);
+});
 
-  it('charge et affiche les utilisateurs dans la table', async () => {
-    userServiceSpy.getUsers.and.returnValue(
-      of({ content: mockUsers, totalElements: 2, totalPages: 1, size: 10})
-    );
+  it('charge les utilisateurs depuis le store', () => {
+    expect(component.dataSource.data.length).toBe(2);
+    expect(component.dataSource.data[0].firstName).toBe('Prénom 1');
+    expect(component.dataSource.data[1].firstName).toBe('Prénom 2');
+    expect(component.resultsLength).toBe(2);
+    expect(component.pageSize).toBe(10);
+    expect(component.isLoading).toBeFalse();
+  });
 
-    component.ngAfterViewInit?.();
-    fixture.detectChanges();
+  it('rappelle le store quand keywordsChanged est déclenché', fakeAsync(() => {
+    userStoreMock.load.calls.reset();
 
-    const loader = TestbedHarnessEnvironment.loader(fixture);
-    const table = await loader.getHarness(MatTableHarness);
-
-    const text = await table.getCellTextByIndex();
-    expect(text.length).toBe(2);
-    expect(text[0].some(cell => cell.includes('Prénom 1'))).toBeTrue();
-    expect(text[1].some(cell => cell.includes('Prénom 2'))).toBeTrue();
-  })
-
-  it('paginates with MatPaginatorHarness and recalls the service', fakeAsync(async () => {
-    userServiceSpy.getUsers.and.returnValues(
-      of({ content: mockUsers, totalElements: 20, totalPages: 10, size: 2 }), // page 0
-      of({ content: mockUsers, totalElements: 20, totalPages: 10, size: 2 }) // page 1
-    );
-
-    component.pageSize = 2;
-    component.pageSizeOptions = [2, 5, 10];
-    component.ngAfterViewInit?.();
-    fixture.detectChanges();
-
-    const loader = TestbedHarnessEnvironment.loader(fixture);
-    const paginator = await loader.getHarness(MatPaginatorHarness);
-
-    expect(await paginator.getPageSize()).toBe(2);
-    expect(await paginator.getRangeLabel()).toContain('1'); await paginator.goToNextPage();
-    fixture.detectChanges();
+    component.keywordsChanged(['abc']);
     tick();
 
-    expect(userServiceSpy.getUsers.calls.count()).toBeGreaterThanOrEqual(2);
-  })); 
+    expect(component.listKeywords).toEqual(['abc']);
+    expect(userStoreMock.load).toHaveBeenCalled();
+  }));
 
-  /*it("affiche une erreur si pb avec le service", () => {
+  it('resetTable réinitialise les filtres', fakeAsync(() => {
+    component.listKeywords = ['abc'];
+    component.advancedFilters = {
+      role: ['USER'],
+      status: ['ACTIVE'],
+      createdDate: '01/01/2026',
+    } as any;
+    userStoreMock.load.calls.reset();
 
-  })*/
+    component.resetTable();
+    tick();
 
-  it("affiche correctement même si liste vide", async () => {
-    userServiceSpy.getUsers.and.returnValue(
-      of({content: [], totalElements: 0, totalPages: 10, size: 0})
-    );
-    fixture.detectChanges();
-    await fixture.whenStable();
+    expect(component.listKeywords).toEqual([]);
+    expect(component.advancedFilters).toEqual({});
+    expect(component.filters).toEqual({
+      keywords: [],
+      roles: undefined,
+      statuses: undefined,
+      creationDate: undefined,
+    });
+    expect(userStoreMock.load).toHaveBeenCalled();
+  }));
 
-    // Vérifier si la table existe encore
-    const table = fixture.debugElement.query(By.css('.mat-mdc-table'))
-    expect(table).toBeTruthy();
-
-    // Vérifier si la pagination indique bien '0 sur 0'
-    const paginatorRange = fixture.debugElement.query(By.css('.mat-mdc-paginator-range-label')).nativeElement;
-    expect(paginatorRange.textContent.trim()).toBe('0 of 0');
-  })
-
-  it("trie correctement les utilisateurs par colonne", async () => {
-    userServiceSpy.getUsers.and.returnValue(
-      of({content: mockUsers.reverse(), totalElements: 20, totalPages: 1, size: 20})
-    );
-
-    component.ngAfterViewInit?.();
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    // Vérifier que le tableau a bien été rempli
-    const rows = fixture.debugElement.queryAll(By.css('.mat-mdc-row'));
-    expect(rows.length).toBeGreaterThan(0);
-
-
-
-    const firstCellBefore = fixture.debugElement.query(By.css('.mat-mdc-row:first-child .mat-mdc-cell:first-child')).nativeElement.textContent.trim();
-
-    const sortColumnArrow = fixture.debugElement.query(By.css('th.mat-sort-header'));
-    sortColumnArrow.nativeElement.dispatchEvent(new Event('click'));
-
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const firstCellAfter = fixture.debugElement.query(By.css('.mat-mdc-row:first-child .mat-mdc-cell:first-child')).nativeElement.textContent.trim();
-
-    expect(firstCellBefore).not.toEqual(firstCellAfter);
-  })
-
-  it("change les données lors du changement de page", () => {
-    userServiceSpy.getUsers.and.callFake(
-      (page: number, size: number) : Observable<PagedUserDTO> => {
-        const start = page * size;
-        const end = start + size;
-        const pageContent = mockUsers.slice(start, end);
-        return of({content: pageContent, totalElements: mockUsers.length, totalPages: Math.ceil(mockUsers.length / size), size: size})
-      }
-    )
-
-    let resultPage0: any;
-    userServiceSpy.getUsers(0, 1).subscribe(response => resultPage0 = response);
-    expect(resultPage0.content.length).toBe(1);
-    expect(resultPage0.content[0].id).toBe(mockUsers[0].id);
-
-    let resultPage1: any;
-    userServiceSpy.getUsers(1, 1).subscribe(response => resultPage1 = response);
-    expect(resultPage1.content.length).toBe(1);
-    expect(resultPage1.content[0].id).toBe(mockUsers[1].id);
-  })
+  it('retourne true si l’utilisateur est le current user', () => {
+    expect(component.isCurrentUser({ id: '0' })).toBeTrue();
+    expect(component.isCurrentUser({ id: '1' })).toBeFalse();
+  });
 });

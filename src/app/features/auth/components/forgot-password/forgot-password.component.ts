@@ -1,5 +1,4 @@
 
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,8 +34,8 @@ export class ForgotPasswordComponent {
   resetRequestSuccess: boolean | null = null;
 
   constructor(
-    private fb: FormBuilder,
-    private authService: AuthService
+    private readonly fb: FormBuilder,
+    private readonly authService: AuthService
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]]

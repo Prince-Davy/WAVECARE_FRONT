@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { PatientCouvertureSanteComponent } from './patient-couverture-sante.component';
-import { TranslateModule } from '@ngx-translate/core';
 
 describe('PatientCouvertureSanteComponent', () => {
   let component: PatientCouvertureSanteComponent;
@@ -9,10 +9,15 @@ describe('PatientCouvertureSanteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PatientCouvertureSanteComponent, TranslateModule.forRoot()]
+      imports: [PatientCouvertureSanteComponent, TranslateModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PatientCouvertureSanteComponent);
+    fixture.componentRef.setInput('couvertureSante', {
+      insurance: 'Mutuelle',
+      policy: 'POL123',
+    } as any);
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -39,11 +39,11 @@ export class ResetPasswordComponent {
   showConfirmPassword = false;
 
   constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private route: ActivatedRoute,
-    private navigationService: NavigationService,
-    private translate: TranslateService
+    private readonly fb: FormBuilder,
+    private readonly authService: AuthService,
+    private readonly route: ActivatedRoute,
+    private readonly navigationService: NavigationService,
+    private readonly translate: TranslateService
   ) {
     this.resetForm = this.fb.group({
       newPassword: ['', [

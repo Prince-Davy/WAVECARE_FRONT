@@ -173,6 +173,5 @@ export class SearchBarComponent {
       createdDate: ''
     }
     this.keywordsChanged.emit(this.listKeywords);
-    // this.filtersChanged.emit(this.advancedFilters);
   }
 }
