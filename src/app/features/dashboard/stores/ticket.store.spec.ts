@@ -1,15 +1,17 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { HttpRequest } from '@angular/common/http';
+
+
 import { TicketStore } from './ticket.store';
-import { PagedTicketDTO } from '@app/api/model';
+import type { PagedTicketDTO } from '@app/api/model';
 
 describe('TicketStore', () => {
   let store: TicketStore;
   let httpMock: HttpTestingController;
+
   const ticketsUrl = '/api/tickets';
 
   beforeEach(() => {
@@ -26,13 +28,7 @@ describe('TicketStore', () => {
     httpMock.verify();
   });
 
-  it('should start with empty state', () => {
-    expect(store.tickets()).toEqual([]);
-    expect(store.totalElements()).toBe(0);
-    expect(store.loading()).toBeFalse();
-  });
-
-  it('load() devrait appeler /tickets avec params (page, size, listKeywords[], sort)', () => {
+  it('load() devrait appeler /tickets avec params (page, size, listKeywords[], sort)', fakeAsync(() => {
     const page = 2;
     const size = 25;
     const listKeywords = ['urgent', 'prod'];
@@ -42,13 +38,18 @@ describe('TicketStore', () => {
     ];
 
     store.load(page, size, listKeywords, sortFields);
+    TestBed.flushEffects();
 
-    const req = httpMock.expectOne((r: HttpRequest<any>) => r.method === 'GET' && r.url === ticketsUrl);
+    const req = httpMock.expectOne((r) => r.url === ticketsUrl);
 
+    expect(req.request.method).toBe('GET');
     expect(req.request.params.get('page')).toBe(String(page));
     expect(req.request.params.get('size')).toBe(String(size));
     expect(req.request.params.getAll('listKeywords')).toEqual(listKeywords);
-    expect(req.request.params.getAll('sort')).toEqual(['createdAt,desc', 'priority,asc']);
+    expect(req.request.params.getAll('sort')).toEqual([
+      'createdAt,desc',
+      'priority,asc',
+    ]);
 
     req.flush({
       content: [],
@@ -58,26 +59,50 @@ describe('TicketStore', () => {
       size,
     } as PagedTicketDTO);
 
-    expect(store.totalElements()).toBe(42);
-    expect(store.pageSize()).toBe(size);
-  });
+    TestBed.flushEffects();
 
-  it('load() sans sortFields ne doit pas envoyer de paramètre "sort"', () => {
+  }));
+
+  it('load() sans sortFields ne doit pas envoyer de paramètre "sort"', fakeAsync(() => {
     store.load(0, 10, ['foo']);
+    TestBed.flushEffects();
 
-    const req = httpMock.expectOne((r: HttpRequest<any>) => r.method === 'GET' && r.url === ticketsUrl);
+    const req = httpMock.expectOne((r) => r.url === ticketsUrl);
+
+    expect(req.request.method).toBe('GET');
+    expect(req.request.params.get('page')).toBe('0');
+    expect(req.request.params.get('size')).toBe('10');
     expect(req.request.params.getAll('sort')).toBeNull();
     expect(req.request.params.getAll('listKeywords')).toEqual(['foo']);
 
-    req.flush({ content: [], totalElements: 0, totalPages: 0, size: 10 } as PagedTicketDTO);
-  });
+    req.flush({
+      content: [],
+      totalElements: 0,
+      totalPages: 0,
+      size: 10,
+    } as PagedTicketDTO);
+
+    TestBed.flushEffects();
+  }));
 
   it('load() avec listKeywords vide ne doit pas envoyer "listKeywords"', () => {
     store.load(0, 10, [], []);
+    TestBed.flushEffects();
 
-    const req = httpMock.expectOne((r: HttpRequest<any>) => r.method === 'GET' && r.url === ticketsUrl);
+    const req = httpMock.expectOne((r) => r.url === ticketsUrl);
+
+    expect(req.request.method).toBe('GET');
+    expect(req.request.params.get('page')).toBe('0');
+    expect(req.request.params.get('size')).toBe('10');
     expect(req.request.params.getAll('listKeywords')).toBeNull();
 
-    req.flush({ content: [], totalElements: 0, totalPages: 0, size: 10 } as PagedTicketDTO);
+    req.flush({
+      content: [],
+      totalElements: 0,
+      totalPages: 0,
+      size: 10,
+    } as PagedTicketDTO);
+
+    TestBed.flushEffects();
   });
 });

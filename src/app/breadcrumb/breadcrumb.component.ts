@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 
+
 export interface BreadcrumbItem {
   /** Clé de traduction (ex: 'feature.dashboard.patient.detail.breadcrumb.patientFile') */
   labelKey: string;

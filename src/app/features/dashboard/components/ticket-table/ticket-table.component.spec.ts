@@ -135,5 +135,3 @@ describe('TicketTableComponent', () => {
     expect(component.openTicketDialog).toHaveBeenCalledOnceWith(1);
   });
 });
-
-});

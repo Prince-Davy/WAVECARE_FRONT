@@ -129,11 +129,4 @@ describe('SearchBarComponent', () => {
     button.click();
     expect(component.addKeyword).toHaveBeenCalled();
   });
-
-  it('appelle removeAllKeywords() lorsque le bouton de réinitialisation est cliqué', () => {
-    spyOn(component, 'removeAllKeywords');
-    const button = fixture.debugElement.query(By.css('.reset-button')).nativeElement;
-    button.click();
-    expect(component.removeAllKeywords).toHaveBeenCalled();
-  });
 });

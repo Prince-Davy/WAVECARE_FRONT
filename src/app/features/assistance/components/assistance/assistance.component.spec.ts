@@ -1,20 +1,55 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+import { of } from 'rxjs';
+
 import { AssistanceComponent } from '@app/features/assistance/components/assistance/assistance.component';
+import { TicketsService } from '@app/api/generated/tickets/tickets.service';
+import { TicketCategoriesService } from '@app/api/generated/ticket-categories/ticket-categories.service';
 
 describe('AssistanceComponent', () => {
   let component: AssistanceComponent;
   let fixture: ComponentFixture<AssistanceComponent>;
+  let ticketsServiceSpy: jasmine.SpyObj<TicketsService>;
+  let ticketCategoriesServiceSpy: jasmine.SpyObj<TicketCategoriesService>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [AssistanceComponent],
-      imports: [ReactiveFormsModule]
-    })
-      .compileComponents();
-  });
+    ticketsServiceSpy = jasmine.createSpyObj<TicketsService>('TicketsService', [
+      'createTicket',
+    ]);
+    ticketCategoriesServiceSpy = jasmine.createSpyObj<TicketCategoriesService>(
+      'TicketCategoriesService',
+      ['getAllCategories']
+    );
 
-  beforeEach(() => {
+    ticketsServiceSpy.createTicket.and.returnValue(of({} as any));
+    ticketCategoriesServiceSpy.getAllCategories.and.returnValue(
+      of([{ id: 1, label: 'Identifiant' }] as any)
+    );
+
+    await TestBed.configureTestingModule({
+      imports: [
+        AssistanceComponent,
+        ReactiveFormsModule,
+        TranslateModule.forRoot(),
+      ],
+      providers: [
+        provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {},
+            params: of({}),
+            queryParams: of({}),
+            data: of({}),
+          },
+        },
+        { provide: TicketsService, useValue: ticketsServiceSpy },
+        { provide: TicketCategoriesService, useValue: ticketCategoriesServiceSpy },
+      ],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(AssistanceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -25,46 +60,52 @@ describe('AssistanceComponent', () => {
   });
 
   it('should have a valid form when all fields are filled correctly', () => {
-    component.assistanceForm.controls['nom'].setValue('Doe');
-    component.assistanceForm.controls['prenom'].setValue('John');
-    component.assistanceForm.controls['email'].setValue('***REMOVED***');
-    component.assistanceForm.controls['objet'].setValue('Identifiant');
-    component.assistanceForm.controls['description'].setValue('This is a test description.');
+    component.assistanceForm.controls['lastName'].setValue('Doe');
+    component.assistanceForm.controls['firstName'].setValue('John');
+    component.assistanceForm.controls['mail'].setValue('***REMOVED***');
+    component.assistanceForm.controls['subject'].setValue(1);
+    component.assistanceForm.controls['content'].setValue(
+      'This is a valid test description.'
+    );
 
-    expect(component.assistanceForm.valid).toBeTruthy();
+    expect(component.assistanceForm.valid).toBeTrue();
   });
 
   it('should have an invalid form when fields are empty or incorrect', () => {
-    component.assistanceForm.controls['nom'].setValue('');
-    component.assistanceForm.controls['prenom'].setValue('');
-    component.assistanceForm.controls['email'].setValue('invalid-email');
-    component.assistanceForm.controls['objet'].setValue('');
-    component.assistanceForm.controls['description'].setValue('short');
+    component.assistanceForm.controls['lastName'].setValue('');
+    component.assistanceForm.controls['firstName'].setValue('');
+    component.assistanceForm.controls['mail'].setValue('invalid-email');
+    component.assistanceForm.controls['subject'].setValue(null);
+    component.assistanceForm.controls['content'].setValue('short');
 
-    expect(component.assistanceForm.invalid).toBeTruthy();
+    expect(component.assistanceForm.invalid).toBeTrue();
   });
 
   it('should set submissionSuccess to true on valid form submission', () => {
-    component.assistanceForm.controls['nom'].setValue('Doe');
-    component.assistanceForm.controls['prenom'].setValue('John');
-    component.assistanceForm.controls['email'].setValue('***REMOVED***');
-    component.assistanceForm.controls['objet'].setValue('Identifiant');
-    component.assistanceForm.controls['description'].setValue('This is a test description.');
+    component.assistanceForm.controls['lastName'].setValue('Doe');
+    component.assistanceForm.controls['firstName'].setValue('John');
+    component.assistanceForm.controls['mail'].setValue('***REMOVED***');
+    component.assistanceForm.controls['subject'].setValue(1);
+    component.assistanceForm.controls['content'].setValue(
+      'This is a valid test description.'
+    );
 
     component.onSubmit();
 
+    expect(ticketsServiceSpy.createTicket).toHaveBeenCalled();
     expect(component.submissionSuccess).toBeTrue();
   });
 
   it('should set submissionSuccess to false on invalid form submission', () => {
-    component.assistanceForm.controls['nom'].setValue('');
-    component.assistanceForm.controls['prenom'].setValue('');
-    component.assistanceForm.controls['email'].setValue('invalid-email');
-    component.assistanceForm.controls['objet'].setValue('');
-    component.assistanceForm.controls['description'].setValue('short');
+    component.assistanceForm.controls['lastName'].setValue('');
+    component.assistanceForm.controls['firstName'].setValue('');
+    component.assistanceForm.controls['mail'].setValue('invalid-email');
+    component.assistanceForm.controls['subject'].setValue(null);
+    component.assistanceForm.controls['content'].setValue('short');
 
     component.onSubmit();
 
+    expect(ticketsServiceSpy.createTicket).not.toHaveBeenCalled();
     expect(component.submissionSuccess).toBeFalse();
   });
 });
