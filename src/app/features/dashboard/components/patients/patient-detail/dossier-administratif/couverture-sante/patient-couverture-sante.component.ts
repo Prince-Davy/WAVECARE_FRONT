@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PatientDTO } from '@app/api/model';
+import { PatientResponse } from '@app/api/model';
 
 import { MatCard, MatCardModule } from '@angular/material/card';
 import { TranslateModule } from '@ngx-translate/core';
@@ -17,9 +17,9 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule, TranslateModule]
 })
 export class PatientCouvertureSanteComponent {
-  readonly couvertureSante = input.required<PatientDTO['healthCoverage']>();
+  readonly couvertureSante = input.required<PatientResponse['healthCoverage']>();
   readonly editMode = input(false);
-  readonly update = output<Partial<PatientDTO['healthCoverage']>>();
+  readonly update = output<Partial<PatientResponse['healthCoverage']>>();
 
   form: FormGroup;
 

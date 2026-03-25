@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PatientDTO } from '@app/api/model';
+import { PatientResponse } from '@app/api/model';
 
 import { MatCardModule } from '@angular/material/card';
 import { TranslateModule } from '@ngx-translate/core';
@@ -15,12 +15,12 @@ import { PhoneFormatPipe } from '@app/features/dashboard/pipes/phone-format.pipe
   templateUrl: './patient-contact-confiance.component.html',
   styleUrls: ['./patient-contact-confiance.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule,TranslateModule, PhoneFormatPipe]
+  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule, TranslateModule, PhoneFormatPipe]
 })
 export class PatientContactConfianceComponent {
-  readonly contactConfiance = input.required<PatientDTO['trustedContact']>();
+  readonly contactConfiance = input.required<PatientResponse['trustedContact']>();
   readonly editMode = input(false);
-  readonly update = output<Partial<PatientDTO['trustedContact']>>();
+  readonly update = output<Partial<PatientResponse['trustedContact']>>();
 
   form: FormGroup;
 

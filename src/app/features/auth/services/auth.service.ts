@@ -17,7 +17,7 @@ export class AuthService {
   private readonly tokenService = inject(AuthTokenService);
 
   login(credentials: { username: string; password: string }): Observable<TokenResponse> {
-    return this.usersApi.login(credentials)
+    return this.usersApi.userLogin(credentials)
       .pipe(
         tap(response => {
           if (response.access_token && response.refresh_token) {
@@ -36,20 +36,20 @@ export class AuthService {
   }
 
   forgotPassword(email: string): Observable<string> {
-    return this.passwordResetApi.requestPasswordReset({ email });
+    return this.passwordResetApi.resetPasswordRequest({ email });
   }
 
   readToken(token: string): Observable<{ id: string; email: string }> {
-    return this.passwordResetApi.getUserInfoByToken({ token }) as Observable<{ id: string; email: string }>;
+    return this.passwordResetApi.resetPasswordValidate({ token }) as Observable<{ id: string; email: string }>;
   }
 
   updatePassword(token: string | null, userId: string, payload: { userName: string; newPassword: string }): Observable<string> {
-    return this.usersApi.updatePassword(userId, payload, {
+    return this.usersApi.userUpdatePassword(userId, payload, {
       params: { token: token! },
     });
   }
 
   deleteToken(token: string): Observable<unknown> {
-    return this.passwordResetApi.deleteToken({ token });
+    return this.passwordResetApi.resetPasswordDelete({ token });
   }
 }

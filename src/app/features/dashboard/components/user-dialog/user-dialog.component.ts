@@ -11,16 +11,16 @@ import { MatIcon } from '@angular/material/icon';
 import { UsersService } from '@app/api/generated/users/users.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { finalize, tap } from 'rxjs';
-import type { UserDTO } from '@app/api/model';
+import type { UserResponse } from '@app/api/model';
 
 export interface UserDialogData {
-  user: UserDTO;
+  user: UserResponse;
   roles: string[];
   mode?: 'create' | 'update';
 }
 
 // Backward compat alias
-export type UserCreateDTO = UserDTO;
+export type UserCreateDTO = UserResponse;
 
 @Component({
   selector: 'app-user-dialog',
@@ -37,7 +37,7 @@ export type UserCreateDTO = UserDTO;
     MatIcon,
     MatDialogModule,
     TranslateModule
-],
+  ],
   templateUrl: './user-dialog.component.html',
   styleUrl: './user-dialog.component.scss'
 })
@@ -70,12 +70,12 @@ export class UserDialogComponent {
     afterNextRender(() => this.roleInput().focus());
   }
 
-  validate(): UserDTO {
+  validate(): UserResponse {
     const formValue = this.userDialogForm.getRawValue();
 
     if (this.data.mode === 'create') {
-        return { firstName: formValue.firstName, lastName: formValue.lastName, email: formValue.email, role: formValue.role };
-      }
+      return { firstName: formValue.firstName, lastName: formValue.lastName, email: formValue.email, role: formValue.role };
+    }
 
     const updateUser = this.data.user;
     return { id: updateUser.id, firstName: formValue.firstName, lastName: formValue.lastName, role: formValue.role, email: updateUser.email };
@@ -101,13 +101,12 @@ export class UserDialogComponent {
     const payload = this.validate();
     const isCreate = this.data.mode === 'create';
     const request$ = isCreate
-      ? this.usersApi.createUser(payload)
-      : this.usersApi.updateUser(payload.id!, {
-          lastName: payload.lastName,
-          firstName: payload.firstName,
-          role: payload.role,
-          email: payload.email,
-        });
+      ? this.usersApi.userCreate(payload)
+      : this.usersApi.userUpdate(payload.id!, {
+        lastName: payload.lastName,
+        firstName: payload.firstName,
+        role: payload.role
+      });
 
     this.isSubmitting = true;
     request$

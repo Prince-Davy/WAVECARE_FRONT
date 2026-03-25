@@ -22,14 +22,14 @@ import { AdvancedFilters } from '@app/features/dashboard/components/search-bar/f
 import { UserFilters } from '../../models/user-filters';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
-import type { UserDTO } from '@app/api/model';
+import type { UserResponse } from '@app/api/model';
 
 @Component({
   selector: 'app-user-table',
   standalone: true,
   imports: [
     MatTableModule, MatPaginatorModule, DatePipe, TranslateModule,
-    MatIconModule, MatTooltipModule, MatCardModule, SearchBarComponent, MatSortModule, MatButtonModule,MatDialogModule
+    MatIconModule, MatTooltipModule, MatCardModule, SearchBarComponent, MatSortModule, MatButtonModule, MatDialogModule
   ],
   templateUrl: './user-table.component.html',
   styleUrl: './user-table.component.scss'
@@ -38,7 +38,7 @@ export class UserTableComponent extends DashboardComponent {
   readonly dialog = inject(MatDialog);
 
   displayedColumns: string[] = ['lastName', 'firstName', 'email', 'role', 'locked', 'creationDate', 'update', 'delete'];
-  dataSource: MatTableDataSource<UserDTO> = new MatTableDataSource<UserDTO>([]);
+  dataSource: MatTableDataSource<UserResponse> = new MatTableDataSource<UserResponse>([]);
 
   readonly paginator = viewChild(MatPaginator);
   readonly sort = viewChild(MatSort);
@@ -51,7 +51,7 @@ export class UserTableComponent extends DashboardComponent {
   currentUserId!: string;
   advancedFilters: AdvancedFilters = {};
   filters: UserFilters = {};
-  
+
 
   constructor(
     private userStore: UserStore,
@@ -109,67 +109,67 @@ export class UserTableComponent extends DashboardComponent {
       this.filters
     );
   }
-  
-openCreateUserDialog() {
-  this.usersApi.getRoles().subscribe(roles => {
-    const empty: UserDTO = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      role: roles?.[0] ?? '0'
-    };
 
-    this.dialog.open(UserDialogComponent, {
-      data: { user: empty, roles, mode: 'create' } as UserDialogData,
-      disableClose: true,
-      autoFocus: false
-    }).afterClosed().subscribe((created?: boolean) => {
-      if (created) {
-        this.refreshTable(0);
-      }
+  openCreateUserDialog() {
+    this.usersApi.userListRoles().subscribe(roles => {
+      const empty: UserResponse = {
+        firstName: '',
+        lastName: '',
+        email: '',
+        role: roles?.[0] ?? '0'
+      };
+
+      this.dialog.open(UserDialogComponent, {
+        data: { user: empty, roles, mode: 'create' } as UserDialogData,
+        disableClose: true,
+        autoFocus: false
+      }).afterClosed().subscribe((created?: boolean) => {
+        if (created) {
+          this.refreshTable(0);
+        }
+      });
     });
-  });
-}
+  }
 
-openUpdateUserDialog(userId: number) {
-  zip(this.usersApi.getRoles(), this.usersApi.getUser(String(userId))).subscribe(([roles, dto]) => {
-    const payload: UserDTO = {
-      id: dto.id,
-      firstName: dto.firstName,
-      lastName: dto.lastName,
-      role: dto.role,
-      email: dto.email
-    };
+  openUpdateUserDialog(userId: number) {
+    zip(this.usersApi.userListRoles(), this.usersApi.userGetById(String(userId))).subscribe(([roles, dto]) => {
+      const payload: UserResponse = {
+        id: dto.id,
+        firstName: dto.firstName,
+        lastName: dto.lastName,
+        role: dto.role,
+        email: dto.email
+      };
 
-    this.dialog.open(UserDialogComponent, {
-      data: { user: payload, roles, mode: 'update' } as UserDialogData,
-      disableClose: true,
-      autoFocus: false
-    }).afterClosed().subscribe((updated?: boolean) => {
-      if (updated) {
-        this.refreshTable();
-      }
+      this.dialog.open(UserDialogComponent, {
+        data: { user: payload, roles, mode: 'update' } as UserDialogData,
+        disableClose: true,
+        autoFocus: false
+      }).afterClosed().subscribe((updated?: boolean) => {
+        if (updated) {
+          this.refreshTable();
+        }
+      });
     });
-  });
-}
+  }
 
   isCurrentUser(user: any): boolean {
-  return user?.id === this.currentUserId;
+    return user?.id === this.currentUserId;
   }
 
   openDeleteUserDialog(user: any) {
-  if (this.isCurrentUser(user)) {
-    this.notificationService.openErrorSnackBar(
-      this.translate.instant('feature.dashboard.user-table-component.table.column.action.delete.message.self.error')
-    );
-    return;
-  }
+    if (this.isCurrentUser(user)) {
+      this.notificationService.openErrorSnackBar(
+        this.translate.instant('feature.dashboard.user-table-component.table.column.action.delete.message.self.error')
+      );
+      return;
+    }
 
     const dialogRef = this.dialog.open(DeleteUserDialogComponent, { data: user });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.usersApi.deleteUser(user.id)
+        this.usersApi.userDelete(user.id)
           .pipe(
             tap(() => {
               this.notificationService.openSuccessSnackBar(

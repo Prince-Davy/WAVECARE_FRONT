@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { PatientDTO } from '@app/api/model';
+import { PatientResponse } from '@app/api/model';
 
 import { CommonModule } from '@angular/common';
 
@@ -11,5 +11,5 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule]
 })
 export class PatientDossierMedicalComponent {
-  readonly patient = input.required<PatientDTO>();
+  readonly patient = input.required<PatientResponse>();
 }

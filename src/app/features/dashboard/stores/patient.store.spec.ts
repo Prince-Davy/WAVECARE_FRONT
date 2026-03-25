@@ -34,7 +34,7 @@ describe('PatientStore', () => {
     store.load(0, 10, ['Dupont'], 'id', 'asc');
     TestBed.flushEffects();
 
-    const req = httpMock.expectOne((r) => r.url === '/api/patients');
+    const req = httpMock.expectOne((r) => r.url === '/api/v1/patients');
 
     expect(req.request.method).toBe('GET');
     expect(req.request.params.get('page')).toBe('0');
@@ -64,7 +64,7 @@ describe('PatientStore', () => {
     store.load(0, 10, [], 'id', 'asc');
     TestBed.flushEffects();
 
-    const req = httpMock.expectOne((r) => r.url === '/api/patients');
+    const req = httpMock.expectOne((r) => r.url === '/api/v1/patients');
 
     expect(req.request.params.get('page')).toBe('0');
     expect(req.request.params.get('size')).toBe('10');
@@ -93,7 +93,7 @@ describe('PatientStore', () => {
     store.load(0, 10, ['Dupont'], undefined, undefined);
     TestBed.flushEffects();
 
-    const req = httpMock.expectOne((r) => r.url === '/api/patients');
+    const req = httpMock.expectOne((r) => r.url === '/api/v1/patients');
 
     expect(req.request.params.get('page')).toBe('0');
     expect(req.request.params.get('size')).toBe('10');
@@ -121,7 +121,7 @@ describe('PatientStore', () => {
     });
     TestBed.flushEffects();
 
-    const req = httpMock.expectOne((r) => r.url === '/api/patients');
+    const req = httpMock.expectOne((r) => r.url === '/api/v1/patients');
 
     const filterParam = req.request.params.get('filter');
     expect(filterParam).not.toBeNull();

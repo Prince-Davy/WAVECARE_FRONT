@@ -6,13 +6,13 @@ import {
 
 
 import { TicketStore } from './ticket.store';
-import type { PagedTicketDTO } from '@app/api/model';
+import type { PageTicketResponse } from '@app/api/model';
 
 describe('TicketStore', () => {
   let store: TicketStore;
   let httpMock: HttpTestingController;
 
-  const ticketsUrl = '/api/tickets';
+  const ticketsUrl = '/api/v1/tickets';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -57,7 +57,7 @@ describe('TicketStore', () => {
       totalPages: 2,
       number: page,
       size,
-    } as PagedTicketDTO);
+    } as PageTicketResponse);
 
     TestBed.flushEffects();
 
@@ -80,7 +80,7 @@ describe('TicketStore', () => {
       totalElements: 0,
       totalPages: 0,
       size: 10,
-    } as PagedTicketDTO);
+    } as PageTicketResponse);
 
     TestBed.flushEffects();
   }));
@@ -101,7 +101,7 @@ describe('TicketStore', () => {
       totalElements: 0,
       totalPages: 0,
       size: 10,
-    } as PagedTicketDTO);
+    } as PageTicketResponse);
 
     TestBed.flushEffects();
   });

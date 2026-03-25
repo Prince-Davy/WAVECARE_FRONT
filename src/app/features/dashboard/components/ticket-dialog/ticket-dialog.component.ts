@@ -11,11 +11,11 @@ import { MatIcon } from '@angular/material/icon';
 import { TicketsService } from '@app/api/generated/tickets/tickets.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { finalize, tap } from 'rxjs';
-import type { TicketDetailDTO, TicketStatusDTO } from '@app/api/model';
+import type { TicketDetailResponse, TicketStatus } from '@app/api/model';
 
 export interface TicketDialogData {
-  ticketDetailDTO: TicketDetailDTO;
-  statuses: TicketStatusDTO[];
+  ticketDetailDTO: TicketDetailResponse;
+  statuses: TicketStatus[];
 }
 
 @Component({
@@ -32,7 +32,7 @@ export interface TicketDialogData {
     MatInputModule,
     MatIcon,
     TranslateModule
-],
+  ],
   templateUrl: './ticket-dialog.component.html',
   styleUrl: './ticket-dialog.component.scss'
 })
@@ -83,7 +83,7 @@ export class TicketDialogComponent {
     this.isSubmitting = true;
     const payload = this.validate();
     this.ticketsApi
-      .updateTicketDetail(payload.id, {
+      .ticketUpdate(payload.id, {
         statusId: payload.statusId,
         adminComment: payload.adminComment,
       })
