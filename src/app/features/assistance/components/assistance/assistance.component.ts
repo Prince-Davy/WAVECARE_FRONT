@@ -12,7 +12,7 @@ import { TicketsService } from '@app/api/generated/tickets/tickets.service';
 import { TicketCategoriesService } from '@app/api/generated/ticket-categories/ticket-categories.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { tap } from 'rxjs';
-import type { TicketCreateDTO } from '@app/api/model';
+import type { TicketCreateRequest } from '@app/api/model';
 
 @Component({
   selector: 'app-assistance',
@@ -27,7 +27,7 @@ import type { TicketCreateDTO } from '@app/api/model';
     MatSelectModule,
     TranslateModule,
     RouterLink
-],
+  ],
   templateUrl: './assistance.component.html',
   styleUrls: ['./assistance.component.scss']
 })
@@ -36,7 +36,7 @@ export class AssistanceComponent {
   submissionSuccess: boolean | null = null;
 
   private readonly categoriesService = inject(TicketCategoriesService);
-  readonly ticketCategories = toSignal(this.categoriesService.getAllCategories(), { initialValue: [] });
+  readonly ticketCategories = toSignal(this.categoriesService.ticketCategoryList(), { initialValue: [] });
 
   /**
    * This regex matches if :
@@ -59,7 +59,7 @@ export class AssistanceComponent {
 
   onSubmit() {
     if (this.assistanceForm.valid) {
-      const ticketData: TicketCreateDTO = {
+      const ticketData: TicketCreateRequest = {
         firstName: this.assistanceForm.value.firstName,
         lastName: this.assistanceForm.value.lastName,
         mail: this.assistanceForm.value.mail,
@@ -67,7 +67,7 @@ export class AssistanceComponent {
         description: this.assistanceForm.value.content
       };
 
-      this.ticketsService.createTicket(ticketData)
+      this.ticketsService.ticketCreate(ticketData)
         .pipe(
           tap((result) => {
             console.log('Ticket submitted successfully', result);

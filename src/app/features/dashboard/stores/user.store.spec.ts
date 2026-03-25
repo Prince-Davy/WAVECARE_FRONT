@@ -2,13 +2,13 @@ import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { UserStore } from './user.store';
-import type { PagedUserDTO } from '@app/api/model';
+import type { PageUserResponse } from '@app/api/model';
 import type { UserFilters } from '../models/user-filters';
 
 describe('UserStore', () => {
   let store: UserStore;
   let httpMock: HttpTestingController;
-  const apiUrl = '/api/users';
+  const apiUrl = '/api/v1/users';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

@@ -3,7 +3,7 @@ import { defineConfig } from 'orval';
 export default defineConfig({
   wavecare: {
     input: {
-      target: './openapi.json',
+      target: '../WAVECARE_BACK/target/openapi.json',
     },
     output: {
       mode: 'tags-split',

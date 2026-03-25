@@ -2,7 +2,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
-import type { PagedTicketDTO, TicketViewDTO } from '@app/api/model';
+import type { PageTicketResponse, TicketResponse } from '@app/api/model';
 
 interface TicketLoadRequest {
   page: number;
@@ -11,7 +11,7 @@ interface TicketLoadRequest {
   sortFields: { field: string; direction: 'asc' | 'desc' }[];
 }
 
-const EMPTY_PAGE: PagedTicketDTO = { content: [], totalElements: 0, totalPages: 0, size: 10 };
+const EMPTY_PAGE: PageTicketResponse = { content: [], totalElements: 0, totalPages: 0, size: 10 };
 
 @Injectable({ providedIn: 'root' })
 export class TicketStore {
@@ -20,7 +20,7 @@ export class TicketStore {
 
   private readonly _request = signal<TicketLoadRequest | undefined>(undefined);
 
-  private readonly _resource = rxResource<PagedTicketDTO, TicketLoadRequest | undefined>({
+  private readonly _resource = rxResource<PageTicketResponse, TicketLoadRequest | undefined>({
     params: () => this._request(),
     stream: ({ params: req }) => {
       if (!req) return of(EMPTY_PAGE);
@@ -39,12 +39,12 @@ export class TicketStore {
         params = params.append('sort', `${sort.field},${sort.direction}`);
       });
 
-      return this.http.get<PagedTicketDTO>('/api/tickets', { params });
+      return this.http.get<PageTicketResponse>('/api/v1/tickets', { params });
     },
   });
 
   // --- public computed ---
-  readonly tickets = computed<TicketViewDTO[]>(() => this._resource.value()?.content ?? []);
+  readonly tickets = computed<TicketResponse[]>(() => this._resource.value()?.content ?? []);
   readonly totalElements = computed(() => this._resource.value()?.totalElements ?? 0);
   readonly pageSize = computed(() => this._resource.value()?.size ?? 10);
   readonly totalPages = computed(() => this._resource.value()?.totalPages ?? 0);

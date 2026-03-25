@@ -2,7 +2,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
-import type { PagedPatientDTO, PatientDTO } from '@app/api/model';
+import type { PagePatientResponse, PatientResponse } from '@app/api/model';
 
 export interface PatientFilters {
   keywords?: string[];
@@ -18,7 +18,7 @@ interface PatientLoadRequest {
   filters?: PatientFilters;
 }
 
-const EMPTY_PAGE: PagedPatientDTO = { content: [], totalElements: 0, totalPages: 0, size: 10 };
+const EMPTY_PAGE: PagePatientResponse = { content: [], totalElements: 0, totalPages: 0, size: 10 };
 
 @Injectable({ providedIn: 'root' })
 export class PatientStore {
@@ -27,7 +27,7 @@ export class PatientStore {
 
   private readonly _request = signal<PatientLoadRequest | undefined>(undefined);
 
-  private readonly _resource = rxResource<PagedPatientDTO, PatientLoadRequest | undefined>({
+  private readonly _resource = rxResource<PagePatientResponse, PatientLoadRequest | undefined>({
     params: () => this._request(),
     stream: ({ params: req }) => {
       if (!req) return of(EMPTY_PAGE);
@@ -45,12 +45,12 @@ export class PatientStore {
       }
       params = params.set('filter', JSON.stringify(payloadFilters));
 
-      return this.http.get<PagedPatientDTO>('/api/patients', { params });
+      return this.http.get<PagePatientResponse>('/api/v1/patients', { params });
     },
   });
 
   // --- public computed ---
-  readonly patients = computed<PatientDTO[]>(() => this._resource.value()?.content ?? []);
+  readonly patients = computed<PatientResponse[]>(() => this._resource.value()?.content ?? []);
   readonly totalElements = computed(() => this._resource.value()?.totalElements ?? 0);
   readonly pageSize = computed(() => this._resource.value()?.size ?? 10);
   readonly totalPages = computed(() => this._resource.value()?.totalPages ?? 0);

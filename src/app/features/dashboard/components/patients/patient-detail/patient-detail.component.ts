@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { PatientsService } from '@app/api/generated/patients/patients.service';
-import type { PatientDTO } from '@app/api/model';
+import type { PatientResponse } from '@app/api/model';
 import { PatientDossierAdministratifComponent } from './dossier-administratif/patient-dossier-administratif.component';
 import { PatientDossierMedicalComponent } from './dossier-medical/patient-dossier-medical.component';
 import { PatientAnalyseDiagnosticComponent } from './analyse-diagnostic/patient-analyse-diagnostic.component';
@@ -29,10 +29,10 @@ export class PatientDetailComponent {
 
   private readonly _patientResource = rxResource({
     params: () => this.patientId(),
-    stream: ({ params: id }) => this.patientsService.getPatientById(id),
+    stream: ({ params: id }) => this.patientsService.patientGetById(id),
   });
 
-  readonly patient = computed<PatientDTO | undefined>(() => this._patientResource.value());
+  readonly patient = computed<PatientResponse | undefined>(() => this._patientResource.value());
 
   selectedTab: 'administratif' | 'medical' | 'diagnostic' = 'administratif';
   selectedIndex: number = 0;

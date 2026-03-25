@@ -2,7 +2,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
-import type { PagedUserDTO, UserDTO } from '@app/api/model';
+import type { PageUserResponse, UserResponse } from '@app/api/model';
 import { UserFilters } from '../models/user-filters';
 
 interface UserLoadRequest {
@@ -14,7 +14,7 @@ interface UserLoadRequest {
   filters?: UserFilters;
 }
 
-const EMPTY_PAGE: PagedUserDTO = { content: [], totalElements: 0, totalPages: 0, size: 10 };
+const EMPTY_PAGE: PageUserResponse = { content: [], totalElements: 0, totalPages: 0, size: 10 };
 
 @Injectable({ providedIn: 'root' })
 export class UserStore {
@@ -23,7 +23,7 @@ export class UserStore {
 
   private readonly _request = signal<UserLoadRequest | undefined>(undefined);
 
-  private readonly _resource = rxResource<PagedUserDTO, UserLoadRequest | undefined>({
+  private readonly _resource = rxResource<PageUserResponse, UserLoadRequest | undefined>({
     params: () => this._request(),
     stream: ({ params: req }) => {
       if (!req) return of(EMPTY_PAGE);
@@ -42,12 +42,12 @@ export class UserStore {
         params = params.set('filter', JSON.stringify(filters));
       }
 
-      return this.http.get<PagedUserDTO>('/api/users', { params });
+      return this.http.get<PageUserResponse>('/api/v1/users', { params });
     },
   });
 
   // --- public computed ---
-  readonly users = computed<UserDTO[]>(() => this._resource.value()?.content ?? []);
+  readonly users = computed<UserResponse[]>(() => this._resource.value()?.content ?? []);
   readonly totalElements = computed(() => this._resource.value()?.totalElements ?? 0);
   readonly pageSize = computed(() => this._resource.value()?.size ?? 10);
   readonly totalPages = computed(() => this._resource.value()?.totalPages ?? 0);

@@ -30,11 +30,11 @@ import { merge, startWith } from 'rxjs';
 import { DashboardComponent } from '@app/features/dashboard/abstract/dashboard-component.abstract';
 import { SearchBarComponent } from '@app/features/dashboard/components/search-bar/search-bar.component';
 import { PatientStore, PatientFilters } from '@app/features/dashboard/stores/patient.store';
-import type { PatientDTO } from '@app/api/model';
+import type { PatientResponse } from '@app/api/model';
 
 // Re-export for backward compat with components that imported from here
 export type { PatientFilters } from '@app/features/dashboard/stores/patient.store';
-export type { PatientDTO } from '@app/api/model';
+export type { PatientResponse } from '@app/api/model';
 
 @Component({
   selector: 'app-patient-table',
@@ -58,7 +58,7 @@ export type { PatientDTO } from '@app/api/model';
 export class PatientTableComponent extends DashboardComponent {
 
   displayedColumns: string[] = ['id', 'lastName', 'firstName', 'ins', 'birthDate', 'action'];
-  dataSource: MatTableDataSource<PatientDTO> = new MatTableDataSource<PatientDTO>([]);
+  dataSource: MatTableDataSource<PatientResponse> = new MatTableDataSource<PatientResponse>([]);
 
   readonly paginator = viewChild(MatPaginator);
   readonly sort = viewChild(MatSort);
@@ -73,8 +73,8 @@ export class PatientTableComponent extends DashboardComponent {
   filters: PatientFilters = {};
 
   constructor(private readonly patientStore: PatientStore,
-              private router: Router,
-              public route: ActivatedRoute) {
+    private router: Router,
+    public route: ActivatedRoute) {
     super();
     const destroyRef = inject(DestroyRef);
 
@@ -124,16 +124,16 @@ export class PatientTableComponent extends DashboardComponent {
   }
 
   onPatientSearch(value: string) {
-  const v = value?.trim();
-  this.listKeywords = v ? [v.toLowerCase()] : [];
+    const v = value?.trim();
+    this.listKeywords = v ? [v.toLowerCase()] : [];
 
-  this.filters = {
-    ...this.filters,
-    keywords: this.listKeywords,
-  };
+    this.filters = {
+      ...this.filters,
+      keywords: this.listKeywords,
+    };
 
-  this.refreshTable(0); // ✅ met à jour la table + resultsLength => compteur aussi
-}
+    this.refreshTable(0); // ✅ met à jour la table + resultsLength => compteur aussi
+  }
 
   keywordsChanged(currentListKeywords: string[]) {
     this.listKeywords = currentListKeywords;
@@ -156,7 +156,7 @@ export class PatientTableComponent extends DashboardComponent {
     this.refreshTable(0);
   }
 
-  consultPatient(patient: PatientDTO): void {
+  consultPatient(patient: PatientResponse): void {
     // naviguer vers patient detail page
     this.router.navigate([patient.id], {
       relativeTo: this.route,

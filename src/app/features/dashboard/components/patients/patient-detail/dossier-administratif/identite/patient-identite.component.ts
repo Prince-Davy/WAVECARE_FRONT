@@ -5,7 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
-import { PatientDTO } from '@app/api/model';
+import { PatientResponse } from '@app/api/model';
 
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -21,9 +21,9 @@ import { PhoneFormatPipe } from '@app/features/dashboard/pipes/phone-format.pipe
   imports: [CommonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, ReactiveFormsModule, MatCardModule, TranslateModule, NssFormatPipe, PhoneFormatPipe]
 })
 export class PatientIdentiteComponent {
-  readonly patient = input.required<PatientDTO>();
+  readonly patient = input.required<PatientResponse>();
   readonly editMode = input(false);
-  readonly update = output<Partial<PatientDTO>>();
+  readonly update = output<Partial<PatientResponse>>();
 
   form: FormGroup;
 

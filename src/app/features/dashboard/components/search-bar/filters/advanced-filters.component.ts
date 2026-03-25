@@ -1,6 +1,6 @@
 import { Component, effect, output, input, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -38,7 +38,7 @@ export interface AdvancedFilters {
     MatChipsModule,
     TranslateModule,
     MatCheckbox
-],
+  ],
   templateUrl: './advanced-filters.component.html',
   styleUrl: './advanced-filters.component.scss',
   providers: [
@@ -71,9 +71,9 @@ export class AdvancedFiltersComponent {
     statuses: [],
     createdDate: null
   };
-  
+
   private readonly usersApi = inject(UsersService);
-  readonly roles = toSignal(this.usersApi.getRoles(), { initialValue: [] as string[] });
+  readonly roles = toSignal(this.usersApi.userListRoles(), { initialValue: [] as string[] });
   statuses = ['active', 'locked'];
 
   constructor(private readonly fb: FormBuilder, private readonly cdr: ChangeDetectorRef) {
@@ -111,7 +111,7 @@ export class AdvancedFiltersComponent {
     this.toggleOpen.emit();
   }
 
-  
+
   onToggleArray(key: 'roles' | 'statuses', value: string, checked: boolean) {
     const current = this.filtersForm.get(key)?.value ?? [];
     const next = new Set(current as string[]);

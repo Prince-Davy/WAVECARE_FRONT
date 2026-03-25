@@ -23,7 +23,7 @@ import { NotificationService } from '@app/features/notification/services/notific
 import { Pad4Pipe } from '@app/features/dashboard/pipes/pad4.pide';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { merge, startWith, zip } from 'rxjs';
-import type { TicketViewDTO } from '@app/api/model';
+import type { TicketResponse } from '@app/api/model';
 
 
 @Component({
@@ -45,7 +45,7 @@ export class TicketTableComponent extends DashboardComponent {
   readonly dialog = inject(MatDialog);
 
   displayedColumns: string[] = ['id', 'subject', 'lastName', 'firstName', 'mail', 'status', 'lastModifiedDate', 'action'];
-  dataSource = new MatTableDataSource<TicketViewDTO>([]);
+  dataSource = new MatTableDataSource<TicketResponse>([]);
 
   readonly sort = viewChild(MatSort);
   readonly paginator = viewChild(MatPaginator);
@@ -81,7 +81,7 @@ export class TicketTableComponent extends DashboardComponent {
 
 
   openTicketDialog(ticketId: number) {
-    zip(this.ticketStatusesApi.getAllStatuses(), this.ticketsApi.getTicket(ticketId))
+    zip(this.ticketStatusesApi.ticketStatusList(), this.ticketsApi.ticketGetById(ticketId))
       .subscribe(([statuses, ticketDetailDTO]) => {
         this.dialog.open(TicketDialogComponent, {
           data: {
@@ -128,7 +128,7 @@ export class TicketTableComponent extends DashboardComponent {
   }
 
 
-  private updateRows(rows: TicketViewDTO[], totalElements: number, pageSize: number) {
+  private updateRows(rows: TicketResponse[], totalElements: number, pageSize: number) {
     this.dataSource.data = rows;
     this.resultsLength = totalElements;
     this.pageSize = pageSize;
