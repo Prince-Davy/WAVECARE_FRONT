@@ -15,14 +15,26 @@
     <label for="lastName">{{ 'feature.dashboard.user-dialog-component.form.lastName.label' | translate }}</label>
     <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
       <input matInput mat-autosize id="lastName" formControlName="lastName"/>
+      <mat-error *ngIf="userDialogForm.get('lastName')?.hasError('required')">
+        {{ 'feature.dashboard.user-dialog-component.form.lastName.error.required' | translate }}
+      </mat-error>
     </mat-form-field>
     <label for="firstName">{{ 'feature.dashboard.user-dialog-component.form.firstName.label' | translate }}</label>
     <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
       <input matInput mat-autosize id="firstName" formControlName="firstName"/>
+      <mat-error *ngIf="userDialogForm.get('firstName')?.hasError('required')">
+        {{ 'feature.dashboard.user-dialog-component.form.firstName.error.required' | translate }}
+      </mat-error>
     </mat-form-field>
     <label for="email">{{ 'feature.dashboard.user-dialog-component.form.email.label' | translate }}</label>
     <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
       <input matInput mat-autosize id="email" formControlName="email"/>
+      <mat-error *ngIf="userDialogForm.get('email')?.hasError('required')">
+        {{ 'feature.dashboard.user-dialog-component.form.email.error.required' | translate }}
+      </mat-error>
+      <mat-error *ngIf="userDialogForm.get('email')?.hasError('email')">
+        {{ 'feature.dashboard.user-dialog-component.form.email.error.invalid' | translate }}
+      </mat-error>
     </mat-form-field>
     <label for="role">{{ 'feature.dashboard.user-dialog-component.form.role.label' | translate }}<span class="required-label">*</span></label>
     <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
@@ -31,6 +43,9 @@
         <mat-option [value]="role">{{ 'model.user.role.' + role | translate }}</mat-option>
         }
       </mat-select>
+      <mat-error *ngIf="userDialogForm.get('role')?.hasError('required')">
+        {{ 'feature.dashboard.user-dialog-component.form.role.error.required' | translate }}
+      </mat-error>
     </mat-form-field>
   </form>
 </mat-dialog-content>
