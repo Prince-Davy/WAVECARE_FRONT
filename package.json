@@ -13,7 +13,11 @@
     "build:all:prod": "npm run build:prod && npm run build:ssr:prod",
     "serve:ssr": "node dist/wavecare-front/server/server.mjs",
     "serve:ssr:WAVECARE_FRONT": "node dist/wavecare-front/server/server.mjs",
-    "api:generate": "orval && node scripts/post-orval.js"
+    "api:generate": "orval && node scripts/post-orval.js",
+    "test": "ng test",
+    "test:ci": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage",
+    "docs:compodoc": "compodoc -p tsconfig.doc.json -d documentation",
+    "docs:compodoc:check": "compodoc -p tsconfig.doc.json -d documentation --coverageTest 20 --coverageTestThresholdFail true --unitTestCoverage coverage/coverage-summary.json"
   },
   "private": true,
   "dependencies": {
@@ -56,6 +60,7 @@
     "karma-coverage": "~2.2.1",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.2.0",
+    "@compodoc/compodoc": "^1.1.26",
     "orval": "^8.5.3",
     "typescript": "~5.9.3"
   },

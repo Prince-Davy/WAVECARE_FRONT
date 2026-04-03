@@ -12,7 +12,7 @@ import { TicketTableComponent } from '@app/features/dashboard/components/ticket-
 import { TicketStore } from '@app/features/dashboard/stores/ticket.store';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
-import type { TicketViewDTO } from '@app/api/model';
+import type { TicketResponse } from '@app/api/model';
 
 class FakeLoader implements TranslateLoader {
   getTranslation(lang: string) { return of({}); }
@@ -23,7 +23,7 @@ describe('TicketTableComponent', () => {
   let component: TicketTableComponent;
 
   // writable signals for mock store
-  let ticketsSignal: WritableSignal<TicketViewDTO[]>;
+  let ticketsSignal: WritableSignal<TicketResponse[]>;
   let totalElementsSignal: WritableSignal<number>;
   let pageSizeSignal: WritableSignal<number>;
   let totalPagesSignal: WritableSignal<number>;
@@ -31,7 +31,7 @@ describe('TicketTableComponent', () => {
   let errorSignal: WritableSignal<string | null>;
   let loadSpy: jasmine.Spy;
 
-  const mockTickets: TicketViewDTO[] = [
+  const mockTickets: TicketResponse[] = [
     {
       id: 1,
       firstName: 'Jean',
@@ -53,7 +53,7 @@ describe('TicketTableComponent', () => {
   ];
 
   beforeEach(async () => {
-    ticketsSignal = signal<TicketViewDTO[]>([]);
+    ticketsSignal = signal<TicketResponse[]>([]);
     totalElementsSignal = signal(0);
     pageSizeSignal = signal(10);
     totalPagesSignal = signal(0);

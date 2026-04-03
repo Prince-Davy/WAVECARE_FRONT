@@ -1,0 +1,16 @@
+services:
+  # Application Container
+  # refer to azure-pipeline variable project_name
+  wavecare-front:
+    build: ./build
+    volumes:
+      - ./:/var/workspace/wavecare-front
+      # Mount Docker socket to allow Testcontainers (IT tests) to start containers
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - innovation_default
+
+networks:
+  innovation_default:
+    external: true
+    name: innovation_default

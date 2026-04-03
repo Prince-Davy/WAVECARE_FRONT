@@ -36,7 +36,7 @@ describe('UserStore', () => {
 
   describe('load', () => {
     it('should update signals on success', fakeAsync(() => {
-      const mockPage: PagedUserDTO = {
+      const mockPage: PageUserResponse = {
         content: [
           {
             id: 'userId',
