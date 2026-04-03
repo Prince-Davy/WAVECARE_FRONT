@@ -8,7 +8,7 @@ import { UsersService } from '@app/api/generated/users/users.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { of } from 'rxjs';
 
-import type { UserDTO } from '@app/api/model';
+import type { UserResponse } from '@app/api/model';
 
 describe('UserDialogComponent', () => {
   let fixture: ComponentFixture<UserDialogComponent>;
@@ -35,14 +35,14 @@ describe('UserDialogComponent', () => {
   });
 
   describe('En mode update', () => {
-    const userBase: UserDTO = {
+    const userBase: UserResponse = {
       id: '10',
       lastName: 'Doe',
       firstName: 'John',
       email: '***REMOVED***',
       role: 'USER',
       locked: false,
-    } as UserDTO;
+    } as UserResponse;
 
     beforeEach(async () => {
       const dialogData: UserDialogData = {
@@ -119,7 +119,7 @@ describe('UserDialogComponent', () => {
       component.userDialogForm.get('firstName')?.setValue('Alice');
       component.userDialogForm.get('role')?.setValue('ADMIN');
 
-      const dto: UserDTO = component.validate();
+      const dto: UserResponse = component.validate();
 
       expect(dto.id).toBe('10');
       expect(dto.lastName).toBe('Smith');
@@ -141,14 +141,14 @@ describe('UserDialogComponent', () => {
   });
 
   describe('En mode création', () => {
-    const userCreateBase: UserDTO = {
+    const userCreateBase: UserResponse = {
       id: undefined,
       lastName: '',
       firstName: '',
       email: '',
       role: 'USER',
       locked: false,
-    } as unknown as UserDTO;
+    } as unknown as UserResponse;
 
     beforeEach(async () => {
       const dialogData: UserDialogData = {

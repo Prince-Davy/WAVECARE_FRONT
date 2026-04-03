@@ -1,0 +1,8 @@
+{
+  "tsconfig": "tsconfig.doc.json",
+  "output": "documentation",
+  "coverageTest": 100,
+  "coverageMinimumPerFile": 100,
+  "coverageTestThresholdFail": true,
+  "unitTestCoverage": "coverage/coverage-summary.json"
+}

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import type { PatientDTO } from '@app/api/model';
+import type { PatientResponse } from '@app/api/model';
 
 import { PatientIdentiteComponent } from './patient-identite.component';
 
@@ -8,7 +8,7 @@ describe('PatientIdentiteComponent', () => {
   let component: PatientIdentiteComponent;
   let fixture: ComponentFixture<PatientIdentiteComponent>;
 
-  const basePatient: PatientDTO = {
+  const basePatient: PatientResponse = {
     id: 123,
     firstName: 'Base',
     lastName: 'Patient',
@@ -44,7 +44,7 @@ describe('PatientIdentiteComponent', () => {
   });
 
   it('should populate form when patient input changes including maritalStatus', () => {
-    const patient: PatientDTO = {
+    const patient: PatientResponse = {
       id: 456,
       firstName: 'A',
       lastName: 'C',

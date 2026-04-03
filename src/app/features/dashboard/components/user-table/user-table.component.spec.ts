@@ -9,13 +9,13 @@ import { UserStore } from '@app/features/dashboard/stores/user.store';
 import { UsersService } from '@app/api/generated/users/users.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
-import type { UserDTO } from '@app/api/model';
+import type { UserResponse } from '@app/api/model';
 
 describe('UserTableComponent', () => {
   let component: UserTableComponent;
   let fixture: ComponentFixture<UserTableComponent>;
 
-  const mockUsers: UserDTO[] = [
+  const mockUsers: UserResponse[] = [
     {
       id: '0',
       firstName: 'Prénom 1',
@@ -43,10 +43,10 @@ describe('UserTableComponent', () => {
   };
 
   const usersServiceMock = jasmine.createSpyObj<UsersService>('UsersService', [
-    'getUsers',
-    'getRoles',
-    'getUser',
-    'deleteUser',
+    'userList',
+    'userListRoles',
+    'userGetById',
+    'userDelete',
   ]);
 
   const notificationServiceMock = jasmine.createSpyObj<NotificationService>(
@@ -63,8 +63,8 @@ describe('UserTableComponent', () => {
 
   beforeEach(async () => {
     authTokenServiceMock.getUserId.and.returnValue('0');
-    usersServiceMock.getRoles.and.returnValue(of(['USER', 'ADMINISTRATOR'] as any));
-    usersServiceMock.getUser.and.returnValue(of({} as any));
+    usersServiceMock.userListRoles.and.returnValue(of(['USER', 'ADMINISTRATOR'] as any));
+    usersServiceMock.userGetById.and.returnValue(of({} as any));
     dialogMock.open.and.returnValue({
       afterClosed: () => of(false),
     } as any);
@@ -94,17 +94,17 @@ describe('UserTableComponent', () => {
   });
 
   it('affiche les colonnes attendues', () => {
-  expect(component.displayedColumns).toEqual([
-    'lastName',
-    'firstName',
-    'email',
-    'role',
-    'locked',
-    'creationDate',
-    'update',
-    'delete',
-  ]);
-});
+    expect(component.displayedColumns).toEqual([
+      'lastName',
+      'firstName',
+      'email',
+      'role',
+      'locked',
+      'creationDate',
+      'update',
+      'delete',
+    ]);
+  });
 
   it('charge les utilisateurs depuis le store', () => {
     expect(component.dataSource.data.length).toBe(2);

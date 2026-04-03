@@ -16,15 +16,15 @@ describe('AssistanceComponent', () => {
 
   beforeEach(async () => {
     ticketsServiceSpy = jasmine.createSpyObj<TicketsService>('TicketsService', [
-      'createTicket',
+      'ticketCreate',
     ]);
     ticketCategoriesServiceSpy = jasmine.createSpyObj<TicketCategoriesService>(
       'TicketCategoriesService',
-      ['getAllCategories']
+      ['ticketCategoryList']
     );
 
-    ticketsServiceSpy.createTicket.and.returnValue(of({} as any));
-    ticketCategoriesServiceSpy.getAllCategories.and.returnValue(
+    ticketsServiceSpy.ticketCreate.and.returnValue(of({} as any));
+    ticketCategoriesServiceSpy.ticketCategoryList.and.returnValue(
       of([{ id: 1, label: 'Identifiant' }] as any)
     );
 
@@ -92,7 +92,7 @@ describe('AssistanceComponent', () => {
 
     component.onSubmit();
 
-    expect(ticketsServiceSpy.createTicket).toHaveBeenCalled();
+    expect(ticketsServiceSpy.ticketCreate).toHaveBeenCalled();
     expect(component.submissionSuccess).toBeTrue();
   });
 
@@ -105,7 +105,7 @@ describe('AssistanceComponent', () => {
 
     component.onSubmit();
 
-    expect(ticketsServiceSpy.createTicket).not.toHaveBeenCalled();
+    expect(ticketsServiceSpy.ticketCreate).not.toHaveBeenCalled();
     expect(component.submissionSuccess).toBeFalse();
   });
 });

@@ -9,22 +9,22 @@ import { TicketsService } from '@app/api/generated/tickets/tickets.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { of } from 'rxjs';
 
-import { TicketDetailDTO, TicketStatusDTO } from '@app/api/model';
+import { TicketDetailResponse, TicketStatus } from '@app/api/model';
 
 describe('TicketDialogComponent', () => {
   let fixture: ComponentFixture<TicketDialogComponent>;
   let component: TicketDialogComponent;
 
-  const statuses: TicketStatusDTO[] = [
-    { id: 1, label: 'Ouvert' } as TicketStatusDTO,
-    { id: 2, label: 'Fermé' } as TicketStatusDTO,
+  const statuses: TicketStatus[] = [
+    { id: 1, label: 'Ouvert' } as TicketStatus,
+    { id: 2, label: 'Fermé' } as TicketStatus,
   ];
 
-  const ticket: TicketDetailDTO = {
+  const ticket: TicketDetailResponse = {
     id: 42,
     statusId: 1,
     adminComment: 'Commentaire initial',
-  } as TicketDetailDTO;
+  } as TicketDetailResponse;
 
   const dialogData: TicketDialogData = {
     ticketDetailDTO: { ...ticket },
@@ -37,9 +37,9 @@ describe('TicketDialogComponent', () => {
   );
 
   const ticketServiceMock = jasmine.createSpyObj<TicketsService>('TicketsService', [
-    'updateTicketDetail',
+    'ticketUpdate',
   ]);
-  (ticketServiceMock.updateTicketDetail as jasmine.Spy).and.returnValue(of(void 0));
+  (ticketServiceMock.ticketUpdate as jasmine.Spy).and.returnValue(of(void 0));
 
   const notificationServiceMock = jasmine.createSpyObj<NotificationService>(
     'NotificationService',
