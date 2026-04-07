@@ -29,13 +29,6 @@ variables:
     value: 'lge-wavecare-app'
   - name: kubernetesNamespaceTest
     value: 'lge-wavecare-test'
- # Include specific variables of Quality and Security
-  - name: SKIP_DOXYGEN
-    value: false
-  - name: SKIP_QUALITY
-    value: false
-  - name: SKIP_SECURITY
-    value: false
  # Include template variables
   -  template: templates-general/variables.yml@templates
 
@@ -51,3 +44,8 @@ extends:
     NO_SONAR_FAIL: true
     NO_QUALITY_FAIL: true
     SCAN_SQ: true
+    # Include specific variables of Quality and Security
+    SKIP_DOXYGEN: false
+    SKIP_QUALITY: false
+    SKIP_SECURITY: false
+    SKIP_COMPODOC: false
