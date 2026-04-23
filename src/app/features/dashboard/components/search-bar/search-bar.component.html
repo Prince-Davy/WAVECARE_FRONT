@@ -1,80 +1,103 @@
 <div class="search-container">
   <div class="search-bar">
     <span class="search-label">
-      <label for="search-bar">{{'feature.dashboard.search-bar.search-bar-component.search.label' | translate}}</label>
-      <span>{{infoKey() | translate}}</span>
-
+      <label for="search-bar">
+        {{ 'feature.dashboard.search-bar.search-bar-component.search.label' | translate }}
+      </label>
+      <span>{{ infoKey() | translate }}</span>
     </span>
+
     <div class="search-actions">
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <input id="search-bar" matInput [(ngModel)]="inputValue" [placeholder]="placeholderKey() | translate" (keyup.enter)="onSearch()" />
+        <input
+          id="search-bar"
+          matInput
+          [(ngModel)]="inputValue"
+          [placeholder]="placeholderKey() | translate"
+          (keyup.enter)="onSearch()"
+        />
       </mat-form-field>
+
       <button mat-raised-button class="search-button" (click)="onSearch()">
-        {{'feature.dashboard.search-bar.search-bar-component.search.button' | translate}}
+        {{ 'feature.dashboard.search-bar.search-bar-component.search.button' | translate }}
       </button>
+
+      @if (showAdvancedFilters()) {
+        <button
+          type="button"
+          class="advanced-filter-button"
+          (click)="toggleFilters()"
+        >
+          <mat-icon class="filter-icon">add_circle_outline</mat-icon>
+          <span>{{ 'feature.dashboard.advanced-filters.title' | translate }}</span>
+        </button>
+      }
     </div>
   </div>
 
-  <!-- Advanced Filters -->
   @if (showAdvancedFilters()) {
-  <app-advanced-filters 
-    [isOpen]="isFiltersOpen" 
-    (toggleOpen)="toggleFilters()" 
-    (filtersChanged)="onAdvancedFiltersChanged($event)"
-    (reset)="onAdvancedFiltersReset()"
-    [filters]="advancedFilters">
-  </app-advanced-filters>
+    <app-advanced-filters
+      [isOpen]="isFiltersOpen"
+      (toggleOpen)="toggleFilters()"
+      (filtersChanged)="onAdvancedFiltersChanged($event)"
+      (reset)="onAdvancedFiltersReset()"
+      [filters]="advancedFilters">
+    </app-advanced-filters>
   }
 
-  <div class="chip-row">
-    <div class="left-section">
-      <p class="results-text">
-        {{'feature.dashboard.search-bar.search-bar-component.result-found-first-part' | translate}}
-        {{totalResults()}}
-        {{ getTranslationResultsFound(totalResults()) | translate}}
-      </p>
-    </div>
+  <div class="results-row">
+    <p class="results-text">
+      {{ 'feature.dashboard.search-bar.search-bar-component.result-found-first-part' | translate }}
+      {{ totalResults() }}
+      {{ getTranslationResultsFound(totalResults()) | translate }}
+    </p>
+  </div>
 
+  @if (showResetButton) {
+    <div class="chip-row">
       <div class="chip-list">
         @for (keyword of listKeywords; track keyword) {
-        <mat-chip [removable]="true" (removed)="removeKeyword(keyword)" class="custom-chip">
-          {{ keyword }}
-          <button matChipRemove>
-            <mat-icon tabindex=0>close</mat-icon>
-          </button>
-        </mat-chip>
+          <mat-chip [removable]="true" (removed)="removeKeyword(keyword)" class="custom-chip">
+            {{ keyword }}
+            <button matChipRemove>
+              <mat-icon tabindex="0">close</mat-icon>
+            </button>
+          </mat-chip>
         }
+
         @for (roleFilter of advancedFilters.role; track roleFilter) {
-        <mat-chip [removable]="true" (removed)="removeRoleFilter(roleFilter)" class="custom-chip">
-          {{ getRoleLabel(roleFilter) | translate}}
-          <button matChipRemove>
-            <mat-icon tabindex=0>close</mat-icon>
-          </button>
-        </mat-chip>
+          <mat-chip [removable]="true" (removed)="removeRoleFilter(roleFilter)" class="custom-chip">
+            {{ getRoleLabel(roleFilter) | translate }}
+            <button matChipRemove>
+              <mat-icon tabindex="0">close</mat-icon>
+            </button>
+          </mat-chip>
         }
+
         @for (statusFilter of advancedFilters.status; track statusFilter) {
-        <mat-chip [removable]="true" (removed)="removeStatusFilter(statusFilter)" class="custom-chip">
-          {{ getStatusLabel(statusFilter) | translate}}
-          <button matChipRemove>
-            <mat-icon tabindex=0>close</mat-icon>
-          </button>
-        </mat-chip>
+          <mat-chip [removable]="true" (removed)="removeStatusFilter(statusFilter)" class="custom-chip">
+            {{ getStatusLabel(statusFilter) | translate }}
+            <button matChipRemove>
+              <mat-icon tabindex="0">close</mat-icon>
+            </button>
+          </mat-chip>
         }
+
         @if (advancedFilters.createdDate) {
-        <mat-chip [removable]="true" (removed)="removeDateFilter()" class="custom-chip">
-          {{ formatDate(advancedFilters.createdDate) }}
-          <button matChipRemove>
-            <mat-icon tabindex=0>close</mat-icon>
-          </button>
-        </mat-chip>
+          <mat-chip [removable]="true" (removed)="removeDateFilter()" class="custom-chip">
+            {{ formatDate(advancedFilters.createdDate) }}
+            <button matChipRemove>
+              <mat-icon tabindex="0">close</mat-icon>
+            </button>
+          </mat-chip>
         }
       </div>
-    <div class="right-section">
-    @if (showResetButton) {
-      <button mat-raised-button class="action-button" (click)="onReset()">
-        {{'feature.dashboard.search-bar.search-bar-component.reset' | translate}}
-      </button>
-    }
+
+      <div class="right-section">
+        <button mat-raised-button class="action-button reset-button" (click)="onReset()">
+          {{ 'feature.dashboard.search-bar.search-bar-component.reset' | translate }}
+        </button>
+      </div>
     </div>
-  </div>
+  }
 </div>
