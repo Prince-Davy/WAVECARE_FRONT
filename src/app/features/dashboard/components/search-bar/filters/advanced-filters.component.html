@@ -1,63 +1,51 @@
-<div class="advanced-filters-wrapper">
-  <div class="filters-toggle" (click)="toggleFilters()">
-    <span class="toggle-text">
-      {{ isOpen() ? '–' : '+' }} {{ 'feature.dashboard.advanced-filters.title' | translate }}
-    </span>
-    <mat-icon class="toggle-icon" [class.open]="isOpen()">expand_more</mat-icon>
-  </div>
+@if (isOpen()) {
+  <div class="advanced-filters-wrapper">
+    <div class="filters-container">
+      <form [formGroup]="filtersForm">
+        <div class="filters-grid">
+          <div class="filter-column">
+            <h3 class="filter-title">{{ 'feature.dashboard.advanced-filters.roles.title' | translate }}</h3>
+            @for (role of roles(); track role) {
+              <mat-checkbox
+                class="checkbox-option"
+                [checked]="filtersForm.value.roles?.includes(role)"
+                (change)="onToggleArray('roles', role, $event.checked)">
+                {{ getRoleLabel(role) | translate }}
+              </mat-checkbox>
+            }
+          </div>
 
-  @if (isOpen()) {
-  <div class="filters-container">
-    <form [formGroup]="filtersForm">
-      <div class="filters-grid">
-        <!-- Rôles -->
-        <div class="filter-column">
-          <h3 class="filter-title">{{ 'feature.dashboard.advanced-filters.roles.title' | translate }}</h3>
-          @for (role of roles(); track role) {
-            <mat-checkbox
-              class="checkbox-option"
-              [checked]="filtersForm.value.roles?.includes(role)"
-              (change)="onToggleArray('roles', role, $event.checked)">
-              {{ getRoleLabel(role) | translate }}
-            </mat-checkbox>
-          }
-        </div>
+          <div class="filter-column">
+            <h3 class="filter-title">{{ 'feature.dashboard.advanced-filters.status.title' | translate }}</h3>
+            @for (status of statuses; track status) {
+              <mat-checkbox
+                class="checkbox-option"
+                [checked]="filtersForm.value.statuses?.includes(status)"
+                (change)="onToggleArray('statuses', status, $event.checked)">
+                {{ getStatusLabel(status) | translate }}
+              </mat-checkbox>
+            }
+          </div>
 
-
-        <!-- Statut -->
-        <div class="filter-column">
-          <h3 class="filter-title">{{ 'feature.dashboard.advanced-filters.status.title' | translate }}</h3>
-          @for (status of statuses; track status) {
-            <mat-checkbox
-              class="checkbox-option"
-              [checked]="filtersForm.value.statuses?.includes(status)"
-              (change)="onToggleArray('statuses', status, $event.checked)">
-              {{ getStatusLabel(status) | translate }}
-            </mat-checkbox>
-          }
-        </div>
-
-
-        <!-- Date de création -->
-        <div class="filter-column">
-          <h3 class="filter-title">{{ 'feature.dashboard.advanced-filters.createdDate.title' | translate }}</h3>
-          <div class="date-input-wrapper">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>{{ 'feature.dashboard.advanced-filters.createdDate.placeholder' | translate }}</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="createdDate" />
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
+          <div class="filter-column">
+            <h3 class="filter-title">{{ 'feature.dashboard.advanced-filters.createdDate.title' | translate }}</h3>
+            <div class="date-input-wrapper">
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>{{ 'feature.dashboard.advanced-filters.createdDate.placeholder' | translate }}</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="createdDate" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="filters-actions">
-        <button mat-raised-button class="search-button" type="button" (click)="applyFilters()">
-          {{ 'feature.dashboard.advanced-filters.apply' | translate }}
-        </button>
-      </div>
-    </form>
+        <div class="filters-actions">
+          <button mat-raised-button class="search-button" type="button" (click)="applyFilters()">
+            {{ 'feature.dashboard.advanced-filters.apply' | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-  }
-</div>
+}

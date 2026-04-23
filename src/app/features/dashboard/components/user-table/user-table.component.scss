@@ -1,5 +1,36 @@
+.table-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 12px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: 0;
+}
+
+.action-button {
+  white-space: nowrap;
+}
+
+.search-bar-wrapper {
+  width: 100%;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
 .material-symbols.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-    cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
 }

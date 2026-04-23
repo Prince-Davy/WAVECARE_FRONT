@@ -281,7 +281,7 @@
         },
         "action": {
           "create": {
-            "button": "CREER UN PROFIL",
+            "button": " AJOUTER UN PROFIL",
             "message": {
               "success": "Le profil a été créé avec succès",
               "error": "Echec de la création du profil"
