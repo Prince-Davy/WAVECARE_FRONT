@@ -1,6 +1,22 @@
 import { Component, DestroyRef, afterNextRender, effect, inject, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
+import { merge, startWith } from 'rxjs';
+
+import { DashboardComponent } from '@app/features/dashboard/abstract/dashboard-component.abstract';
+import { SearchBarComponent } from '@app/features/dashboard/components/search-bar/search-bar.component';
+import { PatientStore, PatientFilters } from '@app/features/dashboard/stores/patient.store';
+import type { PatientResponse } from '@app/api/model';
+
 // utility to parse dd/MM/yyyy strings into Date objects
 function parseBirthDate(value: string): Date {
   if (!value) {
@@ -16,21 +32,34 @@ function parseBirthDate(value: string): Date {
   // fallback to native parser
   return new Date(value);
 }
-import { Router, ActivatedRoute, RouterModule } from '@angular/router';
-import { DatePipe } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslateModule } from '@ngx-translate/core';
-import { merge, startWith } from 'rxjs';
 
-import { DashboardComponent } from '@app/features/dashboard/abstract/dashboard-component.abstract';
-import { SearchBarComponent } from '@app/features/dashboard/components/search-bar/search-bar.component';
-import { PatientStore, PatientFilters } from '@app/features/dashboard/stores/patient.store';
-import type { PatientResponse } from '@app/api/model';
+// Factory function to create a MatPaginatorIntl with French labels
+function getFrenchPaginatorIntl(): MatPaginatorIntl {
+  const paginatorIntl = new MatPaginatorIntl();
+
+  paginatorIntl.itemsPerPageLabel = 'Items par page';
+  paginatorIntl.nextPageLabel = 'Page suivante';
+  paginatorIntl.previousPageLabel = 'Page précédente';
+  paginatorIntl.firstPageLabel = 'Première page';
+  paginatorIntl.lastPageLabel = 'Dernière page';
+
+  paginatorIntl.getRangeLabel = (
+    page: number,
+    pageSize: number,
+    length: number
+  ): string => {
+    if (length === 0 || pageSize === 0) {
+      return `0 sur ${length}`;
+    }
+
+    const startIndex = page * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, length);
+
+    return `${startIndex + 1} – ${endIndex} sur ${length}`;
+  };
+
+  return paginatorIntl;
+}
 
 // Re-export for backward compat with components that imported from here
 export type { PatientFilters } from '@app/features/dashboard/stores/patient.store';
@@ -51,7 +80,9 @@ export type { PatientResponse } from '@app/api/model';
     SearchBarComponent,
     RouterModule
   ],
-  providers: [],
+  providers: [
+    { provide: MatPaginatorIntl, useFactory: getFrenchPaginatorIntl }
+  ],
   templateUrl: './patient-table.component.html',
   styleUrl: './patient-table.component.scss',
 })
