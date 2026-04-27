@@ -4,7 +4,7 @@ import { Component, DestroyRef, afterNextRender, effect, inject, viewChild } fro
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -24,12 +24,43 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
 import type { UserResponse } from '@app/api/model';
 
+// Factory function to create a MatPaginatorIntl with French labels
+function getFrenchPaginatorIntl(): MatPaginatorIntl {
+  const paginatorIntl = new MatPaginatorIntl();
+
+  paginatorIntl.itemsPerPageLabel = 'Items par page';
+  paginatorIntl.nextPageLabel = 'Page suivante';
+  paginatorIntl.previousPageLabel = 'Page précédente';
+  paginatorIntl.firstPageLabel = 'Première page';
+  paginatorIntl.lastPageLabel = 'Dernière page';
+
+  paginatorIntl.getRangeLabel = (
+    page: number,
+    pageSize: number,
+    length: number
+  ): string => {
+    if (length === 0 || pageSize === 0) {
+      return `0 sur ${length}`;
+    }
+
+    const startIndex = page * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, length);
+
+    return `${startIndex + 1} – ${endIndex} sur ${length}`;
+  };
+
+  return paginatorIntl;
+}
+
 @Component({
   selector: 'app-user-table',
   standalone: true,
   imports: [
     MatTableModule, MatPaginatorModule, DatePipe, TranslateModule,
     MatIconModule, MatTooltipModule, MatCardModule, SearchBarComponent, MatSortModule, MatButtonModule, MatDialogModule
+  ],
+  providers: [
+    { provide: MatPaginatorIntl, useFactory: getFrenchPaginatorIntl }
   ],
   templateUrl: './user-table.component.html',
   styleUrl: './user-table.component.scss'
