@@ -305,7 +305,7 @@
             "birthDate": { "label": "Date de naissance" },
             "action": {
               "label": "Action",
-              "tooltip": "Consulter"
+              "tooltip": "Consulter N°NNS {{ins}}"
             }
           },
           "paginator": {
