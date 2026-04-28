@@ -7,6 +7,10 @@
  */
 import type { SortObject } from './sortObject';
 
+/**
+ * PageableObject
+ * Metadata object describing the pageable configuration for paginated responses.
+ */
 export interface PageableObject {
   offset?: number;
   unpaged?: boolean;

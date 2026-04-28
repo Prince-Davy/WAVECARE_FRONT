@@ -9,6 +9,10 @@ import type { PageableObject } from './pageableObject';
 import type { SortObject } from './sortObject';
 import type { UserResponse } from './userResponse';
 
+/**
+ * PageUserResponse
+ * Paginated response wrapper containing `UserResponse` items and paging metadata.
+ */
 export interface PageUserResponse {
   totalPages?: number;
   totalElements?: number;

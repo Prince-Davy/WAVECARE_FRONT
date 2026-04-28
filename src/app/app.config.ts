@@ -14,11 +14,19 @@ import { authInterceptor } from './features/auth/components/auth/auth.intercepto
 import { problemDetailInterceptor } from './core/interceptors/problem-detail.interceptor';
 import { provideTanStackQuery, QueryClient } from '@tanstack/angular-query-experimental';
 
+/**
+ * initConfig
+ * Application initializer which loads remote configuration before app bootstrap.
+ */
 function initConfig() {
   const cfg = inject(ConfigService);
   return cfg.load();
 }
 
+/**
+ * appConfig
+ * Provides the application's global providers and boot-time initializers.
+ */
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withComponentInputBinding()),

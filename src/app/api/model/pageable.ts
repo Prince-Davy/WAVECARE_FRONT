@@ -5,7 +5,11 @@
  * REST API for the Wavecare healthcare platform
  * OpenAPI spec version: v1
  */
-
+ 
+/**
+ * Pageable
+ * Pagination parameters accepted by list endpoints.
+ */
 export interface Pageable {
   /** @minimum 0 */
   page?: number;

@@ -4,15 +4,45 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
 import type { PageTicketResponse, TicketResponse } from '@app/api/model';
 
+/**
+ * TicketLoadRequest
+ * Internal request shape used by the ticket store resource.
+ */
 interface TicketLoadRequest {
+/**
+ * TODO: Documentation for page (property)
+ */
   page: number;
+/**
+ * TODO: Documentation for size (property)
+ */
   size: number;
+/**
+ * TODO: Documentation for listKeywords (property)
+ */
   listKeywords: string[];
+/**
+ * TODO: Documentation for sortFields (property)
+ */
   sortFields: { field: string; direction: 'asc' | 'desc' }[];
 }
 
+/**
+ * EMPTY_PAGE
+ * Default empty ticket page used when there is no request.
+ */
 const EMPTY_PAGE: PageTicketResponse = { content: [], totalElements: 0, totalPages: 0, size: 10 };
 
+/**
+ * TicketStore
+ * Reactive store exposing tickets list and pagination helpers.
+ */
+/**
+ * TODO: Documentation for TicketStore (class)
+ */
+/**
+ * TODO: Documentation for TicketStore (class)
+ */
 @Injectable({ providedIn: 'root' })
 export class TicketStore {
 
@@ -21,8 +51,19 @@ export class TicketStore {
   private readonly _request = signal<TicketLoadRequest | undefined>(undefined);
 
   private readonly _resource = rxResource<PageTicketResponse, TicketLoadRequest | undefined>({
+/**
+ * TODO: Documentation for params (property)
+ */
     params: () => this._request(),
+/**
+ * TODO: Documentation for stream (property)
+ */
     stream: ({ params: req }) => {
+/**
+ * TODO: Documentation for if (method)
+ * @param of(EMPTY_PAGE - TODO
+ * @returns TODO
+ */
       if (!req) return of(EMPTY_PAGE);
 
       const { page, size, listKeywords, sortFields } = req;
@@ -54,10 +95,24 @@ export class TicketStore {
     return err instanceof Error ? err.message : err ? String(err) : null;
   });
 
+/**
+ * TODO: Documentation for load (method)
+ * @param page - TODO
+ * @param size - TODO
+ * @param listKeywords - TODO
+ * @param sortFields - TODO
+ * @returns TODO
+ */
   load(
     page = 0,
     size = 10,
+/**
+ * TODO: Documentation for listKeywords (property)
+ */
     listKeywords: string[],
+/**
+ * TODO: Documentation for sortFields (property)
+ */
     sortFields: { field: string; direction: 'asc' | 'desc' }[] = []
   ): void {
     this._request.set({ page, size, listKeywords, sortFields });

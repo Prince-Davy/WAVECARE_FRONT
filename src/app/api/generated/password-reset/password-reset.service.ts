@@ -34,6 +34,11 @@ import type {
 
 
 
+/**
+ * HttpClientOptions
+ * Request options accepted by the generated HTTP client methods
+ * (headers, params, context and other fetch-like options).
+ */
 interface HttpClientOptions {
   readonly headers?: HttpHeaders | Record<string, string | string[]>;
   readonly context?: HttpContext;
@@ -54,6 +59,11 @@ interface HttpClientOptions {
   readonly transferCache?: {includeHeaders?: string[]} | boolean;
 }
 
+/**
+ * filterParams
+ * Normalize and filter a record of parameters to primitives or arrays
+ * of primitives suitable for Angular's HttpClient `params`.
+ */
 function filterParams(
   params: Record<string, unknown>,
   requiredNullableKeys: Set<string> = new Set(),
@@ -88,6 +98,12 @@ function filterParams(
 
 
 @Injectable({ providedIn: 'root' })
+/**
+ * PasswordResetService
+ * Client for password-reset endpoints: request, validate and delete reset tokens.
+ * Generated from the OpenAPI specification and used by the application to
+ * handle password reset workflows.
+ */
 export class PasswordResetService {
   private readonly http = inject(HttpClient);
 /**

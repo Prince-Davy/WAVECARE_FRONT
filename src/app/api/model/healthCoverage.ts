@@ -6,6 +6,10 @@
  * OpenAPI spec version: v1
  */
 
+/**
+ * HealthCoverage
+ * Simple representation of a patient's health insurance information.
+ */
 export interface HealthCoverage {
   insurance?: string;
   policy?: string;

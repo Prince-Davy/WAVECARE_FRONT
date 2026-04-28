@@ -6,10 +6,29 @@
  * OpenAPI spec version: v1
  */
 
+/**
+ * TicketCreateRequest
+ * Payload for creating a new ticket via the API.
+ */
 export interface TicketCreateRequest {
+/**
+ * TODO: Documentation for firstName (property)
+ */
   firstName: string;
+/**
+ * TODO: Documentation for lastName (property)
+ */
   lastName: string;
+/**
+ * TODO: Documentation for mail (property)
+ */
   mail: string;
+/**
+ * TODO: Documentation for description (property)
+ */
   description: string;
+/**
+ * TODO: Documentation for categoryId (property)
+ */
   categoryId: number;
 }

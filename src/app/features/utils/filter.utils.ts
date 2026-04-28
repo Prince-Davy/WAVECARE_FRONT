@@ -1,17 +1,45 @@
+/**
+ * TODO: Documentation for FilterUtils (class)
+ */
 export class FilterUtils {
 
+/**
+ * TODO: Documentation for getRoleLabel (method)
+ * @param role - TODO
+ * @returns TODO
+ */
   static getRoleLabel(role: string): string {
     return `model.user.role.${role}`;
   }
 
+/**
+ * TODO: Documentation for getStatusLabel (method)
+ * @param status - TODO
+ * @returns TODO
+ */
   static getStatusLabel(status: string): string {
     return `model.user.status.${status}`;
   }
 
+/**
+ * TODO: Documentation for formatDate (method)
+ * @param dateInput - TODO
+ * @returns TODO
+ */
   static formatDate(dateInput: string | Date | null): string {
+/**
+ * TODO: Documentation for if (method)
+ * @param !dateInput - TODO
+ * @returns TODO
+ */
     if (!dateInput) return '';
 
     // Si c'est déjà un objet Date
+/**
+ * TODO: Documentation for if (method)
+ * @param Date - TODO
+ * @returns TODO
+ */
     if (dateInput instanceof Date) {
       return dateInput.toLocaleDateString('fr-FR');
     }
@@ -19,15 +47,35 @@ export class FilterUtils {
     const dateString = dateInput;
 
     // Si contenant des slashs, tenter de détecter le format
+/**
+ * TODO: Documentation for if (method)
+ * @param dateString.includes('/') - TODO
+ * @returns TODO
+ */
     if (dateString.includes('/')) {
       const parts = dateString.split('/').map(p => p.trim());
+/**
+ * TODO: Documentation for if (method)
+ * @param parts.length - TODO
+ * @returns TODO
+ */
       if (parts.length === 3) {
         const p0 = Number.parseInt(parts[0], 10);
         const p1 = Number.parseInt(parts[1], 10);
         const year = parts[2];
         // si premier segment > 12 => déjà au format jour/mois/année
+/**
+ * TODO: Documentation for if (method)
+ * @param 12 - TODO
+ * @returns TODO
+ */
         if (!Number.isNaN(p0) && p0 > 12) return dateString;
         // si deuxième segment > 12 => c'est très probablement mm/dd/yyyy -> swap
+/**
+ * TODO: Documentation for if (method)
+ * @param 12 - TODO
+ * @returns TODO
+ */
         if (!Number.isNaN(p1) && p1 > 12) {
           const day = String(p1).padStart(2, '0');
           const month = String(p0).padStart(2, '0');
@@ -40,6 +88,11 @@ export class FilterUtils {
     }
 
     // Si au format 'yyyy-MM-dd', convertir
+/**
+ * TODO: Documentation for if (method)
+ * @param dateString.includes('-') - TODO
+ * @returns TODO
+ */
     if (dateString.includes('-')) {
       const [day, month, year] = dateString.split('-');
       return `${day}/${month}/${year}`;
@@ -47,6 +100,11 @@ export class FilterUtils {
 
     // Sinon, essayer de construire une date et formater en français
     const parsed = new Date(dateString);
+/**
+ * TODO: Documentation for if (method)
+ * @param parsed.toLocaleDateString('fr-FR' - TODO
+ * @returns TODO
+ */
     if (!Number.isNaN(parsed.getTime())) return parsed.toLocaleDateString('fr-FR');
     return dateString;
   }

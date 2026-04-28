@@ -6,6 +6,16 @@ import { PATH_TO_ASSISTANCE } from '@app/app.routes';
 import { NavigationService } from '@app/features/navigation/services/navigation.service';
 import { TranslateModule } from '@ngx-translate/core';
 
+/**
+ * NotFoundComponent
+ * Simple 404 view that offers assistance navigation to users.
+ */
+/**
+ * TODO: Documentation for NotFoundComponent (class)
+ */
+/**
+ * TODO: Documentation for NotFoundComponent (class)
+ */
 @Component({
   selector: 'app-not-found',
   standalone: true,
@@ -22,5 +32,10 @@ export class NotFoundComponent {
 
   readonly PATH_TO_ASSISTANCE_FOR_HTML = `/${PATH_TO_ASSISTANCE}`;
 
+/**
+ * TODO: Documentation for constructor (method)
+ * @param navigationService - TODO
+ * @returns TODO
+ */
   constructor(public navigationService: NavigationService) { }
 }

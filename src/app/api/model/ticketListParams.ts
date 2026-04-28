@@ -7,7 +7,11 @@
  */
 import type { Pageable } from './pageable';
 
+/**
+ * TicketListParams
+ * Parameters used to list tickets (pagination and optional keywords).
+ */
 export type TicketListParams = {
-pageable: Pageable;
-listKeywords?: string[];
+	pageable: Pageable;
+	listKeywords?: string[];
 };

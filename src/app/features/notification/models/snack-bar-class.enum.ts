@@ -1,3 +1,6 @@
+/**
+ * TODO: Documentation for SnackBarClass (enum)
+ */
 export enum SnackBarClass {
   /**
    * Class name to use for an error snack-bar. This value is also used in the CSS, be careful when updating it.

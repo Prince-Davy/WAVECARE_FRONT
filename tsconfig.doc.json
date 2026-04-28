@@ -4,8 +4,20 @@
   "exclude": [
     "src/**/*.spec.ts",
     "src/test.ts",
+    "src/app/api/generated/**",
+    "src/app/api/model/**",
     "src/main.ts",
     "src/main.server.ts",
-    "src/server.ts"
+    "src/server.ts",
+    "coverage/**",
+    "build/**",
+    "wavecare_front/**",
+    "public/**",
+    "documentation/**",
+    "manifests/**",
+    "docker/**",
+    "scripts/**",
+    "test/**",
+    "src/**/*.d.ts"
   ]
 }

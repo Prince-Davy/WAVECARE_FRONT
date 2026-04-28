@@ -6,6 +6,10 @@
  * OpenAPI spec version: v1
  */
 
+/**
+ * TicketResponse
+ * Representation of a ticket returned by the API.
+ */
 export interface TicketResponse {
   id?: number;
   firstName?: string;
@@ -17,3 +21,5 @@ export interface TicketResponse {
   creationDate?: string;
   lastModifiedDate?: string;
 }
+
+

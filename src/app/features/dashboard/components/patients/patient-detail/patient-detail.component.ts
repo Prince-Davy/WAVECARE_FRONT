@@ -13,6 +13,15 @@ import { TranslateModule } from '@ngx-translate/core';
 import { PatientGeneralInfoComponent } from './dossier-administratif/patient-general-info/patient-general-info.component';
 import { BreadcrumbComponent } from '@app/breadcrumb/breadcrumb.component';
 
+/**
+ * TODO: Documentation for PatientDetailComponent (class)
+ */
+/**
+ * TODO: Documentation for PatientDetailComponent (class)
+ */
+/**
+ * TODO: Documentation for PatientDetailComponent (class)
+ */
 @Component({
   selector: 'app-patient-detail',
   templateUrl: './patient-detail.component.html',
@@ -28,12 +37,24 @@ export class PatientDetailComponent {
   private readonly patientId = computed(() => Number(this.route.snapshot.paramMap.get('id') || '0'));
 
   private readonly _patientResource = rxResource({
+/**
+ * TODO: Documentation for params (property)
+ */
     params: () => this.patientId(),
+/**
+ * TODO: Documentation for stream (property)
+ */
     stream: ({ params: id }) => this.patientsService.patientGetById(id),
   });
 
   readonly patient = computed<PatientResponse | undefined>(() => this._patientResource.value());
 
+/**
+ * TODO: Documentation for selectedTab (property)
+ */
   selectedTab: 'administratif' | 'medical' | 'diagnostic' = 'administratif';
+/**
+ * TODO: Documentation for selectedIndex (property)
+ */
   selectedIndex: number = 0;
 }

@@ -7,6 +7,17 @@ import { NavbarComponent } from "./features/navigation/components/navbar/navbar.
 import { MatChipsModule } from '@angular/material/chips';
 import { filter, map } from 'rxjs/operators';
 
+/**
+ * AppComponent
+ * Root application shell that controls layout and route-aware UI modes.
+ * Exposes `dashboardMode` signal to hide chrome on specific full-page routes.
+ */
+/**
+ * TODO: Documentation for AppComponent (class)
+ */
+/**
+ * TODO: Documentation for AppComponent (class)
+ */
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, NavbarComponent, FooterComponent, MatChipsModule],
@@ -21,7 +32,17 @@ export class AppComponent {
 
   private readonly currentUrl = toSignal(
     this.router.events.pipe(
+/**
+ * TODO: Documentation for filter (method)
+ * @param (e) - TODO
+ * @returns TODO
+ */
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+/**
+ * TODO: Documentation for map (method)
+ * @param e - TODO
+ * @returns TODO
+ */
       map(e => e.urlAfterRedirects)
     ),
     { initialValue: '' }
@@ -32,5 +53,10 @@ export class AppComponent {
     return url ? !this.fullPageRoutes.some(prefix => url.startsWith(prefix)) : false;
   });
 
+/**
+ * TODO: Documentation for constructor (method)
+ * @param tokenService - TODO
+ * @returns TODO
+ */
   constructor(public tokenService: AuthTokenService) { }
 }

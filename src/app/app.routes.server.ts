@@ -1,5 +1,8 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
 
+/**
+ * TODO: Documentation for serverRoutes (const)
+ */
 export const serverRoutes: ServerRoute[] = [
   {
     path: '**',

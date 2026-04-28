@@ -31,6 +31,11 @@ import type {
 
 
 
+/**
+ * HttpClientOptions
+ * Request options accepted by the generated HTTP client methods
+ * (headers, params, context and other fetch-like options).
+ */
 interface HttpClientOptions {
   readonly headers?: HttpHeaders | Record<string, string | string[]>;
   readonly context?: HttpContext;
@@ -56,6 +61,12 @@ interface HttpClientOptions {
 
 
 @Injectable({ providedIn: 'root' })
+/**
+ * TicketCategoriesService
+ * Client for ticket categories endpoints: list categories available in the system.
+ * Generated from the OpenAPI specification and used by the application
+ * to display and select ticket categories.
+ */
 export class TicketCategoriesService {
   private readonly http = inject(HttpClient);
 /**

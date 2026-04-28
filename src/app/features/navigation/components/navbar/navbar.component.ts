@@ -11,6 +11,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NavigationService } from '../../services/navigation.service';
 import { CommonModule } from '@angular/common';
 
+/**
+ * NavbarComponent
+ * Top navigation bar showing links and user/session actions.
+ */
+/**
+ * TODO: Documentation for NavbarComponent (class)
+ */
+/**
+ * TODO: Documentation for NavbarComponent (class)
+ */
 @Component({
   selector: 'navbar',
   standalone: true,
@@ -31,8 +41,20 @@ export class NavbarComponent {
   readonly PATH_TO_USERS_FOR_HTML = `/${PATH_TO_USERS}`;
   readonly PATH_TO_PATIENTS_FOR_HTML = `/${PATH_TO_PATIENTS}`;
 
+/**
+ * TODO: Documentation for constructor (method)
+ * @param authService - TODO
+ * @param authTokenService - TODO
+ * @param navigationService - TODO
+ * @param router - TODO
+ * @returns TODO
+ */
   constructor(private readonly authService: AuthService, public authTokenService: AuthTokenService, private readonly navigationService: NavigationService, public router: Router) { }
 
+/**
+ * TODO: Documentation for logout (method)
+ * @returns TODO
+ */
   logout(): void {
     this.authService.logout();
     this.navigationService.navigateToLogin();

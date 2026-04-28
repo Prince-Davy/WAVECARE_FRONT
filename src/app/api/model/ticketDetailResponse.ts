@@ -6,6 +6,10 @@
  * OpenAPI spec version: v1
  */
 
+/**
+ * TicketDetailResponse
+ * Detailed ticket information returned by the API.
+ */
 export interface TicketDetailResponse {
   id?: number;
   firstName?: string;

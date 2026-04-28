@@ -6,6 +6,10 @@
  * OpenAPI spec version: v1
  */
 
+/**
+ * TicketCategory
+ * Category metadata for tickets.
+ */
 export interface TicketCategory {
   id?: number;
   label?: string;

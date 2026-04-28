@@ -3,6 +3,9 @@ import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 
+/**
+ * TODO: Documentation for BreadcrumbItem (interface)
+ */
 
 export interface BreadcrumbItem {
   /** Clé de traduction (ex: 'feature.dashboard.patient.detail.breadcrumb.patientFile') */
@@ -17,6 +20,15 @@ export interface BreadcrumbItem {
   key?: string;
 }
 
+/**
+ * TODO: Documentation for BreadcrumbComponent (class)
+ */
+/**
+ * TODO: Documentation for BreadcrumbComponent (class)
+ */
+/**
+ * TODO: Documentation for BreadcrumbComponent (class)
+ */
 @Component({
   selector: 'app-patient-breadcrumb',
   standalone: true,
