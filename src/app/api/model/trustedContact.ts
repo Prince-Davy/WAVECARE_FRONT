@@ -6,6 +6,10 @@
  * OpenAPI spec version: v1
  */
 
+/**
+ * TrustedContact
+ * Emergency or secondary contact details for a patient.
+ */
 export interface TrustedContact {
   firstName?: string;
   lastName?: string;

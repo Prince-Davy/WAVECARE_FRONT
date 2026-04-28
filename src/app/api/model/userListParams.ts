@@ -7,10 +7,14 @@
  */
 import type { Pageable } from './pageable';
 
-export type UserListParams = {
-pageable: Pageable;
 /**
- * JSON-serialized filter
+ * UserListParams
+ * Parameters used to list users (pagination and optional filter).
  */
-filter?: string;
+export type UserListParams = {
+	pageable: Pageable;
+	/**
+	 * JSON-serialized filter
+	 */
+	filter?: string;
 };

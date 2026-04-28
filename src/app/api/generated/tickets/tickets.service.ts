@@ -35,6 +35,11 @@ import type {
 
 
 
+/**
+ * HttpClientOptions
+ * Request options accepted by the generated HTTP client methods
+ * (headers, params, context and other fetch-like options).
+ */
 interface HttpClientOptions {
   readonly headers?: HttpHeaders | Record<string, string | string[]>;
   readonly context?: HttpContext;
@@ -55,6 +60,11 @@ interface HttpClientOptions {
   readonly transferCache?: {includeHeaders?: string[]} | boolean;
 }
 
+/**
+ * filterParams
+ * Normalize and filter a record of parameters to primitives or arrays
+ * of primitives suitable for Angular's HttpClient `params`.
+ */
 function filterParams(
   params: Record<string, unknown>,
   requiredNullableKeys: Set<string> = new Set(),
@@ -89,6 +99,12 @@ function filterParams(
 
 
 @Injectable({ providedIn: 'root' })
+/**
+ * TicketsService
+ * Client for tickets endpoints: create, retrieve, update and list tickets.
+ * Generated from the OpenAPI specification and used by the application to
+ * manage support/issue tickets on the backend.
+ */
 export class TicketsService {
   private readonly http = inject(HttpClient);
 /**

@@ -6,6 +6,10 @@
  * OpenAPI spec version: v1
  */
 
+/**
+ * SortObject
+ * Metadata describing sorting state for pageable responses.
+ */
 export interface SortObject {
   empty?: boolean;
   unsorted?: boolean;

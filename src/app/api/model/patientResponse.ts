@@ -10,6 +10,10 @@ import type { PatientResponseGender } from './patientResponseGender';
 import type { PatientResponseMaritalStatus } from './patientResponseMaritalStatus';
 import type { TrustedContact } from './trustedContact';
 
+/**
+ * PatientResponse
+ * Representation of patient details returned by the API.
+ */
 export interface PatientResponse {
   id?: number;
   firstName?: string;

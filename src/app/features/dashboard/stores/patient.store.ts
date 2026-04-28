@@ -4,22 +4,53 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
 import type { PagePatientResponse, PatientResponse } from '@app/api/model';
 
+/**
+ * PatientFilters
+ * Filters that can be applied when loading patient lists.
+ */
 export interface PatientFilters {
   keywords?: string[];
   birthDate?: string;
 }
 
+/**
+ * PatientLoadRequest
+ * Internal request shape used by the patient store resource.
+ */
 interface PatientLoadRequest {
+/**
+ * TODO: Documentation for page (property)
+ */
   page: number;
+/**
+ * TODO: Documentation for size (property)
+ */
   size: number;
+/**
+ * TODO: Documentation for listKeywords (property)
+ */
   listKeywords: string[];
   sortField?: string;
   sortDirection?: string;
   filters?: PatientFilters;
 }
 
+/**
+ * EMPTY_PAGE
+ * Default empty page used when there is no request or on errors.
+ */
 const EMPTY_PAGE: PagePatientResponse = { content: [], totalElements: 0, totalPages: 0, size: 10 };
 
+/**
+ * PatientStore
+ * Reactive store exposing patients list and pagination state.
+ */
+/**
+ * TODO: Documentation for PatientStore (class)
+ */
+/**
+ * TODO: Documentation for PatientStore (class)
+ */
 @Injectable({ providedIn: 'root' })
 export class PatientStore {
 
@@ -28,8 +59,19 @@ export class PatientStore {
   private readonly _request = signal<PatientLoadRequest | undefined>(undefined);
 
   private readonly _resource = rxResource<PagePatientResponse, PatientLoadRequest | undefined>({
+/**
+ * TODO: Documentation for params (property)
+ */
     params: () => this._request(),
+/**
+ * TODO: Documentation for stream (property)
+ */
     stream: ({ params: req }) => {
+/**
+ * TODO: Documentation for if (method)
+ * @param of(EMPTY_PAGE - TODO
+ * @returns TODO
+ */
       if (!req) return of(EMPTY_PAGE);
 
       const { page, size, listKeywords, sortField, sortDirection, filters } = req;
@@ -40,6 +82,11 @@ export class PatientStore {
         .set('page', page)
         .set('size', size);
 
+/**
+ * TODO: Documentation for if (method)
+ * @param sort - TODO
+ * @returns TODO
+ */
       if (sort) {
         params = params.set('sort', sort);
       }
@@ -60,9 +107,28 @@ export class PatientStore {
     return err instanceof Error ? err.message : err ? String(err) : null;
   });
 
+/**
+ * TODO: Documentation for load (method)
+ * @param page - TODO
+ * @param size - TODO
+ * @param listKeywords - TODO
+ * @param sortField? - TODO
+ * @param sortDirection? - TODO
+ * @param filters? - TODO
+ * @returns TODO
+ */
   load(
+/**
+ * TODO: Documentation for page (property)
+ */
     page: number,
+/**
+ * TODO: Documentation for size (property)
+ */
     size: number,
+/**
+ * TODO: Documentation for listKeywords (property)
+ */
     listKeywords: string[],
     sortField?: string,
     sortDirection?: string,

@@ -9,6 +9,10 @@ import type { PageableObject } from './pageableObject';
 import type { SortObject } from './sortObject';
 import type { TicketResponse } from './ticketResponse';
 
+/**
+ * PageTicketResponse
+ * Paginated response wrapper containing `TicketResponse` items and paging metadata.
+ */
 export interface PageTicketResponse {
   totalPages?: number;
   totalElements?: number;

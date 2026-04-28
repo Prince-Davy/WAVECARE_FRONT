@@ -31,6 +31,11 @@ import type {
 
 
 
+/**
+ * HttpClientOptions
+ * Request options accepted by the generated HTTP client methods
+ * (headers, params, context and other fetch-like options).
+ */
 interface HttpClientOptions {
   readonly headers?: HttpHeaders | Record<string, string | string[]>;
   readonly context?: HttpContext;
@@ -56,6 +61,12 @@ interface HttpClientOptions {
 
 
 @Injectable({ providedIn: 'root' })
+/**
+ * TicketStatusesService
+ * Client exposing ticket status endpoints (list available statuses).
+ * Generated from the OpenAPI specification and used by the application
+ * to retrieve ticket status metadata.
+ */
 export class TicketStatusesService {
   private readonly http = inject(HttpClient);
 /**

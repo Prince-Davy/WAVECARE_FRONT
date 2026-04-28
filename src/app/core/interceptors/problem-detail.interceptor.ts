@@ -43,6 +43,9 @@ function normalizeErrorKey(userMessageKey: string): { key: string; statusCode?: 
   return { key: userMessageKey };
 }
 
+/**
+ * TODO: Documentation for translateProblemKey (function)
+ */
 function translateProblemKey(userMessageKey: string, pd: ProblemDetail, translate: TranslateService): string {
   const normalized = normalizeErrorKey(userMessageKey);
   const statusCode = normalized.statusCode ?? pd.status;
@@ -56,6 +59,9 @@ function translateProblemKey(userMessageKey: string, pd: ProblemDetail, translat
   return userMessageKey;
 }
 
+/**
+ * TODO: Documentation for getUserFacingMessage (function)
+ */
 export function getUserFacingMessage(pd: ProblemDetail, translate?: TranslateService): string {
   if (!pd) {
     return 'Erreur inconnue.';

@@ -7,6 +7,9 @@
  */
 import type { Pageable } from './pageable';
 
+/**
+ * TODO: Documentation for PatientListParams (type)
+ */
 export type PatientListParams = {
 pageable: Pageable;
 filter?: string;

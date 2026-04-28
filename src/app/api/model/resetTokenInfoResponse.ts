@@ -6,6 +6,10 @@
  * OpenAPI spec version: v1
  */
 
+/**
+ * ResetTokenInfoResponse
+ * Contains information about a password reset token.
+ */
 export interface ResetTokenInfoResponse {
   id?: string;
   email?: string;

@@ -3,6 +3,11 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { ConfigService } from './config.service';
 
+/**
+ * apiBaseUrlInterceptor
+ * Prepends the configured API base URL to relative requests when present.
+ * This interceptor skips absolute URLs and leaves them untouched.
+ */
 export const apiBaseUrlInterceptor: HttpInterceptorFn = (req, next) => {
   if (/^https?:\/\//i.test(req.url)) {
     return next(req);

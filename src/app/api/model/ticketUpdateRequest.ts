@@ -6,6 +6,10 @@
  * OpenAPI spec version: v1
  */
 
+/**
+ * TicketUpdateRequest
+ * Fields accepted to update an existing ticket.
+ */
 export interface TicketUpdateRequest {
   statusId?: number;
   adminComment?: string;

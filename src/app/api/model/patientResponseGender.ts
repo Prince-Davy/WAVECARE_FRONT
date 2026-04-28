@@ -6,9 +6,16 @@
  * OpenAPI spec version: v1
  */
 
+/**
+ * PatientResponseGender
+ * Possible values for a patient's gender as returned by the API.
+ */
 export type PatientResponseGender = typeof PatientResponseGender[keyof typeof PatientResponseGender];
 
 
+/**
+ * PatientResponseGender
+ */
 export const PatientResponseGender = {
   MALE: 'MALE',
   FEMALE: 'FEMALE',

@@ -15,12 +15,24 @@ import { FilterUtils } from '@app/features/utils/filter.utils';
 import { UsersService } from '@app/api/generated/users/users.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 
+/**
+ * TODO: Documentation for AdvancedFilters (interface)
+ */
 export interface AdvancedFilters {
   role?: string[];
   status?: string[];
   createdDate?: string;
 }
 
+/**
+ * TODO: Documentation for AdvancedFiltersComponent (class)
+ */
+/**
+ * TODO: Documentation for AdvancedFiltersComponent (class)
+ */
+/**
+ * TODO: Documentation for AdvancedFiltersComponent (class)
+ */
 @Component({
   selector: 'app-advanced-filters',
   standalone: true,
@@ -65,10 +77,25 @@ export class AdvancedFiltersComponent {
   readonly toggleOpen = output<void>();
   readonly reset = output<void>();
 
+/**
+ * TODO: Documentation for filtersForm (property)
+ */
   filtersForm: FormGroup;
+/**
+ * TODO: Documentation for appliedFilters (property)
+ */
   appliedFilters: { roles: string[]; statuses: string[]; createdDate: string | null } = {
+/**
+ * TODO: Documentation for roles (property)
+ */
     roles: [],
+/**
+ * TODO: Documentation for statuses (property)
+ */
     statuses: [],
+/**
+ * TODO: Documentation for createdDate (property)
+ */
     createdDate: null
   };
 
@@ -76,20 +103,55 @@ export class AdvancedFiltersComponent {
   readonly roles = toSignal(this.usersApi.userListRoles(), { initialValue: [] as string[] });
   statuses = ['active', 'locked'];
 
+/**
+ * TODO: Documentation for constructor (method)
+ * @param fb - TODO
+ * @param cdr - TODO
+ * @returns TODO
+ */
   constructor(private readonly fb: FormBuilder, private readonly cdr: ChangeDetectorRef) {
     this.filtersForm = this.fb.group({
+/**
+ * TODO: Documentation for roles (property)
+ */
       roles: this.fb.control<string[]>([]),
+/**
+ * TODO: Documentation for statuses (property)
+ */
       statuses: this.fb.control<string[]>([]),
+/**
+ * TODO: Documentation for createdDate (property)
+ */
       createdDate: this.fb.control<string | Date | null>('')
     });
 
+/**
+ * TODO: Documentation for effect (method)
+ * @param ( - TODO
+ * @returns TODO
+ */
     effect(() => {
       const f = this.filters();
+/**
+ * TODO: Documentation for if (method)
+ * @param f - TODO
+ * @returns TODO
+ */
       if (f) {
         this.filtersForm.get('roles')?.setValue(f.role ?? []);
         this.filtersForm.get('statuses')?.setValue(f.status ?? []);
+/**
+ * TODO: Documentation for if (method)
+ * @param f.createdDate - TODO
+ * @returns TODO
+ */
         if (f.createdDate) {
           const parts = f.createdDate.split('-');
+/**
+ * TODO: Documentation for if (method)
+ * @param parts.length - TODO
+ * @returns TODO
+ */
           if (parts.length === 3) {
             const day = Number(parts[0]);
             const month = Number(parts[1]) - 1;
@@ -106,37 +168,77 @@ export class AdvancedFiltersComponent {
     });
   }
 
+/**
+ * TODO: Documentation for toggleFilters (method)
+ * @returns TODO
+ */
 
   toggleFilters(): void {
     this.toggleOpen.emit();
   }
 
+/**
+ * TODO: Documentation for onToggleArray (method)
+ * @param key - TODO
+ * @param value - TODO
+ * @param checked - TODO
+ * @returns TODO
+ */
 
   onToggleArray(key: 'roles' | 'statuses', value: string, checked: boolean) {
     const current = this.filtersForm.get(key)?.value ?? [];
     const next = new Set(current as string[]);
+/**
+ * TODO: Documentation for if (method)
+ * @param next.add(value - TODO
+ * @returns TODO
+ */
     if (checked) next.add(value);
     else next.delete(value);
     this.filtersForm.get(key)?.setValue(Array.from(next));
     this.filtersForm.get(key)?.markAsDirty();
   }
 
+/**
+ * TODO: Documentation for applyFilters (method)
+ * @returns TODO
+ */
 
   applyFilters(): void {
     const formValue = this.filtersForm.value;
     const filters: AdvancedFilters = {};
 
     // Permettre la combinaison des 3 filtres (role, status, createdDate)
+/**
+ * TODO: Documentation for if (method)
+ * @param 0 - TODO
+ * @returns TODO
+ */
     if (formValue.roles && formValue.roles.length > 0) {
       filters.role = formValue.roles;
     }
 
+/**
+ * TODO: Documentation for if (method)
+ * @param 0 - TODO
+ * @returns TODO
+ */
     if (formValue.statuses && formValue.statuses.length > 0) {
       filters.status = formValue.statuses;
     }
 
+/**
+ * TODO: Documentation for if (method)
+ * @param formValue.createdDate - TODO
+ * @returns TODO
+ */
     if (formValue.createdDate) {
       const dateVal = formValue.createdDate;
+/**
+ * TODO: Documentation for if (method)
+ * @param Date - TODO
+ * @returns TODO
+ */
       if (dateVal instanceof Date) {
         const year = dateVal.getFullYear();
         const month = String(dateVal.getMonth() + 1).padStart(2, '0');
@@ -154,14 +256,29 @@ export class AdvancedFiltersComponent {
     this.filtersChanged.emit(filters);
   }
 
+/**
+ * TODO: Documentation for getRoleLabel (method)
+ * @param role - TODO
+ * @returns TODO
+ */
   getRoleLabel(role: string): string {
     return FilterUtils.getRoleLabel(role);
   }
 
+/**
+ * TODO: Documentation for getStatusLabel (method)
+ * @param status - TODO
+ * @returns TODO
+ */
   getStatusLabel(status: string): string {
     return FilterUtils.getStatusLabel(status);
   }
 
+/**
+ * TODO: Documentation for formatDate (method)
+ * @param dateInput - TODO
+ * @returns TODO
+ */
   formatDate(dateInput: string | Date | null): string {
     return FilterUtils.formatDate(dateInput);
   }

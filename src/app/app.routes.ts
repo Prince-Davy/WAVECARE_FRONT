@@ -3,14 +3,40 @@ import { authGuard } from './features/auth/guards/auth.guard';
 import { administratorGuard, radiologistGuard, radioOperatorGuard } from './features/auth/guards/role.guard';
 import { homeRedirectGuard } from './guards/home-redirect.guard';
 
+/**
+ * Route path constants used across the application to avoid hardcoded strings.
+ */
 export const PATH_TO_LOGIN = '***REMOVED***';
+/**
+ * TODO: Documentation for PATH_TO_FORGOT_PASSWORD (const)
+ */
 export const PATH_TO_FORGOT_PASSWORD = '***REMOVED***';
+/**
+ * TODO: Documentation for PATH_TO_RESET_PASSWORD (const)
+ */
 export const PATH_TO_RESET_PASSWORD = '***REMOVED***';
+/**
+ * TODO: Documentation for PATH_TO_ASSISTANCE (const)
+ */
 export const PATH_TO_ASSISTANCE = 'assistance';
+/**
+ * TODO: Documentation for PATH_TO_TICKETS (const)
+ */
 export const PATH_TO_TICKETS: string = 'tickets';
+/**
+ * TODO: Documentation for PATH_TO_USERS (const)
+ */
 export const PATH_TO_USERS: string = 'users';
+/**
+ * TODO: Documentation for PATH_TO_PATIENTS (const)
+ */
 export const PATH_TO_PATIENTS: string = 'patients';
 
+/**
+ * routes
+ * Application route definitions, using lazy-loaded standalone components
+ * and guards for authorization.
+ */
 export const routes: Routes = [
   {
     path: PATH_TO_LOGIN,

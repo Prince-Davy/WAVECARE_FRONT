@@ -6,9 +6,16 @@
  * OpenAPI spec version: v1
  */
 
+/**
+ * PatientResponseMaritalStatus
+ * Possible values for a patient's marital status as returned by the API.
+ */
 export type PatientResponseMaritalStatus = typeof PatientResponseMaritalStatus[keyof typeof PatientResponseMaritalStatus];
 
 
+/**
+ * PatientResponseMaritalStatus
+ */
 export const PatientResponseMaritalStatus = {
   SINGLE: 'SINGLE',
   MARRIED: 'MARRIED',
