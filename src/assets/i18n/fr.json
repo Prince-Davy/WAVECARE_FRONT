@@ -293,19 +293,19 @@
         "table": {
           "title": "Recherche du patient",
           "search": {
-            "search-information": "NNS, nom et/ou prénom",
-            "helper-text": "Consulter N°NNS ",
+            "search-information": "NSS, nom et/ou prénom",
+            "helper-text": "Consulter N°NSS ",
             "placeholder": ""
           },
           "column": {
             "id": { "label": "Id" },
             "lastName": { "label": "Nom" },
             "firstName": { "label": "Prénom" },
-            "ins": { "label": "N°NNS" },
+            "ins": { "label": "N°NSS" },
             "birthDate": { "label": "Date de naissance" },
             "action": {
               "label": "Action",
-              "tooltip": "Consulter N°NNS {{ins}}"
+              "tooltip": "Consulter N°NSS {{ins}}"
             }
           },
           "paginator": {
