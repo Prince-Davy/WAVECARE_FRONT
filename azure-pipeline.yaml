@@ -17,6 +17,7 @@ resources:
       ref: wip-experimental-helm
 pool: labs-pool
 variables:
+  - group: sonarqube_token
   - name: project_group
     value: 'wavecare'
   - name: project_name
