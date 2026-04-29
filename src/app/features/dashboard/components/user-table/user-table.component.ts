@@ -31,7 +31,7 @@ import type { UserResponse } from '@app/api/model';
 function getFrenchPaginatorIntl(): MatPaginatorIntl {
   const paginatorIntl = new MatPaginatorIntl();
 
-  paginatorIntl.itemsPerPageLabel = 'Items par page';
+  paginatorIntl.itemsPerPageLabel = 'Nombre de lignes par page';
   paginatorIntl.nextPageLabel = 'Page suivante';
   paginatorIntl.previousPageLabel = 'Page précédente';
   paginatorIntl.firstPageLabel = 'Première page';
