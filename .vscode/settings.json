@@ -1,0 +1,22 @@
+{
+    "js/ts.tsdk.path": "node_modules/typescript/lib",
+    "js/ts.preferences.importModuleSpecifier": "relative",
+
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "html"
+    ],
+
+        "sonarlint.connectedMode.project": {
+        "connectionId": "https-sonarqube-innovation-factory-io",
+        "projectKey": "Wavecare-front"
+    }
+}

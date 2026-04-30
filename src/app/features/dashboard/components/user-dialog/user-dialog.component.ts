@@ -12,6 +12,7 @@ import { UsersService } from '@app/api/generated/users/users.service';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 import { finalize, tap } from 'rxjs';
 import type { UserResponse } from '@app/api/model';
+import { CommonModule } from '@angular/common';
 
 /**
  * TODO: Documentation for UserDialogData (interface)
@@ -57,7 +58,8 @@ export type UserCreateDTO = UserResponse;
     MatInputModule,
     MatIcon,
     MatDialogModule,
-    TranslateModule
+    TranslateModule,
+    CommonModule
   ],
   templateUrl: './user-dialog.component.html',
   styleUrl: './user-dialog.component.scss'
