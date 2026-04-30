@@ -7,7 +7,8 @@ trigger:
     - '*'
   branches:
     include:
-    - '*'
+    - develop
+    - main
 resources:
   repositories:
     - repository: templates
@@ -17,7 +18,7 @@ resources:
       ref: wip-experimental-helm
 pool: labs-pool
 variables:
-  - group: sonarqube_token
+  - group: sonar_token
   - name: project_group
     value: 'wavecare'
   - name: project_name
