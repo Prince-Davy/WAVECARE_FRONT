@@ -38,62 +38,6 @@ export type UserCreateDTO = UserResponse;
 /**
  * TODO: Documentation for UserDialogComponent (class)
  */
-/**
- * TODO: Documentation for UserDialogComponent (class)
- */
-/**
- * TODO: Documentation for UserDialogComponent (class)
- */
-
-export function strictEmailValidator(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value;
-
-    if (!value) {
-      return null; // Validators.required gère le champ vide
-    }
-
-    const specialCharactersRegex = /[^a-zA-Z0-9.@_-]/;
-
-    if (specialCharactersRegex.test(value)) {
-      return { specialCharacters: true };
-    }
-
-    const emailFormatRegex = /^[a-zA-Z]+[a-zA-Z_-]*\.[a-zA-Z]+[a-zA-Z_-]*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
-
-    if (!emailFormatRegex.test(value)) {
-      return { invalidEmailFormat: true };
-    }
-
-    return null;
-  };
-}
-
-export function strictEmailValidator(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value;
-
-    if (!value) {
-      return null; // Validators.required gère le champ vide
-    }
-
-    const specialCharactersRegex = /[^a-zA-Z0-9.@_-]/;
-
-    if (specialCharactersRegex.test(value)) {
-      return { specialCharacters: true };
-    }
-
-    const emailFormatRegex = /^[a-zA-Z]+[a-zA-Z_-]*\.[a-zA-Z]+[a-zA-Z_-]*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
-
-    if (!emailFormatRegex.test(value)) {
-      return { invalidEmailFormat: true };
-    }
-
-    return null;
-  };
-}
-
-export const STRICT_EMAIL_VALIDATOR: ValidatorFn = strictEmailValidator();
 
 export function strictEmailValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -196,7 +140,6 @@ export class UserDialogComponent {
 /**
  * TODO: Documentation for email (property)
  */
-
     email:[
       { value: this.data.user.email ?? '', disabled: !isCreate },
       {
@@ -240,16 +183,6 @@ export class UserDialogComponent {
     const updateUser = this.data.user;
     return { id: updateUser.id, firstName: formValue.firstName, lastName: formValue.lastName, role: formValue.role, email: updateUser.email };
 
-    /*
-    const selectedRoles = this.data.roles.find(s => s === formValue.role);
-
-      this.data.user.role = selectedRoles ?? "0";
-      this.data.user.lastName = formValue.lastName ?? '';
-      this.data.user.firstName = formValue.firstName ?? '';  
-      this.data.user.email = formValue.email ?? this.data.user.email;
-
-      return this.data.user;
-      */
   }
 
 /**
@@ -264,9 +197,7 @@ export class UserDialogComponent {
  */
     if (this.userDialogForm.invalid || this.isSubmitting) {
       this.userDialogForm.markAllAsTouched();
-/**
- * TODO: Documentation for return (property)
- */
+
       return;
     }
 
@@ -316,3 +247,4 @@ export class UserDialogComponent {
       .subscribe(() => this.dialogRef.close(true));
   }
 }
+
