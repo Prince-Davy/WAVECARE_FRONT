@@ -21,8 +21,8 @@ describe('UserDialogComponent', () => {
   } as unknown as MatDialogRef<UserDialogComponent>;
 
   const userServiceMock = {
-    createUser: jasmine.createSpy('createUser').and.returnValue(of(void 0)),
-    updateUser: jasmine.createSpy('updateUser').and.returnValue(of(void 0)),
+    createUser: jasmine.createSpy('userCreate').and.returnValue(of(void 0)),
+    updateUser: jasmine.createSpy('userUpdate').and.returnValue(of(void 0)),
   };
 
   const notificationServiceMock = {
@@ -101,18 +101,46 @@ describe('UserDialogComponent', () => {
       expect(fg.valid).toBeFalse();
     });
 
-    it('devrait appliquer la contrainte email sur le champ email (même désactivé)', () => {
-      const emailCtrl = component.userDialogForm.get('email');
-      emailCtrl?.enable();
+    it('devrait refuser un email contenant des caractères spéciaux non autorisés', () => {
+  const emailCtrl = component.userDialogForm.get('email');
+  emailCtrl?.enable();
 
-      emailCtrl?.setValue('not-an-email');
-      expect(emailCtrl?.hasError('email')).toBeTrue();
+  emailCtrl?.setValue('jean#dupont@gmail.com');
+  emailCtrl?.markAsTouched();
+  emailCtrl?.updateValueAndValidity();
 
-      emailCtrl?.setValue('valid@test.com');
-      expect(emailCtrl?.hasError('email')).toBeFalse();
+  expect(emailCtrl?.hasError('specialCharacters')).toBeTrue();
 
-      emailCtrl?.disable();
-    });
+  emailCtrl?.disable();
+});
+
+it('devrait refuser un email qui ne respecte pas le format prénom.nom@domaine.com', () => {
+  const emailCtrl = component.userDialogForm.get('email');
+  emailCtrl?.enable();
+
+  emailCtrl?.setValue('jean@gmail.com');
+  emailCtrl?.markAsTouched();
+  emailCtrl?.updateValueAndValidity();
+
+  expect(emailCtrl?.hasError('invalidEmailFormat')).toBeTrue();
+
+  emailCtrl?.disable();
+});
+
+it('devrait accepter un email au format prénom.nom@domaine.com', () => {
+  const emailCtrl = component.userDialogForm.get('email');
+  emailCtrl?.enable();
+
+  emailCtrl?.setValue('jean.dupont@gmail.com');
+  emailCtrl?.markAsTouched();
+  emailCtrl?.updateValueAndValidity();
+
+  expect(emailCtrl?.valid).toBeTrue();
+  expect(emailCtrl?.hasError('specialCharacters')).toBeFalse();
+  expect(emailCtrl?.hasError('invalidEmailFormat')).toBeFalse();
+
+  emailCtrl?.disable();
+});
 
     it('validate() devrait retourner un UserDTO avec les valeurs choisies', () => {
       component.userDialogForm.get('lastName')?.setValue('Smith');
@@ -194,7 +222,7 @@ describe('UserDialogComponent', () => {
       const fg = component.userDialogForm;
       fg.get('lastName')?.setValue('New');
       fg.get('firstName')?.setValue('User');
-      fg.get('email')?.setValue('new@test.com');
+      fg.get('email')?.setValue('new.user@test.com');
       fg.get('role')?.setValue('MANAGER');
 
       const dto = component.validate();
@@ -202,7 +230,7 @@ describe('UserDialogComponent', () => {
       expect(dto.id).toBeUndefined();
       expect(dto.lastName).toBe('New');
       expect(dto.firstName).toBe('User');
-      expect(dto.email).toBe('new@test.com');
+      expect(dto.email).toBe('new.user@test.com');
       expect(dto.role).toBe('MANAGER');
     });
   });
