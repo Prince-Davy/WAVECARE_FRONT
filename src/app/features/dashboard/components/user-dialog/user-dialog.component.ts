@@ -1,6 +1,6 @@
 
 import { Component, afterNextRender, inject, viewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators , AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -44,6 +44,30 @@ export type UserCreateDTO = UserResponse;
 /**
  * TODO: Documentation for UserDialogComponent (class)
  */
+
+export function strictEmailValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+
+    if (!value) {
+      return null; // Validators.required gère le champ vide
+    }
+
+    const specialCharactersRegex = /[^a-zA-Z0-9.@_-]/;
+
+    if (specialCharactersRegex.test(value)) {
+      return { specialCharacters: true };
+    }
+
+    const emailFormatRegex = /^[a-zA-Z]+[a-zA-Z_-]*\.[a-zA-Z]+[a-zA-Z_-]*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailFormatRegex.test(value)) {
+      return { invalidEmailFormat: true };
+    }
+
+    return null;
+  };
+}
 @Component({
   selector: 'app-user-dialog',
   standalone: true,
@@ -121,7 +145,16 @@ export class UserDialogComponent {
 /**
  * TODO: Documentation for email (property)
  */
-      email: [{ value: this.data.user.email ?? '', disabled: !isCreate }, [Validators.required, Validators.email]],
+    email:[
+      { value: this.data.user.email ?? '', disabled: !isCreate },
+      {
+        validators: [
+          Validators.required,
+          strictEmailValidator()
+        ],
+         updateOn: 'blur' 
+      }
+    ],
 /**
  * TODO: Documentation for role (property)
  */

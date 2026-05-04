@@ -420,18 +420,28 @@
             "label": "Role : "
           },
           "lastName": {
-            "label": "Nom : "
+            "label": "Nom : ",
+            "error": {
+              "required": "Le nom est obligatoire, exemple : Dupont"
+            }
           },
           "firstName": {
-            "label": "Prenom : "
+            "label": "Prenom : ",
+            "error": {
+              "required": "Le prénom est obligatoire, exemple : Jean"
+            }
           },
           "email": {
-            "label": "Email : "
+            "label": "Email : ",
+            "error": {
+              "required": "L'email est obligatoire",
+              "invalidFormat": "Le format de l'email est invalide, exemple : jean.dupont@domain.com",
+              "specialCharacters": "L'email contient des caractères spéciaux"
+            }
           },
           "required": {
             "label": {
-              "first": "Les champs marqués d'une astérisque (",
-              "second": ") sont obligatoires."
+              "first": "Tous les champs sont obligatoires."
             }
           }
         },

@@ -10,7 +10,7 @@
 
 <mat-dialog-content>
 
-  <p><span>{{ 'feature.dashboard.user-dialog-component.form.required.label.first' | translate }}<span class="required-label"> * </span>{{ 'feature.dashboard.user-dialog-component.form.required.label.second' | translate }}</span></p>
+  <p><span>{{ 'feature.dashboard.user-dialog-component.form.required.label.first' | translate }}</span></p>
   <form [formGroup]="userDialogForm">
     <label for="lastName">{{ 'feature.dashboard.user-dialog-component.form.lastName.label' | translate }}</label>
     <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
@@ -32,11 +32,16 @@
       <mat-error *ngIf="userDialogForm.get('email')?.hasError('required')">
         {{ 'feature.dashboard.user-dialog-component.form.email.error.required' | translate }}
       </mat-error>
-      <mat-error *ngIf="userDialogForm.get('email')?.hasError('email')">
-        {{ 'feature.dashboard.user-dialog-component.form.email.error.invalid' | translate }}
+
+      <mat-error *ngIf="userDialogForm.get('email')?.hasError('specialCharacters')">
+        {{ 'feature.dashboard.user-dialog-component.form.email.error.specialCharacters' | translate }}
+      </mat-error>
+
+      <mat-error *ngIf="userDialogForm.get('email')?.hasError('invalidEmailFormat')">
+        {{ 'feature.dashboard.user-dialog-component.form.email.error.invalidFormat' | translate }}
       </mat-error>
     </mat-form-field>
-    <label for="role">{{ 'feature.dashboard.user-dialog-component.form.role.label' | translate }}<span class="required-label">*</span></label>
+    <label for="role">{{ 'feature.dashboard.user-dialog-component.form.role.label' | translate }}</label>
     <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
       <mat-select #roleInput id="role" formControlName="role" [aria-label]="'feature.dashboard.user-dialog-component.form.role.label' | translate" required>
         @for(role of data.roles; track role) {
