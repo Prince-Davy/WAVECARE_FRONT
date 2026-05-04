@@ -68,6 +68,33 @@ export function strictEmailValidator(): ValidatorFn {
     return null;
   };
 }
+
+export function strictEmailValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+
+    if (!value) {
+      return null; // Validators.required gère le champ vide
+    }
+
+    const specialCharactersRegex = /[^a-zA-Z0-9.@_-]/;
+
+    if (specialCharactersRegex.test(value)) {
+      return { specialCharacters: true };
+    }
+
+    const emailFormatRegex = /^[a-zA-Z]+[a-zA-Z_-]*\.[a-zA-Z]+[a-zA-Z_-]*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailFormatRegex.test(value)) {
+      return { invalidEmailFormat: true };
+    }
+
+    return null;
+  };
+}
+
+export const STRICT_EMAIL_VALIDATOR: ValidatorFn = strictEmailValidator();
+
 @Component({
   selector: 'app-user-dialog',
   standalone: true,
@@ -150,7 +177,7 @@ export class UserDialogComponent {
       {
         validators: [
           Validators.required,
-          strictEmailValidator()
+          STRICT_EMAIL_VALIDATOR
         ],
          updateOn: 'blur' 
       }
