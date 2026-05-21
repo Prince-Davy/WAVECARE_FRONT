@@ -14,7 +14,7 @@
     "serve:ssr": "node dist/wavecare-front/server/server.mjs",
     "serve:ssr:WAVECARE_FRONT": "node dist/wavecare-front/server/server.mjs",
     "api:generate": "orval && node scripts/post-orval.js",
-    "test": "ng test",
+    "test": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage",
     "test:ci": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage",
     "docs:compodoc": "compodoc -p tsconfig.doc.json -d documentation",
     "docs:compodoc:check": "compodoc -p tsconfig.doc.json -d documentation --coverageTest 20 --coverageTestThresholdFail true --unitTestCoverage coverage/coverage-summary.json",
