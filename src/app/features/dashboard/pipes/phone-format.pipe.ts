@@ -22,11 +22,6 @@ export class PhoneFormatPipe implements PipeTransform {
  * @returns TODO
  */
   transform(value: string | null | undefined): string {
-/**
- * TODO: Documentation for if (method)
- * @param !value - TODO
- * @returns TODO
- */
     if (!value) return '';
 
     const phoneUtil = PhoneNumberUtil.getInstance();

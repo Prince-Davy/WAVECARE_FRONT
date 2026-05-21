@@ -8,27 +8,27 @@ import { homeRedirectGuard } from './guards/home-redirect.guard';
  */
 export const PATH_TO_LOGIN = '***REMOVED***';
 /**
- * TODO: Documentation for PATH_TO_FORGOT_PASSWORD (const)
+ * Path constant for the forgot password route.
  */
 export const PATH_TO_FORGOT_PASSWORD = '***REMOVED***';
 /**
- * TODO: Documentation for PATH_TO_RESET_PASSWORD (const)
+ * Path constant for the password reset route.
  */
 export const PATH_TO_RESET_PASSWORD = '***REMOVED***';
 /**
- * TODO: Documentation for PATH_TO_ASSISTANCE (const)
+ * Path constant for the assistance/help route.
  */
 export const PATH_TO_ASSISTANCE = 'assistance';
 /**
- * TODO: Documentation for PATH_TO_TICKETS (const)
+ * Path constant for the tickets management route.
  */
 export const PATH_TO_TICKETS: string = 'tickets';
 /**
- * TODO: Documentation for PATH_TO_USERS (const)
+ * Path constant for the users management route.
  */
 export const PATH_TO_USERS: string = 'users';
 /**
- * TODO: Documentation for PATH_TO_PATIENTS (const)
+ * Path constant for the patients management route.
  */
 export const PATH_TO_PATIENTS: string = 'patients';
 

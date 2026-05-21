@@ -93,11 +93,6 @@ export class ResetPasswordComponent {
     }, { validators: this.passwordMatchValidator } as AbstractControlOptions);
 
     this.token = this.route.snapshot.queryParamMap.get('token');
-/**
- * TODO: Documentation for if (method)
- * @param ! - TODO
- * @returns TODO
- */
     if (this.token && this.token.trim() !== '') {
       this.loadUserInfoFromToken();
     } else {
@@ -115,20 +110,10 @@ export class ResetPasswordComponent {
  * @returns TODO
  */
   loadUserInfoFromToken() {
-/**
- * TODO: Documentation for if (method)
- * @param !this.token - TODO
- * @returns TODO
- */
     if (!this.token) return;
 
     this.authService.readToken(this.token)
       .pipe(
-/**
- * TODO: Documentation for tap (method)
- * @param data - TODO
- * @returns TODO
- */
         tap(data => {
           this.userId = data.id;
           this.email = data.email;
@@ -161,11 +146,6 @@ export class ResetPasswordComponent {
  */
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
-/**
- * TODO: Documentation for if (method)
- * @param !value - TODO
- * @returns TODO
- */
       if (!value) return null;
       const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\-€\._])[A-Za-z\d!@#\$%\^&\*\-€\._]{12,20}$/;
       return pattern.test(value) ? null : { invalidPasswordPattern: true };
@@ -193,11 +173,6 @@ export class ResetPasswordComponent {
  * @returns TODO
  */
   onSubmitNewPassword() {
-/**
- * TODO: Documentation for if (method)
- * @param this.resetForm.invalid - TODO
- * @returns TODO
- */
     if (this.resetForm.invalid) {
       this.markFormGroupTouched();
 /**
@@ -206,11 +181,6 @@ export class ResetPasswordComponent {
       return;
     }
 
-/**
- * TODO: Documentation for if (method)
- * @param !this.email - TODO
- * @returns TODO
- */
     if (!this.userId || !this.email) {
       this.isError = true;
       this.message = this.translate.instant('feature.auth.***REMOVED***-component.form.submit.message.error.userinfo-not-available');
@@ -225,28 +195,13 @@ export class ResetPasswordComponent {
 
     this.authService.updatePassword(this.token, this.userId, payload)
       .pipe(
-/**
- * TODO: Documentation for tap (method)
- * @param response - TODO
- * @returns TODO
- */
         tap(response => {
           this.isError = false;
           this.message = this.translate.instant('feature.auth.***REMOVED***-component.form.submit.message.success');
 
-/**
- * TODO: Documentation for if (method)
- * @param this.token - TODO
- * @returns TODO
- */
           if (this.token) {
             this.authService.deleteToken(this.token)
               .pipe(
-/**
- * TODO: Documentation for tap (method)
- * @param () - TODO
- * @returns TODO
- */
                 tap(() => console.log('Token was successfully removed'))
               )
               .subscribe();

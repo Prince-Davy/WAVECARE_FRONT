@@ -147,11 +147,6 @@ export class TicketDialogComponent {
  * @returns TODO
  */
   submit(): void {
-/**
- * TODO: Documentation for if (method)
- * @param this.isSubmitting - TODO
- * @returns TODO
- */
     if (this.ticketDialogForm.invalid || this.isSubmitting) {
       this.ticketDialogForm.markAllAsTouched();
 /**
@@ -174,11 +169,6 @@ export class TicketDialogComponent {
         adminComment: payload.adminComment,
       })
       .pipe(
-/**
- * TODO: Documentation for tap (method)
- * @param ( - TODO
- * @returns TODO
- */
         tap(() => {
           this.notificationService.openSuccessSnackBar(
             this.translate.instant('feature.dashboard.ticket-table-component.table.column.action.message.success', {
@@ -189,11 +179,6 @@ export class TicketDialogComponent {
             })
           );
         }),
-/**
- * TODO: Documentation for finalize (method)
- * @param ( - TODO
- * @returns TODO
- */
         finalize(() => {
           this.isSubmitting = false;
         })

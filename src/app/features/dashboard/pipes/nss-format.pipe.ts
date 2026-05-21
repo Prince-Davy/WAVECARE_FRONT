@@ -21,11 +21,6 @@ export class NssFormatPipe implements PipeTransform {
  * @returns TODO
  */
   transform(value: string | null | undefined): string {
-/**
- * TODO: Documentation for if (method)
- * @param !value - TODO
- * @returns TODO
- */
     if (!value) return '';
 
     // Garde uniquement les chiffres

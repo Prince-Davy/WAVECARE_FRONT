@@ -64,11 +64,6 @@ export class PatientContactConfianceComponent {
  */
     effect(() => {
       const c = this.contactConfiance();
-/**
- * TODO: Documentation for if (method)
- * @param c - TODO
- * @returns TODO
- */
       if (c) {
         this.form.patchValue({
 /**
@@ -93,11 +88,6 @@ export class PatientContactConfianceComponent {
  * @returns TODO
  */
   submit() {
-/**
- * TODO: Documentation for if (method)
- * @param this.form.valid - TODO
- * @returns TODO
- */
     if (this.form.valid) {
       this.update.emit(this.form.value);
     }

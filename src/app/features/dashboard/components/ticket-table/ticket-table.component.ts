@@ -111,11 +111,6 @@ export class TicketTableComponent extends DashboardComponent {
       this.pageSize = this.ticketStore.pageSize();
       this.isLoading = this.ticketStore.loading();
       const p = this.paginator();
-/**
- * TODO: Documentation for if (method)
- * @param p - TODO
- * @returns TODO
- */
       if (p) {
         p.length = this.ticketStore.totalElements();
         p.pageSize = this.ticketStore.pageSize();
@@ -174,11 +169,6 @@ export class TicketTableComponent extends DashboardComponent {
         })
           .afterClosed()
           .subscribe((updated?: boolean) => {
-/**
- * TODO: Documentation for if (method)
- * @param updated - TODO
- * @returns TODO
- */
             if (updated) {
               this.refreshTable();
             }
@@ -194,11 +184,6 @@ export class TicketTableComponent extends DashboardComponent {
  */
 
   private refreshTable(pageIndex?: number): void {
-/**
- * TODO: Documentation for if (method)
- * @param ! - TODO
- * @returns TODO
- */
     if (pageIndex !== undefined) {
       this.paginator()!.pageIndex = pageIndex;
     }
@@ -215,11 +200,6 @@ export class TicketTableComponent extends DashboardComponent {
     };
 
     const sortFields: { field: string; direction: 'asc' | 'desc' }[] = [];
-/**
- * TODO: Documentation for if (method)
- * @param this.sort()?.direction - TODO
- * @returns TODO
- */
     if (this.sort()?.active && this.sort()?.direction) {
       const field = sortFieldMap[this.sort()!.active] ?? this.sort()!.active;
       const direction = this.sort()!.direction as 'asc' | 'desc';

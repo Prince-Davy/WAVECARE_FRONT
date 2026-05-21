@@ -52,11 +52,6 @@ export class AuthTokenService {
   /** decoded JWT payload or null if not available/parsing failed */
   payload = computed<JwtPayload | null>(() => {
     const t = this.token();
-/**
- * TODO: Documentation for if (method)
- * @param !t - TODO
- * @returns TODO
- */
     if (!t) {
       return null;
     }
@@ -70,11 +65,6 @@ export class AuthTokenService {
   /** user object derived from payload for easy consumption */
   user = computed(() => {
     const p = this.payload();
-/**
- * TODO: Documentation for if (method)
- * @param !p - TODO
- * @returns TODO
- */
     if (!p) {
       return null;
     }
@@ -106,11 +96,6 @@ export class AuthTokenService {
   /** true when there is a token that hasn't expired yet */
   isAuthenticated = computed(() => {
     const exp = this.expiresAt();
-/**
- * TODO: Documentation for if (method)
- * @param !exp - TODO
- * @returns TODO
- */
     if (!exp) {
       return false;
     }
@@ -120,11 +105,6 @@ export class AuthTokenService {
 
   roles = computed<string[]>(() => {
     const p = this.payload();
-/**
- * TODO: Documentation for if (method)
- * @param !p - TODO
- * @returns TODO
- */
     if (!p) {
       return [];
     }
@@ -155,11 +135,6 @@ export class AuthTokenService {
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-/**
- * TODO: Documentation for if (method)
- * @param isPlatformBrowser(this.platformId) - TODO
- * @returns TODO
- */
     if (isPlatformBrowser(this.platformId)) {
       this.storage =
         STORAGE_STRATEGY === 'local' ? localStorage : sessionStorage;
@@ -167,31 +142,16 @@ export class AuthTokenService {
 
       // listen to other tabs making changes
       window.addEventListener('storage', (ev) => {
-/**
- * TODO: Documentation for if (method)
- * @param ! - TODO
- * @returns TODO
- */
         if (ev.storageArea !== this.storage) {
 /**
  * TODO: Documentation for return (property)
  */
           return;
         }
-/**
- * TODO: Documentation for if (method)
- * @param ev.key - TODO
- * @returns TODO
- */
         if (ev.key === 'access_token') {
           this.token.set(ev.newValue);
           this.scheduleRefresh();
         }
-/**
- * TODO: Documentation for if (method)
- * @param ev.key - TODO
- * @returns TODO
- */
         if (ev.key === 'refresh_token') {
           this.refresh.set(ev.newValue);
         }
@@ -204,11 +164,6 @@ export class AuthTokenService {
  * @returns TODO
  */
   initFromStorage(): void {
-/**
- * TODO: Documentation for if (method)
- * @param !this.storage - TODO
- * @returns TODO
- */
     if (!this.storage) {
 /**
  * TODO: Documentation for return (property)
@@ -227,32 +182,17 @@ export class AuthTokenService {
  * @returns TODO
  */
   private persistTokens(): void {
-/**
- * TODO: Documentation for if (method)
- * @param !this.storage - TODO
- * @returns TODO
- */
     if (!this.storage) {
 /**
  * TODO: Documentation for return (property)
  */
       return;
     }
-/**
- * TODO: Documentation for if (method)
- * @param this.token() - TODO
- * @returns TODO
- */
     if (this.token()) {
       this.storage.setItem('access_token', this.token()!);
     } else {
       this.storage.removeItem('access_token');
     }
-/**
- * TODO: Documentation for if (method)
- * @param this.refresh() - TODO
- * @returns TODO
- */
     if (this.refresh()) {
       this.storage.setItem('refresh_token', this.refresh()!);
     } else {
@@ -285,11 +225,6 @@ export class AuthTokenService {
   removeTokens(): void {
     this.token.set(null);
     this.refresh.set(null);
-/**
- * TODO: Documentation for if (method)
- * @param this.storage - TODO
- * @returns TODO
- */
     if (this.storage) {
       this.storage.removeItem('access_token');
       this.storage.removeItem('refresh_token');
@@ -306,11 +241,6 @@ export class AuthTokenService {
  */
   async refreshTokens(): Promise<void> {
     const refresh = this.refresh();
-/**
- * TODO: Documentation for if (method)
- * @param !refresh - TODO
- * @returns TODO
- */
     if (!refresh) {
       throw new Error('no refresh token');
     }
@@ -326,11 +256,6 @@ export class AuthTokenService {
     const resp = await firstValueFrom(
       this.http.post<any>(TOKEN_ENDPOINT, body.toString(), { headers })
     );
-/**
- * TODO: Documentation for if (method)
- * @param !resp.refresh_token - TODO
- * @returns TODO
- */
     if (!resp.access_token || !resp.refresh_token) {
       throw new Error('invalid token response');
     }
@@ -355,11 +280,6 @@ export class AuthTokenService {
   private scheduleRefresh(): void {
     this.clearRefreshTimer();
     const exp = this.expiresAt();
-/**
- * TODO: Documentation for if (method)
- * @param !exp - TODO
- * @returns TODO
- */
     if (!exp) {
 /**
  * TODO: Documentation for return (property)
@@ -368,11 +288,6 @@ export class AuthTokenService {
     }
     const now = Math.floor(Date.now() / 1000);
     const msUntil = (exp - now - 60) * 1000;
-/**
- * TODO: Documentation for if (method)
- * @param < - TODO
- * @returns TODO
- */
     if (msUntil <= 0) {
       // already too close or expired, trigger immediately
       void this.tryAutoRefresh();
@@ -391,11 +306,6 @@ export class AuthTokenService {
  * @returns TODO
  */
   private clearRefreshTimer(): void {
-/**
- * TODO: Documentation for if (method)
- * @param ! - TODO
- * @returns TODO
- */
     if (this.refreshTimer !== null) {
 /**
  * TODO: Documentation for clearTimeout (method)
@@ -416,27 +326,12 @@ export class AuthTokenService {
  * @returns TODO
  */
   async tryAutoRefresh(): Promise<boolean> {
-/**
- * TODO: Documentation for if (method)
- * @param this.isTokenValid() - TODO
- * @returns TODO
- */
     if (this.isTokenValid()) {
       return true;
     }
-/**
- * TODO: Documentation for if (method)
- * @param !this.refresh() - TODO
- * @returns TODO
- */
     if (!this.refresh()) {
       return false;
     }
-/**
- * TODO: Documentation for if (method)
- * @param this.ongoingRefresh - TODO
- * @returns TODO
- */
     if (this.ongoingRefresh) {
       return this.ongoingRefresh;
     }
@@ -457,11 +352,6 @@ export class AuthTokenService {
  * @returns TODO
  */
   async ensureFreshToken(): Promise<void> {
-/**
- * TODO: Documentation for if (method)
- * @param !this.isAuthenticated() - TODO
- * @returns TODO
- */
     if (!this.isAuthenticated()) {
       await this.tryAutoRefresh();
     }
@@ -473,11 +363,6 @@ export class AuthTokenService {
  */
   getUserId(): string | null {
     const t = this.token();
-/**
- * TODO: Documentation for if (method)
- * @param !t - TODO
- * @returns TODO
- */
     if (!t) {
       return null;
     }
@@ -495,11 +380,6 @@ export class AuthTokenService {
  */
   getCompleteName(): string | null {
     const t = this.token();
-/**
- * TODO: Documentation for if (method)
- * @param !t - TODO
- * @returns TODO
- */
     if (!t) {
       return null;
     }
@@ -559,27 +439,12 @@ export class AuthTokenService {
  * @returns TODO
  */
   getDefaultRoute(): string {
-/**
- * TODO: Documentation for if (method)
- * @param this.isAdministrator() - TODO
- * @returns TODO
- */
     if (this.isAdministrator()) {
       return PATH_TO_TICKETS;
     }
-/**
- * TODO: Documentation for if (method)
- * @param this.isRadiologist() - TODO
- * @returns TODO
- */
     if (this.isRadiologist()) {
       return PATH_TO_PATIENTS;
     }
-/**
- * TODO: Documentation for if (method)
- * @param this.isRadioOperator() - TODO
- * @returns TODO
- */
     if (this.isRadioOperator()) {
       return PATH_TO_ASSISTANCE;
     }

@@ -128,9 +128,6 @@ export class PatientTableComponent extends DashboardComponent {
  * TODO: Documentation for listKeywords (property)
  */
   listKeywords: string[] = [];
-/**
- * TODO: Documentation for filters (property)
- */
   filters: PatientFilters = {};
 
 /**
@@ -173,11 +170,6 @@ export class PatientTableComponent extends DashboardComponent {
       this.pageSize = this.patientStore.pageSize();
       this.isLoading = this.patientStore.loading();
       const pg = this.paginator();
-/**
- * TODO: Documentation for if (method)
- * @param pg - TODO
- * @returns TODO
- */
       if (pg) {
         pg.length = this.patientStore.totalElements();
         pg.pageSize = this.patientStore.pageSize();
@@ -208,11 +200,6 @@ export class PatientTableComponent extends DashboardComponent {
  * @returns TODO
  */
   private refreshTable(pageIndex?: number): void {
-/**
- * TODO: Documentation for if (method)
- * @param ! - TODO
- * @returns TODO
- */
     if (pageIndex !== undefined) {
       this.paginator()!.pageIndex = pageIndex;
     }
@@ -269,11 +256,6 @@ export class PatientTableComponent extends DashboardComponent {
   }
 
   // si votre SearchBar expose aussi des filtres avancés, vous pouvez les brancher ici
-/**
- * TODO: Documentation for filtersChanged (method)
- * @param filters - TODO
- * @returns TODO
- */
   filtersChanged(filters: any): void {
     // Exemple si vous ajoutez plus tard une date de naissance
     // this.filters.birthDate = filters?.birthDate;

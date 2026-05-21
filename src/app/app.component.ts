@@ -12,12 +12,6 @@ import { filter, map } from 'rxjs/operators';
  * Root application shell that controls layout and route-aware UI modes.
  * Exposes `dashboardMode` signal to hide chrome on specific full-page routes.
  */
-/**
- * TODO: Documentation for AppComponent (class)
- */
-/**
- * TODO: Documentation for AppComponent (class)
- */
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, NavbarComponent, FooterComponent, MatChipsModule],
@@ -30,33 +24,32 @@ export class AppComponent {
 
   private readonly fullPageRoutes = ['/***REMOVED***', '/***REMOVED***', '/***REMOVED***', '/assistance'];
 
+  /**
+   * Observable that emits the current URL after each navigation event.
+   * Used to determine if the dashboard layout should be visible.
+   */
   private readonly currentUrl = toSignal(
     this.router.events.pipe(
-/**
- * TODO: Documentation for filter (method)
- * @param (e) - TODO
- * @returns TODO
- */
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-/**
- * TODO: Documentation for map (method)
- * @param e - TODO
- * @returns TODO
- */
       map(e => e.urlAfterRedirects)
     ),
     { initialValue: '' }
   );
 
+  /**
+   * Computed signal indicating whether the dashboard layout should be displayed.
+   * Returns true when the current URL is not in fullPageRoutes.
+   */
   readonly dashboardMode = computed(() => {
     const url = this.currentUrl();
     return url ? !this.fullPageRoutes.some(prefix => url.startsWith(prefix)) : false;
   });
 
 /**
- * TODO: Documentation for constructor (method)
- * @param tokenService - TODO
- * @returns TODO
+ * AppComponent constructor.
+ * Injects the AuthTokenService for authentication token management.
+ * 
+ * @param tokenService - Authentication token service
  */
   constructor(public tokenService: AuthTokenService) { }
 }

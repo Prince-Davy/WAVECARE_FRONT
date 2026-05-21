@@ -77,9 +77,6 @@ export class AdvancedFiltersComponent {
   readonly toggleOpen = output<void>();
   readonly reset = output<void>();
 
-/**
- * TODO: Documentation for filtersForm (property)
- */
   filtersForm: FormGroup;
 /**
  * TODO: Documentation for appliedFilters (property)
@@ -132,26 +129,11 @@ export class AdvancedFiltersComponent {
  */
     effect(() => {
       const f = this.filters();
-/**
- * TODO: Documentation for if (method)
- * @param f - TODO
- * @returns TODO
- */
       if (f) {
         this.filtersForm.get('roles')?.setValue(f.role ?? []);
         this.filtersForm.get('statuses')?.setValue(f.status ?? []);
-/**
- * TODO: Documentation for if (method)
- * @param f.createdDate - TODO
- * @returns TODO
- */
         if (f.createdDate) {
           const parts = f.createdDate.split('-');
-/**
- * TODO: Documentation for if (method)
- * @param parts.length - TODO
- * @returns TODO
- */
           if (parts.length === 3) {
             const day = Number(parts[0]);
             const month = Number(parts[1]) - 1;
@@ -188,11 +170,6 @@ export class AdvancedFiltersComponent {
   onToggleArray(key: 'roles' | 'statuses', value: string, checked: boolean) {
     const current = this.filtersForm.get(key)?.value ?? [];
     const next = new Set(current as string[]);
-/**
- * TODO: Documentation for if (method)
- * @param next.add(value - TODO
- * @returns TODO
- */
     if (checked) next.add(value);
     else next.delete(value);
     this.filtersForm.get(key)?.setValue(Array.from(next));
@@ -209,36 +186,16 @@ export class AdvancedFiltersComponent {
     const filters: AdvancedFilters = {};
 
     // Permettre la combinaison des 3 filtres (role, status, createdDate)
-/**
- * TODO: Documentation for if (method)
- * @param 0 - TODO
- * @returns TODO
- */
     if (formValue.roles && formValue.roles.length > 0) {
       filters.role = formValue.roles;
     }
 
-/**
- * TODO: Documentation for if (method)
- * @param 0 - TODO
- * @returns TODO
- */
     if (formValue.statuses && formValue.statuses.length > 0) {
       filters.status = formValue.statuses;
     }
 
-/**
- * TODO: Documentation for if (method)
- * @param formValue.createdDate - TODO
- * @returns TODO
- */
     if (formValue.createdDate) {
       const dateVal = formValue.createdDate;
-/**
- * TODO: Documentation for if (method)
- * @param Date - TODO
- * @returns TODO
- */
       if (dateVal instanceof Date) {
         const year = dateVal.getFullYear();
         const month = String(dateVal.getMonth() + 1).padStart(2, '0');

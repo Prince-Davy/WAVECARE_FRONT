@@ -71,11 +71,6 @@ export class CustomPaginator extends MatPaginatorIntl {
   }
 
   override getRangeLabel = (page: number, pageSize: number, length: number) => {
-/**
- * TODO: Documentation for if (method)
- * @param length - TODO
- * @returns TODO
- */
     if (length === 0 || pageSize === 0) {
       return `0 ${this.ofLabel} ${length}`;
     }

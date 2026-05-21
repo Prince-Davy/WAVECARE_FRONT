@@ -119,11 +119,6 @@ export class PatientIdentiteComponent {
  */
     effect(() => {
       const p = this.patient();
-/**
- * TODO: Documentation for if (method)
- * @param p - TODO
- * @returns TODO
- */
       if (p) {
         this.form.patchValue({
 /**
@@ -184,11 +179,6 @@ export class PatientIdentiteComponent {
  * @returns TODO
  */
   submit() {
-/**
- * TODO: Documentation for if (method)
- * @param this.form.valid - TODO
- * @returns TODO
- */
     if (this.form.valid) {
       this.update.emit(this.form.value);
     }
@@ -203,11 +193,6 @@ export class PatientIdentiteComponent {
  * @returns TODO
  */
   translateMaritalStatus(value?: string): string {
-/**
- * TODO: Documentation for if (method)
- * @param !value - TODO
- * @returns TODO
- */
     if (!value) {
       return '';
     }
@@ -220,11 +205,6 @@ export class PatientIdentiteComponent {
  * @returns TODO
  */
   translateGender(value?: string): string {
-/**
- * TODO: Documentation for if (method)
- * @param !value - TODO
- * @returns TODO
- */
     if (!value) {
       return '';
     }
