@@ -117,9 +117,6 @@ export class UserTableComponent extends DashboardComponent {
  * TODO: Documentation for advancedFilters (property)
  */
   advancedFilters: AdvancedFilters = {};
-/**
- * TODO: Documentation for filters (property)
- */
   filters: UserFilters = {};
 
 /**
@@ -173,11 +170,6 @@ export class UserTableComponent extends DashboardComponent {
       this.pageSize = this.userStore.pageSize();
       this.isLoading = this.userStore.loading();
       const p = this.paginator();
-/**
- * TODO: Documentation for if (method)
- * @param p - TODO
- * @returns TODO
- */
       if (p) {
         p.length = this.userStore.totalElements();
         p.pageSize = this.userStore.pageSize();
@@ -208,11 +200,6 @@ export class UserTableComponent extends DashboardComponent {
  * @returns TODO
  */
   private refreshTable(pageIndex?: number): void {
-/**
- * TODO: Documentation for if (method)
- * @param ! - TODO
- * @returns TODO
- */
     if (pageIndex !== undefined) {
       this.paginator()!.pageIndex = pageIndex;
     }
@@ -290,11 +277,6 @@ export class UserTableComponent extends DashboardComponent {
  */
         autoFocus: false
       }).afterClosed().subscribe((created?: boolean) => {
-/**
- * TODO: Documentation for if (method)
- * @param created - TODO
- * @returns TODO
- */
         if (created) {
           this.refreshTable(0);
         }
@@ -353,11 +335,6 @@ export class UserTableComponent extends DashboardComponent {
  */
         autoFocus: false
       }).afterClosed().subscribe((updated?: boolean) => {
-/**
- * TODO: Documentation for if (method)
- * @param updated - TODO
- * @returns TODO
- */
         if (updated) {
           this.refreshTable();
         }
@@ -380,11 +357,6 @@ export class UserTableComponent extends DashboardComponent {
  * @returns TODO
  */
   openDeleteUserDialog(user: any) {
-/**
- * TODO: Documentation for if (method)
- * @param this.isCurrentUser(user) - TODO
- * @returns TODO
- */
     if (this.isCurrentUser(user)) {
       this.notificationService.openErrorSnackBar(
         this.translate.instant('feature.dashboard.user-table-component.table.column.action.delete.message.self.error')
@@ -398,19 +370,9 @@ export class UserTableComponent extends DashboardComponent {
     const dialogRef = this.dialog.open(DeleteUserDialogComponent, { data: user });
 
     dialogRef.afterClosed().subscribe(result => {
-/**
- * TODO: Documentation for if (method)
- * @param result - TODO
- * @returns TODO
- */
       if (result) {
         this.usersApi.userDelete(user.id)
           .pipe(
-/**
- * TODO: Documentation for tap (method)
- * @param ( - TODO
- * @returns TODO
- */
             tap(() => {
               this.notificationService.openSuccessSnackBar(
                 this.translate.instant('feature.dashboard.user-table-component.table.column.action.delete.message.success', {
@@ -425,11 +387,6 @@ export class UserTableComponent extends DashboardComponent {
                 })
               );
             }),
-/**
- * TODO: Documentation for finalize (method)
- * @param () - TODO
- * @returns TODO
- */
             finalize(() => this.refreshTable())
           )
           .subscribe();

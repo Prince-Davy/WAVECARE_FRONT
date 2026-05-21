@@ -59,11 +59,6 @@ export class TicketStore {
  * TODO: Documentation for stream (property)
  */
     stream: ({ params: req }) => {
-/**
- * TODO: Documentation for if (method)
- * @param of(EMPTY_PAGE - TODO
- * @returns TODO
- */
       if (!req) return of(EMPTY_PAGE);
 
       const { page, size, listKeywords, sortFields } = req;

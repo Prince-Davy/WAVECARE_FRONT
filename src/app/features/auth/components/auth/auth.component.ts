@@ -102,11 +102,6 @@ export class AuthComponent {
       password: ['', [Validators.required]]
     });
 
-/**
- * TODO: Documentation for if (method)
- * @param this.authTokenService.isAuthenticated() - TODO
- * @returns TODO
- */
     if (this.authTokenService.isAuthenticated()) {
       this.navigationService.navigateToHome();
     }
@@ -126,19 +121,9 @@ export class AuthComponent {
  */
   onSubmit() {
     this.submitted = true;
-/**
- * TODO: Documentation for if (method)
- * @param this.loginForm.valid - TODO
- * @returns TODO
- */
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value)
         .pipe(
-/**
- * TODO: Documentation for tap (method)
- * @param (response - TODO
- * @returns TODO
- */
           tap((response) => {
             console.log("You are logged in");
             this.navigationService.navigateToHome();

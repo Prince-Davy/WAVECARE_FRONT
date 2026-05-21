@@ -1,7 +1,8 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
 
 /**
- * TODO: Documentation for serverRoutes (const)
+ * Server-side rendering routes configuration.
+ * Defines which routes should be prerendered and which should use server rendering.
  */
 export const serverRoutes: ServerRoute[] = [
   {

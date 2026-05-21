@@ -8,10 +8,28 @@ import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+/**
+ * Directory path where the server-side built application is located.
+ * Retrieved from the current module's metadata using import.meta.url.
+ */
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
+
+/**
+ * Directory path where the client-side (browser) built application is located.
+ * Resolved relative to the server distribution folder.
+ */
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 
+/**
+ * Express application instance used to handle HTTP requests.
+ * Configured to serve static files and handle server-side rendering.
+ */
 const app = express();
+
+/**
+ * Angular server-side rendering engine instance.
+ * Handles Angular application rendering on the server.
+ */
 const angularApp = new AngularNodeAppEngine();
 
 /**

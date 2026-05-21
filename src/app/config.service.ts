@@ -8,21 +8,15 @@ import { firstValueFrom } from 'rxjs';
  */
 export interface AppConfig {
 /**
- * TODO: Documentation for apiBaseUrl (property)
+ * Base URL for API requests
  */
   apiBaseUrl: string;
 }
 
 /**
  * ConfigService
- * Loads runtime configuration and exposes convenient accessors
+ * Loads runtime configuration from `/assets/config.json` and exposes convenient accessors
  * (e.g. `apiBaseUrl`) used by interceptors and services.
- */
-/**
- * TODO: Documentation for ConfigService (class)
- */
-/**
- * TODO: Documentation for ConfigService (class)
  */
 @Injectable({ providedIn: 'root' })
 export class ConfigService {
@@ -30,8 +24,10 @@ export class ConfigService {
   private config!: AppConfig;
 
 /**
- * TODO: Documentation for load (method)
- * @returns TODO
+ * Loads the application configuration from the config.json asset file.
+ * Falls back to a default development configuration if loading fails.
+ * 
+ * @returns Promise that resolves when configuration is loaded
  */
   async load(): Promise<void> {
     try {

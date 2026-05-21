@@ -98,11 +98,6 @@ export class AssistanceComponent {
  * @returns TODO
  */
   onSubmit() {
-/**
- * TODO: Documentation for if (method)
- * @param this.assistanceForm.valid - TODO
- * @returns TODO
- */
     if (this.assistanceForm.valid) {
       const ticketData: TicketCreateRequest = {
 /**
@@ -129,11 +124,6 @@ export class AssistanceComponent {
 
       this.ticketsService.ticketCreate(ticketData)
         .pipe(
-/**
- * TODO: Documentation for tap (method)
- * @param (result - TODO
- * @returns TODO
- */
           tap((result) => {
             console.log('Ticket submitted successfully', result);
             this.assistanceForm.reset();

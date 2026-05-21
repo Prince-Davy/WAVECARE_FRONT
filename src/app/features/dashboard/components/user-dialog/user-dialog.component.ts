@@ -171,11 +171,6 @@ export class UserDialogComponent {
   validate(): UserResponse {
     const formValue = this.userDialogForm.getRawValue();
 
-/**
- * TODO: Documentation for if (method)
- * @param this.data.mode - TODO
- * @returns TODO
- */
     if (this.data.mode === 'create') {
       return { firstName: formValue.firstName, lastName: formValue.lastName, email: formValue.email, role: formValue.role };
     }
@@ -190,11 +185,6 @@ export class UserDialogComponent {
  * @returns TODO
  */
   submit(): void {
-/**
- * TODO: Documentation for if (method)
- * @param this.isSubmitting - TODO
- * @returns TODO
- */
     if (this.userDialogForm.invalid || this.isSubmitting) {
       this.userDialogForm.markAllAsTouched();
 
@@ -223,11 +213,6 @@ export class UserDialogComponent {
     this.isSubmitting = true;
     request$
       .pipe(
-/**
- * TODO: Documentation for tap (method)
- * @param ( - TODO
- * @returns TODO
- */
         tap(() => {
           const messageKey = isCreate
             ? 'feature.dashboard.user-table-component.action.create.message.success'
@@ -235,11 +220,6 @@ export class UserDialogComponent {
 
           this.notificationService.openSuccessSnackBar(this.translate.instant(messageKey));
         }),
-/**
- * TODO: Documentation for finalize (method)
- * @param ( - TODO
- * @returns TODO
- */
         finalize(() => {
           this.isSubmitting = false;
         })

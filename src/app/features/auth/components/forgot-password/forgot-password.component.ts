@@ -71,11 +71,6 @@ export class ForgotPasswordComponent {
  * @returns TODO
  */
   submit(): void {
-/**
- * TODO: Documentation for if (method)
- * @param this.form.invalid - TODO
- * @returns TODO
- */
     if (this.form.invalid) {
       this.form.get('email')?.markAsTouched();
       this.resetRequestSuccess = false;
@@ -89,12 +84,6 @@ export class ForgotPasswordComponent {
 
     this.authService.forgotPassword(email)
       .pipe(
-/**
- * TODO: Documentation for tap (method)
- * @param response - TODO
- * @param response - TODO
- * @returns TODO
- */
         tap(response => {
           console.log('Success:', response);
           this.resetRequestSuccess = true;

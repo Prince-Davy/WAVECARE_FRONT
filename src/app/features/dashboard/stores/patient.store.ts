@@ -67,11 +67,6 @@ export class PatientStore {
  * TODO: Documentation for stream (property)
  */
     stream: ({ params: req }) => {
-/**
- * TODO: Documentation for if (method)
- * @param of(EMPTY_PAGE - TODO
- * @returns TODO
- */
       if (!req) return of(EMPTY_PAGE);
 
       const { page, size, listKeywords, sortField, sortDirection, filters } = req;
@@ -82,11 +77,6 @@ export class PatientStore {
         .set('page', page)
         .set('size', size);
 
-/**
- * TODO: Documentation for if (method)
- * @param sort - TODO
- * @returns TODO
- */
       if (sort) {
         params = params.set('sort', sort);
       }

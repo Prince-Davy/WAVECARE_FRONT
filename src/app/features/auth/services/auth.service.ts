@@ -33,17 +33,7 @@ export class AuthService {
   login(credentials: { username: string; password: string }): Observable<TokenResponse> {
     return this.usersApi.userLogin(credentials)
       .pipe(
-/**
- * TODO: Documentation for tap (method)
- * @param response - TODO
- * @returns TODO
- */
         tap(response => {
-/**
- * TODO: Documentation for if (method)
- * @param response.refresh_token - TODO
- * @returns TODO
- */
           if (response.access_token && response.refresh_token) {
             this.tokenService.setTokens({
 /**
