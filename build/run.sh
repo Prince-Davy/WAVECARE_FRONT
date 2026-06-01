@@ -1,5 +1,9 @@
 #!/bin/bash
+
 set -uo pipefail
+
+set -x
+export PATH="/root/.local/bin:$PATH"
 
 WORKSPACE="/var/workspace/wavecare-front"
 TARGET_DIR="${WORKSPACE}/target"
@@ -145,3 +149,21 @@ find "${TARGET_DIR}" -maxdepth 3 -type f | sort || true
 
 echo "=== END run.sh with exitcode=${exitcode} ==="
 exit $exitcode
+
+echo "=== START run.sh ==="
+echo "Current user: $(whoami)"
+echo "PWD=$(pwd)"
+echo "PATH=$PATH"
+echo "CHROME_BIN=$CHROME_BIN"
+echo "Workspace: ${WORKSPACE}"
+
+echo "=== /var/workspace content ==="
+ls -la /var/workspace || true
+
+echo "=== workspace content ==="
+ls -la "$WORKSPACE" || true
+
+cd "$WORKSPACE" || {
+  echo "Cannot cd to ${WORKSPACE}"
+  exit 2
+}
