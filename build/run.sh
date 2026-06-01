@@ -32,6 +32,21 @@ if [ $? -ne 0 ]; then
   exitcode=1
 fi
 
+# --- SonarQube Scan ---
+if [ -z "${SONAR_TOKEN:-}" ]; then
+  echo "[WARNING] SONAR_TOKEN not set, skipping SonarQube scan"
+else
+  echo "[INFO] Running SonarQube scan..."
+  echo "[INFO] Current working directory: $(pwd)"
+  echo "[INFO] sonar-project.properties location:"
+  ls -la "${WORKSPACE}/sonar-project.properties" || echo "[ERROR] File not found"
+  
+  if ! npm run sonar:scan; then
+    echo "sonar:scan failed"
+    exitcode=1
+  fi
+fi
+
 # --- Copie des artefacts ---
 [ -d "${WORKSPACE}/coverage" ]      && cp -R "${WORKSPACE}/coverage/."      "${TARGET_DIR}/coverage/"      || true
 [ -d "${WORKSPACE}/documentation" ] && cp -R "${WORKSPACE}/documentation/." "${TARGET_DIR}/documentation/" || true
