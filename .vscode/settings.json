@@ -1,21 +1,21 @@
 {
-    "js/ts.tsdk.path": "node_modules/typescript/lib",
-    "js/ts.preferences.importModuleSpecifier": "relative",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.preferences.importModuleSpecifier": "relative",
 
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
-    },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
 
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact",
-        "html"
-    ],
-    "sonarlint.connectedMode.project": {
-        "connectionId": "SonarQube",
-        "projectKey": "Wavecare-front"
-    }
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "html"
+  ],
+  "sonarlint.connectedMode.project": {
+    "connectionId": "Wavecare-Front",
+    "projectKey": "Wavecare-front"
+  }
 }
