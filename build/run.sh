@@ -38,12 +38,27 @@ if [ -z "${SONAR_TOKEN:-}" ]; then
 else
   echo "[INFO] Running SonarQube scan..."
   echo "[INFO] Current working directory: $(pwd)"
-  echo "[INFO] sonar-project.properties location:"
-  ls -la "${WORKSPACE}/sonar-project.properties" || echo "[ERROR] File not found"
-  
-  if ! npm run sonar:scan; then
-    echo "sonar:scan failed"
+
+  # Verify sonar-project.properties exists
+  if [ ! -f "${WORKSPACE}/sonar-project.properties" ]; then
+    echo "[ERROR] sonar-project.properties not found at ${WORKSPACE}/sonar-project.properties"
+    ls -la "${WORKSPACE}" | grep sonar || true
     exitcode=1
+  else
+    echo "[INFO] Found sonar-project.properties"
+    ls -la "${WORKSPACE}/sonar-project.properties"
+
+    # Verify lcov.info exists
+    if [ ! -f "${WORKSPACE}/coverage/lcov.info" ]; then
+      echo "[WARNING] lcov.info not found - coverage report will not be included in scan"
+    else
+      echo "[INFO] Found coverage/lcov.info"
+    fi
+
+    if ! npm run sonar:scan; then
+      echo "sonar:scan failed"
+      exitcode=1
+    fi
   fi
 fi
 
