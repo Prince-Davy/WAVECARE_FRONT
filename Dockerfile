@@ -1,14 +1,14 @@
-FROM node:25-alpine AS build
+FROM node:20-alpine AS build
 RUN apk update && apk upgrade
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 COPY . .
 RUN npm run build
 
 # -------- Runtime --------
-FROM node:25-alpine AS server
+FROM node:20-alpine AS server
 RUN apk update && apk upgrade
 WORKDIR /app
 
