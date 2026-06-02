@@ -37,6 +37,7 @@ mkdir -p "${TARGET_DIR}/coverage" "${TARGET_DIR}/documentation"
 
 # --- Installation des dépendances ---
 
+
 echo "=== npm install ==="
 
 if ! npm ci; then
@@ -44,8 +45,11 @@ if ! npm ci; then
 
 echo "=== npm install ==="
 npm install
+
+npm ci
+
 if [ $? -ne 0 ]; then
-  echo "npm install failed"
+  echo "npm ci failed"
 
   exit 1
 fi
