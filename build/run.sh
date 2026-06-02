@@ -16,25 +16,12 @@ cd "$WORKSPACE" || {
 echo "[INFO] node: $(node --version)"
 echo "[INFO] npm: $(npm --version)"
 
-echo "=== START run.sh ==="
-echo "Current user: $(whoami)"
-echo "Workspace: ${WORKSPACE}"
-
-cd "$WORKSPACE" || {
-  echo "Cannot cd to ${WORKSPACE}"
-  exit 1
-}
-
-
 exitcode=0
 
 mkdir -p "${TARGET_DIR}/coverage" "${TARGET_DIR}/documentation"
 
 
 # --- Installation des dépendances ---
-
-echo "=== npm install ==="
-
 if ! npm ci; then
   echo "npm ci failed"
 
@@ -48,9 +35,6 @@ fi
 
 
 # --- Tests + couverture ---
-
-echo "=== npm run test:ci ==="
-
 if ! npm run test:ci; then
 
 echo "=== npm run test:ci ==="
@@ -64,7 +48,6 @@ fi
 echo "=== npm run docs:compodoc:check ==="
 npm run docs:compodoc:check
 if [ $? -ne 0 ]; then
-
   echo "docs:compodoc:check failed"
   exitcode=1
 fi
@@ -94,15 +77,12 @@ else
 
     if ! npm run sonar:scan; then
       echo "sonar:scan failed"
-
-  echo "docs:compodoc:check failed"
-
       exitcode=1
     fi
   fi
 fi
 
-echo "=== Copy artifacts ==="
+# --- Copie des artefacts ---
 
 echo "=== Copy artifacts ==="
 
