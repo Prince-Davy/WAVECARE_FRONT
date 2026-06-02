@@ -19,7 +19,6 @@
     "docs:compodoc": "compodoc -p tsconfig.doc.json -d documentation",
     "docs:compodoc:check": "compodoc -p tsconfig.doc.json -d documentation --coverageTest 20 --coverageTestThresholdFail true --unitTestCoverage coverage/coverage-summary.json",
     "docs:autofix": "node scripts/add-compodoc-stubs.js",
-    "sonar:scan": "sonar-scanner -Dproject.settings=./sonar-project.properties -Dsonar.projectKey=Wavecare-front -Dsonar.host.url=https://sonarqube.innovation-factory.io"
   },
   "private": true,
   "dependencies": {
@@ -58,7 +57,6 @@
     "@types/node": "^25.5.0",
     "jasmine-core": "~6.1.0",
     "karma": "~6.4.4",
-    "sonar-scanner": "^3.4.1",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.1",
     "karma-jasmine": "~5.1.0",
