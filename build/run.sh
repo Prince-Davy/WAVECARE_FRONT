@@ -4,14 +4,7 @@ set -uo pipefail
 WORKSPACE="/var/workspace/wavecare-front"
 TARGET_DIR="${WORKSPACE}/target"
 
-echo "=== START run.sh ==="
-echo "Current user: $(whoami)"
-echo "Workspace: ${WORKSPACE}"
-
-cd "$WORKSPACE" || {
-  echo "Cannot cd to ${WORKSPACE}"
-  exit 1
-}
+cd "$WORKSPACE"
 
 echo "[INFO] node: $(node --version)"
 echo "[INFO] npm: $(npm --version)"
@@ -20,35 +13,22 @@ exitcode=0
 
 mkdir -p "${TARGET_DIR}/coverage" "${TARGET_DIR}/documentation"
 
-
 # --- Installation des dépendances ---
 if ! npm ci; then
   echo "npm ci failed"
-
-echo "=== npm install ==="
-npm install
-if [ $? -ne 0 ]; then
-  echo "npm install failed"
-
   exit 1
 fi
 
-
 # --- Tests + couverture ---
 if ! npm run test:ci; then
-
-echo "=== npm run test:ci ==="
-npm run test:ci
-if [ $? -ne 0 ]; then
-
   echo "test:ci failed"
   exitcode=1
 fi
 
-echo "=== npm run docs:compodoc:check ==="
+# --- Documentation (Compodoc) ---
 npm run docs:compodoc:check
 if [ $? -ne 0 ]; then
-  echo "docs:compodoc:check failed"
+  echo "docs:compodoc:check failed — run 'npm run docs:compodoc' locally to fix documentation coverage"
   exitcode=1
 fi
 
@@ -83,15 +63,12 @@ else
 fi
 
 # --- Copie des artefacts ---
-
-echo "=== Copy artifacts ==="
-
 [ -d "${WORKSPACE}/coverage" ]      && cp -R "${WORKSPACE}/coverage/."      "${TARGET_DIR}/coverage/"      || true
 [ -d "${WORKSPACE}/documentation" ] && cp -R "${WORKSPACE}/documentation/." "${TARGET_DIR}/documentation/" || true
 
+# --- Badge de couverture ---
 COVERAGE_JSON="${WORKSPACE}/coverage/coverage-summary.json"
 
-echo "=== Check coverage file ==="
 if [ ! -f "$COVERAGE_JSON" ]; then
   echo "Coverage report not found: $COVERAGE_JSON"
   anybadge --value="Failed" --file="${TARGET_DIR}/coverage.svg" --label=coverage -c red -o
@@ -123,5 +100,4 @@ fi
 echo "--- target content ---"
 find "${TARGET_DIR}" -maxdepth 3 -type f | sort || true
 
-echo "=== END run.sh with exitcode=${exitcode} ==="
 exit $exitcode
