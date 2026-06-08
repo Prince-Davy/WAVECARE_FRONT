@@ -19,9 +19,9 @@ resources:
 pool: labs-pool
 variables:
   - group: sonar_token
-  # Use the project-scoped token (SONAR_ANALYSIS_TOKEN) for CI scans
+  # If present, use the project-scoped token for CI scans while keeping the user token in the variable group
   - name: SONAR_TOKEN
-    value: $(SONAR_ANALYSIS_TOKEN)
+    value: $(SONAR_PROJECT_TOKEN)
   - name: project_group
     value: 'wavecare'
   - name: project_name
