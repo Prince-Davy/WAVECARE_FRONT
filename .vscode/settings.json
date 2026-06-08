@@ -14,8 +14,9 @@
         "typescriptreact",
         "html"
     ],
-    "sonarlint.connectedMode.project": {
-        "connectionId": "SonarQube",
-        "projectKey": "Wavecare-front"
-    }
+
+        "sonarlint.connectedMode.project": {
+            "connectionId": "https-sonarqube-innovation-factory-io",
+            "projectKey": "Wavecare-front"
+        }
 }
