@@ -1,26 +1,24 @@
 #!/bin/bash
-set -uo pipefail
 
 WORKSPACE="/var/workspace/wavecare-front"
 TARGET_DIR="${WORKSPACE}/target"
 
 cd "$WORKSPACE"
 
-echo "[INFO] node: $(node --version)"
-echo "[INFO] npm: $(npm --version)"
-
 exitcode=0
 
 mkdir -p "${TARGET_DIR}/coverage" "${TARGET_DIR}/documentation"
 
 # --- Installation des dépendances ---
-if ! npm ci; then
-  echo "npm ci failed"
+npm install
+if [ $? -ne 0 ]; then
+  echo "npm install failed"
   exit 1
 fi
 
 # --- Tests + couverture ---
-if ! npm run test:ci; then
+npm run test:ci
+if [ $? -ne 0 ]; then
   echo "test:ci failed"
   exitcode=1
 fi
