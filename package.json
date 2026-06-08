@@ -19,7 +19,7 @@
     "docs:compodoc": "compodoc -p tsconfig.doc.json -d documentation",
     "docs:compodoc:check": "compodoc -p tsconfig.doc.json -d documentation --coverageTest 20 --coverageTestThresholdFail true --unitTestCoverage coverage/coverage-summary.json",
     "docs:autofix": "node scripts/add-compodoc-stubs.js",
-    "sonar:scan": "sonar-scanner -Dproject.settings=./sonar-project.properties -Dsonar.projectKey=Wavecare-front -Dsonar.host.url=https://sonarqube.innovation-factory.io"
+    "sonar:scan": "sonar-scanner"
   },
   "private": true,
   "dependencies": {
