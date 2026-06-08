@@ -18,8 +18,7 @@
     "test:ci": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage",
     "docs:compodoc": "compodoc -p tsconfig.doc.json -d documentation",
     "docs:compodoc:check": "compodoc -p tsconfig.doc.json -d documentation --coverageTest 20 --coverageTestThresholdFail true --unitTestCoverage coverage/coverage-summary.json",
-    "docs:autofix": "node scripts/add-compodoc-stubs.js",
-    "sonar:scan": "sonar-scanner"
+    "docs:autofix": "node scripts/add-compodoc-stubs.js"
   },
   "private": true,
   "dependencies": {
