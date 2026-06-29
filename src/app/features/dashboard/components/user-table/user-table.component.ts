@@ -1,4 +1,3 @@
-
 import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, afterNextRender, effect, inject, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -23,7 +22,8 @@ import { UserFilters } from '../../models/user-filters';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
 import type { UserResponse } from '@app/api/model';
-
+import { Router } from '@angular/router';
+import { TrashService } from '@app/api/generated/trash/trash.service';
 /**
  * TODO: Documentation for getFrenchPaginatorIntl (function)
  */
@@ -130,6 +130,9 @@ export class UserTableComponent extends DashboardComponent {
  */
 
   constructor(
+    private router: Router,
+
+    private trashService: TrashService,
 /**
  * TODO: Documentation for userStore (property)
  */
@@ -348,7 +351,11 @@ export class UserTableComponent extends DashboardComponent {
  * @returns TODO
  */
   isCurrentUser(user: any): boolean {
-    return user?.id === this.currentUserId;
+    return String(user?.id) === String(this.currentUserId);
+  }
+
+  goToTrash(): void {
+    this.router.navigate(['/users/trash']);
   }
 
 /**
@@ -371,7 +378,7 @@ export class UserTableComponent extends DashboardComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.usersApi.userDelete(user.id)
+        this.usersApi.userDelete(String(user.id))
           .pipe(
             tap(() => {
               this.notificationService.openSuccessSnackBar(

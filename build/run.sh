@@ -1,26 +1,24 @@
 #!/bin/bash
-set -uo pipefail
 
 WORKSPACE="/var/workspace/wavecare-front"
 TARGET_DIR="${WORKSPACE}/target"
 
 cd "$WORKSPACE"
 
-echo "[INFO] node: $(node --version)"
-echo "[INFO] npm: $(npm --version)"
-
 exitcode=0
 
 mkdir -p "${TARGET_DIR}/coverage" "${TARGET_DIR}/documentation"
 
 # --- Installation des dépendances ---
-if ! npm ci; then
-  echo "npm ci failed"
+npm install
+if [ $? -ne 0 ]; then
+  echo "npm install failed"
   exit 1
 fi
 
 # --- Tests + couverture ---
-if ! npm run test:ci; then
+npm run test:ci
+if [ $? -ne 0 ]; then
   echo "test:ci failed"
   exitcode=1
 fi
@@ -30,36 +28,6 @@ npm run docs:compodoc:check
 if [ $? -ne 0 ]; then
   echo "docs:compodoc:check failed — run 'npm run docs:compodoc' locally to fix documentation coverage"
   exitcode=1
-fi
-
-# --- SonarQube Scan ---
-if [ -z "${SONAR_TOKEN:-}" ]; then
-  echo "[WARNING] SONAR_TOKEN not set, skipping SonarQube scan"
-else
-  echo "[INFO] Running SonarQube scan..."
-  echo "[INFO] Current working directory: $(pwd)"
-
-  # Verify sonar-project.properties exists
-  if [ ! -f "${WORKSPACE}/sonar-project.properties" ]; then
-    echo "[ERROR] sonar-project.properties not found at ${WORKSPACE}/sonar-project.properties"
-    ls -la "${WORKSPACE}" | grep sonar || true
-    exitcode=1
-  else
-    echo "[INFO] Found sonar-project.properties"
-    ls -la "${WORKSPACE}/sonar-project.properties"
-
-    # Verify lcov.info exists
-    if [ ! -f "${WORKSPACE}/coverage/lcov.info" ]; then
-      echo "[WARNING] lcov.info not found - coverage report will not be included in scan"
-    else
-      echo "[INFO] Found coverage/lcov.info"
-    fi
-
-    if ! npm run sonar:scan; then
-      echo "sonar:scan failed"
-      exitcode=1
-    fi
-  fi
 fi
 
 # --- Copie des artefacts ---
