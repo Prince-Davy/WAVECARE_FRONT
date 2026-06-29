@@ -1,0 +1,166 @@
+<div class="table-container">
+  <div class="page-header">
+    <div>
+      <h1 class="title">
+        {{ 'feature.dashboard.user-trash-component.title' | translate }}
+      </h1>
+    </div>
+
+    <button
+      mat-raised-button
+      type="button"
+      class="back-button"
+      (click)="goBackToUsers()"
+    >
+      <mat-icon>arrow_back</mat-icon>
+      {{ 'feature.dashboard.user-trash-component.button.back-to-users.label' | translate }}
+    </button>
+  </div>
+
+  <div class="trash-toolbar-row">
+    <app-search-bar
+      class="search-zone"
+      [totalResults]="resultsLength"
+      (keywordsChanged)="keywordsChanged($event)"
+      (resetRequested)="resetTable()"
+    >
+    <!-- Checkbox Tout selectionner  -->
+      <!-- <div resultExtraActions class="result-select-all">
+        <mat-checkbox
+          class="select-all-checkbox"
+          [checked]="isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()"
+          [disabled]="dataSource.data.length === 0"
+          (change)="masterToggle()"
+          [aria-label]="checkboxLabel()"
+        >
+          {{ 'feature.dashboard.user-trash-component.select-all-checkbox' | translate }}
+        </mat-checkbox>
+      </div> -->
+    </app-search-bar>
+
+    <div class="trash-actions-panel">
+      <span class="selection-count" *ngIf="selectedCount > 0">
+        {{ selectedCount }} compte{{ selectedCount > 1 ? 's' : '' }}
+        sélectionné{{ selectedCount > 1 ? 's' : '' }}
+      </span>
+
+      <button
+        mat-raised-button
+        type="button"
+        class="trash-action-button"
+        [disabled]="selectedCount === 0"
+        (click)="openRestoreSelectedConfirmation()"
+      >
+        <mat-icon>restore</mat-icon>
+        {{ 'feature.dashboard.user-trash-component.button.restore.label' | translate }}
+      </button>
+
+      <!-- Bouton Supprimer definitivement  un profil de la corbeille -->
+      <!-- <button
+        mat-raised-button
+        color="warn"
+        type="button"
+        class="trash-action-button"
+        [disabled]="selectedCount === 0"
+        (click)="openPermanentDeleteSelectedConfirmation()"
+      >
+        <mat-icon>delete_forever</mat-icon>
+        {{ 'feature.dashboard.user-trash-component.button.permanent-delete.label' | translate }}
+      </button> -->
+    </div>
+  </div>
+
+  <mat-card>
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ 'feature.dashboard.user-trash-component.table.actions-column' | translate }}
+          </th>
+
+          <td mat-cell *matCellDef="let user">
+            <mat-checkbox
+              [checked]="selection.isSelected(user)"
+              [aria-label]="checkboxLabel(user)"
+              (click)="$event.stopPropagation()"
+              (change)="toggleRow(user)"
+            >
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="lastName">
+            {{ 'feature.dashboard.user-trash-component.table.last-name-column' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let user">
+            {{ user.lastName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="firstName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="firstName">
+            {{ 'feature.dashboard.user-trash-component.table.first-name-column' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let user">
+            {{ user.firstName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="email">
+            {{ 'feature.dashboard.user-trash-component.table.email-column' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let user">
+            {{ user.email }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="role">
+            {{ 'feature.dashboard.user-trash-component.table.role-column' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let user">
+            {{ 'model.user.role.' + user.role | translate }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="status">
+            {{ 'feature.dashboard.user-trash-component.table.status-column' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let user">
+            <span class="inactive-status">Inactif</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="deletedAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="deletedAt">
+            {{ 'feature.dashboard.user-trash-component.table.deleted-at-column' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let user">
+            {{ user.deletedAt | date:'dd/MM/yyyy - HH:mm' }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns;"
+          [class.selected-row]="selection.isSelected(row)"
+          (click)="toggleRow(row)"
+        >
+        </tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [length]="resultsLength"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      showFirstLastButtons>
+    </mat-paginator>
+  </mat-card>
+</div>

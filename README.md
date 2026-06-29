@@ -57,8 +57,3 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-## SonarQube & SonarLint
-
-To help catch code issues directly in your editor, we recommend using SonarLint connected to our SonarQube server. Follow the quick setup guide: [SONAR_SETUP.md](SONAR_SETUP.md).
-

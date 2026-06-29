@@ -14,8 +14,9 @@
     "typescriptreact",
     "html"
   ],
+
   "sonarlint.connectedMode.project": {
-    "connectionId": "Wavecare-Front",
+    "connectionId": "Wavecare Front",
     "projectKey": "Wavecare-front"
   }
 }

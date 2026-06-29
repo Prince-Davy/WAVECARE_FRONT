@@ -31,6 +31,10 @@ export const PATH_TO_USERS: string = 'users';
  * Path constant for the patients management route.
  */
 export const PATH_TO_PATIENTS: string = 'patients';
+/**
+ * Path constant for the trash management route.
+ */
+export const PATH_TO_USERS_TRASH: string = 'users/trash';
 
 /**
  * routes
@@ -58,6 +62,11 @@ export const routes: Routes = [
     path: PATH_TO_TICKETS,
     canActivate: [authGuard, administratorGuard],
     loadComponent: () => import('@app/features/dashboard/components/ticket-table/ticket-table.component').then(c => c.TicketTableComponent)
+  },
+  {
+    path: PATH_TO_USERS_TRASH,
+    canActivate: [authGuard, administratorGuard],
+    loadComponent: () => import('@app/features/dashboard/components/user-trash/user-trash.component').then(c => c.UserTrashComponent)
   },
   {
     path: PATH_TO_USERS,
