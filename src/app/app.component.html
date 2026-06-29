@@ -1,14 +1,16 @@
 @if (dashboardMode()) {
-  <!-- Dashboard  -->
   <div class="dashboard-container">
     <navbar></navbar>
+
     <main class="main-content">
       <router-outlet></router-outlet>
     </main>
+
     <app-footer></app-footer>
   </div>
-}
-@else {
-  <!-- Full page components  -->
+
+  <app-notification-stack></app-notification-stack>
+  <app-idle-timeout-overlay></app-idle-timeout-overlay>
+} @else {
   <router-outlet></router-outlet>
 }
