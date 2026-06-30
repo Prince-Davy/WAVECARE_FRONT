@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+
+    <mat-dialog-content>
+      <p>{{ data.message }}</p>
+
+      <ul class="users-list">
+        <li *ngFor="let user of data.users">
+          <strong>{{ user.lastName }} {{ user.firstName }}</strong>
+          <span *ngIf="user.email"> — {{ user.email }}</span>
+        </li>
+      </ul>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+      <button mat-button [mat-dialog-close]="false">
+        {{ data.cancelLabel || 'Annuler' }}
+      </button>
+
+      <button
+        mat-raised-button
+        [color]="data.confirmColor || 'primary'"
+        [mat-dialog-close]="true"
+      >
+        {{ data.confirmLabel }}
+      </button>
+    </mat-dialog-actions>

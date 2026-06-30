@@ -1,55 +1,71 @@
-﻿import { Component, computed, inject } from '@angular/core';
+﻿import { Component, computed, effect, inject } from '@angular/core';
 import { RouterOutlet, NavigationEnd, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { AuthTokenService } from './features/auth/services/auth-token.service';
-import { FooterComponent } from "./features/dashboard/components/footer/footer.component";
-import { NavbarComponent } from "./features/navigation/components/navbar/navbar.component";
-import { MatChipsModule } from '@angular/material/chips';
 import { filter, map } from 'rxjs/operators';
 
-/**
- * AppComponent
- * Root application shell that controls layout and route-aware UI modes.
- * Exposes `dashboardMode` signal to hide chrome on specific full-page routes.
- */
+import { AuthTokenService } from './features/auth/services/auth-token.service';
+import { IdleTimeoutService } from './api/generated/idle-timeout/idle-timeout.service';
+
+import { FooterComponent } from './features/dashboard/components/footer/footer.component';
+import { NavbarComponent } from './features/navigation/components/navbar/navbar.component';
+import { NotificationStackComponent } from './features/notification/components/notification-stack/notification-stack.component';
+import { IdleTimeoutOverlayComponent } from './features/auth/components/idle-timeout-overlay/idle-timeout-overlay/idle-timeout-overlay.component';
+
+import { MatChipsModule } from '@angular/material/chips';
+
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent, FooterComponent, MatChipsModule],
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    NavbarComponent,
+    FooterComponent,
+    MatChipsModule,
+    NotificationStackComponent,
+    IdleTimeoutOverlayComponent,
+],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-
   private readonly router = inject(Router);
+  private readonly idleTimeoutService = inject(IdleTimeoutService);
 
-  private readonly fullPageRoutes = ['/***REMOVED***', '/***REMOVED***', '/***REMOVED***', '/assistance'];
+  private readonly fullPageRoutes = [
+    '/***REMOVED***',
+    '/***REMOVED***',
+    '/***REMOVED***',
+    '/assistance',
+  ];
 
-  /**
-   * Observable that emits the current URL after each navigation event.
-   * Used to determine if the dashboard layout should be visible.
-   */
   private readonly currentUrl = toSignal(
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
       map(e => e.urlAfterRedirects)
     ),
-    { initialValue: '' }
+    {
+      initialValue: this.router.url,
+    }
   );
 
-  /**
-   * Computed signal indicating whether the dashboard layout should be displayed.
-   * Returns true when the current URL is not in fullPageRoutes.
-   */
   readonly dashboardMode = computed(() => {
     const url = this.currentUrl();
-    return url ? !this.fullPageRoutes.some(prefix => url.startsWith(prefix)) : false;
+
+    return url
+      ? !this.fullPageRoutes.some(prefix => url.startsWith(prefix))
+      : false;
   });
 
-/**
- * AppComponent constructor.
- * Injects the AuthTokenService for authentication token management.
- * 
- * @param tokenService - Authentication token service
- */
-  constructor(public tokenService: AuthTokenService) { }
+  constructor(public tokenService: AuthTokenService) {
+    effect(() => {
+      const isAuthenticated = this.tokenService.isAuthenticated();
+      const isDashboard = this.dashboardMode();
+
+      if (isAuthenticated && isDashboard) {
+        this.idleTimeoutService.startWatching();
+      } else {
+        this.idleTimeoutService.stopWatching();
+      }
+    });
+  }
 }
