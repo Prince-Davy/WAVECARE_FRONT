@@ -1,83 +1,67 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
-import { SnackBarClass } from '../models/snack-bar-class.enum';
+import { BehaviorSubject } from 'rxjs';
 
-/**
- * TODO: Documentation for NotificationService (class)
- */
-/**
- * TODO: Documentation for NotificationService (class)
- */
-/**
- * TODO: Documentation for NotificationService (class)
- */
+export type NotificationType = 'success' | 'error';
+
+export interface AppNotification {
+  id: number;
+  message: string;
+  type: NotificationType;
+  duration: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
   private readonly ACTION_MESSAGE_KEY = 'feature.notification.notification-service.action-message';
-  private readonly SNACK_BAR_DURATION = 5000;
 
-/**
- * TODO: Documentation for constructor (method)
- * @param snackBar - TODO
- * @param translate - TODO
- * @returns TODO
- */
-  constructor(
-/**
- * TODO: Documentation for snackBar (property)
- */
-    private snackBar: MatSnackBar,
-/**
- * TODO: Documentation for translate (property)
- */
-    private translate: TranslateService
-  ) {}
+  private readonly SUCCESS_SNACK_BAR_DURATION = 5000;
+  private readonly ERROR_SNACK_BAR_DURATION = 70000;
 
-/**
- * TODO: Documentation for openErrorSnackBar (method)
- * @param message - TODO
- * @returns TODO
- */
-  openErrorSnackBar(message: string): void {
-    this.openSnackBar(message, SnackBarClass.ERROR);
+  private readonly notificationsSubject = new BehaviorSubject<AppNotification[]>([]);
+  readonly notifications$ = this.notificationsSubject.asObservable();
+
+  constructor(private translate: TranslateService) {}
+
+  openErrorSnackBar(message: string, duration: number = this.ERROR_SNACK_BAR_DURATION): void {
+    this.openNotification(message, 'error', duration);
   }
 
-/**
- * TODO: Documentation for openSuccessSnackBar (method)
- * @param message - TODO
- * @returns TODO
- */
-  openSuccessSnackBar(message: string): void {
-    this.openSnackBar(message, SnackBarClass.SUCCESS);
+  openSuccessSnackBar(message: string, duration: number = this.SUCCESS_SNACK_BAR_DURATION): void {
+    this.openNotification(message, 'success', duration);
   }
 
-/**
- * TODO: Documentation for openSnackBar (method)
- * @param message - TODO
- * @param cssClass - TODO
- * @returns TODO
- */
-  private openSnackBar(message: string, cssClass: SnackBarClass): void {
-    this.snackBar.open(
-      message,
-      this.translate.instant(this.ACTION_MESSAGE_KEY),
-      {
-/**
- * TODO: Documentation for panelClass (property)
- */
-        panelClass: [cssClass],
-/**
- * TODO: Documentation for verticalPosition (property)
- */
-        verticalPosition: 'top',
-/**
- * TODO: Documentation for duration (property)
- */
-        duration: this.SNACK_BAR_DURATION,
-      }
+  closeNotification(id: number): void {
+    this.notificationsSubject.next(
+      this.notificationsSubject.value.filter(notification => notification.id !== id)
     );
+  }
+
+  getCloseLabel(): string {
+    return this.translate.instant(this.ACTION_MESSAGE_KEY);
+  }
+
+  private openNotification(
+    message: string,
+    type: NotificationType,
+    duration: number
+  ): void {
+    const notification: AppNotification = {
+      id: Date.now() + Math.floor(Math.random() * 1000),
+      message,
+      type,
+      duration,
+    };
+
+    this.notificationsSubject.next([
+      ...this.notificationsSubject.value,
+      notification,
+    ]);
+
+    setTimeout(() => {
+      this.closeNotification(notification.id);
+    }, duration);
   }
 }

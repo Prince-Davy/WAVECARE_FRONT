@@ -188,3 +188,45 @@ app-advanced-filters {
     margin-left: 0;
   }
 }
+
+.profile-action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 18px;
+  border-radius: 24px;
+  font-weight: 500;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+}
+
+.advanced-filter-button {
+  margin-left: 8px;
+}
+
+.filter-icon {
+  margin-right: 4px;
+}
+
+.search-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.advanced-filter-button {
+  min-width: 190px;
+}
+
+.filter-icon {
+  margin-right: 4px;
+}

@@ -264,7 +264,7 @@
               },
               "delete": {
                 "message": {
-                  "success": "Le profil de l'utilisateur {{lastName}} {{firstName}} a été supprimé avec succès",
+                  "success": "Le profil de l'utilisateur {{lastName}} {{firstName}} a été déplacé vers la corbeille",
                   "error": "Echec de suppression du profil de l'utilisateur {{lastName}} {{firstName}}"
                 }
               }
@@ -281,13 +281,82 @@
         },
         "action": {
           "create": {
-            "button": " AJOUTER UN PROFIL",
+            "button": "AJOUTER UN PROFIL",
             "message": {
               "success": "Le profil a été créé avec succès",
               "error": "Echec de la création du profil"
             }
           }
+        },
+        "button": {
+          "trash": {
+            "label": "PROFILS INACTIFS",
+            "tooltip": "Accéder à la corbeille des profils inactifs"
+          }
         }
+      },
+      "user-trash-component": {
+        "title": "Corbeille des profils inactifs",
+        "table": {
+          "column": {
+            "firstName": {
+              "label": "Prénom"
+            },
+            "lastName": {
+              "label": "Nom"
+            },
+            "email": {
+              "label": "Email"
+            },
+            "role": {
+              "label": "Rôle"
+            },
+            "status": {
+              "label": "Statut"
+            },
+            "creationDate": {
+              "label": "Date création"
+            },
+            "action": {
+              "restore": {
+                "label": "Restaurer",
+                "tooltip": "Restaurer le profil de l'utilisateur {{lastName}} {{firstName}}",
+                "message": {
+                  "success": "Le profil de l'utilisateur {{lastName}} {{firstName}} a été restauré avec succès",
+                  "error": "Echec de la restauration du profil de l'utilisateur {{lastName}} {{firstName}}"
+                }
+              }
+            }
+          },
+          "actions-column": "Actions",
+          "last-name-column": "Nom",
+          "first-name-column": "Prénom",
+          "email-column": "Email",
+          "role-column": "Rôle",
+          "status-column": "Statut",
+          "deleted-at-column": "Date de suppression",
+          "paginator": {
+            "itemsPerPage": "Nombre de lignes par page ",
+            "nextPage": "Suivant",
+            "previousPage": "Précédent",
+            "firstPage": "Première page",
+            "lastPage": "Dernière page",
+            "of": "sur"
+          }
+        },
+        "button": {
+          "back-to-users": {
+            "label": "RETOUR À LA GESTION DES PROFILS",
+            "tooltip": "Retour à la gestion des profils"
+          },
+          "restore": {
+            "label": "Restaurer"
+          },
+          "permanent-delete": {
+            "label": "Supprimer définitivement"
+          }
+        },
+        "select-all-checkbox": "Tout sélectionner"
       },
       "patient": {
         "table": {
@@ -489,6 +558,7 @@
       },
       "advanced-filters": {
         "title": "Filtres avancés",
+        "button": "FILTRES AVANCÉS",
         "roles": {
           "title": "Rôle"
         },

@@ -1,0 +1,43 @@
+@if (state$ | async; as state) {
+  @if (state.visible) {
+    <div class="idle-overlay">
+      <div class="idle-modal">
+        <mat-icon class="idle-icon">lock_clock</mat-icon>
+
+        <h2>Session inactive</h2>
+
+        <p>
+          Votre session va être déconnectée automatiquement dans :
+        </p>
+
+        <div class="countdown">
+          {{ formatSeconds(state.remainingSeconds) }}
+        </div>
+
+        <p class="description">
+          Pour des raisons de sécurité, l’écran est temporairement verrouillé.
+          Vous pouvez continuer votre session ou vous déconnecter maintenant.
+        </p>
+
+        <div class="actions">
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            (click)="continueSession()"
+          >
+            Continuer la session
+          </button>
+
+          <button
+            mat-stroked-button
+            color="warn"
+            type="button"
+            (click)="logout()" 
+          >{{'feature.navigation.navbar-component.logout-button' | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+}

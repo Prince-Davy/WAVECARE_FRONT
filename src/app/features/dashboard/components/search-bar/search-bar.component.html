@@ -18,18 +18,24 @@
         />
       </mat-form-field>
 
-      <button mat-raised-button class="search-button" (click)="onSearch()">
+      <button
+        mat-raised-button
+        type="button"
+        class="search-button"
+        (click)="onSearch()"
+      >
         {{ 'feature.dashboard.search-bar.search-bar-component.search.button' | translate }}
       </button>
 
       @if (showAdvancedFilters()) {
         <button
+          mat-raised-button
           type="button"
-          class="advanced-filter-button"
+          class="action-button profile-action-button advanced-filter-button"
           (click)="toggleFilters()"
         >
           <mat-icon class="filter-icon">add_circle_outline</mat-icon>
-          <span>{{ 'feature.dashboard.advanced-filters.title' | translate }}</span>
+          {{ 'feature.dashboard.advanced-filters.button' | translate }}
         </button>
       }
     </div>
@@ -51,13 +57,19 @@
       {{ totalResults() }}
       {{ getTranslationResultsFound(totalResults()) | translate }}
     </p>
-  </div>
+
+  <ng-content select="[resultExtraActions]"></ng-content>
+</div>
 
   @if (showResetButton) {
     <div class="chip-row">
       <div class="chip-list">
         @for (keyword of listKeywords; track keyword) {
-          <mat-chip [removable]="true" (removed)="removeKeyword(keyword)" class="custom-chip">
+          <mat-chip
+            [removable]="true"
+            (removed)="removeKeyword(keyword)"
+            class="custom-chip"
+          >
             {{ keyword }}
             <button matChipRemove>
               <mat-icon tabindex="0">close</mat-icon>
@@ -66,7 +78,11 @@
         }
 
         @for (roleFilter of advancedFilters.role; track roleFilter) {
-          <mat-chip [removable]="true" (removed)="removeRoleFilter(roleFilter)" class="custom-chip">
+          <mat-chip
+            [removable]="true"
+            (removed)="removeRoleFilter(roleFilter)"
+            class="custom-chip"
+          >
             {{ getRoleLabel(roleFilter) | translate }}
             <button matChipRemove>
               <mat-icon tabindex="0">close</mat-icon>
@@ -75,7 +91,11 @@
         }
 
         @for (statusFilter of advancedFilters.status; track statusFilter) {
-          <mat-chip [removable]="true" (removed)="removeStatusFilter(statusFilter)" class="custom-chip">
+          <mat-chip
+            [removable]="true"
+            (removed)="removeStatusFilter(statusFilter)"
+            class="custom-chip"
+          >
             {{ getStatusLabel(statusFilter) | translate }}
             <button matChipRemove>
               <mat-icon tabindex="0">close</mat-icon>
@@ -84,7 +104,11 @@
         }
 
         @if (advancedFilters.createdDate) {
-          <mat-chip [removable]="true" (removed)="removeDateFilter()" class="custom-chip">
+          <mat-chip
+            [removable]="true"
+            (removed)="removeDateFilter()"
+            class="custom-chip"
+          >
             {{ formatDate(advancedFilters.createdDate) }}
             <button matChipRemove>
               <mat-icon tabindex="0">close</mat-icon>
@@ -94,7 +118,12 @@
       </div>
 
       <div class="right-section">
-        <button mat-raised-button class="action-button reset-button" (click)="onReset()">
+        <button
+          mat-raised-button
+          type="button"
+          class="action-button reset-button"
+          (click)="onReset()"
+        >
           {{ 'feature.dashboard.search-bar.search-bar-component.reset' | translate }}
         </button>
       </div>
