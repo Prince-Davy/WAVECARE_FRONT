@@ -182,7 +182,7 @@ export class UserTrashComponent {
           this.resultsLength = 0;
 
           this.notificationService.openErrorSnackBar(
-            'Erreur lors du chargement de la corbeille des comptes inactifs.'
+            'Erreur lors du chargement de la corbeille des profils inactifs.'
           );
         },
       });
@@ -435,18 +435,18 @@ export class UserTrashComponent {
 
     if (selectedUsers.length === 0) {
       this.notificationService.openErrorSnackBar(
-        'Veuillez sélectionner au moins un compte à restaurer.'
+        'Veuillez sélectionner au moins un profil à restaurer.'
       );
       return;
     }
 
     const dialogRef = this.dialog.open(ComfirmUserDialogComponent, {
       data: {
-        title: selectedUsers.length > 1 ? 'Restaurer les comptes' : 'Restaurer le compte',
+        title: selectedUsers.length > 1 ? 'Restaurer les profils' : 'Restaurer le profil',
         message:
           selectedUsers.length > 1
-            ? 'Voulez-vous restaurer les comptes suivants ?'
-            : `Voulez-vous restaurer le compte ${this.getUserDisplayName(selectedUsers[0])} ?`,
+            ? 'Voulez-vous restaurer les profils suivants ?'
+            : `Voulez-vous restaurer le profil ${this.getUserDisplayName(selectedUsers[0])} ?`,
         confirmLabel: 'Restaurer',
         users: selectedUsers,
       } as ConfirmUsersActionDialogData,
@@ -470,12 +470,12 @@ export class UserTrashComponent {
       this.showRestoreResultMessage(response, selectedUsers);
     },
     error: error => {
-      console.error('Erreur restauration comptes', error);
+      console.error('Erreur restauration profils', error);
 
       this.notificationService.openErrorSnackBar(
         selectedUsers.length > 1
-          ? 'Erreur technique lors de la restauration des comptes sélectionnés.'
-          : `Erreur technique lors de la restauration du compte ${this.getUserDisplayName(selectedUsers[0])}.`
+          ? 'Erreur technique lors de la restauration des profils sélectionnés.'
+          : `Erreur technique lors de la restauration du profil ${this.getUserDisplayName(selectedUsers[0])}.`
       );
     },
   });
@@ -492,8 +492,8 @@ export class UserTrashComponent {
   if (restored.length === 0 && failed.length === 0) {
     this.notificationService.openSuccessSnackBar(
       selectedUsers.length > 1
-        ? 'Les comptes sélectionnés ont été restaurés.'
-        : `Le compte ${this.getUserDisplayName(selectedUsers[0])} a été restauré.`
+        ? 'Les profils sélectionnés ont été restaurés.'
+        : `Le profil ${this.getUserDisplayName(selectedUsers[0])} a été restauré.`
     );
 
     return;
@@ -502,8 +502,8 @@ export class UserTrashComponent {
   if (restored.length > 0) {
     this.notificationService.openSuccessSnackBar(
       restored.length > 1
-        ? `${restored.length} comptes ont été restaurés avec succès.`
-        : `Le compte ${this.getActionUserDisplayName(restored[0])} a été restauré avec succès.`
+        ? `${restored.length} profils ont été restaurés avec succès.`
+        : `Le profil ${this.getActionUserDisplayName(restored[0])} a été restauré avec succès.`
     );
   }
 
@@ -518,7 +518,7 @@ private buildRestoreFailureMessage(failed: TrashActionItemResponse[]): string {
   if (failed.length === 1) {
     const user = failed[0];
 
-    return `Le compte ${this.getActionUserDisplayName(user)} n'a pas été restauré : ${this.getFailureReasonLabel(user)}.`;
+    return `Le profil ${this.getActionUserDisplayName(user)} n'a pas été restauré : ${this.getFailureReasonLabel(user)}.`;
   }
 
   const displayedUsers = failed
@@ -529,23 +529,23 @@ private buildRestoreFailureMessage(failed: TrashActionItemResponse[]): string {
   const remainingCount = failed.length - 3;
 
   return remainingCount > 0
-    ? `${failed.length} comptes n'ont pas été restaurés. ${displayedUsers} / +${remainingCount} autre(s).`
-    : `${failed.length} comptes n'ont pas été restaurés. ${displayedUsers}.`;
+    ? `${failed.length} profils n'ont pas été restaurés. ${displayedUsers} / +${remainingCount} autre(s).`
+    : `${failed.length} profils n'ont pas été restaurés. ${displayedUsers}.`;
 }
 
 private getFailureReasonLabel(user: TrashActionItemResponse): string {
   switch (user.reason) {
     case 'ALREADY_RESTORED':
-      return 'ce compte a déjà été restauré';
+      return 'ce profil a déjà été restauré';
 
     case 'NOT_FOUND':
-      return 'ce compte n’existe plus dans la corbeille';
+      return 'ce profil n’existe plus dans la corbeille';
 
     case 'CONCURRENT_UPDATE':
-      return 'ce compte a été modifié par un autre administrateur';
+      return 'ce profil a été modifié par un autre administrateur';
 
     case 'EMAIL_ALREADY_USED':
-      return 'cet email est déjà utilisé par un autre compte actif';
+      return 'cet email est déjà utilisé par un autre profil actif';
 
     default:
       return user.message || 'erreur inconnue';
@@ -563,7 +563,7 @@ private getActionUserDisplayName(user: TrashActionItemResponse): string {
 
     if (selectedUsers.length === 0) {
       this.notificationService.openErrorSnackBar(
-        'Veuillez sélectionner au moins un compte à supprimer définitivement.'
+        'Veuillez sélectionner au moins un profil à supprimer définitivement.'
       );
       return;
     }
@@ -573,11 +573,11 @@ private getActionUserDisplayName(user: TrashActionItemResponse): string {
         title:
           selectedUsers.length > 1
             ? 'Suppression définitive'
-            : 'Suppression définitive du compte',
+            : 'Suppression définitive du profil',
         message:
           selectedUsers.length > 1
-            ? 'Cette action est irréversible. Voulez-vous supprimer définitivement les comptes suivants ?'
-            : `Cette action est irréversible. Voulez-vous supprimer définitivement le compte ${this.getUserDisplayName(selectedUsers[0])} ?`,
+            ? 'Cette action est irréversible. Voulez-vous supprimer définitivement les profils suivants ?'
+            : `Cette action est irréversible. Voulez-vous supprimer définitivement le profil ${this.getUserDisplayName(selectedUsers[0])} ?`,
         confirmLabel: 'Supprimer définitivement',
         confirmColor: 'warn',
         users: selectedUsers,
@@ -602,17 +602,17 @@ private getActionUserDisplayName(user: TrashActionItemResponse): string {
           next: () => {
             this.notificationService.openSuccessSnackBar(
               selectedUsers.length > 1
-                ? 'Les comptes sélectionnés ont été supprimés définitivement.'
-                : `Le compte ${this.getUserDisplayName(selectedUsers[0])} a été supprimé définitivement.`
+                ? 'Les profils sélectionnés ont été supprimés définitivement.'
+                : `Le profil ${this.getUserDisplayName(selectedUsers[0])} a été supprimé définitivement.`
             );
           },
           error: error => {
-            console.error('Erreur suppression définitive comptes', error);
+            console.error('Erreur suppression définitive profils', error);
 
             this.notificationService.openErrorSnackBar(
               selectedUsers.length > 1
-                ? 'Erreur lors de la suppression définitive des comptes sélectionnés.'
-                : `Erreur lors de la suppression définitive du compte ${this.getUserDisplayName(selectedUsers[0])}.`
+                ? 'Erreur lors de la suppression définitive des profils sélectionnés.'
+                : `Erreur lors de la suppression définitive du profil ${this.getUserDisplayName(selectedUsers[0])}.`
             );
           },
         });

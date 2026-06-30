@@ -18,7 +18,7 @@ export class NotificationService {
   private readonly ACTION_MESSAGE_KEY = 'feature.notification.notification-service.action-message';
 
   private readonly SUCCESS_SNACK_BAR_DURATION = 5000;
-  private readonly ERROR_SNACK_BAR_DURATION = 10000;
+  private readonly ERROR_SNACK_BAR_DURATION = 70000;
 
   private readonly notificationsSubject = new BehaviorSubject<AppNotification[]>([]);
   readonly notifications$ = this.notificationsSubject.asObservable();

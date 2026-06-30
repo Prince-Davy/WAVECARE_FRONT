@@ -20,7 +20,7 @@ export class IdleTimeoutService {
 
   // Pour tester rapidement : 10_000.
   // En vrai : 13 * 60_000 pour prévenir après 13 min d’inactivité.
-  private readonly idleBeforeWarningMs = 5_000;
+  private readonly idleBeforeWarningMs = 90_000;
 
   private idleTimerId?: ReturnType<typeof setTimeout>;
   private countdownSubscription?: Subscription;
