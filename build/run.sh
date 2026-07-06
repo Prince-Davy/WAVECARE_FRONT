@@ -3,19 +3,27 @@
 WORKSPACE="/var/workspace/wavecare-front"
 TARGET_DIR="${WORKSPACE}/target"
 
-# --- Chrome / DBus setup for Karma CI ---
+# --- Chrome setup for Karma CI ---
 export CHROME_BIN="${CHROME_BIN:-/usr/bin/chromium}"
+export NO_AT_BRIDGE=1
 
+# Clean invalid DBus env variables inherited from the container/agent
+unset DBUS_SESSION_BUS_ADDRESS
+unset DBUS_SYSTEM_BUS_ADDRESS
+
+# Optional system bus for Chromium, without forcing address variables
 mkdir -p /run/dbus
 rm -f /run/dbus/pid
-
 dbus-daemon --system --fork || true
-
-export DBUS_SYSTEM_BUS_ADDRESS="unix:path=/run/dbus/system_bus_socket"
-unset DBUS_SESSION_BUS_ADDRESS
 
 mkdir -p /tmp/chrome-headless
 chmod 777 /tmp/chrome-headless
+
+echo "--- Chrome / DBus diagnostic ---"
+echo "CHROME_BIN=${CHROME_BIN}"
+"${CHROME_BIN}" --version || true
+env | grep '^DBUS_' || true
+echo "--------------------------------"
 
 cd "$WORKSPACE"
 
