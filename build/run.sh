@@ -3,6 +3,15 @@
 WORKSPACE="/var/workspace/wavecare-front"
 TARGET_DIR="${WORKSPACE}/target"
 
+# --- Chrome / DBus setup for Karma CI ---
+export CHROME_BIN="${CHROME_BIN:-/usr/bin/chromium}"
+export DBUS_SESSION_BUS_ADDRESS=/dev/null
+
+mkdir -p /run/dbus
+if [ ! -S /run/dbus/system_bus_socket ]; then
+  dbus-daemon --system --fork || true
+fi
+
 cd "$WORKSPACE"
 
 exitcode=0
