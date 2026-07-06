@@ -16,7 +16,7 @@ chmod 777 /tmp/chrome-headless
 
 echo "--- Chrome / DBus diagnostic ---"
 echo "CHROME_BIN=${CHROME_BIN}"
-"${CHROME_BIN}" --version || true
+"${CHROME_BIN}" --no-sandbox --version || true
 env | grep '^DBUS_' || true
 echo "--------------------------------"
 
@@ -34,8 +34,25 @@ if [ $? -ne 0 ]; then
 fi
 
 # --- Tests + couverture ---
-npm run test:ci
-if [ $? -ne 0 ]; then
+# --- Tests + couverture ---
+TEST_LOG="${TARGET_DIR}/test-ci.log"
+
+timeout 10m npm run test:ci 2>&1 | tee "$TEST_LOG"
+test_status=${PIPESTATUS[0]}
+
+if [ "$test_status" -eq 124 ]; then
+  if grep -Eq "TOTAL: [0-9]+ SUCCESS" "$TEST_LOG" && [ -f "${WORKSPACE}/coverage/coverage-summary.json" ]; then
+    echo "test:ci reached SUCCESS and coverage was generated, but Karma did not exit cleanly. Continuing."
+    test_status=0
+    pkill -f chromium || true
+    pkill -f chrome || true
+    pkill -f karma || true
+  else
+    echo "test:ci timed out before successful completion"
+  fi
+fi
+
+if [ "$test_status" -ne 0 ]; then
   echo "test:ci failed"
   exitcode=1
 fi
