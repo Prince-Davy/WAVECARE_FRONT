@@ -34,6 +34,8 @@ module.exports = function (config) {
       '--no-first-run',
       '--no-zygote',
       '--user-data-dir=/tmp/chrome-headless',
+      '--disable-crash-reporter',
+      '--disable-breakpad',
       '--window-size=1920,1080'
         ]
       }

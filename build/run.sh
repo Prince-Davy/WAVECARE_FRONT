@@ -5,12 +5,17 @@ TARGET_DIR="${WORKSPACE}/target"
 
 # --- Chrome / DBus setup for Karma CI ---
 export CHROME_BIN="${CHROME_BIN:-/usr/bin/chromium}"
-export DBUS_SESSION_BUS_ADDRESS=/dev/null
 
 mkdir -p /run/dbus
-if [ ! -S /run/dbus/system_bus_socket ]; then
-  dbus-daemon --system --fork || true
-fi
+rm -f /run/dbus/pid
+
+dbus-daemon --system --fork || true
+
+export DBUS_SYSTEM_BUS_ADDRESS="unix:path=/run/dbus/system_bus_socket"
+unset DBUS_SESSION_BUS_ADDRESS
+
+mkdir -p /tmp/chrome-headless
+chmod 777 /tmp/chrome-headless
 
 cd "$WORKSPACE"
 
