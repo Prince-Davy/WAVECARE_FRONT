@@ -323,7 +323,7 @@ describe('UserTrashComponent', () => {
 
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledTimes(1);
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledWith(
-      'Veuillez sélectionner au moins un compte à restaurer.'
+      'Veuillez sélectionner au moins un profil à restaurer.'
     );
     expect(matDialogMock.open).not.toHaveBeenCalled();
   });
@@ -340,7 +340,7 @@ describe('UserTrashComponent', () => {
         disableClose: true,
         autoFocus: false,
         data: jasmine.objectContaining({
-          title: 'Restaurer le compte',
+          title: 'Restaurer le profil',
           confirmLabel: 'Restaurer',
           users: [users[0]],
         }),
@@ -351,7 +351,7 @@ describe('UserTrashComponent', () => {
     expect(trashServiceMock.restoreUsers).toHaveBeenCalledWith(['1']);
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledTimes(1);
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledWith(
-      'Le compte Jean Dupont a été restauré.'
+      'Le profil Jean Dupont a été restauré.'
     );
   });
 
@@ -364,7 +364,7 @@ describe('UserTrashComponent', () => {
       ComfirmUserDialogComponent,
       jasmine.objectContaining({
         data: jasmine.objectContaining({
-          title: 'Restaurer les comptes',
+          title: 'Restaurer les profils',
           confirmLabel: 'Restaurer',
           users,
         }),
@@ -373,7 +373,7 @@ describe('UserTrashComponent', () => {
 
     expect(trashServiceMock.restoreUsers).toHaveBeenCalledWith(['1', '2']);
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledWith(
-      'Les comptes sélectionnés ont été restaurés.'
+      'Les profils sélectionnés ont été restaurés.'
     );
   });
 
@@ -410,7 +410,7 @@ describe('UserTrashComponent', () => {
     component.openRestoreSelectedConfirmation();
 
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledWith(
-      'Le compte Jean Dupont a été restauré avec succès.'
+      'Le profil Jean Dupont a été restauré avec succès.'
     );
   });
 
@@ -435,7 +435,7 @@ describe('UserTrashComponent', () => {
     component.openRestoreSelectedConfirmation();
 
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledWith(
-      jasmine.stringContaining('cet email est déjà utilisé par un autre compte actif')
+      jasmine.stringContaining('cet email est déjà utilisé par un autre profil actif')
     );
   });
 
@@ -451,7 +451,7 @@ describe('UserTrashComponent', () => {
     ]);
 
     expect(message).toContain('Jean Dupont');
-    expect(message).toContain('ce compte n’existe plus dans la corbeille');
+    expect(message).toContain('ce profil n’existe plus dans la corbeille');
   });
 
   it('should build restore failure message for multiple failed users', () => {
@@ -486,7 +486,7 @@ describe('UserTrashComponent', () => {
       },
     ]);
 
-    expect(message).toContain("4 comptes n'ont pas été restaurés");
+    expect(message).toContain("4 profils n'ont pas été restaurés");
     expect(message).toContain('+1 autre(s)');
   });
 
@@ -512,7 +512,7 @@ describe('UserTrashComponent', () => {
 
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledTimes(1);
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledWith(
-      'Erreur technique lors de la restauration du compte Jean Dupont.'
+      'Erreur technique lors de la restauration du profil Jean Dupont.'
     );
   });
 
@@ -521,7 +521,7 @@ describe('UserTrashComponent', () => {
 
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledTimes(1);
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledWith(
-      'Veuillez sélectionner au moins un compte à supprimer définitivement.'
+      'Veuillez sélectionner au moins un profil à supprimer définitivement.'
     );
     expect(matDialogMock.open).not.toHaveBeenCalled();
   });
@@ -538,7 +538,7 @@ describe('UserTrashComponent', () => {
         disableClose: true,
         autoFocus: false,
         data: jasmine.objectContaining({
-          title: 'Suppression définitive du compte',
+          title: 'Suppression définitive du profil',
           confirmLabel: 'Supprimer définitivement',
           confirmColor: 'warn',
           users: [users[0]],
@@ -550,7 +550,7 @@ describe('UserTrashComponent', () => {
     expect(trashServiceMock.permanentlyDeleteUsers).toHaveBeenCalledWith(['1']);
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledTimes(1);
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledWith(
-      'Le compte Jean Dupont a été supprimé définitivement.'
+      'Le profil Jean Dupont a été supprimé définitivement.'
     );
   });
 
@@ -573,7 +573,7 @@ describe('UserTrashComponent', () => {
 
     expect(trashServiceMock.permanentlyDeleteUsers).toHaveBeenCalledWith(['1', '2']);
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledWith(
-      'Les comptes sélectionnés ont été supprimés définitivement.'
+      'Les profils sélectionnés ont été supprimés définitivement.'
     );
   });
 
@@ -603,7 +603,7 @@ describe('UserTrashComponent', () => {
 
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledTimes(1);
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledWith(
-      'Erreur lors de la suppression définitive du compte Jean Dupont.'
+      'Erreur lors de la suppression définitive du profil Jean Dupont.'
     );
   });
 });
