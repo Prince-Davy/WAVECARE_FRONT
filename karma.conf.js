@@ -15,28 +15,25 @@ module.exports = function (config) {
       clearContext: false,
     },
     customLaunchers: {
-  ChromeHeadlessCI: {
-    base: 'Chrome',
-    flags: [
-      '--headless=new',
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--disable-gpu',
-      '--disable-software-rasterizer',
-      '--disable-extensions',
-      '--disable-background-networking',
-      '--disable-sync',
-      '--disable-default-apps',
-      '--disable-translate',
-      '--disable-crash-reporter',
-      '--disable-breakpad',
-      '--no-first-run',
-      '--no-zygote',
-      '--user-data-dir=/tmp/chrome-headless',
-      '--disable-crash-reporter',
-      '--disable-breakpad',
-      '--window-size=1920,1080'
+      ChromeHeadlessCI: {
+      base: 'ChromeHeadless',
+      flags: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--disable-software-rasterizer',
+        '--disable-extensions',
+        '--disable-background-networking',
+        '--disable-sync',
+        '--disable-default-apps',
+        '--disable-translate',
+        '--disable-crash-reporter',
+        '--disable-breakpad',
+        '--no-first-run',
+        '--no-zygote',
+        '--remote-debugging-port=9222',
+        '--window-size=1920,1080'
         ]
       }
     },
