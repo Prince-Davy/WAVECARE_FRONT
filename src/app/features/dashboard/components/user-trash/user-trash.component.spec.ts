@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
@@ -12,15 +11,12 @@ import {
   TrashUserResponse,
 } from '@app/api/generated/trash/trash.service';
 
-import { ComfirmUserDialogComponent } from '../confirm-user-dialog/comfirm-user-dialog.component';
-
 describe('UserTrashComponent', () => {
   let component: UserTrashComponent;
   let fixture: ComponentFixture<UserTrashComponent>;
 
   let trashServiceMock: jasmine.SpyObj<TrashService>;
   let routerMock: jasmine.SpyObj<Router>;
-  let matDialogMock: jasmine.SpyObj<MatDialog>;
 
   let notificationServiceMock: {
     openErrorSnackBar: jasmine.Spy;
@@ -54,11 +50,6 @@ describe('UserTrashComponent', () => {
     }),
   ];
 
-  const createDialogRef = (confirmed: boolean) =>
-    ({
-      afterClosed: () => of(confirmed),
-    }) as any;
-
   beforeEach(async () => {
     trashServiceMock = jasmine.createSpyObj<TrashService>('TrashService', [
       'listInactiveUsers',
@@ -83,19 +74,13 @@ describe('UserTrashComponent', () => {
 
     routerMock = jasmine.createSpyObj<Router>('Router', ['navigate']);
 
-    matDialogMock = jasmine.createSpyObj<MatDialog>('MatDialog', ['open']);
-    matDialogMock.open.and.returnValue(createDialogRef(true));
-
     notificationServiceMock = {
       openErrorSnackBar: jasmine.createSpy('openErrorSnackBar'),
       openSuccessSnackBar: jasmine.createSpy('openSuccessSnackBar'),
     };
 
     await TestBed.configureTestingModule({
-      imports: [
-        UserTrashComponent,
-        NoopAnimationsModule,
-      ],
+      imports: [UserTrashComponent, NoopAnimationsModule],
       providers: [
         {
           provide: TrashService,
@@ -108,10 +93,6 @@ describe('UserTrashComponent', () => {
         {
           provide: Router,
           useValue: routerMock,
-        },
-        {
-          provide: MatDialog,
-          useValue: matDialogMock,
         },
       ],
     })
@@ -126,18 +107,14 @@ describe('UserTrashComponent', () => {
     component = fixture.componentInstance;
 
     /**
-     * Sécurité supplémentaire :
-     * dans ce projet, MatDialogModule peut encore fournir le vrai MatDialog.
-     * On force donc le mock directement sur l'instance du composant.
+     * Sécurité supplémentaire pour éviter que l’injection réelle reprenne la main.
      */
     (component as any).trashService = trashServiceMock;
     (component as any).notificationService = notificationServiceMock;
     (component as any).router = routerMock;
-    (component as any).dialog = matDialogMock;
 
     fixture.detectChanges();
 
-    matDialogMock.open.calls.reset();
     trashServiceMock.restoreUsers.calls.reset();
     trashServiceMock.permanentlyDeleteUsers.calls.reset();
     notificationServiceMock.openErrorSnackBar.calls.reset();
@@ -300,7 +277,9 @@ describe('UserTrashComponent', () => {
 
     expect((component as any).getSortValue(user, 'lastName')).toBe('dupont');
     expect((component as any).getSortValue(user, 'firstName')).toBe('jean');
-    expect((component as any).getSortValue(user, 'email')).toBe('jean.dupont@test.fr');
+    expect((component as any).getSortValue(user, 'email')).toBe(
+      'jean.dupont@test.fr'
+    );
     expect((component as any).getSortValue(user, 'role')).toBe('admin');
     expect((component as any).getSortValue(user, 'status')).toBe('inactif');
     expect((component as any).getSortValue(user, 'unknown')).toBe('');
@@ -325,28 +304,33 @@ describe('UserTrashComponent', () => {
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledWith(
       'Veuillez sélectionner au moins un profil à restaurer.'
     );
-    expect(matDialogMock.open).not.toHaveBeenCalled();
+    expect(component.isConfirmDialogOpen).toBeFalse();
   });
 
-  it('should open confirmation dialog and restore selected user', () => {
+  it('should open local confirmation dialog for selected user restoration', () => {
     component.selection.select(users[0]);
 
     component.openRestoreSelectedConfirmation();
 
-    expect(matDialogMock.open).toHaveBeenCalledTimes(1);
-    expect(matDialogMock.open).toHaveBeenCalledWith(
-      ComfirmUserDialogComponent,
-      jasmine.objectContaining({
-        disableClose: true,
-        autoFocus: false,
-        data: jasmine.objectContaining({
-          title: 'Restaurer le profil',
-          confirmLabel: 'Restaurer',
-          users: [users[0]],
-        }),
-      })
+    expect(component.isConfirmDialogOpen).toBeTrue();
+    expect(component.confirmDialogTitle).toBe('Restaurer le profil');
+    expect(component.confirmDialogMessage).toBe(
+      'Voulez-vous restaurer le profil Jean Dupont ?'
     );
+    expect(component.confirmDialogConfirmLabel).toBe('Restaurer');
+    expect(component.confirmDialogWarn).toBeFalse();
+    expect((component as any).pendingAction).toBe('restore');
+    expect((component as any).pendingUsers).toEqual([users[0]]);
+    expect(trashServiceMock.restoreUsers).not.toHaveBeenCalled();
+  });
 
+  it('should open local confirmation dialog and restore selected user after confirmation', () => {
+    component.selection.select(users[0]);
+
+    component.openRestoreSelectedConfirmation();
+    component.confirmDialogAction();
+
+    expect(component.isConfirmDialogOpen).toBeFalse();
     expect(trashServiceMock.restoreUsers).toHaveBeenCalledTimes(1);
     expect(trashServiceMock.restoreUsers).toHaveBeenCalledWith(['1']);
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledTimes(1);
@@ -355,36 +339,38 @@ describe('UserTrashComponent', () => {
     );
   });
 
-  it('should open confirmation dialog and restore selected users', () => {
+  it('should open local confirmation dialog and restore selected users after confirmation', () => {
     component.selection.select(...users);
 
     component.openRestoreSelectedConfirmation();
 
-    expect(matDialogMock.open).toHaveBeenCalledWith(
-      ComfirmUserDialogComponent,
-      jasmine.objectContaining({
-        data: jasmine.objectContaining({
-          title: 'Restaurer les profils',
-          confirmLabel: 'Restaurer',
-          users,
-        }),
-      })
+    expect(component.isConfirmDialogOpen).toBeTrue();
+    expect(component.confirmDialogTitle).toBe('Restaurer les profils');
+    expect(component.confirmDialogMessage).toBe(
+      'Voulez-vous restaurer les profils sélectionnés ?'
     );
+    expect(component.confirmDialogConfirmLabel).toBe('Restaurer');
+    expect(component.confirmDialogWarn).toBeFalse();
 
+    component.confirmDialogAction();
+
+    expect(component.isConfirmDialogOpen).toBeFalse();
     expect(trashServiceMock.restoreUsers).toHaveBeenCalledWith(['1', '2']);
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledWith(
       'Les profils sélectionnés ont été restaurés.'
     );
   });
 
-  it('should not restore selected user when dialog is cancelled', () => {
-    matDialogMock.open.and.returnValue(createDialogRef(false));
-
+  it('should not restore selected user when local confirmation dialog is cancelled', () => {
     component.selection.select(users[0]);
 
     component.openRestoreSelectedConfirmation();
 
-    expect(matDialogMock.open).toHaveBeenCalledTimes(1);
+    expect(component.isConfirmDialogOpen).toBeTrue();
+
+    component.cancelConfirmDialog();
+
+    expect(component.isConfirmDialogOpen).toBeFalse();
     expect(trashServiceMock.restoreUsers).not.toHaveBeenCalled();
     expect(notificationServiceMock.openSuccessSnackBar).not.toHaveBeenCalled();
     expect(notificationServiceMock.openErrorSnackBar).not.toHaveBeenCalled();
@@ -408,6 +394,7 @@ describe('UserTrashComponent', () => {
     component.selection.select(users[0]);
 
     component.openRestoreSelectedConfirmation();
+    component.confirmDialogAction();
 
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledWith(
       'Le profil Jean Dupont a été restauré avec succès.'
@@ -433,9 +420,12 @@ describe('UserTrashComponent', () => {
     component.selection.select(users[0]);
 
     component.openRestoreSelectedConfirmation();
+    component.confirmDialogAction();
 
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledWith(
-      jasmine.stringContaining('cet email est déjà utilisé par un autre profil actif')
+      jasmine.stringContaining(
+        'cet email est déjà utilisé par un autre profil actif'
+      )
     );
   });
 
@@ -509,6 +499,7 @@ describe('UserTrashComponent', () => {
     component.selection.select(users[0]);
 
     component.openRestoreSelectedConfirmation();
+    component.confirmDialogAction();
 
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledTimes(1);
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledWith(
@@ -523,29 +514,35 @@ describe('UserTrashComponent', () => {
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledWith(
       'Veuillez sélectionner au moins un profil à supprimer définitivement.'
     );
-    expect(matDialogMock.open).not.toHaveBeenCalled();
+    expect(component.isConfirmDialogOpen).toBeFalse();
   });
 
-  it('should open confirmation dialog and permanently delete selected user', () => {
+  it('should open local confirmation dialog for selected user permanent deletion', () => {
     component.selection.select(users[0]);
 
     component.openPermanentDeleteSelectedConfirmation();
 
-    expect(matDialogMock.open).toHaveBeenCalledTimes(1);
-    expect(matDialogMock.open).toHaveBeenCalledWith(
-      ComfirmUserDialogComponent,
-      jasmine.objectContaining({
-        disableClose: true,
-        autoFocus: false,
-        data: jasmine.objectContaining({
-          title: 'Suppression définitive du profil',
-          confirmLabel: 'Supprimer définitivement',
-          confirmColor: 'warn',
-          users: [users[0]],
-        }),
-      })
+    expect(component.isConfirmDialogOpen).toBeTrue();
+    expect(component.confirmDialogTitle).toBe('Suppression définitive du profil');
+    expect(component.confirmDialogMessage).toBe(
+      'Cette action est irréversible. Voulez-vous supprimer définitivement le profil Jean Dupont ?'
     );
+    expect(component.confirmDialogConfirmLabel).toBe(
+      'Supprimer définitivement'
+    );
+    expect(component.confirmDialogWarn).toBeTrue();
+    expect((component as any).pendingAction).toBe('delete');
+    expect((component as any).pendingUsers).toEqual([users[0]]);
+    expect(trashServiceMock.permanentlyDeleteUsers).not.toHaveBeenCalled();
+  });
 
+  it('should open local confirmation dialog and permanently delete selected user after confirmation', () => {
+    component.selection.select(users[0]);
+
+    component.openPermanentDeleteSelectedConfirmation();
+    component.confirmDialogAction();
+
+    expect(component.isConfirmDialogOpen).toBeFalse();
     expect(trashServiceMock.permanentlyDeleteUsers).toHaveBeenCalledTimes(1);
     expect(trashServiceMock.permanentlyDeleteUsers).toHaveBeenCalledWith(['1']);
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledTimes(1);
@@ -554,37 +551,43 @@ describe('UserTrashComponent', () => {
     );
   });
 
-  it('should open confirmation dialog and permanently delete selected users', () => {
+  it('should open local confirmation dialog and permanently delete selected users after confirmation', () => {
     component.selection.select(...users);
 
     component.openPermanentDeleteSelectedConfirmation();
 
-    expect(matDialogMock.open).toHaveBeenCalledWith(
-      ComfirmUserDialogComponent,
-      jasmine.objectContaining({
-        data: jasmine.objectContaining({
-          title: 'Suppression définitive',
-          confirmLabel: 'Supprimer définitivement',
-          confirmColor: 'warn',
-          users,
-        }),
-      })
+    expect(component.isConfirmDialogOpen).toBeTrue();
+    expect(component.confirmDialogTitle).toBe('Suppression définitive');
+    expect(component.confirmDialogMessage).toBe(
+      'Cette action est irréversible. Voulez-vous supprimer définitivement les profils sélectionnés ?'
     );
+    expect(component.confirmDialogConfirmLabel).toBe(
+      'Supprimer définitivement'
+    );
+    expect(component.confirmDialogWarn).toBeTrue();
 
-    expect(trashServiceMock.permanentlyDeleteUsers).toHaveBeenCalledWith(['1', '2']);
+    component.confirmDialogAction();
+
+    expect(component.isConfirmDialogOpen).toBeFalse();
+    expect(trashServiceMock.permanentlyDeleteUsers).toHaveBeenCalledWith([
+      '1',
+      '2',
+    ]);
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledWith(
       'Les profils sélectionnés ont été supprimés définitivement.'
     );
   });
 
-  it('should not permanently delete selected user when dialog is cancelled', () => {
-    matDialogMock.open.and.returnValue(createDialogRef(false));
-
+  it('should not permanently delete selected user when local confirmation dialog is cancelled', () => {
     component.selection.select(users[0]);
 
     component.openPermanentDeleteSelectedConfirmation();
 
-    expect(matDialogMock.open).toHaveBeenCalledTimes(1);
+    expect(component.isConfirmDialogOpen).toBeTrue();
+
+    component.cancelConfirmDialog();
+
+    expect(component.isConfirmDialogOpen).toBeFalse();
     expect(trashServiceMock.permanentlyDeleteUsers).not.toHaveBeenCalled();
     expect(notificationServiceMock.openSuccessSnackBar).not.toHaveBeenCalled();
     expect(notificationServiceMock.openErrorSnackBar).not.toHaveBeenCalled();
@@ -600,6 +603,7 @@ describe('UserTrashComponent', () => {
     component.selection.select(users[0]);
 
     component.openPermanentDeleteSelectedConfirmation();
+    component.confirmDialogAction();
 
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledTimes(1);
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledWith(
