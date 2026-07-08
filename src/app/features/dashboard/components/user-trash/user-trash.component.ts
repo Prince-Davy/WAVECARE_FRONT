@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, DestroyRef, afterNextRender, inject, viewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  afterNextRender,
+  inject,
+  viewChild,
+} from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -9,9 +16,12 @@ import { finalize, merge, tap } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import {
+  MatPaginator,
+  MatPaginatorIntl,
+  MatPaginatorModule,
+} from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -22,13 +32,13 @@ import { SearchBarComponent } from '@app/features/dashboard/components/search-ba
 import { AdvancedFilters } from '@app/features/dashboard/components/search-bar/filters/advanced-filters.component';
 import { NotificationService } from '@app/features/notification/services/notification.service';
 
-import { TrashService, TrashUserResponse,TrashRestoreResponse,
-  TrashActionItemResponse, } from '@app/api/generated/trash/trash.service';
-
 import {
-  ConfirmUsersActionDialogData,
-  ComfirmUserDialogComponent,
-} from '../confirm-user-dialog/comfirm-user-dialog.component';
+  TrashActionItemResponse,
+  TrashRestoreResponse,
+  TrashService,
+  TrashUserResponse,
+} from '@app/api/generated/trash/trash.service';
+
 
 function getFrenchPaginatorIntl(): MatPaginatorIntl {
   const paginatorIntl = new MatPaginatorIntl();
@@ -67,7 +77,6 @@ function getFrenchPaginatorIntl(): MatPaginatorIntl {
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
-    MatDialogModule,
     MatIconModule,
     MatPaginatorModule,
     MatSortModule,
@@ -75,9 +84,7 @@ function getFrenchPaginatorIntl(): MatPaginatorIntl {
     MatTooltipModule,
     SearchBarComponent,
   ],
-  providers: [
-    { provide: MatPaginatorIntl, useFactory: getFrenchPaginatorIntl },
-  ],
+  providers: [{ provide: MatPaginatorIntl, useFactory: getFrenchPaginatorIntl }],
   templateUrl: './user-trash.component.html',
   styleUrl: './user-trash.component.scss',
 })
@@ -85,8 +92,16 @@ export class UserTrashComponent {
   private readonly trashService = inject(TrashService);
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
-  private readonly dialog = inject(MatDialog);
   private readonly cdr = inject(ChangeDetectorRef);
+
+  isConfirmDialogOpen = false;
+  confirmDialogTitle = '';
+  confirmDialogMessage = '';
+  confirmDialogConfirmLabel = '';
+  confirmDialogWarn = false;
+
+  pendingAction: 'restore' | 'delete' | null = null;
+  pendingUsers: TrashUserResponse[] = [];
 
   readonly paginator = viewChild(MatPaginator);
   readonly sort = viewChild(MatSort);
@@ -272,7 +287,9 @@ export class UserTrashComponent {
     });
   }
 
-  private applyLocalAdvancedFilters(users: TrashUserResponse[]): TrashUserResponse[] {
+  private applyLocalAdvancedFilters(
+    users: TrashUserResponse[]
+  ): TrashUserResponse[] {
     const roles = this.advancedFilters?.role ?? [];
     const creationDate = this.advancedFilters?.createdDate;
 
@@ -431,195 +448,231 @@ export class UserTrashComponent {
   }
 
   openRestoreSelectedConfirmation(): void {
-    const selectedUsers = this.selection.selected;
+  const selectedUsers = this.selection.selected;
 
-    if (selectedUsers.length === 0) {
-      this.notificationService.openErrorSnackBar(
-        'Veuillez sélectionner au moins un profil à restaurer.'
-      );
-      return;
-    }
-
-    const dialogRef = this.dialog.open(ComfirmUserDialogComponent, {
-      data: {
-        title: selectedUsers.length > 1 ? 'Restaurer les profils' : 'Restaurer le profil',
-        message:
-          selectedUsers.length > 1
-            ? 'Voulez-vous restaurer les profils suivants ?'
-            : `Voulez-vous restaurer le profil ${this.getUserDisplayName(selectedUsers[0])} ?`,
-        confirmLabel: 'Restaurer',
-        users: selectedUsers,
-      } as ConfirmUsersActionDialogData,
-      disableClose: true,
-      autoFocus: false,
-    });
-
-    dialogRef.afterClosed().subscribe(confirmed => {
-      if (!confirmed) {
-        return;
-      }
-
-      const ids = selectedUsers
-        .map(user => user.id)
-        .filter((id): id is string => !!id && id.trim() !== '');
-
-      this.restoreUsers(ids)
-  .pipe(finalize(() => this.refreshTable()))
-  .subscribe({
-    next: response => {
-      this.showRestoreResultMessage(response, selectedUsers);
-    },
-    error: error => {
-      console.error('Erreur restauration profils', error);
-
-      this.notificationService.openErrorSnackBar(
-        selectedUsers.length > 1
-          ? 'Erreur technique lors de la restauration des profils sélectionnés.'
-          : `Erreur technique lors de la restauration du profil ${this.getUserDisplayName(selectedUsers[0])}.`
-      );
-    },
-  });
-    });
-  }
-
-  private showRestoreResultMessage(
-  response: TrashRestoreResponse,
-  selectedUsers: TrashUserResponse[]
-): void {
-  const restored = response.restored ?? [];
-  const failed = response.failed ?? [];
-
-  if (restored.length === 0 && failed.length === 0) {
-    this.notificationService.openSuccessSnackBar(
-      selectedUsers.length > 1
-        ? 'Les profils sélectionnés ont été restaurés.'
-        : `Le profil ${this.getUserDisplayName(selectedUsers[0])} a été restauré.`
+  if (selectedUsers.length === 0) {
+    this.notificationService.openErrorSnackBar(
+      'Veuillez sélectionner au moins un profil à restaurer.'
     );
-
     return;
   }
 
-  if (restored.length > 0) {
-    this.notificationService.openSuccessSnackBar(
-      restored.length > 1
-        ? `${restored.length} profils ont été restaurés avec succès.`
-        : `Le profil ${this.getActionUserDisplayName(restored[0])} a été restauré avec succès.`
-    );
-  }
+  this.pendingAction = 'restore';
+  this.pendingUsers = [...selectedUsers];
+  this.confirmDialogWarn = false;
+  this.confirmDialogConfirmLabel = 'Restaurer';
+  this.confirmDialogTitle =
+    selectedUsers.length > 1 ? 'Restaurer les profils' : 'Restaurer le profil';
+  this.confirmDialogMessage =
+    selectedUsers.length > 1
+      ? 'Voulez-vous restaurer les profils sélectionnés ?'
+      : `Voulez-vous restaurer le profil ${this.getUserDisplayName(selectedUsers[0])} ?`;
 
-  if (failed.length > 0) {
-    this.notificationService.openErrorSnackBar(
-      this.buildRestoreFailureMessage(failed)
-    );
-  }
+  this.isConfirmDialogOpen = true;
 }
 
-private buildRestoreFailureMessage(failed: TrashActionItemResponse[]): string {
-  if (failed.length === 1) {
-    const user = failed[0];
+  private showRestoreResultMessage(
+    response: TrashRestoreResponse,
+    selectedUsers: TrashUserResponse[]
+  ): void {
+    const restored = response.restored ?? [];
+    const failed = response.failed ?? [];
 
-    return `Le profil ${this.getActionUserDisplayName(user)} n'a pas été restauré : ${this.getFailureReasonLabel(user)}.`;
-  }
-
-  const displayedUsers = failed
-    .slice(0, 3)
-    .map(user => `${this.getActionUserDisplayName(user)} : ${this.getFailureReasonLabel(user)}`)
-    .join(' / ');
-
-  const remainingCount = failed.length - 3;
-
-  return remainingCount > 0
-    ? `${failed.length} profils n'ont pas été restaurés. ${displayedUsers} / +${remainingCount} autre(s).`
-    : `${failed.length} profils n'ont pas été restaurés. ${displayedUsers}.`;
-}
-
-private getFailureReasonLabel(user: TrashActionItemResponse): string {
-  switch (user.reason) {
-    case 'ALREADY_RESTORED':
-      return 'ce profil a déjà été restauré';
-
-    case 'NOT_FOUND':
-      return 'ce profil n’existe plus dans la corbeille';
-
-    case 'CONCURRENT_UPDATE':
-      return 'ce profil a été modifié par un autre administrateur';
-
-    case 'EMAIL_ALREADY_USED':
-      return 'cet email est déjà utilisé par un autre profil actif';
-
-    default:
-      return user.message || 'erreur inconnue';
-  }
-}
-
-private getActionUserDisplayName(user: TrashActionItemResponse): string {
-  const fullName = `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
-
-  return fullName || user.email || 'sélectionné';
-}
-
-  openPermanentDeleteSelectedConfirmation(): void {
-    const selectedUsers = this.selection.selected;
-
-    if (selectedUsers.length === 0) {
-      this.notificationService.openErrorSnackBar(
-        'Veuillez sélectionner au moins un profil à supprimer définitivement.'
+    if (restored.length === 0 && failed.length === 0) {
+      this.notificationService.openSuccessSnackBar(
+        selectedUsers.length > 1
+          ? 'Les profils sélectionnés ont été restaurés.'
+          : `Le profil ${this.getUserDisplayName(selectedUsers[0])} a été restauré.`
       );
+
       return;
     }
 
-    const dialogRef = this.dialog.open(ComfirmUserDialogComponent, {
-      data: {
-        title:
-          selectedUsers.length > 1
-            ? 'Suppression définitive'
-            : 'Suppression définitive du profil',
-        message:
-          selectedUsers.length > 1
-            ? 'Cette action est irréversible. Voulez-vous supprimer définitivement les profils suivants ?'
-            : `Cette action est irréversible. Voulez-vous supprimer définitivement le profil ${this.getUserDisplayName(selectedUsers[0])} ?`,
-        confirmLabel: 'Supprimer définitivement',
-        confirmColor: 'warn',
-        users: selectedUsers,
-      } as ConfirmUsersActionDialogData,
-      disableClose: true,
-      autoFocus: false,
-    });
+    if (restored.length > 0) {
+      this.notificationService.openSuccessSnackBar(
+        restored.length > 1
+          ? `${restored.length} profils ont été restaurés avec succès.`
+          : `Le profil ${this.getActionUserDisplayName(restored[0])} a été restauré avec succès.`
+      );
+    }
 
-    dialogRef.afterClosed().subscribe(confirmed => {
-      if (!confirmed) {
-        return;
-      }
-
-      const ids = selectedUsers
-  .map(user => user.id)
-  .filter((id): id is string => !!id && id.trim() !== '');
-
-
-      this.permanentlyDeleteUsers(ids)
-        .pipe(finalize(() => this.refreshTable()))
-        .subscribe({
-          next: () => {
-            this.notificationService.openSuccessSnackBar(
-              selectedUsers.length > 1
-                ? 'Les profils sélectionnés ont été supprimés définitivement.'
-                : `Le profil ${this.getUserDisplayName(selectedUsers[0])} a été supprimé définitivement.`
-            );
-          },
-          error: error => {
-            console.error('Erreur suppression définitive profils', error);
-
-            this.notificationService.openErrorSnackBar(
-              selectedUsers.length > 1
-                ? 'Erreur lors de la suppression définitive des profils sélectionnés.'
-                : `Erreur lors de la suppression définitive du profil ${this.getUserDisplayName(selectedUsers[0])}.`
-            );
-          },
-        });
-    });
+    if (failed.length > 0) {
+      this.notificationService.openErrorSnackBar(
+        this.buildRestoreFailureMessage(failed)
+      );
+    }
   }
 
-  private getUserDisplayName(user: TrashUserResponse): string {
+  private buildRestoreFailureMessage(
+    failed: TrashActionItemResponse[]
+  ): string {
+    if (failed.length === 1) {
+      const user = failed[0];
+
+      return `Le profil ${this.getActionUserDisplayName(user)} n'a pas été restauré : ${this.getFailureReasonLabel(user)}.`;
+    }
+
+    const displayedUsers = failed
+      .slice(0, 3)
+      .map(
+        user =>
+          `${this.getActionUserDisplayName(user)} : ${this.getFailureReasonLabel(user)}`
+      )
+      .join(' / ');
+
+    const remainingCount = failed.length - 3;
+
+    return remainingCount > 0
+      ? `${failed.length} profils n'ont pas été restaurés. ${displayedUsers} / +${remainingCount} autre(s).`
+      : `${failed.length} profils n'ont pas été restaurés. ${displayedUsers}.`;
+  }
+
+  private getFailureReasonLabel(user: TrashActionItemResponse): string {
+    switch (user.reason) {
+      case 'ALREADY_RESTORED':
+        return 'ce profil a déjà été restauré';
+
+      case 'NOT_FOUND':
+        return 'ce profil n’existe plus dans la corbeille';
+
+      case 'CONCURRENT_UPDATE':
+        return 'ce profil a été modifié par un autre administrateur';
+
+      case 'EMAIL_ALREADY_USED':
+        return 'cet email est déjà utilisé par un autre profil actif';
+
+      default:
+        return user.message || 'erreur inconnue';
+    }
+  }
+
+  private getActionUserDisplayName(user: TrashActionItemResponse): string {
+    const fullName = `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
+
+    return fullName || user.email || 'sélectionné';
+  }
+
+  openPermanentDeleteSelectedConfirmation(): void {
+  const selectedUsers = this.selection.selected;
+
+  if (selectedUsers.length === 0) {
+    this.notificationService.openErrorSnackBar(
+      'Veuillez sélectionner au moins un profil à supprimer définitivement.'
+    );
+    return;
+  }
+
+  this.pendingAction = 'delete';
+  this.pendingUsers = [...selectedUsers];
+  this.confirmDialogWarn = true;
+  this.confirmDialogConfirmLabel = 'Supprimer définitivement';
+  this.confirmDialogTitle =
+    selectedUsers.length > 1
+      ? 'Suppression définitive'
+      : 'Suppression définitive du profil';
+  this.confirmDialogMessage =
+    selectedUsers.length > 1
+      ? 'Cette action est irréversible. Voulez-vous supprimer définitivement les profils sélectionnés ?'
+      : `Cette action est irréversible. Voulez-vous supprimer définitivement le profil ${this.getUserDisplayName(selectedUsers[0])} ?`;
+
+  this.isConfirmDialogOpen = true;
+}
+
+cancelConfirmDialog(): void {
+  this.closeConfirmDialog();
+}
+
+confirmDialogAction(): void {
+  const users = [...this.pendingUsers];
+  const action = this.pendingAction;
+
+  this.closeConfirmDialog();
+
+  if (action === 'restore') {
+    this.executeRestoreUsers(users);
+    return;
+  }
+
+  if (action === 'delete') {
+    this.executePermanentDeleteUsers(users);
+  }
+}
+
+private closeConfirmDialog(): void {
+  this.isConfirmDialogOpen = false;
+  this.confirmDialogTitle = '';
+  this.confirmDialogMessage = '';
+  this.confirmDialogConfirmLabel = '';
+  this.confirmDialogWarn = false;
+  this.pendingAction = null;
+  this.pendingUsers = [];
+}
+
+private executeRestoreUsers(selectedUsers: TrashUserResponse[]): void {
+  const ids = selectedUsers
+    .map(user => user.id)
+    .filter((id): id is string => !!id && id.trim() !== '');
+
+  if (ids.length === 0) {
+    this.notificationService.openErrorSnackBar(
+      'Aucun identifiant valide trouvé pour la restauration.'
+    );
+    return;
+  }
+
+  this.restoreUsers(ids)
+    .pipe(finalize(() => this.refreshTable()))
+    .subscribe({
+      next: response => {
+        this.showRestoreResultMessage(response, selectedUsers);
+      },
+      error: error => {
+        console.error('Erreur restauration profils', error);
+
+        this.notificationService.openErrorSnackBar(
+          selectedUsers.length > 1
+            ? 'Erreur technique lors de la restauration des profils sélectionnés.'
+            : `Erreur technique lors de la restauration du profil ${this.getUserDisplayName(selectedUsers[0])}.`
+        );
+      },
+    });
+}
+
+private executePermanentDeleteUsers(selectedUsers: TrashUserResponse[]): void {
+  const ids = selectedUsers
+    .map(user => user.id)
+    .filter((id): id is string => !!id && id.trim() !== '');
+
+  if (ids.length === 0) {
+    this.notificationService.openErrorSnackBar(
+      'Aucun identifiant valide trouvé pour la suppression définitive.'
+    );
+    return;
+  }
+
+  this.permanentlyDeleteUsers(ids)
+    .pipe(finalize(() => this.refreshTable()))
+    .subscribe({
+      next: () => {
+        this.notificationService.openSuccessSnackBar(
+          selectedUsers.length > 1
+            ? 'Les profils sélectionnés ont été supprimés définitivement.'
+            : `Le profil ${this.getUserDisplayName(selectedUsers[0])} a été supprimé définitivement.`
+        );
+      },
+      error: error => {
+        console.error('Erreur suppression définitive profils', error);
+
+        this.notificationService.openErrorSnackBar(
+          selectedUsers.length > 1
+            ? 'Erreur lors de la suppression définitive des profils sélectionnés.'
+            : `Erreur lors de la suppression définitive du profil ${this.getUserDisplayName(selectedUsers[0])}.`
+        );
+      },
+    });
+}
+
+  getUserDisplayName(user: TrashUserResponse): string {
     const fullName = `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
 
     return fullName || user.email || 'sélectionné';
