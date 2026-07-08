@@ -125,3 +125,67 @@ td.mat-mdc-cell {
 .results-text {
   margin: 0;
 }
+
+.trash-confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.trash-confirm-dialog {
+  width: min(520px, calc(100vw - 48px));
+  padding: 24px;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #1f2933;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
+}
+
+.trash-confirm-title {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2933;
+}
+
+.trash-confirm-message {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #334155;
+}
+
+.trash-confirm-users {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.trash-confirm-user {
+  font-size: 14px;
+  color: #334155;
+}
+
+.trash-confirm-user + .trash-confirm-user {
+  margin-top: 6px;
+}
+
+.trash-confirm-user-more {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.trash-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}

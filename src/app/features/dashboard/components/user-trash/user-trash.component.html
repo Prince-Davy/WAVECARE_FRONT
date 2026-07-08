@@ -163,4 +163,57 @@
       showFirstLastButtons>
     </mat-paginator>
   </mat-card>
+  <div
+  class="trash-confirm-backdrop"
+  *ngIf="isConfirmDialogOpen"
+  (click)="cancelConfirmDialog()"
+>
+  <section
+    class="trash-confirm-dialog"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="confirmDialogTitle"
+    (click)="$event.stopPropagation()"
+  >
+    <h2 class="trash-confirm-title">
+      {{ confirmDialogTitle }}
+    </h2>
+
+    <p class="trash-confirm-message">
+      {{ confirmDialogMessage }}
+    </p>
+
+    <div class="trash-confirm-users" *ngIf="pendingUsers.length > 0">
+      <div
+        class="trash-confirm-user"
+        *ngFor="let user of pendingUsers.slice(0, 5)"
+      >
+        {{ getUserDisplayName(user) }}
+      </div>
+
+      <div class="trash-confirm-user-more" *ngIf="pendingUsers.length > 5">
+        +{{ pendingUsers.length - 5 }} autre(s) profil(s)
+      </div>
+    </div>
+
+    <div class="trash-confirm-actions">
+      <button
+        mat-button
+        type="button"
+        (click)="cancelConfirmDialog()"
+      >
+        Annuler
+      </button>
+
+      <button
+        mat-raised-button
+        type="button"
+        [color]="confirmDialogWarn ? 'warn' : 'primary'"
+        (click)="confirmDialogAction()"
+      >
+        {{ confirmDialogConfirmLabel }}
+      </button>
+    </div>
+  </section>
+</div>
 </div>
