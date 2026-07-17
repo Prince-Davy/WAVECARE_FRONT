@@ -290,7 +290,7 @@
         },
         "button": {
           "trash": {
-            "label": "PROFILS INACTIFS",
+            "label": "ACCES PROFILS INACTIFS",
             "tooltip": "Accéder à la corbeille des profils inactifs"
           }
         }
@@ -328,7 +328,7 @@
               }
             }
           },
-          "actions-column": "Actions",
+          "actions-column": "Action",
           "last-name-column": "Nom",
           "first-name-column": "Prénom",
           "email-column": "Email",
@@ -538,11 +538,11 @@
           },
           "reset": "RÉINITIALISER",
           "search-information": "id, email, nom et/ou prénom",
-          "search-input-placeholder": "Rechercher un ticket",
+          "search-input-placeholder": "Rechercher un profil inactif",
           "result-found-first-part": "Résultat : ",
           "result-found-second-part": {
-            "singular": " ticket trouvé",
-            "plural": " tickets trouvés"
+            "singular": " profil inactif trouvé",
+            "plural": " profils inactifs trouvés"
           }
         }
       },

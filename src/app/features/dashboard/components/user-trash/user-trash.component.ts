@@ -491,7 +491,7 @@ export class UserTrashComponent {
     if (restored.length > 0) {
       this.notificationService.openSuccessSnackBar(
         restored.length > 1
-          ? `${restored.length} profils ont été restaurés avec succès.`
+          ? `Les profils ont été restaurés avec succès.`
           : `Le profil ${this.getActionUserDisplayName(restored[0])} a été restauré avec succès.`
       );
     }
@@ -509,7 +509,7 @@ export class UserTrashComponent {
     if (failed.length === 1) {
       const user = failed[0];
 
-      return `Le profil ${this.getActionUserDisplayName(user)} n'a pas été restauré : ${this.getFailureReasonLabel(user)}.`;
+      return `Erreur : Le profil ${this.getActionUserDisplayName(user)} n'a pas été restauré : ${this.getFailureReasonLabel(user)}.`;
     }
 
     const displayedUsers = failed
