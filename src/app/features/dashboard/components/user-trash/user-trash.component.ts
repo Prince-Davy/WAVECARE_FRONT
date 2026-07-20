@@ -466,7 +466,7 @@ export class UserTrashComponent {
   this.confirmDialogMessage =
     selectedUsers.length > 1
       ? 'Voulez-vous restaurer les profils sélectionnés ?'
-      : `Voulez-vous restaurer le profil ${this.getUserDisplayName(selectedUsers[0])} ?`;
+      : `Voulez-vous restaurer le profil ${this.getUserDisplayName(selectedUsers[0])} (${selectedUsers[0].email})?`;
 
   this.isConfirmDialogOpen = true;
 }
@@ -482,7 +482,7 @@ export class UserTrashComponent {
       this.notificationService.openSuccessSnackBar(
         selectedUsers.length > 1
           ? 'Les profils sélectionnés ont été restaurés.'
-          : `Le profil ${this.getUserDisplayName(selectedUsers[0])} a été restauré.`
+          : `Le profil ${this.getUserDisplayName(selectedUsers[0])} (${selectedUsers[0].email}) a été restauré.`
       );
 
       return;
@@ -492,7 +492,7 @@ export class UserTrashComponent {
       this.notificationService.openSuccessSnackBar(
         restored.length > 1
           ? `Les profils ont été restaurés avec succès.`
-          : `Le profil ${this.getActionUserDisplayName(restored[0])} a été restauré avec succès.`
+          : `Le profil ${this.getActionUserDisplayName(restored[0])} (${restored[0].email}) a été restauré avec succès.`
       );
     }
 
@@ -509,14 +509,14 @@ export class UserTrashComponent {
     if (failed.length === 1) {
       const user = failed[0];
 
-      return `Erreur : Le profil ${this.getActionUserDisplayName(user)} n'a pas été restauré : ${this.getFailureReasonLabel(user)}.`;
+      return `Erreur : Le profil ${this.getActionUserDisplayName(user)} (${user.email}) n'a pas été restauré : ${this.getFailureReasonLabel(user)}.`;
     }
 
     const displayedUsers = failed
       .slice(0, 3)
       .map(
         user =>
-          `${this.getActionUserDisplayName(user)} : ${this.getFailureReasonLabel(user)}`
+          `${this.getActionUserDisplayName(user)} (${user.email}) : ${this.getFailureReasonLabel(user)}`
       )
       .join(' / ');
 
@@ -573,7 +573,7 @@ export class UserTrashComponent {
   this.confirmDialogMessage =
     selectedUsers.length > 1
       ? 'Cette action est irréversible. Voulez-vous supprimer définitivement les profils sélectionnés ?'
-      : `Cette action est irréversible. Voulez-vous supprimer définitivement le profil ${this.getUserDisplayName(selectedUsers[0])} ?`;
+      : `Cette action est irréversible. Voulez-vous supprimer définitivement le profil ${this.getUserDisplayName(selectedUsers[0])} (${selectedUsers[0].email}) ?`;
 
   this.isConfirmDialogOpen = true;
 }
