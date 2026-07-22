@@ -397,7 +397,7 @@ describe('UserTrashComponent', () => {
     component.confirmDialogAction();
 
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledWith(
-      '(Le profil Jean Dupont (jean.dupont@test.fr) a été restauré avec succès.'
+      'Le profil Jean Dupont (jean.dupont@test.fr) a été restauré avec succès.'
     );
   });
 
@@ -607,11 +607,7 @@ describe('UserTrashComponent', () => {
 
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledTimes(1);
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledWith(
-      'Erreur lors de la suppression définitive du profil Jean Dupont (jean.dupont@test.fr).'
+      'Erreur lors de la suppression définitive du profil Jean Dupont.'
     );
   });
 });
-
-function expect<T>(actual: T): jasmine.Matchers<T> {
-  return (globalThis as any).expect(actual);
-}
