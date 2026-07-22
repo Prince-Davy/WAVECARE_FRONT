@@ -315,7 +315,7 @@ describe('UserTrashComponent', () => {
     expect(component.isConfirmDialogOpen).toBeTrue();
     expect(component.confirmDialogTitle).toBe('Restaurer le profil');
     expect(component.confirmDialogMessage).toBe(
-      'Voulez-vous restaurer le profil Jean Dupont ?'
+      'Voulez-vous restaurer le profil Jean Dupont (jean.dupont@test.fr) ?'
     );
     expect(component.confirmDialogConfirmLabel).toBe('Restaurer');
     expect(component.confirmDialogWarn).toBeFalse();
@@ -335,7 +335,7 @@ describe('UserTrashComponent', () => {
     expect(trashServiceMock.restoreUsers).toHaveBeenCalledWith(['1']);
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledTimes(1);
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledWith(
-      'Le profil Jean Dupont a été restauré.'
+      'Le profil Jean Dupont (jean.dupont@test.fr) a été restauré.'
     );
   });
 
@@ -397,7 +397,7 @@ describe('UserTrashComponent', () => {
     component.confirmDialogAction();
 
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledWith(
-      'Le profil Jean Dupont a été restauré avec succès.'
+      '(Le profil Jean Dupont (jean.dupont@test.fr) a été restauré avec succès.'
     );
   });
 
@@ -525,7 +525,7 @@ describe('UserTrashComponent', () => {
     expect(component.isConfirmDialogOpen).toBeTrue();
     expect(component.confirmDialogTitle).toBe('Suppression définitive du profil');
     expect(component.confirmDialogMessage).toBe(
-      'Cette action est irréversible. Voulez-vous supprimer définitivement le profil Jean Dupont ?'
+      'Cette action est irréversible. Voulez-vous supprimer définitivement le profil Jean Dupont (jean.dupont@test.fr) ?'
     );
     expect(component.confirmDialogConfirmLabel).toBe(
       'Supprimer définitivement'
@@ -547,7 +547,7 @@ describe('UserTrashComponent', () => {
     expect(trashServiceMock.permanentlyDeleteUsers).toHaveBeenCalledWith(['1']);
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledTimes(1);
     expect(notificationServiceMock.openSuccessSnackBar).toHaveBeenCalledWith(
-      'Le profil Jean Dupont a été supprimé définitivement.'
+      'Le profil Jean Dupont (jean.dupont@test.fr) a été supprimé définitivement.'
     );
   });
 
@@ -611,3 +611,7 @@ describe('UserTrashComponent', () => {
     );
   });
 });
+
+function expect<T>(actual: T): jasmine.Matchers<T> {
+  return (globalThis as any).expect(actual);
+}

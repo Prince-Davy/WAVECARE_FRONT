@@ -466,7 +466,7 @@ export class UserTrashComponent {
   this.confirmDialogMessage =
     selectedUsers.length > 1
       ? 'Voulez-vous restaurer les profils sélectionnés ?'
-      : `Voulez-vous restaurer le profil ${this.getUserDisplayName(selectedUsers[0])} (${selectedUsers[0].email})?`;
+      : `Voulez-vous restaurer le profil ${this.getUserDisplayName(selectedUsers[0])} (${selectedUsers[0].email}) ?`;
 
   this.isConfirmDialogOpen = true;
 }
@@ -492,7 +492,7 @@ export class UserTrashComponent {
       this.notificationService.openSuccessSnackBar(
         restored.length > 1
           ? `Les profils ont été restaurés avec succès.`
-          : `Le profil ${this.getActionUserDisplayName(restored[0])} (${restored[0].email}) a été restauré avec succès.`
+          : `(Le profil ${this.getActionUserDisplayName(restored[0])} (${restored[0].email}) a été restauré avec succès.`
       );
     }
 
@@ -657,7 +657,7 @@ private executePermanentDeleteUsers(selectedUsers: TrashUserResponse[]): void {
         this.notificationService.openSuccessSnackBar(
           selectedUsers.length > 1
             ? 'Les profils sélectionnés ont été supprimés définitivement.'
-            : `Le profil ${this.getUserDisplayName(selectedUsers[0])} a été supprimé définitivement.`
+            : `Le profil ${this.getUserDisplayName(selectedUsers[0])} (${selectedUsers[0].email}) a été supprimé définitivement.`
         );
       },
       error: error => {
