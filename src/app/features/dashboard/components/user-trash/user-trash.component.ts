@@ -492,7 +492,7 @@ export class UserTrashComponent {
       this.notificationService.openSuccessSnackBar(
         restored.length > 1
           ? `Les profils ont été restaurés avec succès.`
-          : `(Le profil ${this.getActionUserDisplayName(restored[0])} (${restored[0].email}) a été restauré avec succès.`
+          : `Le profil ${this.getActionUserDisplayName(restored[0])} (${restored[0].email}) a été restauré avec succès.`
       );
     }
 
