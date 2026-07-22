@@ -188,7 +188,10 @@
         class="trash-confirm-user"
         *ngFor="let user of pendingUsers.slice(0, 5)"
       >
-        {{ getUserDisplayName(user) }}
+        {{ getUserDisplayName(user) }} :
+         <span class="confirm-user-email">{{ user?.email }}</span>
+
+
       </div>
 
       <div class="trash-confirm-user-more" *ngIf="pendingUsers.length > 5">
