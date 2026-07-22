@@ -607,7 +607,7 @@ describe('UserTrashComponent', () => {
 
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledTimes(1);
     expect(notificationServiceMock.openErrorSnackBar).toHaveBeenCalledWith(
-      'Erreur lors de la suppression définitive du profil Jean Dupont.'
+      'Erreur lors de la suppression définitive du profil Jean Dupont (jean.dupont@test.fr).'
     );
   });
 });
