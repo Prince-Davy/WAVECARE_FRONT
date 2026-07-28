@@ -226,26 +226,6 @@ export class PatientTableComponent extends DashboardComponent {
   }
 
 /**
- * TODO: Documentation for onPatientSearch (method)
- * @param value - TODO
- * @returns TODO
- */
-  onPatientSearch(value: string) {
-    const v = value?.trim();
-    this.listKeywords = v ? [v.toLowerCase()] : [];
-
-    this.filters = {
-      ...this.filters,
-/**
- * TODO: Documentation for keywords (property)
- */
-      keywords: this.listKeywords,
-    };
-
-    this.refreshTable(0); // ✅ met à jour la table + resultsLength => compteur aussi
-  }
-
-/**
  * TODO: Documentation for keywordsChanged (method)
  * @param currentListKeywords - TODO
  * @returns TODO

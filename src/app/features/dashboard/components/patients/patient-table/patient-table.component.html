@@ -9,10 +9,9 @@
     <app-search-bar
       [totalResults]="resultsLength"
       [showAdvancedFilters]="false"
-      mode="simple"
       [placeholderKey]="'feature.dashboard.patient.table.search.placeholder'"
       [infoKey]="'feature.dashboard.patient.table.search.search-information'"
-      (simpleSearch)="onPatientSearch($event)"
+      (keywordsChanged)="keywordsChanged($event)"
       (resetRequested)="resetTable()">
     </app-search-bar>
   </div>

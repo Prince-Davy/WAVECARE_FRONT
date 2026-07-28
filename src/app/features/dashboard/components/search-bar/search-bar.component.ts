@@ -109,11 +109,20 @@ export class SearchBarComponent {
  */
   onSearch(): void {
   const trimmed = (this.inputValue ?? '').trim();
+  console.log('SEARCH MODE => ', this.mode());
+  console.log('INPUT BEFORE => ', this.inputValue);
+
+  const trimed = (this.inputValue ?? '').trim();
+  console.log('INPUT TRIMMED => ', trimed);
 
   if (this.mode() === 'simple') {
+    console.log('PASSAGE SIMPLE ');
 
     this.listKeywords = trimmed ? [trimmed.toLowerCase()] : [];
     this.simpleSearch.emit(trimmed);
+
+    this.inputValue = '';
+    console.log('INPUT AFTER => ', this.inputValue);
 
     return;
   }
