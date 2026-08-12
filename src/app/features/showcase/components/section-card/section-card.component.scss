@@ -1,0 +1,43 @@
+.section-card {
+    width: 100%;
+}
+
+.section-card__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    padding-top: 8px;
+}
+
+.card {
+    height: 100%;
+}
+
+.card__title {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 8px;
+}
+
+.card__description {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.section-card__ctas {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+
+.cta-link {
+    color: #e6197a;
+    font-weight: 500;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}

@@ -1,19 +1,14 @@
 import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
-import { NavigationService } from '@app/features/navigation/services/navigation.service';
 
-/**
- * TODO: Documentation for initAuthFactory (function)
- */
 export function initAuthFactory(
-  auth: AuthTokenService,
-  nav: NavigationService
+  auth: AuthTokenService
 ): () => Promise<void> {
   return async () => {
     auth.initFromStorage();
     const ok = await auth.tryAutoRefresh();
+    // Nettoie les tokens expirés ; la redirection vers /***REMOVED*** est gérée par authGuard
     if (!ok) {
       auth.removeTokens();
-      nav.navigateToLogin();
     }
   };
 }

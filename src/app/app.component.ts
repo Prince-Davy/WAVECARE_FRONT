@@ -23,7 +23,7 @@ import { MatChipsModule } from '@angular/material/chips';
     MatChipsModule,
     NotificationStackComponent,
     IdleTimeoutOverlayComponent,
-],
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
@@ -50,10 +50,10 @@ export class AppComponent {
 
   readonly dashboardMode = computed(() => {
     const url = this.currentUrl();
-
-    return url
-      ? !this.fullPageRoutes.some(prefix => url.startsWith(prefix))
-      : false;
+    if (!url) return false;
+    // '/' est la page publique Showcase : pas de layout dashboard
+    if (url === '/') return false;
+    return !this.fullPageRoutes.some(prefix => url.startsWith(prefix));
   });
 
   constructor(public tokenService: AuthTokenService) {

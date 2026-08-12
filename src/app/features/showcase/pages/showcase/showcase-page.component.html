@@ -1,0 +1,34 @@
+<div class="showcase-page">
+
+    <nav class="navbar">
+        <div class="brand">
+            <a href="/">
+                <img class="logo" alt="WaveCare" src="assets/images/LogoWaveCare.png">
+            </a>
+        </div>
+
+        <span class="spacer-mini"></span>
+
+        @for (section of sections(); track section.title) {
+        <button type="button" class="custom-tab-button" (click)="selectSection(section)">
+            <span class="custom-tab-button-label">{{ section.title }}</span>
+            <span class="custom-tab-button-underline" [class.pink]="selectedSection() === section"
+                [class.transparent]="selectedSection() !== section">
+            </span>
+        </button>
+        }
+    </nav>
+
+    <main class="showcase-content">
+        @if (pageQuery.isPending()) {
+        <p class="showcase-status">Chargement…</p>
+        } @else if (pageQuery.isError()) {
+        <p class="showcase-status showcase-status--error">
+            Une erreur est survenue lors du chargement de la page.
+        </p>
+        } @else if (selectedSection()) {
+        <app-section [section]="selectedSection()!" />
+        }
+    </main>
+
+</div>

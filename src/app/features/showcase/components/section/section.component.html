@@ -1,0 +1,17 @@
+<section [class]="'section section--' + (section().variant || 'default')">
+
+    @if (section().title) {
+    <h2 class="section__title">{{ section().title }}</h2>
+    }
+
+    @if (section().description) {
+    <p class="section__description">{{ section().description }}</p>
+    }
+
+    <div class="section-grid">
+        @for (sectionCard of section().sectionCards; track sectionCard.title) {
+        <app-section-card [sectionCard]="sectionCard" />
+        }
+    </div>
+
+</section>

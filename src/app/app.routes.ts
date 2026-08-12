@@ -91,8 +91,7 @@ export const routes: Routes = [
   {
     path: '',
     canActivate: [homeRedirectGuard],
-    loadComponent: () => import('@app/features/auth/components/auth/auth.component').then(c => c.AuthComponent),
-    // guard may return UrlTree to a home route or true to show ***REMOVED*** component
+    loadComponent: () => import('@app/features/showcase/pages/showcase/showcase-page.component').then(c => c.ShowcasePageComponent)
   },
   // fin des routes principales
 
