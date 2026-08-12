@@ -1,0 +1,39 @@
+<mat-card class="section-card">
+
+    <mat-card-header>
+        <mat-card-title>{{ sectionCard().title }}</mat-card-title>
+        @if (sectionCard().description) {
+        <mat-card-subtitle>{{ sectionCard().description }}</mat-card-subtitle>
+        }
+    </mat-card-header>
+
+    @if (sectionCard().cards.length > 0) {
+    <mat-card-content>
+        <div class="section-card__grid">
+            @for (card of sectionCard().cards; track card.title) {
+            <mat-card class="card" appearance="outlined">
+                <mat-card-header>
+                    <mat-card-title>{{ card.title }}</mat-card-title>
+                </mat-card-header>
+                @if (card.description) {
+                <mat-card-content>
+                    <p>{{ card.description }}</p>
+                </mat-card-content>
+                }
+            </mat-card>
+            }
+        </div>
+    </mat-card-content>
+    }
+
+    @if (sectionCard().ctas?.length) {
+    <mat-card-actions>
+        @for (cta of sectionCard().ctas!; track cta.label) {
+        <a mat-button color="primary" [href]="cta.url" [target]="cta.target ?? '_self'" rel="noopener noreferrer">
+            {{ cta.label }}
+        </a>
+        }
+    </mat-card-actions>
+    }
+
+</mat-card>

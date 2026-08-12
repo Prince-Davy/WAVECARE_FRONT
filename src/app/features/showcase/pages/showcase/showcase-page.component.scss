@@ -1,0 +1,80 @@
+// Réutilise les mêmes tokens visuels que NavbarComponent
+.navbar {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 88px;
+    padding: 0 16px;
+    white-space: nowrap;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+
+    .logo {
+        width: 72px;
+        height: auto;
+        display: block;
+    }
+}
+
+.spacer-mini {
+    width: 12px;
+    flex: 0 0 12px;
+}
+
+.custom-tab-button {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 6px;
+    padding-top: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px 5px 0 0;
+
+    &:hover {
+        background-color: #f4f4f4;
+    }
+}
+
+.custom-tab-button-label {
+    display: block;
+    color: black;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 3px 10px 5px 10px;
+}
+
+.custom-tab-button-underline {
+    display: block;
+    height: 2px;
+
+    &.pink {
+        background-color: #e6197a;
+    }
+
+    &.transparent {
+        background-color: transparent;
+    }
+}
+
+.showcase-content {
+    padding: 32px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.showcase-status {
+    color: #555;
+    font-size: 16px;
+
+    &--error {
+        color: #c0392b;
+    }
+}

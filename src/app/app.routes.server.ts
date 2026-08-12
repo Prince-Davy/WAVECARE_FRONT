@@ -6,6 +6,11 @@ import { RenderMode, ServerRoute } from '@angular/ssr';
  */
 export const serverRoutes: ServerRoute[] = [
   {
+    // Showcase est data-driven (Strapi) : pas de prérendu statique possible
+    path: '',
+    renderMode: RenderMode.Server,
+  },
+  {
     path: '**',
     renderMode: RenderMode.Prerender
   },

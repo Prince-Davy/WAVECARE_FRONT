@@ -1,3 +1,5 @@
 {
-  "apiBaseUrl": "http://localhost:8080"
+  "apiBaseUrl": "http://localhost:8080",
+  "strapiBaseUrl": "http://localhost:1337",
+  "strapiApiToken": "4c26ce20b83700a86b63865211299d670803d136388c949f34d5f496a5021887bf3aced3262756f45108992e7ed0efe33851933990032c78477895cf1df92f7cbac9f49b836ecce4812048a14e9dff377c7d8d2af819da0c0d1209e73076e7eb9a9481dcb1194aa2f266595947703ec8baede73eb51b215b118fcc8d8008d717"
 }
