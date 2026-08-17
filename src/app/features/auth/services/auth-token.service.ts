@@ -244,29 +244,15 @@ export class AuthTokenService {
     if (!refresh) {
       throw new Error('no refresh token');
     }
-    const body = new HttpParams({ encoder: new HttpUrlEncodedEncoder() })
-      .set('grant_type', 'refresh_token')
-      .set('client_id', CLIENT_ID)
-      .set('refresh_token', refresh);
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',
-    });
 
     const resp = await firstValueFrom(
-      this.http.post<any>(TOKEN_ENDPOINT, body.toString(), { headers })
+      this.http.post<any>(TOKEN_ENDPOINT, { refreshToken: refresh })
     );
     if (!resp.access_token || !resp.refresh_token) {
       throw new Error('invalid token response');
     }
     this.setTokens({
-/**
- * TODO: Documentation for access_token (property)
- */
       access_token: resp.access_token,
-/**
- * TODO: Documentation for refresh_token (property)
- */
       refresh_token: resp.refresh_token,
     });
   }
