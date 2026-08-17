@@ -50,9 +50,9 @@ export class AppComponent {
 
   readonly dashboardMode = computed(() => {
     const url = this.currentUrl();
-    if (!url) return false;
-    // '/' est la page publique Showcase : pas de layout dashboard
-    if (url === '/') return false;
+    if (url === undefined || url === null || url === '' || url === '/') {
+      return true;
+    }
     return !this.fullPageRoutes.some(prefix => url.startsWith(prefix));
   });
 
