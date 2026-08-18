@@ -1,4 +1,4 @@
-FROM node:21-alpine AS build
+FROM node:22.12.0-alpine AS build
 RUN apk update && apk upgrade
 WORKDIR /app
 
@@ -8,7 +8,7 @@ COPY . .
 RUN npm run build
 
 # -------- Runtime --------
-FROM node:21-alpine AS server
+FROM node:22.12.0-alpine AS server
 RUN apk update && apk upgrade
 WORKDIR /app
 
