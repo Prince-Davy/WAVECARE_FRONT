@@ -1,3 +1,12 @@
+/**
+ * User Store Module
+ * 
+ * Manages user data state and API interactions using Angular signals and rxResource.
+ * Provides reactive user list pagination, sorting, and filtering.
+ * 
+ * @module UserStore
+ * @see {@link UserStore} for the store class
+ */
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { rxResource } from '@angular/core/rxjs-interop';
@@ -6,8 +15,18 @@ import type { PageUserResponse, UserResponse } from '@app/api/model';
 import { UserFilters } from '../models/user-filters';
 
 /**
+<<<<<<< Updated upstream
  * UserLoadRequest
  * Internal request shape used by the user store resource.
+=======
+ * User Load Request Interface
+ * 
+ * Internal request object for loading user data.
+ * Contains pagination, sorting, and filter information.
+ * 
+ * @interface UserLoadRequest
+ * @private
+>>>>>>> Stashed changes
  */
 interface UserLoadRequest {
 /**
@@ -28,12 +47,21 @@ interface UserLoadRequest {
 }
 
 /**
+<<<<<<< Updated upstream
  * EMPTY_PAGE
  * Default empty user page used when there is no request.
+=======
+ * Empty page constant
+ * 
+ * Default empty page response for initialization.
+ * 
+ * @constant
+>>>>>>> Stashed changes
  */
 const EMPTY_PAGE: PageUserResponse = { content: [], totalElements: 0, totalPages: 0, size: 10 };
 
 /**
+<<<<<<< Updated upstream
  * UserStore
  * Reactive store exposing users list and pagination helpers.
  */
@@ -42,6 +70,19 @@ const EMPTY_PAGE: PageUserResponse = { content: [], totalElements: 0, totalPages
  */
 /**
  * TODO: Documentation for UserStore (class)
+=======
+ * User Store Service
+ * 
+ * Manages user data using Angular signals and reactive resource loading.
+ * Handles:
+ * - User list pagination
+ * - Sorting
+ * - Search and filtering
+ * - Cache management
+ * 
+ * @class UserStore
+ * @injectable
+>>>>>>> Stashed changes
  */
 @Injectable({ providedIn: 'root' })
 export class UserStore {

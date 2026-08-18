@@ -1,4 +1,12 @@
-
+/**
+ * Assistance (Support Request) Component Module
+ * 
+ * Provides a form for users to submit support requests and create support tickets.
+ * Allows users to select ticket categories and describe their issues.
+ * 
+ * @module AssistanceComponent
+ * @see {@link AssistanceComponent} for the component class
+ */
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +23,7 @@ import { tap } from 'rxjs';
 import type { TicketCreateRequest } from '@app/api/model';
 
 /**
+<<<<<<< Updated upstream
  * TODO: Documentation for AssistanceComponent (class)
  */
 /**
@@ -22,6 +31,20 @@ import type { TicketCreateRequest } from '@app/api/model';
  */
 /**
  * TODO: Documentation for AssistanceComponent (class)
+=======
+ * Assistance (Support Request) Component
+ * 
+ * Displays a form for creating support requests.
+ * Allows users to:
+ * - Select a ticket category
+ * - Enter ticket title and description
+ * - Submit their support request
+ * 
+ * Shows success/error feedback after submission.
+ * 
+ * @class AssistanceComponent
+ * @standalone
+>>>>>>> Stashed changes
  */
 @Component({
   selector: 'app-assistance',
@@ -41,6 +64,7 @@ import type { TicketCreateRequest } from '@app/api/model';
   styleUrls: ['./assistance.component.scss']
 })
 export class AssistanceComponent {
+<<<<<<< Updated upstream
 /**
  * TODO: Documentation for assistanceForm (property)
  */
@@ -48,9 +72,26 @@ export class AssistanceComponent {
 /**
  * TODO: Documentation for submissionSuccess (property)
  */
+=======
+  /**
+   * Reactive form for assistance/ticket creation
+   */
+  assistanceForm: FormGroup<any>;
+
+  /**
+   * Tracks submission result (null = not submitted, true = success, false = error)
+   */
+>>>>>>> Stashed changes
   submissionSuccess: boolean | null = null;
 
+  /**
+   * Ticket categories API service
+   */
   private readonly categoriesService = inject(TicketCategoriesService);
+
+  /**
+   * Available ticket categories for selection
+   */
   readonly ticketCategories = toSignal(this.categoriesService.ticketCategoryList(), { initialValue: [] });
 
   /**

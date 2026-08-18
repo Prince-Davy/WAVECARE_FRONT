@@ -1,3 +1,12 @@
+/**
+ * Authentication Token Service Module
+ * 
+ * Manages JWT authentication tokens and user authentication state.
+ * Handles token storage, refresh, role-based access, and user information.
+ * 
+ * @module AuthTokenService
+ * @see {@link AuthTokenService} for the service class
+ */
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { signal, computed, WritableSignal } from '@angular/core';
@@ -15,6 +24,22 @@ import {
 // route constants needed for role-based default navigation
 import { PATH_TO_TICKETS, PATH_TO_PATIENTS, PATH_TO_ASSISTANCE, PATH_TO_LOGIN } from '@app/app.routes';
 
+/**
+ * JWT Token Payload Interface
+ * 
+ * Represents the decoded JWT token payload structure.
+ * Contains user information and authorization data.
+ * 
+ * @interface JwtPayload
+ * @property {number} exp - Token expiration timestamp (seconds since epoch)
+ * @property {string} sub - Subject (user ID)
+ * @property {string} preferred_username - Preferred username for display
+ * @property {string} given_name - User's first name
+ * @property {string} family_name - User's last name
+ * @property {string} name - Full user name
+ * @property {{ roles: string[] }} realm_access - Realm-level roles
+ * @property {{ [client: string]: { roles: string[] } }} resource_access - Resource-specific roles
+ */
 interface JwtPayload {
   exp?: number;
   sub?: string;
@@ -27,6 +52,7 @@ interface JwtPayload {
 }
 
 /**
+<<<<<<< Updated upstream
  * TODO: Documentation for AuthTokenService (class)
  */
 /**
@@ -47,9 +73,54 @@ export class AuthTokenService {
 /**
  * TODO: Documentation for refresh (property)
  */
+=======
+ * Authentication Token Service
+ * 
+ * Manages JWT authentication tokens with the following features:
+ * - Token storage in localStorage or sessionStorage
+ * - Token refresh and auto-refresh on expiration
+ * - JWT decoding and token validation
+ * - User information extraction from token
+ * - Role-based access control
+ * - Cross-tab token synchronization
+ * - Automatic role-based navigation routing
+ * 
+ * Uses Angular Signals for reactive state management.
+ * 
+ * @class AuthTokenService
+ * @injectable
+ * @see {@link JwtPayload} for token structure
+ */
+@Injectable({ providedIn: 'root' })
+export class AuthTokenService {
+  /**
+   * Current access token signal
+   * 
+   * Stores the JWT access token string or null if not authenticated.
+   * 
+   * @type {WritableSignal<string | null>}
+   */
+  token: WritableSignal<string | null> = signal(null);
+  
+  /**
+   * Current refresh token signal
+   * 
+   * Stores the JWT refresh token for token renewal.
+   * 
+   * @type {WritableSignal<string | null>}
+   */
+>>>>>>> Stashed changes
   refresh: WritableSignal<string | null> = signal(null);
 
-  /** decoded JWT payload or null if not available/parsing failed */
+  /**
+   * Computed decoded JWT payload
+   * 
+   * Automatically decodes the current access token.
+   * Returns null if token is unavailable or decoding fails.
+   * 
+   * @type {Computed<JwtPayload | null>}
+   * @readonly
+   */
   payload = computed<JwtPayload | null>(() => {
     const t = this.token();
     if (!t) {

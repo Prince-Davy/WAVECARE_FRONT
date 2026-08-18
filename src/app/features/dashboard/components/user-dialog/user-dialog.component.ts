@@ -1,4 +1,12 @@
-
+/**
+ * User Dialog Component Module
+ * 
+ * Dialog for creating and editing user accounts.
+ * Supports role assignment and user information updates.
+ * 
+ * @module UserDialogComponent
+ * @see {@link UserDialogComponent} for the component class
+ */
 import { Component, afterNextRender, inject, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators , AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,7 +23,19 @@ import type { UserResponse } from '@app/api/model';
 import { CommonModule } from '@angular/common';
 
 /**
+<<<<<<< Updated upstream
  * TODO: Documentation for UserDialogData (interface)
+=======
+ * User Dialog Data Interface
+ * 
+ * Data passed to the user dialog component.
+ * Contains user information and available roles.
+ * 
+ * @interface UserDialogData
+ * @property {UserResponse} user - The user being edited or created
+ * @property {string[]} roles - List of available roles to assign
+ * @property {'create' | 'update'} mode - Dialog mode (create or update)
+>>>>>>> Stashed changes
  */
 export interface UserDialogData {
 /**
@@ -29,6 +49,10 @@ export interface UserDialogData {
   mode?: 'create' | 'update';
 }
 
+/**
+ * Backward compatibility alias for UserResponse
+ * @deprecated Use UserResponse directly
+ */
 // Backward compat alias
 /**
  * TODO: Documentation for UserCreateDTO (type)
@@ -36,6 +60,7 @@ export interface UserDialogData {
 export type UserCreateDTO = UserResponse;
 
 /**
+<<<<<<< Updated upstream
  * TODO: Documentation for UserDialogComponent (class)
  */
 
@@ -63,6 +88,16 @@ export function strictEmailValidator(): ValidatorFn {
   };
 }
 
+=======
+ * User Dialog Component
+ * 
+ * Modal dialog for managing user creation and editing.
+ * Handles form validation, role selection, and API communication.
+ * 
+ * @class UserDialogComponent
+ * @standalone
+ */
+>>>>>>> Stashed changes
 @Component({
   selector: 'app-user-dialog',
   standalone: true,

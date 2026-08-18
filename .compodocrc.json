@@ -1,6 +1,12 @@
 {
   "tsconfig": "tsconfig.doc.json",
   "output": "documentation",
+<<<<<<< Updated upstream
+=======
+  "exclude": [
+    "src/app/api/generated/**"
+  ],
+>>>>>>> Stashed changes
   "coverageTest": 70,
   "coverageMinimumPerFile": 0,
   "coverageTestThresholdFail": true,

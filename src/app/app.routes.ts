@@ -1,9 +1,20 @@
+/**
+ * Application Routes Configuration
+ * 
+ * This file defines all the routes for the Wavecare application.
+ * It includes authentication guards to protect routes and lazy-loaded components.
+ * 
+ * @module AppRoutes
+ * @see {@link authGuard} for authentication guard
+ * @see {@link roleGuard} for role-based access control
+ */
 import { Routes } from '@angular/router';
 import { authGuard } from './features/auth/guards/auth.guard';
 import { administratorGuard, radiologistGuard, radioOperatorGuard } from './features/auth/guards/role.guard';
 import { homeRedirectGuard } from './guards/home-redirect.guard';
 
 /**
+<<<<<<< Updated upstream
  * Route path constants used across the application to avoid hardcoded strings.
  */
 export const PATH_TO_LOGIN = 'login';
@@ -29,6 +40,48 @@ export const PATH_TO_TICKETS: string = 'tickets';
 export const PATH_TO_USERS: string = 'users';
 /**
  * Path constant for the patients management route.
+=======
+ * Route path to the login page
+ * @constant {string}
+ */
+export const PATH_TO_LOGIN = 'login';
+/**
+ * Route path to the forgot password page
+ * @constant {string}
+ */
+export const PATH_TO_FORGOT_PASSWORD = 'forgot-password';
+
+/**
+ * Route path to the reset password page
+ * @constant {string}
+ */
+export const PATH_TO_RESET_PASSWORD = 'reset-password';
+
+/**
+ * Route path to the assistance/help page
+ * @constant {string}
+ */
+export const PATH_TO_ASSISTANCE = 'assistance';
+
+/**
+ * Route path to the tickets management page
+ * Requires ADMINISTRATOR role
+ * @constant {string}
+ */
+export const PATH_TO_TICKETS: string = 'tickets';
+
+/**
+ * Route path to the users management page
+ * Requires ADMINISTRATOR role
+ * @constant {string}
+ */
+export const PATH_TO_USERS: string = 'users';
+
+/**
+ * Route path to the patients management page
+ * Requires RADIOLOGIST role
+ * @constant {string}
+>>>>>>> Stashed changes
  */
 export const PATH_TO_PATIENTS: string = 'patients';
 /**
@@ -37,9 +90,27 @@ export const PATH_TO_PATIENTS: string = 'patients';
 export const PATH_TO_USERS_TRASH: string = 'users/trash';
 
 /**
+<<<<<<< Updated upstream
  * routes
  * Application route definitions, using lazy-loaded standalone components
  * and guards for authorization.
+=======
+ * Application Routes Configuration
+ * 
+ * Defines all available routes in the application with their components,
+ * guards, and child routes. Each route is configured with appropriate
+ * authentication and authorization guards.
+ * 
+ * Routes include:
+ * - Login and authentication pages
+ * - Protected dashboard pages for different user roles
+ * - Patient, ticket, and user management
+ * 
+ * @type {Routes}
+ * @see {@link authGuard} for protecting routes
+ * @see {@link administratorGuard} for admin-only routes
+ * @see {@link radiologistGuard} for radiologist-only routes
+>>>>>>> Stashed changes
  */
 export const routes: Routes = [
   {

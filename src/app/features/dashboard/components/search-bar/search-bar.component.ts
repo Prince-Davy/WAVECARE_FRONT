@@ -1,4 +1,12 @@
-
+/**
+ * Search Bar Component Module
+ * 
+ * Provides a reusable search component with support for keyword search and advanced filtering.
+ * Used for searching patients and tickets in the dashboard.
+ * 
+ * @module SearchBarComponent
+ * @see {@link SearchBarComponent} for the component class
+ */
 import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +20,7 @@ import { FilterUtils } from '@app/features/utils/filter.utils';
 
 
 /**
+<<<<<<< Updated upstream
  * TODO: Documentation for SearchBarComponent (class)
  */
 /**
@@ -19,6 +28,20 @@ import { FilterUtils } from '@app/features/utils/filter.utils';
  */
 /**
  * TODO: Documentation for SearchBarComponent (class)
+=======
+ * Search Bar Component
+ * 
+ * A reusable search component that supports:
+ * - Keyword search with dynamic chip display
+ * - Advanced filtering (role, status, date)
+ * - Configurable display mode (chips or simple input)
+ * - i18n support for labels
+ * 
+ * @class SearchBarComponent
+ * @standalone
+ * @see {@link AdvancedFiltersComponent} for advanced filter options
+ * @see {@link FilterUtils} for utility functions
+>>>>>>> Stashed changes
  */
 @Component({
   selector: 'app-search-bar',
@@ -38,11 +61,27 @@ import { FilterUtils } from '@app/features/utils/filter.utils';
 })
 export class SearchBarComponent {
 
+<<<<<<< Updated upstream
 /**
  * TODO: Documentation for getTranslationResultsFound (method)
  * @param results - TODO
  * @returns TODO
  */
+=======
+  /**
+   * Get pluralized translation key for search results
+   * 
+   * Returns the correct i18n key for displaying the number of results found.
+   * Handles singular and plural forms.
+   * 
+   * @method getTranslationResultsFound
+   * @param {number} results - The number of results found
+   * @returns {string} The i18n translation key for the result count
+   * @example
+   * const key = this.getTranslationResultsFound(1);
+   * // Returns: 'feature.dashboard.search-bar.search-bar-component.result-found-second-part.singular'
+   */
+>>>>>>> Stashed changes
   getTranslationResultsFound(results: number): string {
     return results > 1 ? 'feature.dashboard.search-bar.search-bar-component.result-found-second-part.plural' : 'feature.dashboard.search-bar.search-bar-component.result-found-second-part.singular'
   }
