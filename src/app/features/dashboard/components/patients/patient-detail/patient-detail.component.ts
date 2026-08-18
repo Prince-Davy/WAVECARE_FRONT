@@ -1,4 +1,15 @@
 
+/**
+ * Patient Detail Module
+ * 
+ * Displays comprehensive patient information across multiple tabbed views.
+ * Includes administrative, medical, and diagnostic data sections.
+ * 
+ * @module PatientDetailComponent
+ * @see {@link PatientDossierAdministratifComponent} for administrative data
+ * @see {@link PatientDossierMedicalComponent} for medical records
+ * @see {@link PatientAnalyseDiagnosticComponent} for diagnostic analysis
+ */
 import { Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -14,6 +25,7 @@ import { PatientGeneralInfoComponent } from './dossier-administratif/patient-gen
 import { BreadcrumbComponent } from '@app/breadcrumb/breadcrumb.component';
 
 /**
+<<<<<<< Updated upstream
  * TODO: Documentation for PatientDetailComponent (class)
  */
 /**
@@ -21,6 +33,20 @@ import { BreadcrumbComponent } from '@app/breadcrumb/breadcrumb.component';
  */
 /**
  * TODO: Documentation for PatientDetailComponent (class)
+=======
+ * Patient Detail Component
+ * 
+ * Main detail view for a single patient record.
+ * Displays patient information in tabbed sections:
+ * - Administrative (identity, contacts, health coverage)
+ * - Medical (medical records and history)
+ * - Diagnostic (analysis and diagnostic results)
+ * 
+ * Loads patient data reactively based on route parameters (patient ID).
+ * 
+ * @class PatientDetailComponent
+ * @standalone
+>>>>>>> Stashed changes
  */
 @Component({
   selector: 'app-patient-detail',
@@ -31,11 +57,27 @@ import { BreadcrumbComponent } from '@app/breadcrumb/breadcrumb.component';
 })
 export class PatientDetailComponent {
 
+  /**
+   * Route information service for accessing route parameters
+   */
   private readonly route = inject(ActivatedRoute);
+
+  /**
+   * Patients API service for fetching patient data
+   */
   private readonly patientsService = inject(PatientsService);
 
+  /**
+   * Patient ID extracted from route parameters
+   * Reactive signal that updates when route parameters change
+   */
   private readonly patientId = computed(() => Number(this.route.snapshot.paramMap.get('id') || '0'));
 
+  /**
+   * Reactive resource for loading patient data
+   * Automatically fetches patient data when patientId changes
+   * @private
+   */
   private readonly _patientResource = rxResource({
 /**
  * TODO: Documentation for params (property)
@@ -47,8 +89,13 @@ export class PatientDetailComponent {
     stream: ({ params: id }) => this.patientsService.patientGetById(id),
   });
 
+  /**
+   * Patient data signal
+   * Contains the currently displayed patient's information
+   */
   readonly patient = computed<PatientResponse | undefined>(() => this._patientResource.value());
 
+<<<<<<< Updated upstream
 /**
  * TODO: Documentation for selectedTab (property)
  */
@@ -56,5 +103,17 @@ export class PatientDetailComponent {
 /**
  * TODO: Documentation for selectedIndex (property)
  */
+=======
+  /**
+   * Currently selected tab identifier
+   * Options: 'administratif', 'medical', 'diagnostic'
+   */
+  selectedTab: 'administratif' | 'medical' | 'diagnostic' = 'administratif';
+
+  /**
+   * Current tab index (0-based)
+   * Used for Material tabs component synchronization
+   */
+>>>>>>> Stashed changes
   selectedIndex: number = 0;
 }

@@ -1,4 +1,12 @@
-
+/**
+ * Reset Password Component Module
+ * 
+ * Allows users to reset their password using a reset token sent via email.
+ * Validates the token and handles password update.
+ * 
+ * @module ResetPasswordComponent
+ * @see {@link ResetPasswordComponent} for the component class
+ */
 import { Component } from '@angular/core';
 import { AbstractControl, AbstractControlOptions, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +21,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs';
 
 /**
+<<<<<<< Updated upstream
  * TODO: Documentation for ResetPasswordComponent (class)
  */
 /**
@@ -20,6 +29,15 @@ import { tap } from 'rxjs';
  */
 /**
  * TODO: Documentation for ResetPasswordComponent (class)
+=======
+ * Reset Password Component
+ * 
+ * Displays a form for users to reset their password.
+ * Validates the reset token from URL parameters and updates the password.
+ * 
+ * @class ResetPasswordComponent
+ * @standalone
+>>>>>>> Stashed changes
  */
 @Component({
   selector: 'app-***REMOVED***',

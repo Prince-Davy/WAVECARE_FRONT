@@ -1,3 +1,17 @@
+<<<<<<< Updated upstream
+=======
+
+/**
+ * User Management Table Component Module
+ * 
+ * Displays a paginated and sortable table of system users.
+ * Supports search, filtering, user creation, editing, and deletion.
+ * Administrators only.
+ * 
+ * @module UserTableComponent
+ * @see {@link UserTableComponent} for the component class
+ */
+>>>>>>> Stashed changes
 import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, afterNextRender, effect, inject, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -77,6 +91,17 @@ function getFrenchPaginatorIntl(): MatPaginatorIntl {
   templateUrl: './user-table.component.html',
   styleUrl: './user-table.component.scss'
 })
+/**
+ * User Table Component
+ * 
+ * Manages user listings, creation, editing, and deletion.
+ * Provides a data table with pagination, sorting, and search functionality.
+ * Administrators can manage user roles, status, and account information.
+ * 
+ * @class UserTableComponent
+ * @extends DashboardComponent
+ * @standalone
+ */
 export class UserTableComponent extends DashboardComponent {
   readonly dialog = inject(MatDialog);
 

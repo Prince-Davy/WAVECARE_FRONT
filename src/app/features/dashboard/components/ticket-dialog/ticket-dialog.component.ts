@@ -1,3 +1,12 @@
+/**
+ * Ticket Dialog Component Module
+ * 
+ * Dialog for viewing and managing ticket details and status updates.
+ * Allows administrators to change ticket status and add notes.
+ * 
+ * @module TicketDialogComponent
+ * @see {@link TicketDialogComponent} for the component class
+ */
 import { CommonModule } from '@angular/common';
 import { Component, afterNextRender, inject, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -14,7 +23,18 @@ import { finalize, tap } from 'rxjs';
 import type { TicketDetailResponse, TicketStatus } from '@app/api/model';
 
 /**
+<<<<<<< Updated upstream
  * TODO: Documentation for TicketDialogData (interface)
+=======
+ * Ticket Dialog Data Interface
+ * 
+ * Data passed to the ticket dialog component.
+ * Contains ticket details and available status options.
+ * 
+ * @interface TicketDialogData
+ * @property {TicketDetailResponse} ticketDetailDTO - The ticket details
+ * @property {TicketStatus[]} statuses - Available ticket status options
+>>>>>>> Stashed changes
  */
 export interface TicketDialogData {
 /**
@@ -28,6 +48,7 @@ export interface TicketDialogData {
 }
 
 /**
+<<<<<<< Updated upstream
  * TODO: Documentation for TicketDialogComponent (class)
  */
 /**
@@ -35,6 +56,15 @@ export interface TicketDialogData {
  */
 /**
  * TODO: Documentation for TicketDialogComponent (class)
+=======
+ * Ticket Dialog Component
+ * 
+ * Modal dialog for managing ticket status and notes.
+ * Allows administrators to update ticket information.
+ * 
+ * @class TicketDialogComponent
+ * @standalone
+>>>>>>> Stashed changes
  */
 @Component({
   selector: 'app-ticket-dialog',

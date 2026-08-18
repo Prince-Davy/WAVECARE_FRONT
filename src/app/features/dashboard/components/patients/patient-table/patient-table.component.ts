@@ -1,6 +1,16 @@
+/**
+ * Patient Table Component Module
+ * 
+ * Displays a paginated and sortable table of patient records.
+ * Supports search, filtering, pagination, and patient detail navigation.
+ * 
+ * @module PatientTableComponent
+ * @see {@link PatientTableComponent} for the component class
+ */
 import { Component, DestroyRef, afterNextRender, effect, inject, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+<<<<<<< Updated upstream
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -19,6 +29,20 @@ import type { PatientResponse } from '@app/api/model';
 
 /**
  * TODO: Documentation for parseBirthDate (function)
+=======
+/**
+ * Parse a French date string (dd/MM/yyyy) to a Date object
+ * 
+ * Converts French formatted date strings to JavaScript Date objects.
+ * Handles format: dd/MM/yyyy where dd is day, MM is month, yyyy is year.
+ * 
+ * @function parseBirthDate
+ * @param {string} value - The date string to parse
+ * @returns {Date} Parsed Date object or Invalid Date if parsing fails
+ * @example
+ * const date = parseBirthDate('21/04/2024');
+ * // Returns: Date(2024, 3, 21) // Note: months are 0-indexed
+>>>>>>> Stashed changes
  */
 // utility to parse dd/MM/yyyy strings into Date objects
 function parseBirthDate(value: string): Date {
