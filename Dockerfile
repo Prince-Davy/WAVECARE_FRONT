@@ -1,5 +1,5 @@
 # Devsecops: upgrade de 12 à 18
-FROM node:22.18.0-alpine AS server
+FROM node:22.18.0-alpine AS build
 # FROM node:22.12.0-alpine AS server
 
 RUN apk update && apk upgrade
