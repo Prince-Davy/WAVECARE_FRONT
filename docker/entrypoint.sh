@@ -13,7 +13,7 @@ mkdir -p "$(dirname "$CONFIG_PATH")"
 # Ajout DevSecOps: Pour intégrer la clé api strapi dans les variables d'environnement
 cat > "$CONFIG_PATH" <<EOF
 {
-  "apiBaseUrl": "${API_URL}"
+  "apiBaseUrl": "${API_URL}",
   "strapiApiToken": "${STRAPI_API_TOKEN}"
 }
 EOF
