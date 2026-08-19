@@ -3,7 +3,7 @@ RUN apk update && apk upgrade
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN node --version && npm --version && npm ci --verbose
 COPY . .
 RUN npm run build
 
