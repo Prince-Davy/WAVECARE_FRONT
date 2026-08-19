@@ -1,14 +1,25 @@
-FROM node:22.12.0-alpine AS build
+# Devsecops: upgrade de 12 à 18
+FROM node:22.18.0-alpine AS server
+# FROM node:22.12.0-alpine AS server
+
 RUN apk update && apk upgrade
 WORKDIR /app
 
 COPY package*.json ./
-RUN node --version && npm --version && npm ci --verbose
+# RUN node --version && npm --version && npm ci --verbose
+# DevSecOps : utilisation de PNPM avec le lockfile du projet pour garantir une installation reproductible.
+RUN corepack enable \
+    && corepack prepare pnpm@9.15.0 --activate \
+    && node --version \
+    && pnpm --version \
+    && HUSKY=0 pnpm i --frozen-lockfile
 COPY . .
 RUN npm run build
 
 # -------- Runtime --------
-FROM node:22.12.0-alpine AS server
+# Devsecops: upgrade de 12 à 18
+FROM node:22.18.0-alpine AS server
+# FROM node:22.12.0-alpine AS server
 RUN apk update && apk upgrade
 WORKDIR /app
 
