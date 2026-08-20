@@ -13,8 +13,7 @@ import { inject } from '@angular/core';
 import { ConfigService } from './config.service';
 
 /**
-<<<<<<< Updated upstream
- * apiBaseUrlInterceptor
+* apiBaseUrlInterceptor
  * Prepends the configured API base URL to relative requests when present.
  * This interceptor skips absolute URLs and leaves them untouched.
 =======
