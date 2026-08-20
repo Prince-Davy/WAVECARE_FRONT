@@ -1,22 +1,8 @@
-<<<<<<< Updated upstream
 ﻿import { Component, computed, effect, inject } from '@angular/core';
-=======
-﻿/**
- * Application Root Component Module
- * 
- * The main application component that handles layout, routing, and global navigation.
- * Manages navbar, footer, and router outlet.
- * 
- * @module AppComponent
- * @see {@link AppComponent} for the component class
- */
-import { Component, computed, inject } from '@angular/core';
->>>>>>> Stashed changes
 import { RouterOutlet, NavigationEnd, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs/operators';
 
-<<<<<<< Updated upstream
 import { AuthTokenService } from './features/auth/services/auth-token.service';
 import { IdleTimeoutService } from './api/generated/idle-timeout/idle-timeout.service';
 
@@ -27,23 +13,6 @@ import { IdleTimeoutOverlayComponent } from './features/auth/components/idle-tim
 
 import { MatChipsModule } from '@angular/material/chips';
 
-=======
-/**
- * Application Root Component
- * 
- * Main application component that:
- * - Manages the overall layout (navbar, footer, content)
- * - Handles route navigation and layout switching
- * - Switches between full-page layout (login, assistance) and dashboard layout
- * - Provides global styling and structure
- * 
- * Full-page routes (without navbar/footer): /login, /forgot-password, /reset-password, /assistance
- * Dashboard routes: All other routes display with navbar and footer
- * 
- * @class AppComponent
- * @standalone
- */
->>>>>>> Stashed changes
 @Component({
   selector: 'app-root',
   standalone: true,

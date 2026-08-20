@@ -101,9 +101,10 @@ describe('AuthTokenService', () => {
 
     const req = httpMock.expectOne(TOKEN_ENDPOINT);
     expect(req.request.method).toBe('POST');
-    expect(req.request.body).toContain('grant_type=refresh_token');
-    expect(req.request.body).toContain(`client_id=${CLIENT_ID}`);
-    expect(req.request.body).toContain('refresh_token=refresh-3');
+    expect(req.request.body).toEqual({
+      refreshToken: 'refresh-3',
+    });
+
 
     req.flush({ access_token: refreshedToken, refresh_token: 'refreshed-refresh' });
     await refreshPromise;

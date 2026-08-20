@@ -1,7 +1,3 @@
-/**
- * Breadcrumb Navigation Component Module
- * Displays breadcrumb navigation for current location in application hierarchy.
- */
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
