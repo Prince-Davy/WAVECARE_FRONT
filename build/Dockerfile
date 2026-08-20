@@ -1,4 +1,4 @@
-FROM node:22.12.0
+FROM node:22.18.0
 
 LABEL description="This image is used for quality build"
 

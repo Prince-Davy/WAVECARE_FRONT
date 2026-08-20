@@ -1,12 +1,4 @@
-/**
- * Forgot Password Component Module
- * 
- * Provides a form for users to request a password reset.
- * Sends a password reset request to the API using email address.
- * 
- * @module ForgotPasswordComponent
- * @see {@link ForgotPasswordComponent} for the component class
- */
+
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,7 +12,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { tap } from 'rxjs';
 
 /**
-<<<<<<< Updated upstream
  * TODO: Documentation for ForgotPasswordComponent (class)
  */
 /**
@@ -28,16 +19,6 @@ import { tap } from 'rxjs';
  */
 /**
  * TODO: Documentation for ForgotPasswordComponent (class)
-=======
- * Forgot Password Component
- * 
- * Displays a form for requesting a password reset.
- * User enters email address and API sends reset token via email.
- * After successful request, displays confirmation message.
- * 
- * @class ForgotPasswordComponent
- * @standalone
->>>>>>> Stashed changes
  */
 @Component({
   selector: 'app-***REMOVED***',
@@ -56,12 +37,8 @@ import { tap } from 'rxjs';
 })
 export class ForgotPasswordComponent {
 
-  /**
-   * Path to assistance page for HTML template binding
-   */
   readonly PATH_TO_ASSISTANCE_FOR_HTML = `/${PATH_TO_ASSISTANCE}`;
 
-<<<<<<< Updated upstream
 /**
  * TODO: Documentation for form (property)
  */
@@ -77,22 +54,6 @@ export class ForgotPasswordComponent {
  * @param authService - TODO
  * @returns TODO
  */
-=======
-  /**
-   * Forgot password form (contains email field)
-   */
-  form: FormGroup;
-
-  /**
-   * Tracks reset request result (null = not submitted, true = success, false = error)
-   */
-  resetRequestSuccess: boolean | null = null;
-
-  /**
-   * Initialize the forgot password form
-   * @constructor
-   */
->>>>>>> Stashed changes
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService

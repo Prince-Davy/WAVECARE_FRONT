@@ -1,12 +1,3 @@
-/**
- * Authentication Login Component Module
- * 
- * Provides the main ***REMOVED*** form for user authentication.
- * Handles form validation, error messages, and authentication flow.
- * 
- * @module AuthComponent
- * @see {@link AuthComponent} for the component class
- */
 // auth.component.ts
 
 import { Component } from '@angular/core';
@@ -25,7 +16,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { tap } from 'rxjs';
 
 /**
-<<<<<<< Updated upstream
  * TODO: Documentation for AuthComponent (class)
  */
 /**
@@ -33,16 +23,6 @@ import { tap } from 'rxjs';
  */
 /**
  * TODO: Documentation for AuthComponent (class)
-=======
- * Authentication Login Component
- * 
- * Displays the ***REMOVED*** form and handles user authentication.
- * On successful ***REMOVED***, stores tokens and navigates to the user's default page.
- * Provides links to password reset and assistance.
- * 
- * @class AuthComponent
- * @standalone
->>>>>>> Stashed changes
  */
 @Component({
   selector: 'app-auth',

@@ -1,12 +1,3 @@
-/**
- * Ticket Table Component Module
- * 
- * Displays a paginated and sortable table of support tickets.
- * Supports search, filtering, pagination, and ticket management operations.
- * 
- * @module TicketTableComponent
- * @see {@link TicketTableComponent} for the component class
- */
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, DestroyRef, afterNextRender, effect, inject, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
