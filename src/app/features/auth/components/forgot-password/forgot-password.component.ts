@@ -11,15 +11,6 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { tap } from 'rxjs';
 
-/**
- * TODO: Documentation for ForgotPasswordComponent (class)
- */
-/**
- * TODO: Documentation for ForgotPasswordComponent (class)
- */
-/**
- * TODO: Documentation for ForgotPasswordComponent (class)
- */
 @Component({
   selector: 'app-***REMOVED***',
   standalone: true,
@@ -39,44 +30,22 @@ export class ForgotPasswordComponent {
 
   readonly PATH_TO_ASSISTANCE_FOR_HTML = `/${PATH_TO_ASSISTANCE}`;
 
-/**
- * TODO: Documentation for form (property)
- */
   form: FormGroup;
-/**
- * TODO: Documentation for resetRequestSuccess (property)
- */
   resetRequestSuccess: boolean | null = null;
 
-/**
- * TODO: Documentation for constructor (method)
- * @param fb - TODO
- * @param authService - TODO
- * @returns TODO
- */
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService
   ) {
     this.form = this.fb.group({
-/**
- * TODO: Documentation for email (property)
- */
       email: ['', [Validators.required, Validators.email]]
     });
   }
 
-/**
- * TODO: Documentation for submit (method)
- * @returns TODO
- */
   submit(): void {
     if (this.form.invalid) {
       this.form.get('email')?.markAsTouched();
       this.resetRequestSuccess = false;
-/**
- * TODO: Documentation for return (property)
- */
       return;
     }
 

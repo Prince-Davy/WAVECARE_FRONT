@@ -3,15 +3,6 @@ import { PatientResponse } from '@app/api/model';
 
 import { CommonModule } from '@angular/common';
 
-/**
- * TODO: Documentation for PatientDossierMedicalComponent (class)
- */
-/**
- * TODO: Documentation for PatientDossierMedicalComponent (class)
- */
-/**
- * TODO: Documentation for PatientDossierMedicalComponent (class)
- */
 @Component({
   selector: 'app-patient-dossier-medical',
   templateUrl: './patient-dossier-medical.component.html',

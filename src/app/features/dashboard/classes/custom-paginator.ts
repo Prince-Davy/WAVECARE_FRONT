@@ -18,36 +18,15 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
     }
    }
  */
-/**
- * TODO: Documentation for CustomPaginator (class)
- */
-/**
- * TODO: Documentation for CustomPaginator (class)
- */
-/**
- * TODO: Documentation for CustomPaginator (class)
- */
 @Injectable({
   providedIn: 'root'
 })
 export class CustomPaginator extends MatPaginatorIntl {
   private readonly PAGINATOR_LABEL_DENOMINATION = `feature.dashboard.ticket-table-component.table.paginator`;
 
-/**
- * TODO: Documentation for ofLabel (property)
- */
   private ofLabel: string | undefined;
 
-/**
- * TODO: Documentation for constructor (method)
- * @param translate - TODO
- * @returns TODO
- */
   constructor(private translate: TranslateService) {
-/**
- * TODO: Documentation for super (method)
- * @returns TODO
- */
     super();
 
     this.translate.onLangChange
@@ -56,10 +35,6 @@ export class CustomPaginator extends MatPaginatorIntl {
     this.getAndInitTranslations();
   }
 
-/**
- * TODO: Documentation for getAndInitTranslations (method)
- * @returns TODO
- */
   getAndInitTranslations() {
     this.itemsPerPageLabel = this.translate.instant(`${this.PAGINATOR_LABEL_DENOMINATION}.itemsPerPage`);
     this.nextPageLabel = this.translate.instant(`${this.PAGINATOR_LABEL_DENOMINATION}.nextPage`);

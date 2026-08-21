@@ -11,15 +11,6 @@ import { AdvancedFiltersComponent, AdvancedFilters } from './filters/advanced-fi
 import { FilterUtils } from '@app/features/utils/filter.utils';
 
 
-/**
- * TODO: Documentation for SearchBarComponent (class)
- */
-/**
- * TODO: Documentation for SearchBarComponent (class)
- */
-/**
- * TODO: Documentation for SearchBarComponent (class)
- */
 @Component({
   selector: 'app-search-bar',
   standalone: true,
@@ -38,30 +29,13 @@ import { FilterUtils } from '@app/features/utils/filter.utils';
 })
 export class SearchBarComponent {
 
-/**
- * TODO: Documentation for getTranslationResultsFound (method)
- * @param results - TODO
- * @returns TODO
- */
   getTranslationResultsFound(results: number): string {
     return results > 1 ? 'feature.dashboard.search-bar.search-bar-component.result-found-second-part.plural' : 'feature.dashboard.search-bar.search-bar-component.result-found-second-part.singular'
   }
 
-/**
- * TODO: Documentation for listKeywords (property)
- */
   listKeywords: string[] = [];
-/**
- * TODO: Documentation for inputValue (property)
- */
   inputValue: string = '';
-/**
- * TODO: Documentation for isFiltersOpen (property)
- */
   isFiltersOpen: boolean = false;
-/**
- * TODO: Documentation for advancedFilters (property)
- */
   advancedFilters: AdvancedFilters = {};
   get showResetButton(): boolean {
     const hasKeywords = Array.isArray(this.listKeywords) && this.listKeywords.length > 0;
@@ -87,10 +61,6 @@ export class SearchBarComponent {
 
 	readonly resetRequested = output<void>();
 
-/**
- * TODO: Documentation for onReset (method)
- * @returns TODO
- */
   onReset(): void {
   this.inputValue = '';          
   this.removeAllKeywords();
@@ -103,10 +73,6 @@ export class SearchBarComponent {
   this.resetRequested.emit();
 }
 
-/**
- * TODO: Documentation for onSearch (method)
- * @returns TODO
- */
   onSearch(): void {
   const trimmed = (this.inputValue ?? '').trim();
   console.log('SEARCH MODE => ', this.mode());
@@ -131,37 +97,20 @@ export class SearchBarComponent {
   this.addKeyword();
 }
 
-/**
- * TODO: Documentation for toggleFilters (method)
- * @returns TODO
- */
 	toggleFilters(): void {
 		this.isFiltersOpen = !this.isFiltersOpen;
 	}
 
-/**
- * TODO: Documentation for onAdvancedFiltersChanged (method)
- * @param filters - TODO
- * @returns TODO
- */
 	onAdvancedFiltersChanged(filters: AdvancedFilters): void {
     this.advancedFilters = filters;
     this.filtersChanged.emit(filters);
 	}
 
-/**
- * TODO: Documentation for onAdvancedFiltersReset (method)
- * @returns TODO
- */
 	onAdvancedFiltersReset(): void {
 		this.advancedFilters = {};
 		this.filtersChanged.emit({});
 	}
 
-/**
- * TODO: Documentation for addKeyword (method)
- * @returns TODO
- */
 
   addKeyword(): void {
     const trimmed = this.inputValue?.trim();
@@ -176,11 +125,6 @@ export class SearchBarComponent {
     this.inputValue = '';
   }
 
-/**
- * TODO: Documentation for removeKeyword (method)
- * @param keyword - TODO
- * @returns TODO
- */
   removeKeyword(keyword: string): void {
     const index = this.listKeywords.indexOf(keyword);
 
@@ -190,11 +134,6 @@ export class SearchBarComponent {
     }
   }
 
-/**
- * TODO: Documentation for removeRoleFilter (method)
- * @param filter - TODO
- * @returns TODO
- */
   removeRoleFilter(filter: string): void {
     const index = this.advancedFilters.role?.indexOf(filter) ?? -1;
 
@@ -204,11 +143,6 @@ export class SearchBarComponent {
     }
   }
 
-/**
- * TODO: Documentation for removeStatusFilter (method)
- * @param filter - TODO
- * @returns TODO
- */
   removeStatusFilter(filter: string): void {
     const index = this.advancedFilters.status?.indexOf(filter) ?? -1;
 
@@ -218,46 +152,23 @@ export class SearchBarComponent {
     }
   }
 
-/**
- * TODO: Documentation for removeDateFilter (method)
- * @returns TODO
- */
   removeDateFilter(): void {
     this.advancedFilters.createdDate = ''
     this.filtersChanged.emit(this.advancedFilters);
   }
 
-/**
- * TODO: Documentation for getRoleLabel (method)
- * @param role - TODO
- * @returns TODO
- */
   getRoleLabel(role: string): string {
     return FilterUtils.getRoleLabel(role);
   }
 
-/**
- * TODO: Documentation for getStatusLabel (method)
- * @param status - TODO
- * @returns TODO
- */
   getStatusLabel(status: string): string {
     return FilterUtils.getStatusLabel(status);
   }
 
-/**
- * TODO: Documentation for formatDate (method)
- * @param dateInput - TODO
- * @returns TODO
- */
   formatDate(dateInput: string | Date | null): string {
     return FilterUtils.formatDate(dateInput);
   }
 
-/**
- * TODO: Documentation for removeAllKeywords (method)
- * @returns TODO
- */
   removeAllKeywords(): void {
     this.listKeywords = [];
     this.advancedFilters = {

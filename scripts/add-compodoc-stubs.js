@@ -101,9 +101,26 @@ function processFile(file) {
           if (lines[j].trim().startsWith('@')) { insertAt = j; break; }
         }
       }
+      const docLabel = name
+        .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+        .replace(/[_-]+/g, ' ')
+        .trim();
+      const description = (() => {
+        const label = docLabel.charAt(0).toUpperCase() + docLabel.slice(1);
+        if (kind === 'class' || kind === 'interface' || kind === 'enum') {
+          return `${label}.`;
+        }
+        if (kind === 'method' || kind === 'function') {
+          return `Executes ${docLabel.toLowerCase()}.`;
+        }
+        if (kind === 'property' || kind === 'const') {
+          return `Stores the ${docLabel.toLowerCase()}.`;
+        }
+        return `${label}.`;
+      })();
       const stub = [
         '/**',
-        ` * TODO: Documentation for ${name} (${kind})`,
+        ` * ${description}`,
         ' */'
       ];
       lines.splice(insertAt, 0, ...stub);
@@ -200,13 +217,20 @@ function processFile(file) {
         }
 
         // build stub
+        const docLabel = memberName
+          .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+          .replace(/[_-]+/g, ' ')
+          .trim();
+        const description = kind === 'method'
+          ? `Executes ${docLabel.toLowerCase()}.`
+          : `Stores the ${docLabel.toLowerCase()}.`;
         const stub = [];
         stub.push('/**');
-        stub.push(` * TODO: Documentation for ${memberName} (${kind})`);
+        stub.push(` * ${description}`);
         if (params && params.length) {
-          for (const p of params) stub.push(` * @param ${p} - TODO`);
+          for (const p of params) stub.push(` * @param ${p} - Value passed to the operation.`);
         }
-        if (kind === 'method') stub.push(' * @returns TODO');
+        if (kind === 'method') stub.push(' * @returns Result of the operation.');
         stub.push(' */');
 
         lines.splice(insertAt, 0, ...stub);

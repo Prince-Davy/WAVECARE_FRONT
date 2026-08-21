@@ -1,25 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-/**
- * TODO: Documentation for NssFormatPipe (class)
- */
-/**
- * TODO: Documentation for NssFormatPipe (class)
- */
-/**
- * TODO: Documentation for NssFormatPipe (class)
- */
 @Pipe({
   name: 'nssFormat',
   standalone: true
 })
 export class NssFormatPipe implements PipeTransform {
 
-/**
- * TODO: Documentation for transform (method)
- * @param value - TODO
- * @returns TODO
- */
   transform(value: string | null | undefined): string {
     if (!value) return '';
 

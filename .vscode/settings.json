@@ -16,7 +16,7 @@
   ],
 
   "sonarlint.connectedMode.project": {
-    "connectionId": "Wavecare Front",
+    "connectionId": "SonarQube",
     "projectKey": "Wavecare-front"
   },
   "chat.sessionSync.enabled": true
