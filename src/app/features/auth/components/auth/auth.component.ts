@@ -15,15 +15,6 @@ import { NavigationService } from '@app/features/navigation/services/navigation.
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { tap } from 'rxjs';
 
-/**
- * TODO: Documentation for AuthComponent (class)
- */
-/**
- * TODO: Documentation for AuthComponent (class)
- */
-/**
- * TODO: Documentation for AuthComponent (class)
- */
 @Component({
   selector: 'app-auth',
   standalone: true,
@@ -47,58 +38,22 @@ export class AuthComponent {
   readonly PATH_TO_FORGOT_PASSWORD_FOR_HTML = `/${PATH_TO_FORGOT_PASSWORD}`;
   readonly PATH_TO_ASSISTANCE_FOR_HTML = `/${PATH_TO_ASSISTANCE}`;
 
-/**
- * TODO: Documentation for loginForm (property)
- */
   loginForm: FormGroup;
   hidePassword = true;
-/**
- * TODO: Documentation for errorMessage (property)
- */
   errorMessage: string | undefined;
   isLockoutModalOpen = false;
   submitted = false;
 
-/**
- * TODO: Documentation for constructor (method)
- * @param fb - TODO
- * @param authService - TODO
- * @param authTokenService - TODO
- * @param navigationService - TODO
- * @param translate - TODO
- * @returns TODO
- */
   constructor(
-/**
- * TODO: Documentation for fb (property)
- */
     private fb: FormBuilder,
-/**
- * TODO: Documentation for authService (property)
- */
     private authService: AuthService,
-/**
- * TODO: Documentation for authTokenService (property)
- */
     private authTokenService: AuthTokenService,
-/**
- * TODO: Documentation for navigationService (property)
- */
     private navigationService: NavigationService,
-/**
- * TODO: Documentation for translate (property)
- */
     private translate: TranslateService
   ) {
 
     this.loginForm = this.fb.group({
-/**
- * TODO: Documentation for username (property)
- */
       username: ['', [Validators.required]],
-/**
- * TODO: Documentation for password (property)
- */
       password: ['', [Validators.required]]
     });
 
@@ -115,10 +70,6 @@ export class AuthComponent {
     return this.loginForm.get('password');
   }
 
-/**
- * TODO: Documentation for onSubmit (method)
- * @returns TODO
- */
   onSubmit() {
     this.submitted = true;
     if (this.loginForm.valid) {
@@ -133,10 +84,6 @@ export class AuthComponent {
     }
   }
 
-/**
- * TODO: Documentation for closeLockoutModal (method)
- * @returns TODO
- */
   closeLockoutModal() {
     this.isLockoutModalOpen = false;
   }

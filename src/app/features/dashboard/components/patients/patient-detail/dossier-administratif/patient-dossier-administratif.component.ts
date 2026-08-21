@@ -6,15 +6,6 @@ import { PatientContactConfianceComponent } from './contact-confiance/patient-co
 import { PatientCouvertureSanteComponent } from './couverture-sante/patient-couverture-sante.component';
 
 
-/**
- * TODO: Documentation for PatientDossierAdministratifComponent (class)
- */
-/**
- * TODO: Documentation for PatientDossierAdministratifComponent (class)
- */
-/**
- * TODO: Documentation for PatientDossierAdministratifComponent (class)
- */
 @Component({
   selector: 'app-patient-dossier-administratif',
   templateUrl: './patient-dossier-administratif.component.html',

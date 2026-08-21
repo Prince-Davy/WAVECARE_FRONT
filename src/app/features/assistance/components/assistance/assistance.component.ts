@@ -14,15 +14,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { tap } from 'rxjs';
 import type { TicketCreateRequest } from '@app/api/model';
 
-/**
- * TODO: Documentation for AssistanceComponent (class)
- */
-/**
- * TODO: Documentation for AssistanceComponent (class)
- */
-/**
- * TODO: Documentation for AssistanceComponent (class)
- */
 @Component({
   selector: 'app-assistance',
   standalone: true,
@@ -41,13 +32,7 @@ import type { TicketCreateRequest } from '@app/api/model';
   styleUrls: ['./assistance.component.scss']
 })
 export class AssistanceComponent {
-/**
- * TODO: Documentation for assistanceForm (property)
- */
   assistanceForm: FormGroup<any>;
-/**
- * TODO: Documentation for submissionSuccess (property)
- */
   submissionSuccess: boolean | null = null;
 
   private readonly categoriesService = inject(TicketCategoriesService);
@@ -62,63 +47,23 @@ export class AssistanceComponent {
    */
   private readonly NAME_REGEX: RegExp = /^(?=.*[\p{L}])(?!.* {2})(?!.*-{3})[\p{L}\- ]+$/u;
 
-/**
- * TODO: Documentation for constructor (method)
- * @param fb - TODO
- * @param ticketsService - TODO
- * @returns TODO
- */
   constructor(private fb: FormBuilder, private ticketsService: TicketsService) {
     this.assistanceForm = this.fb.group({
-/**
- * TODO: Documentation for lastName (property)
- */
       lastName: ['', [Validators.required, Validators.pattern(this.NAME_REGEX), Validators.maxLength(50)]],
-/**
- * TODO: Documentation for firstName (property)
- */
       firstName: ['', [Validators.required, Validators.pattern(this.NAME_REGEX), Validators.maxLength(50)]],
-/**
- * TODO: Documentation for mail (property)
- */
       mail: ['', [Validators.required, Validators.email]],
-/**
- * TODO: Documentation for subject (property)
- */
       subject: ['', Validators.required],
-/**
- * TODO: Documentation for content (property)
- */
       content: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(2000)]]
     });
   }
 
-/**
- * TODO: Documentation for onSubmit (method)
- * @returns TODO
- */
   onSubmit() {
     if (this.assistanceForm.valid) {
       const ticketData: TicketCreateRequest = {
-/**
- * TODO: Documentation for firstName (property)
- */
         firstName: this.assistanceForm.value.firstName,
-/**
- * TODO: Documentation for lastName (property)
- */
         lastName: this.assistanceForm.value.lastName,
-/**
- * TODO: Documentation for mail (property)
- */
         mail: this.assistanceForm.value.mail,
-/**
- * TODO: Documentation for categoryId (property)
- */
         categoryId: this.assistanceForm.value.subject,
-/**
- * TODO: Documentation for description (property)
- */
         description: this.assistanceForm.value.content
       };
 

@@ -3,41 +3,29 @@ import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 
-/**
- * TODO: Documentation for BreadcrumbItem (interface)
- */
-
 export interface BreadcrumbItem {
-  /** Clé de traduction (ex: 'feature.dashboard.patient.detail.breadcrumb.patientFile') */
+  /** Translation key used to display the breadcrumb label. */
   labelKey: string;
-  /** Contexte i18n (ex: { nss }) */
-  context?: Record<string, any>;
-  /** Route (ex: ['/patients']) — si absent, l’item est rendu “courant” (non cliquable) */
+
+  /** Optional context passed to the translation string. */
+  context?: Record<string, unknown>;
+
+  /** Route target for the breadcrumb item. If omitted, the item is treated as the current page. */
   link?: string | any[];
-  /** Libellé ARIA optionnel */
+
+  /** Optional ARIA label for accessibility. */
   ariaLabel?: string;
-  /** Clé stable pour trackBy (recommandé) */
-  key?: string;
 }
 
-/**
- * TODO: Documentation for BreadcrumbComponent (class)
- */
-/**
- * TODO: Documentation for BreadcrumbComponent (class)
- */
-/**
- * TODO: Documentation for BreadcrumbComponent (class)
- */
 @Component({
   selector: 'app-patient-breadcrumb',
   standalone: true,
   imports: [RouterLink, MatIconModule, TranslateModule],
   templateUrl: './breadcrumb.component.html',
   styleUrls: ['./breadcrumb.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BreadcrumbComponent {
-  /** Liste des items (obligatoire) */
+  /** Breadcrumb items to render in order. */
   readonly items = input.required<BreadcrumbItem[]>();
 }

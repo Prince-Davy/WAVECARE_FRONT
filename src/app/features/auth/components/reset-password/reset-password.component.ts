@@ -12,15 +12,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs';
 
-/**
- * TODO: Documentation for ResetPasswordComponent (class)
- */
-/**
- * TODO: Documentation for ResetPasswordComponent (class)
- */
-/**
- * TODO: Documentation for ResetPasswordComponent (class)
- */
 @Component({
   selector: 'app-reset-password',
   standalone: true,
@@ -38,39 +29,15 @@ import { tap } from 'rxjs';
 })
 
 export class ResetPasswordComponent {
-/**
- * TODO: Documentation for resetForm (property)
- */
   resetForm: FormGroup;
-/**
- * TODO: Documentation for token (property)
- */
   token: string | null = null;
-/**
- * TODO: Documentation for userId (property)
- */
   userId: string = '';
-/**
- * TODO: Documentation for email (property)
- */
   email: string = '';
-/**
- * TODO: Documentation for message (property)
- */
   message: string | undefined;
   isError = false;
   showNewPassword = false;
   showConfirmPassword = false;
 
-/**
- * TODO: Documentation for constructor (method)
- * @param fb - TODO
- * @param authService - TODO
- * @param route - TODO
- * @param navigationService - TODO
- * @param translate - TODO
- * @returns TODO
- */
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
@@ -79,16 +46,10 @@ export class ResetPasswordComponent {
     private readonly translate: TranslateService
   ) {
     this.resetForm = this.fb.group({
-/**
- * TODO: Documentation for newPassword (property)
- */
       newPassword: ['', [
         Validators.required,
         this.passwordPatternValidator()
       ]],
-/**
- * TODO: Documentation for confirmPassword (property)
- */
       confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator } as AbstractControlOptions);
 
@@ -105,10 +66,6 @@ export class ResetPasswordComponent {
     }
   }
 
-/**
- * TODO: Documentation for loadUserInfoFromToken (method)
- * @returns TODO
- */
   loadUserInfoFromToken() {
     if (!this.token) return;
 
@@ -123,27 +80,13 @@ export class ResetPasswordComponent {
       .subscribe();
   }
 
-/**
- * TODO: Documentation for passwordMatchValidator (method)
- * @param form - TODO
- * @returns TODO
- */
   passwordMatchValidator(form: FormGroup): ValidationErrors | null {
     const password = form.get('newPassword')?.value;
     const confirmPassword = form.get('confirmPassword')?.value;
     return password === confirmPassword ? null : { passwordMismatch: true };
   }
 
-/**
- * TODO: Documentation for passwordPatternValidator (method)
- * @returns TODO
- */
   passwordPatternValidator(): ValidatorFn {
-/**
- * TODO: Documentation for return (method)
- * @param control - TODO
- * @returns TODO
- */
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
       if (!value) return null;
@@ -152,41 +95,23 @@ export class ResetPasswordComponent {
     };
   }
 
-/**
- * TODO: Documentation for toggleNewPasswordVisibility (method)
- * @returns TODO
- */
   toggleNewPasswordVisibility() {
     this.showNewPassword = !this.showNewPassword;
   }
 
-/**
- * TODO: Documentation for toggleConfirmPasswordVisibility (method)
- * @returns TODO
- */
   toggleConfirmPasswordVisibility() {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-/**
- * TODO: Documentation for onSubmitNewPassword (method)
- * @returns TODO
- */
   onSubmitNewPassword() {
     if (this.resetForm.invalid) {
       this.markFormGroupTouched();
-/**
- * TODO: Documentation for return (property)
- */
       return;
     }
 
     if (!this.userId || !this.email) {
       this.isError = true;
       this.message = this.translate.instant('feature.auth.reset-password-component.form.submit.message.error.userinfo-not-available');
-/**
- * TODO: Documentation for return (property)
- */
       return;
     }
 
@@ -207,11 +132,6 @@ export class ResetPasswordComponent {
               .subscribe();
           }
 
-/**
- * TODO: Documentation for setTimeout (method)
- * @param ( - TODO
- * @returns TODO
- */
           setTimeout(() => {
             this.navigationService.navigateToLogin();
           }, 2000);
@@ -220,10 +140,6 @@ export class ResetPasswordComponent {
       .subscribe();
   }
 
-/**
- * TODO: Documentation for markFormGroupTouched (method)
- * @returns TODO
- */
   private markFormGroupTouched() {
     Object.keys(this.resetForm.controls).forEach(key => {
       this.resetForm.get(key)?.markAsTouched();

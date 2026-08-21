@@ -1,18 +1,10 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID, signal, computed, WritableSignal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { signal, computed, WritableSignal } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams, HttpParameterCodec } from '@angular/common/http';
+import { HttpClient, HttpParameterCodec } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { jwtDecode as decodeJwt } from 'jwt-decode';
 
-import {
-  REALM_URL,
-  TOKEN_ENDPOINT,
-  CLIENT_ID,
-  STORAGE_STRATEGY,
-} from './auth-config';
-
-// route constants needed for role-based default navigation
+import { TOKEN_ENDPOINT, CLIENT_ID, STORAGE_STRATEGY } from './auth-config';
 import { PATH_TO_TICKETS, PATH_TO_PATIENTS, PATH_TO_ASSISTANCE, PATH_TO_LOGIN } from '@app/app.routes';
 
 interface JwtPayload {
@@ -26,173 +18,118 @@ interface JwtPayload {
   resource_access?: { [client: string]: { roles: string[] } };
 }
 
-/**
- * TODO: Documentation for AuthTokenService (class)
- */
-/**
- * TODO: Documentation for AuthTokenService (class)
- */
-/**
- * TODO: Documentation for AuthTokenService (class)
- */
-/**
- * TODO: Documentation for AuthTokenService (class)
- */
 @Injectable({ providedIn: 'root' })
 export class AuthTokenService {
-/**
- * TODO: Documentation for token (property)
- */
   token: WritableSignal<string | null> = signal(null);
-/**
- * TODO: Documentation for refresh (property)
- */
   refresh: WritableSignal<string | null> = signal(null);
 
-  /** decoded JWT payload or null if not available/parsing failed */
+  /** Decoded JWT payload, or null when the token is missing or invalid. */
   payload = computed<JwtPayload | null>(() => {
-    const t = this.token();
-    if (!t) {
+    const current = this.token();
+    if (!current) {
       return null;
     }
+
     try {
-      return decodeJwt<JwtPayload>(t);
+      return decodeJwt<JwtPayload>(current);
     } catch {
       return null;
     }
   });
 
-  /** user object derived from payload for easy consumption */
+  /** Lightweight user profile derived from the token claims. */
   user = computed(() => {
-    const p = this.payload();
-    if (!p) {
+    const current = this.payload();
+    if (!current) {
       return null;
     }
+
     return {
-/**
- * TODO: Documentation for id (property)
- */
-      id: p.sub ?? null,
-/**
- * TODO: Documentation for username (property)
- */
-      username: p.preferred_username ?? null,
-/**
- * TODO: Documentation for name (property)
- */
-      name:
-        p.name ||
-        [p.given_name, p.family_name].filter(Boolean).join(' ') ||
-        null,
+      id: current.sub ?? null,
+      username: current.preferred_username ?? null,
+      name: current.name ?? ([current.given_name, current.family_name].filter(Boolean).join(' ') || null),
     };
   });
 
-  /** expiration timestamp (seconds since epoch) or null */
-  expiresAt = computed<number | null>(() => {
-    const p = this.payload();
-    return p?.exp ?? null;
-  });
+  /** Expiration timestamp in Unix seconds, or null when unavailable. */
+  expiresAt = computed<number | null>(() => this.payload()?.exp ?? null);
 
-  /** true when there is a token that hasn't expired yet */
+  /** True when a token exists and has not expired yet. */
   isAuthenticated = computed(() => {
     const exp = this.expiresAt();
     if (!exp) {
       return false;
     }
-    const now = Math.floor(Date.now() / 1000);
-    return exp > now;
+
+    return exp > Math.floor(Date.now() / 1000);
   });
 
+  /** Combined realm and client roles extracted from the token. */
   roles = computed<string[]>(() => {
-    const p = this.payload();
-    if (!p) {
+    const current = this.payload();
+    if (!current) {
       return [];
     }
-    const realmRoles = p.realm_access?.roles || [];
-    const clientRoles = p.resource_access?.[CLIENT_ID]?.roles || [];
+
+    const realmRoles = current.realm_access?.roles ?? [];
+    const clientRoles = current.resource_access?.[CLIENT_ID]?.roles ?? [];
     return Array.from(new Set([...realmRoles, ...clientRoles]));
   });
 
-/**
- * TODO: Documentation for storage (property)
- */
   private storage: Storage | null = null;
-/**
- * TODO: Documentation for refreshTimer (property)
- */
   private refreshTimer: ReturnType<typeof setTimeout> | null = null;
+  private ongoingRefresh: Promise<boolean> | null = null;
 
-/**
- * TODO: Documentation for constructor (method)
- * @param http - TODO
- * @param @Inject(PLATFORM_ID - TODO
- * @returns TODO
- */
   constructor(
-/**
- * TODO: Documentation for http (property)
- */
     private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private readonly platformId: object,
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      this.storage =
-        STORAGE_STRATEGY === 'local' ? localStorage : sessionStorage;
+      this.storage = STORAGE_STRATEGY === 'local' ? localStorage : sessionStorage;
       this.initFromStorage();
 
-      // listen to other tabs making changes
-      window.addEventListener('storage', (ev) => {
-        if (ev.storageArea !== this.storage) {
-/**
- * TODO: Documentation for return (property)
- */
+      window.addEventListener('storage', (event) => {
+        if (event.storageArea !== this.storage) {
           return;
         }
-        if (ev.key === 'access_token') {
-          this.token.set(ev.newValue);
+
+        if (event.key === 'access_token') {
+          this.token.set(event.newValue);
           this.scheduleRefresh();
         }
-        if (ev.key === 'refresh_token') {
-          this.refresh.set(ev.newValue);
+
+        if (event.key === 'refresh_token') {
+          this.refresh.set(event.newValue);
         }
       });
     }
   }
 
-/**
- * TODO: Documentation for initFromStorage (method)
- * @returns TODO
- */
+  /** Restore auth state from the browser storage if available. */
   initFromStorage(): void {
     if (!this.storage) {
-/**
- * TODO: Documentation for return (property)
- */
       return;
     }
-    const access = this.storage.getItem('access_token');
-    const refresh = this.storage.getItem('refresh_token');
-    this.token.set(access);
-    this.refresh.set(refresh);
+
+    const accessToken = this.storage.getItem('access_token');
+    const refreshToken = this.storage.getItem('refresh_token');
+    this.token.set(accessToken);
+    this.refresh.set(refreshToken);
     this.scheduleRefresh();
   }
 
-/**
- * TODO: Documentation for persistTokens (method)
- * @returns TODO
- */
+  /** Store the current tokens into the configured browser storage. */
   private persistTokens(): void {
     if (!this.storage) {
-/**
- * TODO: Documentation for return (property)
- */
       return;
     }
+
     if (this.token()) {
       this.storage.setItem('access_token', this.token()!);
     } else {
       this.storage.removeItem('access_token');
     }
+
     if (this.refresh()) {
       this.storage.setItem('refresh_token', this.refresh()!);
     } else {
@@ -200,17 +137,7 @@ export class AuthTokenService {
     }
   }
 
-  /** legacy helper, mostly replaced by computed `isAuthenticated` */
-  isTokenValid(): boolean {
-    // keep a small leeway to avoid clock skew
-    return this.isAuthenticated() && (this.expiresAt()! > Math.floor(Date.now() / 1000) + 5);
-  }
-
-/**
- * TODO: Documentation for setTokens (method)
- * @param tokens - TODO
- * @returns TODO
- */
+  /** Save a fresh token pair and schedule the next refresh window. */
   setTokens(tokens: { access_token: string; refresh_token: string }): void {
     this.token.set(tokens.access_token);
     this.refresh.set(tokens.refresh_token);
@@ -218,212 +145,171 @@ export class AuthTokenService {
     this.scheduleRefresh();
   }
 
-/**
- * TODO: Documentation for removeTokens (method)
- * @returns TODO
- */
+  /** Clear all auth data and cancel the refresh timer. */
   removeTokens(): void {
     this.token.set(null);
     this.refresh.set(null);
+
     if (this.storage) {
       this.storage.removeItem('access_token');
       this.storage.removeItem('refresh_token');
     }
+
     this.clearRefreshTimer();
   }
 
-  /**
-   * perform a refresh request to Keycloak and update tokens
-   */
-/**
- * TODO: Documentation for refreshTokens (method)
- * @returns TODO
- */
+  /** Refresh the access token using the configured refresh token. */
   async refreshTokens(): Promise<void> {
-    const refresh = this.refresh();
-    if (!refresh) {
+    const currentRefresh = this.refresh();
+    if (!currentRefresh) {
       throw new Error('no refresh token');
     }
 
-    const resp = await firstValueFrom(
-      this.http.post<any>(TOKEN_ENDPOINT, { refreshToken: refresh })
+    const response = await firstValueFrom(
+      this.http.post<any>(TOKEN_ENDPOINT, { refreshToken: currentRefresh }),
     );
-    if (!resp.access_token || !resp.refresh_token) {
+
+    if (!response.access_token || !response.refresh_token) {
       throw new Error('invalid token response');
     }
+
     this.setTokens({
-      access_token: resp.access_token,
-      refresh_token: resp.refresh_token,
+      access_token: response.access_token,
+      refresh_token: response.refresh_token,
     });
   }
 
-/**
- * TODO: Documentation for ongoingRefresh (property)
- */
-  private ongoingRefresh: Promise<boolean> | null = null;
-
-  /** schedule a proactive refresh 60 seconds before expiration */
+  /** Schedule a refresh shortly before expiration to keep the session valid. */
   private scheduleRefresh(): void {
     this.clearRefreshTimer();
+
     const exp = this.expiresAt();
     if (!exp) {
-/**
- * TODO: Documentation for return (property)
- */
       return;
     }
+
     const now = Math.floor(Date.now() / 1000);
     const msUntil = (exp - now - 60) * 1000;
+
     if (msUntil <= 0) {
-      // already too close or expired, trigger immediately
       void this.tryAutoRefresh();
-/**
- * TODO: Documentation for return (property)
- */
       return;
     }
+
     this.refreshTimer = setTimeout(() => {
       void this.tryAutoRefresh();
     }, msUntil);
   }
 
-/**
- * TODO: Documentation for clearRefreshTimer (method)
- * @returns TODO
- */
+  /** Clear any pending automatic refresh timer. */
   private clearRefreshTimer(): void {
     if (this.refreshTimer !== null) {
-/**
- * TODO: Documentation for clearTimeout (method)
- * @param this.refreshTimer - TODO
- * @returns TODO
- */
       clearTimeout(this.refreshTimer);
       this.refreshTimer = null;
     }
   }
 
-  /**
-   * try an auto-refresh if the current token is invalid and a refresh token exists
-   * returns true if after the call the token is valid
-   */
-/**
- * TODO: Documentation for tryAutoRefresh (method)
- * @returns TODO
- */
+  /** Try to refresh the token only when the current one is expired or invalid. */
   async tryAutoRefresh(): Promise<boolean> {
     if (this.isTokenValid()) {
       return true;
     }
+
     if (!this.refresh()) {
       return false;
     }
+
     if (this.ongoingRefresh) {
       return this.ongoingRefresh;
     }
+
     this.ongoingRefresh = this.refreshTokens()
       .then(() => true)
       .catch(() => false)
       .finally(() => {
         this.ongoingRefresh = null;
       });
+
     return this.ongoingRefresh;
   }
 
-  /**
-   * ensure that token expiration is not imminent, refresh if it is
-   */
-/**
- * TODO: Documentation for ensureFreshToken (method)
- * @returns TODO
- */
+  /** Validate the JWT before a protected action uses it. */
+  isTokenValid(): boolean {
+    const current = this.token();
+    if (!current) {
+      return false;
+    }
+
+    try {
+      const payload = decodeJwt<JwtPayload>(current);
+      const exp = payload.exp;
+      return typeof exp === 'number' && exp > Math.floor(Date.now() / 1000);
+    } catch {
+      return false;
+    }
+  }
+
+  /** Refresh the token if there is no valid active session. */
   async ensureFreshToken(): Promise<void> {
     if (!this.isAuthenticated()) {
       await this.tryAutoRefresh();
     }
   }
 
-/**
- * TODO: Documentation for getUserId (method)
- * @returns TODO
- */
+  /** Return the user identifier stored in the JWT subject claim. */
   getUserId(): string | null {
-    const t = this.token();
-    if (!t) {
+    const current = this.token();
+    if (!current) {
       return null;
     }
+
     try {
-      const payload = decodeJwt<JwtPayload>(t);
-      return payload.sub || null;
+      const payload = decodeJwt<JwtPayload>(current);
+      return payload.sub ?? null;
     } catch {
       return null;
     }
   }
 
-/**
- * TODO: Documentation for getCompleteName (method)
- * @returns TODO
- */
+  /** Return the best available display name for the current user. */
   getCompleteName(): string | null {
-    const t = this.token();
-    if (!t) {
+    const current = this.token();
+    if (!current) {
       return null;
     }
+
     try {
-      const payload = decodeJwt<JwtPayload>(t);
-      return payload.name ||
-        [payload.given_name, payload.family_name].filter(Boolean).join(' ') ||
-        payload.preferred_username ||
-/**
- * TODO: Documentation for null (property)
- */
-        null;
+      const payload = decodeJwt<JwtPayload>(current);
+      return (
+        payload.name ??
+        ([payload.given_name, payload.family_name].filter(Boolean).join(' ') || payload.preferred_username || null)
+      );
     } catch {
       return null;
     }
   }
 
-/**
- * TODO: Documentation for hasRole (method)
- * @param role - TODO
- * @returns TODO
- */
+  /** Check whether the current user has a given role. */
   hasRole(role: string): boolean {
     return this.roles().includes(role);
   }
 
-/**
- * TODO: Documentation for isAdministrator (method)
- * @returns TODO
- */
+  /** True when the role is administrator. */
   isAdministrator(): boolean {
     return this.hasRole('administrator');
   }
 
-/**
- * TODO: Documentation for isRadiologist (method)
- * @returns TODO
- */
+  /** True when the role is radiologist. */
   isRadiologist(): boolean {
     return this.hasRole('radiologist');
   }
 
-/**
- * TODO: Documentation for isRadioOperator (method)
- * @returns TODO
- */
+  /** True when the role is radio operator. */
   isRadioOperator(): boolean {
     return this.hasRole('radio_operator');
   }
 
-  /**
-   * Return the canonical "home" route for the currently authenticated user.
-   * This encapsulates the role‑based logic used throughout the app.
-   */
-/**
- * TODO: Documentation for getDefaultRoute (method)
- * @returns TODO
- */
+  /** Return the default landing page according to the user role. */
   getDefaultRoute(): string {
     if (this.isAdministrator()) {
       return PATH_TO_TICKETS;
@@ -438,39 +324,21 @@ export class AuthTokenService {
   }
 }
 
-
-// helper for HttpParams to encode like UrlEncoded
 class HttpUrlEncodedEncoder implements HttpParameterCodec {
-/**
- * TODO: Documentation for encodeKey (method)
- * @param k - TODO
- * @returns TODO
- */
-  encodeKey(k: string): string {
-    return encodeURIComponent(k);
+  encodeKey(key: string): string {
+    return encodeURIComponent(key);
   }
-/**
- * TODO: Documentation for encodeValue (method)
- * @param v - TODO
- * @returns TODO
- */
-  encodeValue(v: string): string {
-    return encodeURIComponent(v);
+
+  encodeValue(value: string): string {
+    return encodeURIComponent(value);
   }
-/**
- * TODO: Documentation for decodeKey (method)
- * @param k - TODO
- * @returns TODO
- */
-  decodeKey(k: string): string {
-    return decodeURIComponent(k);
+
+  decodeKey(key: string): string {
+    return decodeURIComponent(key);
   }
-/**
- * TODO: Documentation for decodeValue (method)
- * @param v - TODO
- * @returns TODO
- */
-  decodeValue(v: string): string {
-    return decodeURIComponent(v);
+
+  decodeValue(value: string): string {
+    return decodeURIComponent(value);
   }
 }
+

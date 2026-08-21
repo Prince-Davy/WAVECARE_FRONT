@@ -3,9 +3,6 @@ import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { AuthTokenService } from '../services/auth-token.service';
 import { PATH_TO_LOGIN } from '@app/app.routes';
 
-/**
- * TODO: Documentation for authGuard (const)
- */
 export const authGuard: CanActivateFn = async (): Promise<boolean | UrlTree> => {
   const auth = inject(AuthTokenService);
   const router = inject(Router);

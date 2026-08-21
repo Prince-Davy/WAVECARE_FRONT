@@ -18,17 +18,8 @@ export interface PatientFilters {
  * Internal request shape used by the patient store resource.
  */
 interface PatientLoadRequest {
-/**
- * TODO: Documentation for page (property)
- */
   page: number;
-/**
- * TODO: Documentation for size (property)
- */
   size: number;
-/**
- * TODO: Documentation for listKeywords (property)
- */
   listKeywords: string[];
   sortField?: string;
   sortDirection?: string;
@@ -45,12 +36,6 @@ const EMPTY_PAGE: PagePatientResponse = { content: [], totalElements: 0, totalPa
  * PatientStore
  * Reactive store exposing patients list and pagination state.
  */
-/**
- * TODO: Documentation for PatientStore (class)
- */
-/**
- * TODO: Documentation for PatientStore (class)
- */
 @Injectable({ providedIn: 'root' })
 export class PatientStore {
 
@@ -59,13 +44,7 @@ export class PatientStore {
   private readonly _request = signal<PatientLoadRequest | undefined>(undefined);
 
   private readonly _resource = rxResource<PagePatientResponse, PatientLoadRequest | undefined>({
-/**
- * TODO: Documentation for params (property)
- */
     params: () => this._request(),
-/**
- * TODO: Documentation for stream (property)
- */
     stream: ({ params: req }) => {
       if (!req) return of(EMPTY_PAGE);
 
@@ -97,28 +76,9 @@ export class PatientStore {
     return err instanceof Error ? err.message : err ? String(err) : null;
   });
 
-/**
- * TODO: Documentation for load (method)
- * @param page - TODO
- * @param size - TODO
- * @param listKeywords - TODO
- * @param sortField? - TODO
- * @param sortDirection? - TODO
- * @param filters? - TODO
- * @returns TODO
- */
   load(
-/**
- * TODO: Documentation for page (property)
- */
     page: number,
-/**
- * TODO: Documentation for size (property)
- */
     size: number,
-/**
- * TODO: Documentation for listKeywords (property)
- */
     listKeywords: string[],
     sortField?: string,
     sortDirection?: string,

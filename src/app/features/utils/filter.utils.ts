@@ -1,31 +1,13 @@
-/**
- * TODO: Documentation for FilterUtils (class)
- */
 export class FilterUtils {
 
-/**
- * TODO: Documentation for getRoleLabel (method)
- * @param role - TODO
- * @returns TODO
- */
   static getRoleLabel(role: string): string {
     return `model.user.role.${role}`;
   }
 
-/**
- * TODO: Documentation for getStatusLabel (method)
- * @param status - TODO
- * @returns TODO
- */
   static getStatusLabel(status: string): string {
     return `model.user.status.${status}`;
   }
 
-/**
- * TODO: Documentation for formatDate (method)
- * @param dateInput - TODO
- * @returns TODO
- */
   static formatDate(dateInput: string | Date | null): string {
     if (!dateInput) return '';
 

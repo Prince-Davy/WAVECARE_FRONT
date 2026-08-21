@@ -4,15 +4,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { PatientResponse } from '@app/api/model';
 import { NssFormatPipe } from '@app/features/dashboard/pipes/nss-format.pipe';
 
-/**
- * TODO: Documentation for PatientGeneralInfoComponent (class)
- */
-/**
- * TODO: Documentation for PatientGeneralInfoComponent (class)
- */
-/**
- * TODO: Documentation for PatientGeneralInfoComponent (class)
- */
 @Component({
   selector: 'app-patient-general-info',
   templateUrl: './patient-general-info.component.html',

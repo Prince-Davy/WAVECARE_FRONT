@@ -24,9 +24,6 @@ import { AuthTokenService } from '@app/features/auth/services/auth-token.service
 import type { UserResponse } from '@app/api/model';
 import { Router } from '@angular/router';
 import { TrashService } from '@app/api/generated/trash/trash.service';
-/**
- * TODO: Documentation for getFrenchPaginatorIntl (function)
- */
 // Factory function to create a MatPaginatorIntl with French labels
 function getFrenchPaginatorIntl(): MatPaginatorIntl {
   const paginatorIntl = new MatPaginatorIntl();
@@ -55,15 +52,6 @@ function getFrenchPaginatorIntl(): MatPaginatorIntl {
   return paginatorIntl;
 }
 
-/**
- * TODO: Documentation for UserTableComponent (class)
- */
-/**
- * TODO: Documentation for UserTableComponent (class)
- */
-/**
- * TODO: Documentation for UserTableComponent (class)
- */
 @Component({
   selector: 'app-user-table',
   standalone: true,
@@ -80,93 +68,36 @@ function getFrenchPaginatorIntl(): MatPaginatorIntl {
 export class UserTableComponent extends DashboardComponent {
   readonly dialog = inject(MatDialog);
 
-/**
- * TODO: Documentation for displayedColumns (property)
- */
   displayedColumns: string[] = ['lastName', 'firstName', 'email', 'role', 'locked', 'creationDate', 'update', 'delete'];
-/**
- * TODO: Documentation for dataSource (property)
- */
   dataSource: MatTableDataSource<UserResponse> = new MatTableDataSource<UserResponse>([]);
 
   readonly paginator = viewChild(MatPaginator);
   readonly sort = viewChild(MatSort);
 
-/**
- * TODO: Documentation for isLoading (property)
- */
   isLoading: boolean = false;
-/**
- * TODO: Documentation for pageSizeOptions (property)
- */
   pageSizeOptions: number[] = [5, 10, 25, 50];
-/**
- * TODO: Documentation for resultsLength (property)
- */
   resultsLength: number = 0;
-/**
- * TODO: Documentation for pageSize (property)
- */
   pageSize: number = this.pageSizeOptions[1];
-/**
- * TODO: Documentation for listKeywords (property)
- */
   listKeywords: string[] = [];
   currentUserId!: string;
-/**
- * TODO: Documentation for advancedFilters (property)
- */
   advancedFilters: AdvancedFilters = {};
   filters: UserFilters = {};
 
-/**
- * TODO: Documentation for constructor (method)
- * @param userStore - TODO
- * @param usersApi - TODO
- * @param notificationService - TODO
- * @param translate - TODO
- * @param authTokenService - TODO
- * @returns TODO
- */
 
   constructor(
     private router: Router,
 
     private trashService: TrashService,
-/**
- * TODO: Documentation for userStore (property)
- */
     private userStore: UserStore,
-/**
- * TODO: Documentation for usersApi (property)
- */
     private usersApi: UsersService,
-/**
- * TODO: Documentation for notificationService (property)
- */
     private notificationService: NotificationService,
-/**
- * TODO: Documentation for translate (property)
- */
     private translate: TranslateService,
-/**
- * TODO: Documentation for authTokenService (property)
- */
     private authTokenService: AuthTokenService
   ) {
-/**
- * TODO: Documentation for super (method)
- * @returns TODO
- */
     super();
     this.currentUserId = this.authTokenService.getUserId() ?? '';
     const destroyRef = inject(DestroyRef);
 
-/**
- * TODO: Documentation for effect (method)
- * @param ( - TODO
- * @returns TODO
- */
     effect(() => {
       this.dataSource.data = this.userStore.users();
       this.resultsLength = this.userStore.totalElements();
@@ -179,29 +110,13 @@ export class UserTableComponent extends DashboardComponent {
       }
     });
 
-/**
- * TODO: Documentation for afterNextRender (method)
- * @param ( - TODO
- * @returns TODO
- */
     afterNextRender(() => {
-/**
- * TODO: Documentation for merge (method)
- * @param this.paginator()!.page - TODO
- * @param this.sort()!.sortChange - TODO
- * @returns TODO
- */
       merge(this.paginator()!.page, this.sort()!.sortChange)
         .pipe(startWith({}), takeUntilDestroyed(destroyRef))
         .subscribe(() => this.refreshTable());
     });
   }
 
-/**
- * TODO: Documentation for refreshTable (method)
- * @param pageIndex? - TODO
- * @returns TODO
- */
   private refreshTable(pageIndex?: number): void {
     if (pageIndex !== undefined) {
       this.paginator()!.pageIndex = pageIndex;
@@ -213,21 +128,9 @@ export class UserTableComponent extends DashboardComponent {
 
     this.filters = {
       ...this.filters,
-/**
- * TODO: Documentation for keywords (property)
- */
       keywords: this.listKeywords ?? this.filters.keywords,
-/**
- * TODO: Documentation for roles (property)
- */
       roles: this.advancedFilters?.role ?? this.filters.roles,
-/**
- * TODO: Documentation for statuses (property)
- */
       statuses: this.advancedFilters?.status ?? this.filters.statuses,
-/**
- * TODO: Documentation for creationDate (property)
- */
       creationDate: this.advancedFilters?.createdDate ?? this.filters.creationDate,
     };
 
@@ -241,43 +144,18 @@ export class UserTableComponent extends DashboardComponent {
     );
   }
 
-/**
- * TODO: Documentation for openCreateUserDialog (method)
- * @returns TODO
- */
   openCreateUserDialog() {
     this.usersApi.userListRoles().subscribe(roles => {
       const empty: UserResponse = {
-/**
- * TODO: Documentation for firstName (property)
- */
         firstName: '',
-/**
- * TODO: Documentation for lastName (property)
- */
         lastName: '',
-/**
- * TODO: Documentation for email (property)
- */
         email: '',
-/**
- * TODO: Documentation for role (property)
- */
         role: roles?.[0] ?? '0'
       };
 
       this.dialog.open(UserDialogComponent, {
-/**
- * TODO: Documentation for data (property)
- */
         data: { user: empty, roles, mode: 'create' } as UserDialogData,
-/**
- * TODO: Documentation for disableClose (property)
- */
         disableClose: true,
-/**
- * TODO: Documentation for autoFocus (property)
- */
         autoFocus: false
       }).afterClosed().subscribe((created?: boolean) => {
         if (created) {
@@ -287,55 +165,19 @@ export class UserTableComponent extends DashboardComponent {
     });
   }
 
-/**
- * TODO: Documentation for openUpdateUserDialog (method)
- * @param userId - TODO
- * @returns TODO
- */
   openUpdateUserDialog(userId: number) {
-/**
- * TODO: Documentation for zip (method)
- * @param this.usersApi.userListRoles() - TODO
- * @param this.usersApi.userGetById(String(userId))).subscribe(([roles - TODO
- * @param dto] - TODO
- * @returns TODO
- */
     zip(this.usersApi.userListRoles(), this.usersApi.userGetById(String(userId))).subscribe(([roles, dto]) => {
       const payload: UserResponse = {
-/**
- * TODO: Documentation for id (property)
- */
         id: dto.id,
-/**
- * TODO: Documentation for firstName (property)
- */
         firstName: dto.firstName,
-/**
- * TODO: Documentation for lastName (property)
- */
         lastName: dto.lastName,
-/**
- * TODO: Documentation for role (property)
- */
         role: dto.role,
-/**
- * TODO: Documentation for email (property)
- */
         email: dto.email
       };
 
       this.dialog.open(UserDialogComponent, {
-/**
- * TODO: Documentation for data (property)
- */
         data: { user: payload, roles, mode: 'update' } as UserDialogData,
-/**
- * TODO: Documentation for disableClose (property)
- */
         disableClose: true,
-/**
- * TODO: Documentation for autoFocus (property)
- */
         autoFocus: false
       }).afterClosed().subscribe((updated?: boolean) => {
         if (updated) {
@@ -345,11 +187,6 @@ export class UserTableComponent extends DashboardComponent {
     });
   }
 
-/**
- * TODO: Documentation for isCurrentUser (method)
- * @param user - TODO
- * @returns TODO
- */
   isCurrentUser(user: any): boolean {
     return String(user?.id) === String(this.currentUserId);
   }
@@ -358,19 +195,11 @@ export class UserTableComponent extends DashboardComponent {
     this.router.navigate(['/users/trash']);
   }
 
-/**
- * TODO: Documentation for openDeleteUserDialog (method)
- * @param user - TODO
- * @returns TODO
- */
   openDeleteUserDialog(user: any) {
     if (this.isCurrentUser(user)) {
       this.notificationService.openErrorSnackBar(
         this.translate.instant('feature.dashboard.user-table-component.table.column.action.delete.message.self.error')
       );
-/**
- * TODO: Documentation for return (property)
- */
       return;
     }
 
@@ -383,13 +212,7 @@ export class UserTableComponent extends DashboardComponent {
             tap(() => {
               this.notificationService.openSuccessSnackBar(
                 this.translate.instant('feature.dashboard.user-table-component.table.column.action.delete.message.success', {
-/**
- * TODO: Documentation for lastName (property)
- */
                   lastName: user.lastName,
-/**
- * TODO: Documentation for firstName (property)
- */
                   firstName: user.firstName
                 })
               );
@@ -401,40 +224,21 @@ export class UserTableComponent extends DashboardComponent {
     });
   }
 
-/**
- * TODO: Documentation for keywordsChanged (method)
- * @param currentListKeywords - TODO
- * @returns TODO
- */
   keywordsChanged(currentListKeywords: string[]) {
     this.listKeywords = currentListKeywords;
     this.refreshTable(0);
   }
 
-/**
- * TODO: Documentation for advancedFiltersChanged (method)
- * @param filters - TODO
- * @returns TODO
- */
   advancedFiltersChanged(filters: AdvancedFilters): void {
     this.advancedFilters = filters;
     this.refreshTable(0);
   }
 
-/**
- * TODO: Documentation for applyFilters (method)
- * @param filters - TODO
- * @returns TODO
- */
   applyFilters(filters: { role?: string[]; status?: string[]; createdDate?: string }): void {
     this.advancedFilters = filters;
     this.refreshTable(0);
   }
 
-/**
- * TODO: Documentation for resetTable (method)
- * @returns TODO
- */
   resetTable(): void {
     this.listKeywords = [];
     this.advancedFilters = {};

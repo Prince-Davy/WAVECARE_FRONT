@@ -14,30 +14,15 @@ import { finalize, tap } from 'rxjs';
 import type { UserResponse } from '@app/api/model';
 import { CommonModule } from '@angular/common';
 
-/**
- * TODO: Documentation for UserDialogData (interface)
- */
 export interface UserDialogData {
-/**
- * TODO: Documentation for user (property)
- */
   user: UserResponse;
-/**
- * TODO: Documentation for roles (property)
- */
   roles: string[];
   mode?: 'create' | 'update';
 }
 
 // Backward compat alias
-/**
- * TODO: Documentation for UserCreateDTO (type)
- */
 export type UserCreateDTO = UserResponse;
 
-/**
- * TODO: Documentation for UserDialogComponent (class)
- */
 
 export function strictEmailValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -88,58 +73,23 @@ export class UserDialogComponent {
   readonly data = inject<UserDialogData>(MAT_DIALOG_DATA);
   readonly user = this.data.user;
 
-/**
- * TODO: Documentation for userDialogForm (property)
- */
   userDialogForm: FormGroup<any>;
-/**
- * TODO: Documentation for isSubmitting (property)
- */
   isSubmitting: boolean = false;
 
   readonly roleInput = viewChild.required<MatSelect>('roleInput');
 
-/**
- * TODO: Documentation for constructor (method)
- * @param fb - TODO
- * @param usersApi - TODO
- * @param notificationService - TODO
- * @param translate - TODO
- * @returns TODO
- */
 
   constructor(
-/**
- * TODO: Documentation for fb (property)
- */
     private fb: FormBuilder,
-/**
- * TODO: Documentation for usersApi (property)
- */
     private usersApi: UsersService,
-/**
- * TODO: Documentation for notificationService (property)
- */
     private notificationService: NotificationService,
-/**
- * TODO: Documentation for translate (property)
- */
     private translate: TranslateService
   ) {
     const isCreate = this.data.mode === 'create';
 
     this.userDialogForm = this.fb.group({
-/**
- * TODO: Documentation for lastName (property)
- */
       lastName: [this.data.user.lastName ?? '', Validators.required],
-/**
- * TODO: Documentation for firstName (property)
- */
       firstName: [this.data.user.firstName ?? '', Validators.required],
-/**
- * TODO: Documentation for email (property)
- */
     email:[
       { value: this.data.user.email ?? '', disabled: !isCreate },
       {
@@ -150,24 +100,12 @@ export class UserDialogComponent {
          updateOn: 'blur' 
       }
     ],
-/**
- * TODO: Documentation for role (property)
- */
       role: [this.data.user.role ?? this.data.roles?.[0] ?? '0', Validators.required]
     });
 
-/**
- * TODO: Documentation for afterNextRender (method)
- * @param () - TODO
- * @returns TODO
- */
     afterNextRender(() => this.roleInput().focus());
   }
 
-/**
- * TODO: Documentation for validate (method)
- * @returns TODO
- */
   validate(): UserResponse {
     const formValue = this.userDialogForm.getRawValue();
 
@@ -180,10 +118,6 @@ export class UserDialogComponent {
 
   }
 
-/**
- * TODO: Documentation for submit (method)
- * @returns TODO
- */
   submit(): void {
     if (this.userDialogForm.invalid || this.isSubmitting) {
       this.userDialogForm.markAllAsTouched();
@@ -196,17 +130,8 @@ export class UserDialogComponent {
     const request$ = isCreate
       ? this.usersApi.userCreate(payload)
       : this.usersApi.userUpdate(payload.id!, {
-/**
- * TODO: Documentation for lastName (property)
- */
         lastName: payload.lastName,
-/**
- * TODO: Documentation for firstName (property)
- */
         firstName: payload.firstName,
-/**
- * TODO: Documentation for role (property)
- */
         role: payload.role
       });
 

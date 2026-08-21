@@ -10,17 +10,8 @@ import { UserFilters } from '../models/user-filters';
  * Internal request shape used by the user store resource.
  */
 interface UserLoadRequest {
-/**
- * TODO: Documentation for page (property)
- */
   page: number;
-/**
- * TODO: Documentation for size (property)
- */
   size: number;
-/**
- * TODO: Documentation for listKeywords (property)
- */
   listKeywords: string[];
   sortField?: string;
   sortDirection?: string;
@@ -37,12 +28,6 @@ const EMPTY_PAGE: PageUserResponse = { content: [], totalElements: 0, totalPages
  * UserStore
  * Reactive store exposing users list and pagination helpers.
  */
-/**
- * TODO: Documentation for UserStore (class)
- */
-/**
- * TODO: Documentation for UserStore (class)
- */
 @Injectable({ providedIn: 'root' })
 export class UserStore {
 
@@ -51,13 +36,7 @@ export class UserStore {
   private readonly _request = signal<UserLoadRequest | undefined>(undefined);
 
   private readonly _resource = rxResource<PageUserResponse, UserLoadRequest | undefined>({
-/**
- * TODO: Documentation for params (property)
- */
     params: () => this._request(),
-/**
- * TODO: Documentation for stream (property)
- */
     stream: ({ params: req }) => {
       if (!req) return of(EMPTY_PAGE);
 
@@ -90,28 +69,9 @@ export class UserStore {
     return err instanceof Error ? err.message : err ? String(err) : null;
   });
 
-/**
- * TODO: Documentation for load (method)
- * @param page - TODO
- * @param size - TODO
- * @param listKeywords - TODO
- * @param sortField? - TODO
- * @param sortDirection? - TODO
- * @param filters? - TODO
- * @returns TODO
- */
   load(
-/**
- * TODO: Documentation for page (property)
- */
     page: number,
-/**
- * TODO: Documentation for size (property)
- */
     size: number,
-/**
- * TODO: Documentation for listKeywords (property)
- */
     listKeywords: string[],
     sortField?: string,
     sortDirection?: string,
