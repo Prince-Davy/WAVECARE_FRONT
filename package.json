@@ -17,7 +17,7 @@
     "test": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage",
     "test:ci": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage",
     "docs:compodoc": "compodoc -p tsconfig.doc.json -d target/compodoc",
-    "docs:compodoc:check": "compodoc -p tsconfig.doc.json -d target/compodoc --coverageTest 20 --coverageTestThresholdFail true --unitTestCoverage coverage/coverage-summary.json",
+    "docs:compodoc:check": "npm run docs:compodoc && compodoc -p tsconfig.doc.json --coverageTest 20 --coverageTestThresholdFail true --unitTestCoverage coverage/coverage-summary.json",
     "docs:autofix": "node scripts/add-compodoc-stubs.js"
   },
   "private": true,
