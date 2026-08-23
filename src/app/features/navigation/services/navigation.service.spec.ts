@@ -32,4 +32,24 @@ describe('NavigationService', () => {
     service.navigateToHome();
     expect(router.navigate).toHaveBeenCalledWith([PATH_TO_PATIENTS]);
   });
+
+  it('navigateToPatients routes to patients page', () => {
+    service.navigateToPatients();
+    expect(router.navigate).toHaveBeenCalledWith([PATH_TO_PATIENTS]);
+  });
+
+  it('navigateToAssistance routes to assistance page', () => {
+    service.navigateToAssistance();
+    expect(router.navigate).toHaveBeenCalledWith([PATH_TO_ASSISTANCE]);
+  });
+
+  it('navigateToTickets routes to tickets page', () => {
+    service.navigateToTickets();
+    expect(router.navigate).toHaveBeenCalledWith([PATH_TO_TICKETS]);
+  });
+
+  it('navigateToLogin routes to ***REMOVED*** page', () => {
+    service.navigateToLogin();
+    expect(router.navigate).toHaveBeenCalledWith([PATH_TO_LOGIN]);
+  });
 });

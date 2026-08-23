@@ -86,6 +86,11 @@
               "zone.js",
               "zone.js/testing"
             ],
+            "codeCoverageExclude": [
+              "src/app/api/generated/**",
+              "src/app/api/model/**",
+              "src/app/api/api/**"
+            ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [

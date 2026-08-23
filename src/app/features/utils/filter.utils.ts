@@ -41,7 +41,16 @@ export class FilterUtils {
 
     // Si au format 'yyyy-MM-dd', convertir
     if (dateString.includes('-')) {
-      const [day, month, year] = dateString.split('-');
+      const parts = dateString.split('-');
+      if (parts.length !== 3 || !parts[0] || !parts[1] || !parts[2]) {
+        return dateString;
+      }
+
+      const [day, month, year] = parts;
+      if (!/\d{4}/.test(year) || Number.isNaN(Number(day)) || Number.isNaN(Number(month))) {
+        return dateString;
+      }
+
       return `${day}/${month}/${year}`;
     }
 

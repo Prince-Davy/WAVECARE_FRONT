@@ -88,7 +88,7 @@ export class AuthTokenService {
       this.storage = STORAGE_STRATEGY === 'local' ? localStorage : sessionStorage;
       this.initFromStorage();
 
-      window.addEventListener('storage', (event) => {
+      window.addEventListener('storage', (event: StorageEvent) => {
         if (event.storageArea !== this.storage) {
           return;
         }

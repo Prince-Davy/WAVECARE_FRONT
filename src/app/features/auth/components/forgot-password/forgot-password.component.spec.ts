@@ -43,4 +43,25 @@ describe('ForgotPasswordComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should mark the form as invalid and stop submission when email is invalid', () => {
+    component.form.setValue({ email: 'not-an-email' });
+
+    component.submit();
+
+    expect(component.resetRequestSuccess).toBeFalse();
+    expect(component.form.get('email')?.touched).toBeTrue();
+    expect(authServiceSpy.forgotPassword).not.toHaveBeenCalled();
+  });
+
+  it('should submit a valid request and reset the form on success', () => {
+    authServiceSpy.forgotPassword.and.returnValue(of('OK'));
+    component.form.setValue({ email: '***REMOVED***@example.com' });
+
+    component.submit();
+
+    expect(authServiceSpy.forgotPassword).toHaveBeenCalledWith('***REMOVED***@example.com');
+    expect(component.resetRequestSuccess).toBeTrue();
+    expect(component.form.value.email).toBeNull();
+  });
 });

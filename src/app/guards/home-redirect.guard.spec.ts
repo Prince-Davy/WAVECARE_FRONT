@@ -1,64 +1,55 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-import { of } from 'rxjs';
+import { TestBed } from '@angular/core/testing';
+import { Router, UrlTree } from '@angular/router';
 
-import { AuthService } from '@app/features/auth/services/auth.service';
-import { NavigationService } from '@app/features/navigation/services/navigation.service';
-import { ResetPasswordComponent } from '@app/features/auth/components/***REMOVED***/***REMOVED***.component';
+import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
+import { homeRedirectGuard } from './home-redirect.guard';
 
-describe('ResetPasswordComponent', () => {
-  let component: ResetPasswordComponent;
-  let fixture: ComponentFixture<ResetPasswordComponent>;
-  let authServiceSpy: jasmine.SpyObj<AuthService>;
-  let navigationServiceSpy: jasmine.SpyObj<NavigationService>;
+describe('homeRedirectGuard', () => {
+  let router: jasmine.SpyObj<Router>;
+  let auth: jasmine.SpyObj<AuthTokenService>;
 
-  beforeEach(async () => {
-    authServiceSpy = jasmine.createSpyObj<AuthService>('AuthService', [
-      'readToken',
-      'updatePassword',
-      'deleteToken',
+  beforeEach(() => {
+    router = jasmine.createSpyObj<Router>('Router', ['createUrlTree']);
+    auth = jasmine.createSpyObj<AuthTokenService>('AuthTokenService', [
+      'tryAutoRefresh',
+      'isAuthenticated',
+      'getDefaultRoute',
     ]);
 
-    navigationServiceSpy = jasmine.createSpyObj<NavigationService>('NavigationService', [
-      'navigateToLogin',
-    ]);
-
-    authServiceSpy.readToken.and.returnValue(
-      of({
-        id: 'user-1',
-        email: '***REMOVED***',
-      } as any)
-    );
-    authServiceSpy.updatePassword.and.returnValue(of('OK'));
-    authServiceSpy.deleteToken.and.returnValue(of('OK'));
-
-    await TestBed.configureTestingModule({
-      imports: [ResetPasswordComponent, TranslateModule.forRoot()],
+    TestBed.configureTestingModule({
       providers: [
-        provideRouter([]),
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              queryParamMap: convertToParamMap({ token: 'fake-token' }),
-            },
-            params: of({}),
-            queryParams: of({ token: 'fake-token' }),
-            data: of({}),
-          },
-        },
-        { provide: AuthService, useValue: authServiceSpy },
-        { provide: NavigationService, useValue: navigationServiceSpy },
+        { provide: Router, useValue: router },
+        { provide: AuthTokenService, useValue: auth },
       ],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(ResetPasswordComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('redirects authenticated users to the default route', async () => {
+    auth.tryAutoRefresh.and.returnValue(Promise.resolve(true));
+    auth.isAuthenticated.and.returnValue(true);
+    auth.getDefaultRoute.and.returnValue('tickets');
+    const urlTree = {} as UrlTree;
+    router.createUrlTree.and.returnValue(urlTree);
+
+    const result = await TestBed.runInInjectionContext(() =>
+      homeRedirectGuard({} as any, { url: '/home' } as any)
+    );
+
+    expect(auth.tryAutoRefresh).toHaveBeenCalled();
+    expect(auth.isAuthenticated).toHaveBeenCalled();
+    expect(auth.getDefaultRoute).toHaveBeenCalled();
+    expect(router.createUrlTree).toHaveBeenCalledWith(['tickets']);
+    expect(result).toBe(urlTree);
+  });
+
+  it('allows unauthenticated users through to the ***REMOVED*** page route', async () => {
+    auth.tryAutoRefresh.and.returnValue(Promise.resolve(false));
+
+    const result = await TestBed.runInInjectionContext(() =>
+      homeRedirectGuard({} as any, { url: '/home' } as any)
+    );
+
+    expect(result).toBeTrue();
+    expect(router.createUrlTree).not.toHaveBeenCalled();
   });
 });
