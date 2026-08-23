@@ -46,6 +46,14 @@ module.exports = function (config) {
         { type: 'lcovonly' },
         { type: 'json-summary' },
       ],
+      exclude: [
+        'src/app/api/generated/**',
+        'src/app/api/model/**',
+        'src/app/api/api/**',
+        '**/src/app/api/generated/**',
+        '**/src/app/api/model/**',
+        '**/src/app/api/api/**',
+      ],
       check: {
         global: {
           statements: 60,

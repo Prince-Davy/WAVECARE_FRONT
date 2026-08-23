@@ -120,7 +120,28 @@ describe('AuthTokenService', () => {
     expect(result).toBeFalse();
   });
 
-  it('should return null for invalid token payload methods', () => {
+  it('should return false when refresh fails', async () => {
+    const now = Math.floor(Date.now() / 1000);
+    service.token.set(createJwt({ exp: now - 30, sub: 'expired-user' }));
+    service.refresh.set('refresh-expired');
+    const refreshSpy = spyOn(service, 'refreshTokens').and.rejectWith(new Error('refresh failed'));
+
+    const result = await service.tryAutoRefresh();
+
+    expect(result).toBeFalse();
+    expect(refreshSpy).toHaveBeenCalled();
+  });
+
+  it('should reuse the current refresh promise and return null for invalid token payload methods', async () => {
+    const now = Math.floor(Date.now() / 1000);
+    const token = createJwt({ exp: now + 3600, sub: 'user-4' });
+    service.setTokens({ access_token: token, refresh_token: 'refresh-4' });
+
+    const pending = Promise.resolve(true);
+    (service as any).ongoingRefresh = pending;
+    const result = await service.tryAutoRefresh();
+    expect(result).toBeTrue();
+
     service.setTokens({ access_token: 'invalid.token', refresh_token: 'refresh-invalid' });
     expect(service.getUserId()).toBeNull();
     expect(service.getCompleteName()).toBeNull();
@@ -128,8 +149,8 @@ describe('AuthTokenService', () => {
 
   it('should clear session storage and reset token values', () => {
     const now = Math.floor(Date.now() / 1000);
-    const token = createJwt({ exp: now + 3600, sub: 'user-4' });
-    service.setTokens({ access_token: token, refresh_token: 'refresh-4' });
+    const token = createJwt({ exp: now + 3600, sub: 'user-5' });
+    service.setTokens({ access_token: token, refresh_token: 'refresh-5' });
 
     service.removeTokens();
 

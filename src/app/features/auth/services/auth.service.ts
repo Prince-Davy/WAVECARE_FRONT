@@ -43,7 +43,7 @@ export class AuthService {
     return this.passwordResetApi.resetPasswordValidate({ token }) as Observable<{ id: string; email: string }>;
   }
 
-  updatePassword(token: string | null, userId: string, payload: { userName: string; newPassword: string }): Observable<string> {
+  updatePassword(token: string | null, userId: string, payload: { userName: string; newPassword: string }): Observable<void> {
     return this.usersApi.userUpdatePassword(userId, payload, {
       params: { token: token! },
     });

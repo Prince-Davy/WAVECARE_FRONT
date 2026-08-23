@@ -129,4 +129,75 @@ describe('SearchBarComponent', () => {
     button.click();
     expect(component.addKeyword).toHaveBeenCalled();
   });
+
+  it('expose le bouton de reset quand des filtres ou mots-clés existent', () => {
+    component.listKeywords = ['test'];
+    expect(component.showResetButton).toBeTrue();
+
+    component.listKeywords = [];
+    component.advancedFilters = { role: ['ADMIN'] } as any;
+    expect(component.showResetButton).toBeTrue();
+
+    component.advancedFilters = { createdDate: '01/01/2026' } as any;
+    expect(component.showResetButton).toBeTrue();
+
+    component.listKeywords = [];
+    component.advancedFilters = {} as any;
+    expect(component.showResetButton).toBeFalse();
+  });
+
+  it('réinitialise l’état et émet les événements attendus au reset', () => {
+    spyOn(component.resetRequested, 'emit');
+    spyOn(component.keywordsChanged, 'emit');
+    component.inputValue = ' test ';
+    component.listKeywords = ['sample'];
+    component.advancedFilters = { role: ['ADMIN'], status: ['OK'], createdDate: '01/01/2026' } as any;
+
+    component.onReset();
+
+    expect(component.inputValue).toBe('');
+    expect(component.listKeywords).toEqual([]);
+    expect(component.isFiltersOpen).toBeFalse();
+    expect(component.resetRequested.emit).toHaveBeenCalled();
+    expect(component.keywordsChanged.emit).toHaveBeenCalledWith([]);
+  });
+
+  it('fonctionne en mode simple avec recherche trimée et sortie de données', () => {
+    fixture.componentRef.setInput('mode', 'simple');
+    component.inputValue = '  Test keyword  ';
+    spyOn(component.simpleSearch, 'emit');
+
+    component.onSearch();
+
+    expect(component.listKeywords).toEqual(['test keyword']);
+    expect(component.inputValue).toBe('');
+    expect(component.simpleSearch.emit).toHaveBeenCalledWith('Test keyword');
+  });
+
+  it('toggleFilters inverse l’état du panneau', () => {
+    component.isFiltersOpen = false;
+    component.toggleFilters();
+    expect(component.isFiltersOpen).toBeTrue();
+
+    component.toggleFilters();
+    expect(component.isFiltersOpen).toBeFalse();
+  });
+
+  it('propagate filters change and date reset events', () => {
+    spyOn(component.filtersChanged, 'emit');
+
+    component.onAdvancedFiltersChanged({ role: ['ADMIN'] } as any);
+    expect(component.advancedFilters.role).toEqual(['ADMIN']);
+    expect(component.filtersChanged.emit).toHaveBeenCalledWith({ role: ['ADMIN'] });
+
+    component.onAdvancedFiltersReset();
+    expect(component.advancedFilters).toEqual({});
+    expect(component.filtersChanged.emit).toHaveBeenCalledWith({});
+  });
+
+  it('formate les libellés et les dates via les utilitaires', () => {
+    expect(component.getRoleLabel('ADMIN')).toBeTruthy();
+    expect(component.getStatusLabel('ACTIVE')).toBeTruthy();
+    expect(component.formatDate('2024-01-02')).toContain('2024');
+  });
 });

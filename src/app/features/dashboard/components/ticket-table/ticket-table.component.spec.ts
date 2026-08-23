@@ -2,7 +2,7 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
@@ -13,6 +13,8 @@ import { TicketStore } from '@app/features/dashboard/stores/ticket.store';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import type { TicketResponse } from '@app/api/model';
+import { TicketsService } from '@app/api/generated/tickets/tickets.service';
+import { TicketStatusesService } from '@app/api/generated/ticket-statuses/ticket-statuses.service';
 
 class FakeLoader implements TranslateLoader {
   getTranslation(lang: string) { return of({}); }
@@ -71,6 +73,11 @@ describe('TicketTableComponent', () => {
       load: loadSpy,
     };
 
+    const ticketsApi = jasmine.createSpyObj<TicketsService>('TicketsService', ['ticketGetById']);
+    const ticketStatusesApi = jasmine.createSpyObj<TicketStatusesService>('TicketStatusesService', ['ticketStatusList']);
+    ticketsApi.ticketGetById.and.returnValue(of({ id: 1, subject: 'Test' } as any));
+    ticketStatusesApi.ticketStatusList.and.returnValue(of([] as any));
+
     await TestBed.configureTestingModule({
       imports: [
         NoopAnimationsModule,
@@ -84,7 +91,11 @@ describe('TicketTableComponent', () => {
         }),
         TicketTableComponent
       ],
-      providers: [{ provide: TicketStore, useValue: mockStore }]
+      providers: [
+        { provide: TicketStore, useValue: mockStore },
+        { provide: TicketsService, useValue: ticketsApi },
+        { provide: TicketStatusesService, useValue: ticketStatusesApi },
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TicketTableComponent);
@@ -133,5 +144,32 @@ describe('TicketTableComponent', () => {
     fixture.detectChanges();
 
     expect(component.openTicketDialog).toHaveBeenCalledOnceWith(1);
+  });
+
+  it('formats the sequence index and triggers refreshes through the table actions', () => {
+    expect(component.getFormattedSequence(3)).toBe('0004');
+
+    component.keywordsChanged(['urgent']);
+    expect(loadSpy).toHaveBeenCalled();
+
+    (component as any).sort = () => ({ active: 'subject', direction: 'asc' });
+    (component as any).paginator = () => ({ pageIndex: 0, pageSize: 10 });
+    component.resetTable();
+    expect(loadSpy).toHaveBeenCalled();
+  });
+
+  it('opens the ticket dialog, refreshes after confirmation, and closes gracefully', () => {
+    const ticketsApi = TestBed.inject(TicketsService) as jasmine.SpyObj<TicketsService>;
+    const statusesApi = TestBed.inject(TicketStatusesService) as jasmine.SpyObj<TicketStatusesService>;
+    const dialogRef = { afterClosed: () => of(true) } as any;
+    spyOn(component.dialog, 'open').and.returnValue(dialogRef);
+
+    loadSpy.calls.reset();
+    component.openTicketDialog(12);
+
+    expect(statusesApi.ticketStatusList).toHaveBeenCalled();
+    expect(ticketsApi.ticketGetById).toHaveBeenCalledWith(12);
+    expect(component.dialog.open).toHaveBeenCalled();
+    expect(loadSpy).toHaveBeenCalled();
   });
 });
