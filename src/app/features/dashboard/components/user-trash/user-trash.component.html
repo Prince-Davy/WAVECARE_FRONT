@@ -192,19 +192,18 @@
     >
     </mat-paginator>
   </mat-card>
-  <div
-    class="trash-confirm-backdrop"
-    *ngIf="isConfirmDialogOpen"
-    tabindex="0"
-    (click)="cancelConfirmDialog()"
-    (keydown.enter)="cancelConfirmDialog()"
-    (keydown.space)="cancelConfirmDialog()"
-  >
+  <div class="trash-confirm-layer" *ngIf="isConfirmDialogOpen">
+    <button
+      class="trash-confirm-backdrop"
+      type="button"
+      aria-label="Fermer la fenêtre de confirmation"
+      (click)="cancelConfirmDialog()"
+    ></button>
+
     <dialog
       class="trash-confirm-dialog"
       open
       [attr.aria-label]="confirmDialogTitle"
-      (click)="$event.stopPropagation()"
     >
       <h2 class="trash-confirm-title">
         {{ confirmDialogTitle }}
