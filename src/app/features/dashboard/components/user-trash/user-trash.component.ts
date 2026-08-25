@@ -39,7 +39,6 @@ import {
   TrashUserResponse,
 } from '@app/api/generated/trash/trash.service';
 
-
 function getFrenchPaginatorIntl(): MatPaginatorIntl {
   const paginatorIntl = new MatPaginatorIntl();
 
@@ -52,7 +51,7 @@ function getFrenchPaginatorIntl(): MatPaginatorIntl {
   paginatorIntl.getRangeLabel = (
     page: number,
     pageSize: number,
-    length: number
+    length: number,
   ): string => {
     if (length === 0 || pageSize === 0) {
       return `0 sur ${length}`;
@@ -84,7 +83,9 @@ function getFrenchPaginatorIntl(): MatPaginatorIntl {
     MatTooltipModule,
     SearchBarComponent,
   ],
-  providers: [{ provide: MatPaginatorIntl, useFactory: getFrenchPaginatorIntl }],
+  providers: [
+    { provide: MatPaginatorIntl, useFactory: getFrenchPaginatorIntl },
+  ],
   templateUrl: './user-trash.component.html',
   styleUrl: './user-trash.component.scss',
 })
@@ -154,8 +155,8 @@ export class UserTrashComponent {
             paginator.pageIndex = 0;
             this.selection.clear();
             this.updateSelectedCount();
-          })
-        )
+          }),
+        ),
       )
         .pipe(takeUntilDestroyed(destroyRef))
         .subscribe(() => this.applyLocalFiltersSortAndPagination());
@@ -184,11 +185,11 @@ export class UserTrashComponent {
       })
       .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
-        next: page => {
+        next: (page) => {
           this.allTrashUsers = page.content ?? [];
           this.applyLocalFiltersSortAndPagination();
         },
-        error: error => {
+        error: (error) => {
           console.error('Erreur chargement corbeille', error);
 
           this.allTrashUsers = [];
@@ -197,7 +198,7 @@ export class UserTrashComponent {
           this.resultsLength = 0;
 
           this.notificationService.openErrorSnackBar(
-            'Erreur lors du chargement de la corbeille des profils inactifs.'
+            'Erreur lors du chargement de la corbeille des profils inactifs.',
           );
         },
       });
@@ -264,14 +265,14 @@ export class UserTrashComponent {
 
   private applyLocalSearch(users: TrashUserResponse[]): TrashUserResponse[] {
     const keywords = (this.listKeywords ?? [])
-      .map(keyword => this.normalize(keyword))
-      .filter(keyword => keyword.length > 0);
+      .map((keyword) => this.normalize(keyword))
+      .filter((keyword) => keyword.length > 0);
 
     if (keywords.length === 0) {
       return users;
     }
 
-    return users.filter(user => {
+    return users.filter((user) => {
       const searchableText = this.normalize(
         [
           user.lastName,
@@ -280,23 +281,23 @@ export class UserTrashComponent {
           user.role,
           user.deletedAt,
           'inactif',
-        ].join(' ')
+        ].join(' '),
       );
 
-      return keywords.every(keyword => searchableText.includes(keyword));
+      return keywords.every((keyword) => searchableText.includes(keyword));
     });
   }
 
   private applyLocalAdvancedFilters(
-    users: TrashUserResponse[]
+    users: TrashUserResponse[],
   ): TrashUserResponse[] {
     const roles = this.advancedFilters?.role ?? [];
     const creationDate = this.advancedFilters?.createdDate;
 
-    return users.filter(user => {
+    return users.filter((user) => {
       if (roles.length > 0) {
         const userRole = this.normalize(user.role);
-        const acceptedRoles = roles.map(role => this.normalize(role));
+        const acceptedRoles = roles.map((role) => this.normalize(role));
 
         if (!acceptedRoles.includes(userRole)) {
           return false;
@@ -341,7 +342,10 @@ export class UserTrashComponent {
     });
   }
 
-  private getSortValue(user: TrashUserResponse, field: string): string | number {
+  private getSortValue(
+    user: TrashUserResponse,
+    field: string,
+  ): string | number {
     switch (field) {
       case 'lastName':
         return this.normalize(user.lastName);
@@ -414,7 +418,7 @@ export class UserTrashComponent {
 
     return (
       currentPageRows.length > 0 &&
-      currentPageRows.every(user => this.selection.isSelected(user))
+      currentPageRows.every((user) => this.selection.isSelected(user))
     );
   }
 
@@ -422,7 +426,7 @@ export class UserTrashComponent {
     const currentPageRows = this.dataSource.data;
 
     if (this.isAllSelected()) {
-      currentPageRows.forEach(user => this.selection.deselect(user));
+      currentPageRows.forEach((user) => this.selection.deselect(user));
     } else {
       this.selection.select(...currentPageRows);
     }
@@ -437,9 +441,7 @@ export class UserTrashComponent {
 
   checkboxLabel(row?: TrashUserResponse): string {
     if (!row) {
-      return this.isAllSelected()
-        ? 'Tout désélectionner'
-        : 'Tout sélectionner';
+      return this.isAllSelected() ? 'Tout désélectionner' : 'Tout sélectionner';
     }
 
     return this.selection.isSelected(row)
@@ -448,32 +450,34 @@ export class UserTrashComponent {
   }
 
   openRestoreSelectedConfirmation(): void {
-  const selectedUsers = this.selection.selected;
+    const selectedUsers = this.selection.selected;
 
-  if (selectedUsers.length === 0) {
-    this.notificationService.openErrorSnackBar(
-      'Veuillez sélectionner au moins un profil à restaurer.'
-    );
-    return;
+    if (selectedUsers.length === 0) {
+      this.notificationService.openErrorSnackBar(
+        'Veuillez sélectionner au moins un profil à restaurer.',
+      );
+      return;
+    }
+
+    this.pendingAction = 'restore';
+    this.pendingUsers = [...selectedUsers];
+    this.confirmDialogWarn = false;
+    this.confirmDialogConfirmLabel = 'Restaurer';
+    this.confirmDialogTitle =
+      selectedUsers.length > 1
+        ? 'Restaurer les profils'
+        : 'Restaurer le profil';
+    this.confirmDialogMessage =
+      selectedUsers.length > 1
+        ? 'Voulez-vous restaurer les profils sélectionnés ?'
+        : `Voulez-vous restaurer le profil ${this.getUserDisplayName(selectedUsers[0])} (${selectedUsers[0].email}) ?`;
+
+    this.isConfirmDialogOpen = true;
   }
-
-  this.pendingAction = 'restore';
-  this.pendingUsers = [...selectedUsers];
-  this.confirmDialogWarn = false;
-  this.confirmDialogConfirmLabel = 'Restaurer';
-  this.confirmDialogTitle =
-    selectedUsers.length > 1 ? 'Restaurer les profils' : 'Restaurer le profil';
-  this.confirmDialogMessage =
-    selectedUsers.length > 1
-      ? 'Voulez-vous restaurer les profils sélectionnés ?'
-      : `Voulez-vous restaurer le profil ${this.getUserDisplayName(selectedUsers[0])} (${selectedUsers[0].email}) ?`;
-
-  this.isConfirmDialogOpen = true;
-}
 
   private showRestoreResultMessage(
     response: TrashRestoreResponse,
-    selectedUsers: TrashUserResponse[]
+    selectedUsers: TrashUserResponse[],
   ): void {
     const restored = response.restored ?? [];
     const failed = response.failed ?? [];
@@ -482,7 +486,7 @@ export class UserTrashComponent {
       this.notificationService.openSuccessSnackBar(
         selectedUsers.length > 1
           ? 'Les profils sélectionnés ont été restaurés.'
-          : `Le profil ${this.getUserDisplayName(selectedUsers[0])} (${selectedUsers[0].email}) a été restauré.`
+          : `Le profil ${this.getUserDisplayName(selectedUsers[0])} (${selectedUsers[0].email}) a été restauré.`,
       );
 
       return;
@@ -492,31 +496,31 @@ export class UserTrashComponent {
       this.notificationService.openSuccessSnackBar(
         restored.length > 1
           ? `Les profils ont été restaurés avec succès.`
-          : `Le profil ${this.getActionUserDisplayName(restored[0])} (${restored[0].email}) a été restauré avec succès.`
+          : `Le profil ${this.getUserDisplayName(restored[0])} (${restored[0].email}) a été restauré avec succès.`,
       );
     }
 
     if (failed.length > 0) {
       this.notificationService.openErrorSnackBar(
-        this.buildRestoreFailureMessage(failed)
+        this.buildRestoreFailureMessage(failed),
       );
     }
   }
 
   private buildRestoreFailureMessage(
-    failed: TrashActionItemResponse[]
+    failed: TrashActionItemResponse[],
   ): string {
     if (failed.length === 1) {
       const user = failed[0];
 
-      return `Erreur : Le profil ${this.getActionUserDisplayName(user)} (${user.email}) n'a pas été restauré : ${this.getFailureReasonLabel(user)}.`;
+      return `Erreur : Le profil ${this.getUserDisplayName(user)} (${user.email}) n'a pas été restauré : ${this.getFailureReasonLabel(user)}.`;
     }
 
     const displayedUsers = failed
       .slice(0, 3)
       .map(
-        user =>
-          `${this.getActionUserDisplayName(user)} (${user.email}) : ${this.getFailureReasonLabel(user)}`
+        (user) =>
+          `${this.getUserDisplayName(user)} (${user.email}) : ${this.getFailureReasonLabel(user)}`,
       )
       .join(' / ');
 
@@ -546,133 +550,131 @@ export class UserTrashComponent {
     }
   }
 
-  private getActionUserDisplayName(user: TrashActionItemResponse): string {
-    const fullName = `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
-
-    return fullName || user.email || 'sélectionné';
-  }
-
   openPermanentDeleteSelectedConfirmation(): void {
-  const selectedUsers = this.selection.selected;
+    const selectedUsers = this.selection.selected;
 
-  if (selectedUsers.length === 0) {
-    this.notificationService.openErrorSnackBar(
-      'Veuillez sélectionner au moins un profil à supprimer définitivement.'
-    );
-    return;
+    if (selectedUsers.length === 0) {
+      this.notificationService.openErrorSnackBar(
+        'Veuillez sélectionner au moins un profil à supprimer définitivement.',
+      );
+      return;
+    }
+
+    this.pendingAction = 'delete';
+    this.pendingUsers = [...selectedUsers];
+    this.confirmDialogWarn = true;
+    this.confirmDialogConfirmLabel = 'Supprimer définitivement';
+    this.confirmDialogTitle =
+      selectedUsers.length > 1
+        ? 'Suppression définitive'
+        : 'Suppression définitive du profil';
+    this.confirmDialogMessage =
+      selectedUsers.length > 1
+        ? 'Cette action est irréversible. Voulez-vous supprimer définitivement les profils sélectionnés ?'
+        : `Cette action est irréversible. Voulez-vous supprimer définitivement le profil ${this.getUserDisplayName(selectedUsers[0])} (${selectedUsers[0].email}) ?`;
+
+    this.isConfirmDialogOpen = true;
   }
 
-  this.pendingAction = 'delete';
-  this.pendingUsers = [...selectedUsers];
-  this.confirmDialogWarn = true;
-  this.confirmDialogConfirmLabel = 'Supprimer définitivement';
-  this.confirmDialogTitle =
-    selectedUsers.length > 1
-      ? 'Suppression définitive'
-      : 'Suppression définitive du profil';
-  this.confirmDialogMessage =
-    selectedUsers.length > 1
-      ? 'Cette action est irréversible. Voulez-vous supprimer définitivement les profils sélectionnés ?'
-      : `Cette action est irréversible. Voulez-vous supprimer définitivement le profil ${this.getUserDisplayName(selectedUsers[0])} (${selectedUsers[0].email}) ?`;
-
-  this.isConfirmDialogOpen = true;
-}
-
-cancelConfirmDialog(): void {
-  this.closeConfirmDialog();
-}
-
-confirmDialogAction(): void {
-  const users = [...this.pendingUsers];
-  const action = this.pendingAction;
-
-  this.closeConfirmDialog();
-
-  if (action === 'restore') {
-    this.executeRestoreUsers(users);
-    return;
+  cancelConfirmDialog(): void {
+    this.closeConfirmDialog();
   }
 
-  if (action === 'delete') {
-    this.executePermanentDeleteUsers(users);
-  }
-}
+  confirmDialogAction(): void {
+    const users = [...this.pendingUsers];
+    const action = this.pendingAction;
 
-private closeConfirmDialog(): void {
-  this.isConfirmDialogOpen = false;
-  this.confirmDialogTitle = '';
-  this.confirmDialogMessage = '';
-  this.confirmDialogConfirmLabel = '';
-  this.confirmDialogWarn = false;
-  this.pendingAction = null;
-  this.pendingUsers = [];
-}
+    this.closeConfirmDialog();
 
-private executeRestoreUsers(selectedUsers: TrashUserResponse[]): void {
-  const ids = selectedUsers
-    .map(user => user.id)
-    .filter((id): id is string => !!id && id.trim() !== '');
+    if (action === 'restore') {
+      this.executeRestoreUsers(users);
+      return;
+    }
 
-  if (ids.length === 0) {
-    this.notificationService.openErrorSnackBar(
-      'Aucun identifiant valide trouvé pour la restauration.'
-    );
-    return;
+    if (action === 'delete') {
+      this.executePermanentDeleteUsers(users);
+    }
   }
 
-  this.restoreUsers(ids)
-    .pipe(finalize(() => this.refreshTable()))
-    .subscribe({
-      next: response => {
-        this.showRestoreResultMessage(response, selectedUsers);
-      },
-      error: error => {
-        console.error('Erreur restauration profils', error);
-
-        this.notificationService.openErrorSnackBar(
-          selectedUsers.length > 1
-            ? 'Erreur technique lors de la restauration des profils sélectionnés.'
-            : `Erreur technique lors de la restauration du profil ${this.getUserDisplayName(selectedUsers[0])}.`
-        );
-      },
-    });
-}
-
-private executePermanentDeleteUsers(selectedUsers: TrashUserResponse[]): void {
-  const ids = selectedUsers
-    .map(user => user.id)
-    .filter((id): id is string => !!id && id.trim() !== '');
-
-  if (ids.length === 0) {
-    this.notificationService.openErrorSnackBar(
-      'Aucun identifiant valide trouvé pour la suppression définitive.'
-    );
-    return;
+  private closeConfirmDialog(): void {
+    this.isConfirmDialogOpen = false;
+    this.confirmDialogTitle = '';
+    this.confirmDialogMessage = '';
+    this.confirmDialogConfirmLabel = '';
+    this.confirmDialogWarn = false;
+    this.pendingAction = null;
+    this.pendingUsers = [];
   }
 
-  this.permanentlyDeleteUsers(ids)
-    .pipe(finalize(() => this.refreshTable()))
-    .subscribe({
-      next: () => {
-        this.notificationService.openSuccessSnackBar(
-          selectedUsers.length > 1
-            ? 'Les profils sélectionnés ont été supprimés définitivement.'
-            : `Le profil ${this.getUserDisplayName(selectedUsers[0])} (${selectedUsers[0].email}) a été supprimé définitivement.`
-        );
-      },
-      error: error => {
-        console.error('Erreur suppression définitive profils', error);
+  private executeRestoreUsers(selectedUsers: TrashUserResponse[]): void {
+    const ids = selectedUsers
+      .map((user) => user.id)
+      .filter((id): id is string => !!id && id.trim() !== '');
 
-        this.notificationService.openErrorSnackBar(
-          selectedUsers.length > 1
-            ? 'Erreur lors de la suppression définitive des profils sélectionnés.'
-            : `Erreur lors de la suppression définitive du profil ${this.getUserDisplayName(selectedUsers[0])}.`
-        );
-      },
-    });
-}
+    if (ids.length === 0) {
+      this.notificationService.openErrorSnackBar(
+        'Aucun identifiant valide trouvé pour la restauration.',
+      );
+      return;
+    }
 
-  getUserDisplayName(user: TrashUserResponse): string {
+    this.restoreUsers(ids)
+      .pipe(finalize(() => this.refreshTable()))
+      .subscribe({
+        next: (response) => {
+          this.showRestoreResultMessage(response, selectedUsers);
+        },
+        error: (error) => {
+          console.error('Erreur restauration profils', error);
+
+          this.notificationService.openErrorSnackBar(
+            selectedUsers.length > 1
+              ? 'Erreur technique lors de la restauration des profils sélectionnés.'
+              : `Erreur technique lors de la restauration du profil ${this.getUserDisplayName(selectedUsers[0])}.`,
+          );
+        },
+      });
+  }
+
+  private executePermanentDeleteUsers(
+    selectedUsers: TrashUserResponse[],
+  ): void {
+    const ids = selectedUsers
+      .map((user) => user.id)
+      .filter((id): id is string => !!id && id.trim() !== '');
+
+    if (ids.length === 0) {
+      this.notificationService.openErrorSnackBar(
+        'Aucun identifiant valide trouvé pour la suppression définitive.',
+      );
+      return;
+    }
+
+    this.permanentlyDeleteUsers(ids)
+      .pipe(finalize(() => this.refreshTable()))
+      .subscribe({
+        next: () => {
+          this.notificationService.openSuccessSnackBar(
+            selectedUsers.length > 1
+              ? 'Les profils sélectionnés ont été supprimés définitivement.'
+              : `Le profil ${this.getUserDisplayName(selectedUsers[0])} (${selectedUsers[0].email}) a été supprimé définitivement.`,
+          );
+        },
+        error: (error) => {
+          console.error('Erreur suppression définitive profils', error);
+
+          this.notificationService.openErrorSnackBar(
+            selectedUsers.length > 1
+              ? 'Erreur lors de la suppression définitive des profils sélectionnés.'
+              : `Erreur lors de la suppression définitive du profil ${this.getUserDisplayName(selectedUsers[0])}.`,
+          );
+        },
+      });
+  }
+
+  getUserDisplayName(
+    user: TrashUserResponse | TrashActionItemResponse,
+  ): string {
     const fullName = `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
 
     return fullName || user.email || 'sélectionné';
