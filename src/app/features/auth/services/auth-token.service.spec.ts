@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { AuthTokenService } from './auth-token.service';
 import { TOKEN_ENDPOINT, CLIENT_ID } from './auth-config';
 import { PATH_TO_TICKETS, PATH_TO_ASSISTANCE } from '@app/app.routes';
 
 function base64UrlEncode(value: string): string {
-  return window
+  return globalThis
     .btoa(value)
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
@@ -57,7 +60,11 @@ describe('AuthTokenService', () => {
     expect(service.token()).toBe(token);
     expect(service.refresh()).toBe('refresh-token');
     expect(service.payload()).toEqual(payload);
-    expect(service.user()).toEqual({ id: 'user-1', username: 'user1', name: 'Jane Doe' });
+    expect(service.user()).toEqual({
+      id: 'user-1',
+      username: 'user1',
+      name: 'Jane Doe',
+    });
     expect(service.expiresAt()).toBe(payload.exp);
     expect(service.isAuthenticated()).toBeTrue();
     expect(service.isTokenValid()).toBeTrue();
@@ -92,7 +99,10 @@ describe('AuthTokenService', () => {
   it('should refresh tokens with valid backend response', async () => {
     const now = Math.floor(Date.now() / 1000);
     const payload = { exp: now + 3600, sub: 'user-3' };
-    service.setTokens({ access_token: createJwt(payload), refresh_token: 'refresh-3' });
+    service.setTokens({
+      access_token: createJwt(payload),
+      refresh_token: 'refresh-3',
+    });
 
     const refreshedPayload = { exp: now + 7200, sub: 'user-3' };
     const refreshedToken = createJwt(refreshedPayload);
@@ -105,8 +115,10 @@ describe('AuthTokenService', () => {
       refreshToken: 'refresh-3',
     });
 
-
-    req.flush({ access_token: refreshedToken, refresh_token: 'refreshed-refresh' });
+    req.flush({
+      access_token: refreshedToken,
+      refresh_token: 'refreshed-refresh',
+    });
     await refreshPromise;
 
     expect(service.token()).toBe(refreshedToken);
@@ -124,7 +136,9 @@ describe('AuthTokenService', () => {
     const now = Math.floor(Date.now() / 1000);
     service.token.set(createJwt({ exp: now - 30, sub: 'expired-user' }));
     service.refresh.set('refresh-expired');
-    const refreshSpy = spyOn(service, 'refreshTokens').and.rejectWith(new Error('refresh failed'));
+    const refreshSpy = spyOn(service, 'refreshTokens').and.rejectWith(
+      new Error('refresh failed'),
+    );
 
     const result = await service.tryAutoRefresh();
 
@@ -142,7 +156,10 @@ describe('AuthTokenService', () => {
     const result = await service.tryAutoRefresh();
     expect(result).toBeTrue();
 
-    service.setTokens({ access_token: 'invalid.token', refresh_token: 'refresh-invalid' });
+    service.setTokens({
+      access_token: 'invalid.token',
+      refresh_token: 'refresh-invalid',
+    });
     expect(service.getUserId()).toBeNull();
     expect(service.getCompleteName()).toBeNull();
   });
@@ -158,5 +175,84 @@ describe('AuthTokenService', () => {
     expect(service.refresh()).toBeNull();
     expect(sessionStorage.getItem('access_token')).toBeNull();
     expect(sessionStorage.getItem('refresh_token')).toBeNull();
+  });
+
+  it('should reject refresh when no refresh token is available', async () => {
+    service.removeTokens();
+
+    await expectAsync(service.refreshTokens()).toBeRejectedWithError(
+      Error,
+      'no refresh token',
+    );
+  });
+
+  it('should reject an invalid backend token response', async () => {
+    service.refresh.set('refresh-invalid-response');
+
+    const refreshPromise = service.refreshTokens();
+
+    const req = httpMock.expectOne(TOKEN_ENDPOINT);
+
+    expect(req.request.method).toBe('POST');
+
+    req.flush({
+      access_token: 'access-token-only',
+    });
+
+    await expectAsync(refreshPromise).toBeRejectedWithError(
+      Error,
+      'invalid token response',
+    );
+  });
+
+  it('should reuse an ongoing refresh for an expired token', async () => {
+    const now = Math.floor(Date.now() / 1000);
+
+    service.token.set(
+      createJwt({
+        exp: now - 120,
+        sub: 'expired-user',
+      }),
+    );
+
+    service.refresh.set('refresh-ongoing');
+
+    const refreshSpy = spyOn(service, 'refreshTokens');
+
+    (service as any).ongoingRefresh = Promise.resolve(true);
+
+    const result = await service.tryAutoRefresh();
+
+    expect(result).toBeTrue();
+    expect(refreshSpy).not.toHaveBeenCalled();
+  });
+
+  it('should remove persisted values when token signals are empty', () => {
+    sessionStorage.setItem('access_token', 'old-access');
+    sessionStorage.setItem('refresh_token', 'old-refresh');
+
+    service.token.set(null);
+    service.refresh.set(null);
+
+    (service as any).persistTokens();
+
+    expect(sessionStorage.getItem('access_token')).toBeNull();
+    expect(sessionStorage.getItem('refresh_token')).toBeNull();
+  });
+
+  it('should restore tokens from session storage', () => {
+    const now = Math.floor(Date.now() / 1000);
+    const token = createJwt({
+      exp: now + 3600,
+      sub: 'stored-user',
+    });
+
+    sessionStorage.setItem('access_token', token);
+    sessionStorage.setItem('refresh_token', 'stored-refresh');
+
+    service.initFromStorage();
+
+    expect(service.token()).toBe(token);
+    expect(service.refresh()).toBe('stored-refresh');
   });
 });
