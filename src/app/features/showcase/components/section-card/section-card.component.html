@@ -37,8 +37,8 @@
                         {{ cta.label }}
                     </button>
                     } @else {
-                    <a mat-button color="primary" [href]="cta.url" [target]="cta.target ?? '_self'"
-                        rel="noopener noreferrer">
+                    <a mat-button color="primary" [routerLink]="cta.target === '_blank' ? null : cta.url"
+                        [href]="cta.url" [target]="cta.target ?? '_self'" rel="noopener noreferrer">
                         {{ cta.label }}
                     </a>
                     }
@@ -59,7 +59,8 @@
             {{ cta.label }}
         </button>
         } @else {
-        <a mat-button color="primary" [href]="cta.url" [target]="cta.target ?? '_self'" rel="noopener noreferrer">
+        <a mat-button color="primary" [routerLink]="cta.target === '_blank' ? null : cta.url" [href]="cta.url"
+            [target]="cta.target ?? '_self'" rel="noopener noreferrer">
             {{ cta.label }}
         </a>
         }
