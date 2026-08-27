@@ -25,6 +25,11 @@
             }
         </div>
 
+        <div class="showcase-progress" role="progressbar" aria-label="Progression de la page"
+            [attr.aria-valuenow]="scrollProgress()" aria-valuemin="0" aria-valuemax="100">
+            <span [style.width.%]="scrollProgress()"></span>
+        </div>
+
         <span class="spacer"></span>
 
         <button type="button" class="my-space-button" (click)="goToMySpace()">
@@ -59,5 +64,11 @@
         }
         }
     </main>
+
+    @if (showBackToTop()) {
+    <button type="button" class="back-to-top" aria-label="Revenir en haut de la page" (click)="scrollToTop()">
+        ↑
+    </button>
+    }
 
 </div>
