@@ -1,6 +1,6 @@
 <div class="showcase-page">
 
-    <nav class="navbar">
+    <nav class="navbar" aria-label="Navigation principale">
         <div class="brand">
             <a href="/">
                 <img class="logo" alt="WaveCare" src="assets/images/LogoWaveCare.png">
@@ -9,19 +9,44 @@
 
         <span class="spacer-mini"></span>
 
-        @for (section of sections(); track section.title) {
-        <button type="button" class="custom-tab-button" (click)="selectSection(section)">
-            <span class="custom-tab-button-label">{{ section.title }}</span>
-            <span class="custom-tab-button-underline" [class.pink]="selectedSection() === section"
-                [class.transparent]="selectedSection() !== section">
-            </span>
+        <div class="tab-nav" role="tablist" aria-label="Sections de la vitrine">
+            @for (section of sections(); track section.id) {
+            <button type="button" class="custom-tab-button" role="tab"
+                [attr.aria-selected]="selectedSection() === section" (click)="selectSection(section)">
+                <span class="custom-tab-button-label">{{ section.title }}</span>
+                <span class="custom-tab-button-underline" [class.pink]="selectedSection() === section"
+                    [class.transparent]="selectedSection() !== section">
+                </span>
+            </button>
+            } @empty {
+            @if (pageQuery.isSuccess()) {
+            <span class="showcase-status">Aucune section disponible.</span>
+            }
+            }
+        </div>
+
+        <span class="spacer"></span>
+
+        <button type="button" class="my-space-button" (click)="goToMySpace()">
+            @if (authToken.isAuthenticated()) {
+            Mon espace
+            } @else {
+            Se connecter
+            }
         </button>
-        }
     </nav>
 
     <main class="showcase-content">
         @if (pageQuery.isPending()) {
-        <p class="showcase-status">Chargement…</p>
+        <div class="showcase-skeleton">
+            @for (i of [1, 2, 3]; track i) {
+            <div class="skeleton-card">
+                <div class="skeleton-line skeleton-line--title"></div>
+                <div class="skeleton-line"></div>
+                <div class="skeleton-line skeleton-line--short"></div>
+            </div>
+            }
+        </div>
         } @else if (pageQuery.isError()) {
         <p class="showcase-status showcase-status--error">
             Une erreur est survenue lors du chargement de la page.

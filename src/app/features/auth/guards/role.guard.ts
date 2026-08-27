@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { AuthTokenService } from '../services/auth-token.service';
-import { PATH_TO_LOGIN } from '@app/app.routes';
+import { PATH_TO_LOGIN } from '@app/route-paths';
 
 function createRoleGuard(check: (auth: AuthTokenService) => boolean): CanActivateFn {
   return async (): Promise<boolean | UrlTree> => {
@@ -14,7 +14,8 @@ function createRoleGuard(check: (auth: AuthTokenService) => boolean): CanActivat
     if (check(auth)) {
       return true;
     }
-    return router.createUrlTree([PATH_TO_LOGIN]);
+    // Authentifié mais mauvais rôle : rediriger vers la home métier
+    return router.createUrlTree([auth.getDefaultRoute()]);
   };
 }
 

@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import { jwtDecode as decodeJwt } from 'jwt-decode';
 
 import { TOKEN_ENDPOINT, CLIENT_ID, STORAGE_STRATEGY } from './auth-config';
-import { PATH_TO_TICKETS, PATH_TO_PATIENTS, PATH_TO_ASSISTANCE, PATH_TO_LOGIN } from '@app/app.routes';
+import { PATH_TO_TICKETS, PATH_TO_PATIENTS, PATH_TO_ASSISTANCE } from '@app/route-paths';
 
 interface JwtPayload {
   exp?: number;
@@ -320,7 +320,8 @@ export class AuthTokenService {
     if (this.isRadioOperator()) {
       return PATH_TO_ASSISTANCE;
     }
-    return PATH_TO_LOGIN;
+    // Rôle inconnu : renvoyer sur la Showcase publique
+    return '';
   }
 }
 

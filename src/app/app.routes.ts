@@ -1,40 +1,28 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './features/auth/guards/auth.guard';
 import { administratorGuard, radiologistGuard, radioOperatorGuard } from './features/auth/guards/role.guard';
 import { homeRedirectGuard } from './guards/home-redirect.guard';
+import {
+  PATH_TO_ASSISTANCE,
+  PATH_TO_FORGOT_PASSWORD,
+  PATH_TO_LOGIN,
+  PATH_TO_PATIENTS,
+  PATH_TO_RESET_PASSWORD,
+  PATH_TO_TICKETS,
+  PATH_TO_USERS,
+} from './route-paths';
 
 /**
  * Route path constants used across the application to avoid hardcoded strings.
  */
-export const PATH_TO_LOGIN = '***REMOVED***';
-/**
- * Path constant for the forgot password route.
- */
-export const PATH_TO_FORGOT_PASSWORD = '***REMOVED***';
-/**
- * Path constant for the password reset route.
- */
-export const PATH_TO_RESET_PASSWORD = '***REMOVED***';
-/**
- * Path constant for the assistance/help route.
- */
-export const PATH_TO_ASSISTANCE = 'assistance';
-/**
- * Path constant for the tickets management route.
- */
-export const PATH_TO_TICKETS: string = 'tickets';
-/**
- * Path constant for the users management route.
- */
-export const PATH_TO_USERS: string = 'users';
-/**
- * Path constant for the patients management route.
- */
-export const PATH_TO_PATIENTS: string = 'patients';
-/**
- * Path constant for the trash management route.
- */
-export const PATH_TO_USERS_TRASH: string = 'users/trash';
+export {
+  PATH_TO_ASSISTANCE,
+  PATH_TO_FORGOT_PASSWORD,
+  PATH_TO_LOGIN,
+  PATH_TO_PATIENTS,
+  PATH_TO_RESET_PASSWORD,
+  PATH_TO_TICKETS,
+  PATH_TO_USERS,
+} from './route-paths';
 
 /**
  * routes
@@ -60,22 +48,27 @@ export const routes: Routes = [
   },
   {
     path: PATH_TO_TICKETS,
-    canActivate: [authGuard, administratorGuard],
+    canActivate: [administratorGuard],
     loadComponent: () => import('@app/features/dashboard/components/ticket-table/ticket-table.component').then(c => c.TicketTableComponent)
   },
   {
-    path: PATH_TO_USERS_TRASH,
-    canActivate: [authGuard, administratorGuard],
-    loadComponent: () => import('@app/features/dashboard/components/user-trash/user-trash.component').then(c => c.UserTrashComponent)
-  },
-  {
     path: PATH_TO_USERS,
-    canActivate: [authGuard, administratorGuard],
-    loadComponent: () => import('@app/features/dashboard/components/user-table/user-table.component').then(c => c.UserTableComponent)
+    canActivate: [administratorGuard],
+    loadComponent: () => import('@app/features/dashboard/components/users/users.component').then(c => c.UsersComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('@app/features/dashboard/components/user-table/user-table.component').then(c => c.UserTableComponent)
+      },
+      {
+        path: 'trash',
+        loadComponent: () => import('@app/features/dashboard/components/user-trash/user-trash.component').then(c => c.UserTrashComponent)
+      }
+    ]
   },
   {
     path: PATH_TO_PATIENTS,
-    canActivate: [authGuard, radiologistGuard],
+    canActivate: [radiologistGuard],
     loadComponent: () => import('@app/features/dashboard/components/patients/patients.component').then(c => c.PatientsComponent),
     children: [
       {
@@ -91,6 +84,7 @@ export const routes: Routes = [
   {
     path: '',
     canActivate: [homeRedirectGuard],
+    data: { slug: '/' },
     loadComponent: () => import('@app/features/showcase/pages/showcase/showcase-page.component').then(c => c.ShowcasePageComponent)
   },
   // fin des routes principales

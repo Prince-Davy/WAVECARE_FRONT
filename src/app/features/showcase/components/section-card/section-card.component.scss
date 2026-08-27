@@ -1,43 +1,47 @@
 .section-card {
     width: 100%;
+    box-sizing: border-box;
 }
 
 .section-card__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 16px;
     padding-top: 8px;
+
+    // Desktop : colonnes auto
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+
+    // Tablette : 2 colonnes
+    @media (max-width: 959px) and (min-width: 600px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    // Mobile : colonne unique
+    @media (max-width: 599px) {
+        grid-template-columns: 1fr;
+    }
 }
 
 .card {
     height: 100%;
 }
 
-.card__title {
-    font-size: 15px;
-    font-weight: 500;
-    margin: 0 0 8px;
+.card__list {
+    margin: 8px 0 0;
+    padding-left: 4px;
 }
 
-.card__description {
+.card__list-item {
+    position: relative;
+    padding-left: 16px;
     font-size: 14px;
-    color: #666;
-    margin: 0;
-}
+    color: #444;
+    line-height: 1.6;
 
-.section-card__ctas {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 16px;
-}
-
-.cta-link {
-    color: #e6197a;
-    font-weight: 500;
-    text-decoration: none;
-
-    &:hover {
-        text-decoration: underline;
+    &::before {
+        content: '•';
+        position: absolute;
+        left: 0;
+        color: #e6197a;
     }
 }

@@ -9,7 +9,7 @@
     }
 
     <div class="section-grid">
-        @for (sectionCard of section().sectionCards; track sectionCard.title) {
+        @for (sectionCard of section().sectionCards; track sectionCard.id) {
         <app-section-card [sectionCard]="sectionCard" />
         }
     </div>

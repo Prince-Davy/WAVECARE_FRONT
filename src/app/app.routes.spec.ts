@@ -1,4 +1,3 @@
-import { authGuard } from './features/auth/guards/auth.guard';
 import { administratorGuard, radiologistGuard, radioOperatorGuard } from './features/auth/guards/role.guard';
 import { homeRedirectGuard } from './guards/home-redirect.guard';
 import {
@@ -9,7 +8,6 @@ import {
   PATH_TO_RESET_PASSWORD,
   PATH_TO_TICKETS,
   PATH_TO_USERS,
-  PATH_TO_USERS_TRASH,
   routes,
 } from './app.routes';
 
@@ -21,21 +19,23 @@ describe('app routes', () => {
     expect(routes.find((route) => route.path === PATH_TO_ASSISTANCE)).toBeTruthy();
 
     const ticketsRoute = routes.find((route) => route.path === PATH_TO_TICKETS);
-    expect(ticketsRoute?.canActivate).toEqual([authGuard, administratorGuard]);
+    expect(ticketsRoute?.canActivate).toEqual([administratorGuard]);
 
     const usersRoute = routes.find((route) => route.path === PATH_TO_USERS);
-    expect(usersRoute?.canActivate).toEqual([authGuard, administratorGuard]);
+    expect(usersRoute?.canActivate).toEqual([administratorGuard]);
 
-    const trashRoute = routes.find((route) => route.path === PATH_TO_USERS_TRASH);
-    expect(trashRoute?.canActivate).toEqual([authGuard, administratorGuard]);
+    const trashRoute = usersRoute?.children?.find((route) => route.path === 'trash');
+    expect(trashRoute?.loadComponent).toEqual(jasmine.any(Function));
 
     const patientsRoute = routes.find((route) => route.path === PATH_TO_PATIENTS);
-    expect(patientsRoute?.canActivate).toEqual([authGuard, radiologistGuard]);
+    expect(patientsRoute?.canActivate).toEqual([radiologistGuard]);
   });
 
   it('defines the root redirect and catch-all fallback routes', () => {
     const rootRoute = routes.find((route) => route.path === '');
     expect(rootRoute?.canActivate).toEqual([homeRedirectGuard]);
+    expect(rootRoute?.data).toEqual({ slug: '/' });
+    expect(rootRoute?.loadComponent).toEqual(jasmine.any(Function));
 
     const notFoundRoute = routes.find((route) => route.path === '**');
     expect(notFoundRoute).toBeTruthy();
