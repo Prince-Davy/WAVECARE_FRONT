@@ -67,7 +67,7 @@ export class ShowcasePageComponent {
             .subscribe(title => {
                 const target = this.sections().find(s => s.title === title);
                 if (target) {
-                    this.selectedSection.set(target);
+                    this.selectSection(target);
                 } else {
                     console.warn(`[ShowcasePage] tabTarget introuvable : "${title}"`);
                 }
