@@ -1,6 +1,6 @@
 <nav class="inner-breadcrumb" aria-label="Fil d'Ariane">
   <ul class="inner-breadcrumb__list" role="list">
-    @for (item of items(); track item.key ?? item.labelKey; let last = $last) {
+    @for (item of items(); track item.labelKey; let last = $last) {
       <li class="inner-breadcrumb__item">
         @if (item.link && !last) {
           <a
