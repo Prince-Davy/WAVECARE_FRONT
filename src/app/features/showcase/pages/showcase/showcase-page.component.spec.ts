@@ -80,6 +80,10 @@ describe('ShowcasePageComponent', () => {
         meta = TestBed.inject(Meta) as jasmine.SpyObj<Meta>;
     });
 
+    afterEach(() => {
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    });
+
     function stabilizeFixture(): void {
         component.sections();
         fixture.detectChanges();
