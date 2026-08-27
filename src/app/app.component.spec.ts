@@ -76,10 +76,10 @@ describe('AppComponent', () => {
     expect(compiled.querySelector('[data-testid="app-root-test"]')).toBeTruthy();
   });
 
-  it('should detect dashboard mode on default route', () => {
+  it('should not use dashboard mode when the user is not authenticated', () => {
     createComponent();
 
-    expect(component.dashboardMode()).toBeTrue();
+    expect(component.dashboardMode()).toBeFalse();
   });
 
   it('should stop idle watching when user is not authenticated', () => {

@@ -49,6 +49,10 @@ export class AppComponent {
   );
 
   readonly dashboardMode = computed(() => {
+    if (!this.tokenService.isAuthenticated()) {
+      return false;
+    }
+
     const url = this.currentUrl();
     if (url === undefined || url === null || url === '' || url === '/') {
       return true;
