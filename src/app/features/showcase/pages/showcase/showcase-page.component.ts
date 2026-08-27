@@ -75,7 +75,7 @@ export class ShowcasePageComponent {
 
     goToMySpace(): void {
         if (this.authToken.isAuthenticated()) {
-            this.navigationService.navigateToTickets();
+            this.navigationService.navigateToHome();
         } else {
             this.navigationService.navigateToLogin();
         }
