@@ -20,7 +20,9 @@ export class PageService {
             .set('populate[0]', 'sections')
             .set('populate[1]', 'sections.sectionCards')
             .set('populate[2]', 'sections.sectionCards.cards')
-            .set('populate[3]', 'sections.sectionCards.ctas');
+            .set('populate[3]', 'sections.sectionCards.cards.listText')
+            .set('populate[4]', 'sections.sectionCards.cards.ctas')
+            .set('populate[5]', 'sections.sectionCards.ctas');
 
         const token = this.config.strapiApiToken;
         const headers = token

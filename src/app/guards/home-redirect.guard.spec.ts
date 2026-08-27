@@ -42,7 +42,7 @@ describe('homeRedirectGuard', () => {
     expect(result).toBe(urlTree);
   });
 
-  it('allows unauthenticated users through to the login page route', async () => {
+  it('allows unauthenticated users through to the public showcase route', async () => {
     auth.tryAutoRefresh.and.returnValue(Promise.resolve(false));
 
     const result = await TestBed.runInInjectionContext(() =>

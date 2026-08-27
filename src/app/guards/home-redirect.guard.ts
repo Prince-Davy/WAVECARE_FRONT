@@ -14,6 +14,8 @@ export const homeRedirectGuard: CanActivateFn = async (): Promise<boolean | UrlT
   const ok = await auth.tryAutoRefresh();
   if (ok && auth.isAuthenticated()) {
     const target = auth.getDefaultRoute();
+    // Rôle inconnu : laisser voir la Showcase plutôt que boucler
+    if (!target) return true;
     return router.createUrlTree([target]);
   }
 

@@ -6,6 +6,10 @@
     font-size: 24px;
     font-weight: 600;
     margin: 0 0 12px;
+
+    @media (max-width: 599px) {
+        font-size: 20px;
+    }
 }
 
 .section__description {
@@ -15,7 +19,7 @@
 }
 
 .section-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 24px;
 }

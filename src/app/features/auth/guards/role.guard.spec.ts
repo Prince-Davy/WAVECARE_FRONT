@@ -11,7 +11,7 @@ import {
   radioOperatorGuard,
 } from './role.guard';
 import { AuthTokenService } from '../services/auth-token.service';
-import { PATH_TO_LOGIN } from '@app/app.routes';
+import { PATH_TO_LOGIN } from '@app/route-paths';
 
 function createRouterSpy(): jasmine.SpyObj<Router> {
   return jasmine.createSpyObj<Router>('Router', ['createUrlTree']);
@@ -20,13 +20,14 @@ function createRouterSpy(): jasmine.SpyObj<Router> {
 function createAuthStub(valid: boolean) {
   const spy = jasmine.createSpyObj<AuthTokenService>(
     'AuthTokenService',
-    ['tryAutoRefresh', 'isRadiologist', 'isAdministrator', 'isRadioOperator']
+    ['tryAutoRefresh', 'isRadiologist', 'isAdministrator', 'isRadioOperator', 'getDefaultRoute']
   );
 
   spy.tryAutoRefresh.and.returnValue(Promise.resolve(valid));
   spy.isRadiologist.and.returnValue(false);
   spy.isAdministrator.and.returnValue(false);
   spy.isRadioOperator.and.returnValue(false);
+  spy.getDefaultRoute.and.returnValue('');
 
   return spy;
 }
@@ -79,11 +80,12 @@ describe('role.guard', () => {
     expect(result).toBeTrue();
   });
 
-  it('redirects authenticated user without radiologist role', async () => {
+  it('redirects authenticated user without radiologist role to the default route', async () => {
     const auth = createAuthStub(true);
     const urlTree = {} as UrlTree;
 
     auth.isRadiologist.and.returnValue(false);
+    auth.getDefaultRoute.and.returnValue('tickets');
     router.createUrlTree.and.returnValue(urlTree);
 
     TestBed.overrideProvider(AuthTokenService, { useValue: auth });
@@ -94,7 +96,8 @@ describe('role.guard', () => {
 
     expect(auth.tryAutoRefresh).toHaveBeenCalled();
     expect(auth.isRadiologist).toHaveBeenCalled();
-    expect(router.createUrlTree).toHaveBeenCalledWith([PATH_TO_LOGIN]);
+    expect(auth.getDefaultRoute).toHaveBeenCalled();
+    expect(router.createUrlTree).toHaveBeenCalledWith(['tickets']);
     expect(result).toBe(urlTree);
   });
 

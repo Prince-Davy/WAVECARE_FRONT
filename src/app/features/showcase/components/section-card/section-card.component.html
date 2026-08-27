@@ -15,10 +15,35 @@
                 <mat-card-header>
                     <mat-card-title>{{ card.title }}</mat-card-title>
                 </mat-card-header>
-                @if (card.description) {
+                @if (card.description || card.listText?.length) {
                 <mat-card-content>
+                    @if (card.description) {
                     <p>{{ card.description }}</p>
+                    }
+                    @if (card.listText?.length) {
+                    <div class="card__list">
+                        @for (item of card.listText!; track item.id) {
+                        <div class="card__list-item">{{ item.text }}</div>
+                        }
+                    </div>
+                    }
                 </mat-card-content>
+                }
+                @if (card.ctas?.length) {
+                <mat-card-actions>
+                    @for (cta of card.ctas!; track cta.label) {
+                    @if (cta.type === 'tab') {
+                    <button mat-button color="primary" (click)="navigateToTab(cta.tabTarget!)">
+                        {{ cta.label }}
+                    </button>
+                    } @else {
+                    <a mat-button color="primary" [href]="cta.url" [target]="cta.target ?? '_self'"
+                        rel="noopener noreferrer">
+                        {{ cta.label }}
+                    </a>
+                    }
+                    }
+                </mat-card-actions>
                 }
             </mat-card>
             }
@@ -29,9 +54,15 @@
     @if (sectionCard().ctas?.length) {
     <mat-card-actions>
         @for (cta of sectionCard().ctas!; track cta.label) {
+        @if (cta.type === 'tab') {
+        <button mat-button color="primary" (click)="navigateToTab(cta.tabTarget!)">
+            {{ cta.label }}
+        </button>
+        } @else {
         <a mat-button color="primary" [href]="cta.url" [target]="cta.target ?? '_self'" rel="noopener noreferrer">
             {{ cta.label }}
         </a>
+        }
         }
     </mat-card-actions>
     }
