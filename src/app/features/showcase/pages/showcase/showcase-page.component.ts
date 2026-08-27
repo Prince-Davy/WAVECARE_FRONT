@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, signal } from '@angular/core';
+import { Component, HostListener, computed, effect, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { Title, Meta } from '@angular/platform-browser';
 import { injectQuery } from '@tanstack/angular-query-experimental';
@@ -71,6 +71,31 @@ export class ShowcasePageComponent {
 
     selectSection(section: Section): void {
         this.selectedSection.set(section);
+
+        document.getElementById(this.getSectionElementId(section))?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+        });
+    }
+
+    @HostListener('window:scroll')
+    syncSelectedSection(): void {
+        const marker = window.scrollY + window.innerHeight * 0.35;
+        const visibleSection = this.sections()
+            .map(section => ({
+                section,
+                element: document.getElementById(this.getSectionElementId(section)),
+            }))
+            .filter(item => item.element && item.element.offsetTop <= marker)
+            .at(-1)?.section;
+
+        if (visibleSection && visibleSection !== this.selectedSection()) {
+            this.selectedSection.set(visibleSection);
+        }
+    }
+
+    private getSectionElementId(section: Section): string {
+        return `showcase-section-${section.id}`;
     }
 
     goToMySpace(): void {

@@ -51,8 +51,12 @@
         <p class="showcase-status showcase-status--error">
             Une erreur est survenue lors du chargement de la page.
         </p>
-        } @else if (selectedSection()) {
-        <app-section [section]="selectedSection()!" />
+        } @else {
+        @for (section of sections(); track section.id) {
+        <div class="showcase-section" [id]="'showcase-section-' + section.id">
+            <app-section [section]="section" />
+        </div>
+        }
         }
     </main>
 
