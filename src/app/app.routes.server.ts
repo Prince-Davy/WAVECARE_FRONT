@@ -11,11 +11,28 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Server,
   },
   {
-    path: '**',
-    renderMode: RenderMode.Prerender
+    // Pages nécessitant un appel API au chargement : rendu à la requête, pas de prérendu statique
+    path: 'assistance',
+    renderMode: RenderMode.Server,
   },
   {
-    path: 'patients/:id',
+    path: 'tickets',
     renderMode: RenderMode.Server,
+  },
+  {
+    path: 'users/**',
+    renderMode: RenderMode.Server,
+  },
+  {
+    path: 'patients',
+    renderMode: RenderMode.Server,
+  },
+  {
+    path: 'patients/**',
+    renderMode: RenderMode.Server,
+  },
+  {
+    path: '**',
+    renderMode: RenderMode.Prerender
   }
 ];
