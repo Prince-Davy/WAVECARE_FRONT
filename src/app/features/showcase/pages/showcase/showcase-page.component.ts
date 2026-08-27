@@ -36,13 +36,19 @@ export class ShowcasePageComponent {
 
     readonly sections = computed(() => this.pageQuery.data()?.sections ?? []);
     readonly selectedSection = signal<Section | null>(null);
+    readonly scrollProgress = signal(0);
+    readonly showBackToTop = computed(() => this.scrollProgress() > 8);
 
     constructor() {
         // Sélectionne le premier onglet dès que les données arrivent
         effect(() => {
             const sections = this.sections();
             if (sections.length > 0 && !this.selectedSection()) {
-                this.selectedSection.set(sections[0]);
+                const sectionFromUrl = this.getSectionFromUrl(sections);
+                this.selectedSection.set(sectionFromUrl ?? sections[0]);
+                if (sectionFromUrl) {
+                    window.requestAnimationFrame(() => this.scrollToSection(sectionFromUrl, false));
+                }
             }
         });
 
@@ -71,16 +77,18 @@ export class ShowcasePageComponent {
 
     selectSection(section: Section): void {
         this.selectedSection.set(section);
-
-        document.getElementById(this.getSectionElementId(section))?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-        });
+        this.updateUrl(section);
+        this.scrollToSection(section);
     }
 
     @HostListener('window:scroll')
     syncSelectedSection(): void {
         const marker = window.scrollY + window.innerHeight * 0.35;
+        const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+        this.scrollProgress.set(scrollableHeight > 0
+            ? Math.round((window.scrollY / scrollableHeight) * 100)
+            : 0);
+
         const visibleSection = this.sections()
             .map(section => ({
                 section,
@@ -91,11 +99,49 @@ export class ShowcasePageComponent {
 
         if (visibleSection && visibleSection !== this.selectedSection()) {
             this.selectedSection.set(visibleSection);
+            this.updateUrl(visibleSection);
         }
+    }
+
+    @HostListener('window:hashchange')
+    syncSectionFromUrl(): void {
+        const section = this.getSectionFromUrl(this.sections());
+        if (section && section !== this.selectedSection()) {
+            this.selectedSection.set(section);
+            this.scrollToSection(section, false);
+        }
+    }
+
+    scrollToTop(): void {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     private getSectionElementId(section: Section): string {
         return `showcase-section-${section.id}`;
+    }
+
+    private getSectionFromUrl(sections: Section[]): Section | undefined {
+        if (typeof window === 'undefined') {
+            return undefined;
+        }
+
+        const sectionId = window.location.hash.slice(1);
+        return sections.find(section => this.getSectionElementId(section) === sectionId);
+    }
+
+    private updateUrl(section: Section): void {
+        if (typeof window !== 'undefined') {
+            window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${this.getSectionElementId(section)}`);
+        }
+    }
+
+    private scrollToSection(section: Section, smooth = true): void {
+        if (typeof document !== 'undefined') {
+            document.getElementById(this.getSectionElementId(section))?.scrollIntoView({
+                behavior: smooth ? 'smooth' : 'auto',
+                block: 'start',
+            });
+        }
     }
 
     goToMySpace(): void {
