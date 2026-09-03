@@ -122,6 +122,7 @@ env:
   - key: POSTGRES_PORT
   - key: POSTGRES_NAME
   - key: API_URL
+  - key: STRAPI_BASE_URL
 
 # --- THIS SECTION IS FOR MORE COMPLEX CONFIGURATION --- #
 # --- You may not need to edit it --- #
