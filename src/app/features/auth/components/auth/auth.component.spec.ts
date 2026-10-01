@@ -18,7 +18,7 @@ describe('AuthComponent', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj('AuthService', ['***REMOVED***']);
+    const authSpy = jasmine.createSpyObj('AuthService', ['login']);
 
     await TestBed.configureTestingModule({
       imports: [
@@ -57,7 +57,7 @@ describe('AuthComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('devrait appeler authService.***REMOVED*** lors de la soumission si le formulaire est valide', () => {
+  it('devrait appeler authService.login lors de la soumission si le formulaire est valide', () => {
     const mockResponse = {
       access_token: 'fake-access-token',
       refresh_token: 'fake-refresh-token',
@@ -67,12 +67,12 @@ describe('AuthComponent', () => {
       role: 'ADMIN',
     };
 
-    authServiceSpy.***REMOVED***.and.returnValue(of(mockResponse));
+    authServiceSpy.login.and.returnValue(of(mockResponse));
 
-    component.***REMOVED***Form.setValue({ username: 'test', password: '1234' });
+    component.loginForm.setValue({ username: 'test', password: '1234' });
     component.onSubmit();
 
-    expect(authServiceSpy.***REMOVED***).toHaveBeenCalledWith({
+    expect(authServiceSpy.login).toHaveBeenCalledWith({
     username: 'test',
     password: '1234',
     });
@@ -80,11 +80,11 @@ describe('AuthComponent', () => {
 
   it('devrait être invalide lorsque le formulaire est vide', () => {
     component.onSubmit();
-    expect(component.***REMOVED***Form.invalid).toBeTrue();
+    expect(component.loginForm.invalid).toBeTrue();
   });
 
   it('devrait être valide lorsque le formulaire est rempli', () => {
-    component.***REMOVED***Form.setValue({ username: 'test', password: '1234' });
-    expect(component.***REMOVED***Form.valid).toBeTrue();
+    component.loginForm.setValue({ username: 'test', password: '1234' });
+    expect(component.loginForm.valid).toBeTrue();
   });
 });

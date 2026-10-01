@@ -3,8 +3,8 @@ import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { AuthTokenService } from '@app/features/auth/services/auth-token.service';
 
 /**
- * Guard placed on the application root (or ***REMOVED*** page) to send authenticated
- * users to their "home" route and unauthenticated ones to the ***REMOVED*** screen.
+ * Guard placed on the application root (or login page) to send authenticated
+ * users to their "home" route and unauthenticated ones to the login screen.
  * Always returns a UrlTree so that navigation is handled by the router.
  */
 export const homeRedirectGuard: CanActivateFn = async (): Promise<boolean | UrlTree> => {
@@ -19,6 +19,6 @@ export const homeRedirectGuard: CanActivateFn = async (): Promise<boolean | UrlT
     return router.createUrlTree([target]);
   }
 
-  // not logged in, let request proceed (presumably to ***REMOVED*** route)
+  // not logged in, let request proceed (presumably to login route)
   return true;
 };

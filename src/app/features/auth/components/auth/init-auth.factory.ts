@@ -6,7 +6,7 @@ export function initAuthFactory(
   return async () => {
     auth.initFromStorage();
     const ok = await auth.tryAutoRefresh();
-    // Nettoie les tokens expirés ; la redirection vers /***REMOVED*** est gérée par authGuard
+    // Nettoie les tokens expirés ; la redirection vers /login est gérée par authGuard
     if (!ok) {
       auth.removeTokens();
     }

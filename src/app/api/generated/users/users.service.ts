@@ -106,7 +106,7 @@ function filterParams(
  * UsersService
  * Angular client for Users-related API endpoints.
  * Provides methods to list, retrieve, create, update and delete users,
- * and exposes authentication-related endpoints (***REMOVED***, roles, password update).
+ * and exposes authentication-related endpoints (login, roles, password update).
  * Generated from the OpenAPI specification and used by the application to
  * interact with the backend users API.
  */
@@ -338,15 +338,15 @@ export class UsersService {
  * Authenticates credentials against Keycloak and returns OIDC access/refresh tokens.
  * @summary Login
  */
- userLogin<TData = TokenResponse>(***REMOVED***Request: LoginRequest, options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
- userLogin<TData = TokenResponse>(***REMOVED***Request: LoginRequest, options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
- userLogin<TData = TokenResponse>(***REMOVED***Request: LoginRequest, options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
+ userLogin<TData = TokenResponse>(loginRequest: LoginRequest, options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
+ userLogin<TData = TokenResponse>(loginRequest: LoginRequest, options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
+ userLogin<TData = TokenResponse>(loginRequest: LoginRequest, options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
   userLogin<TData = TokenResponse>(
-    ***REMOVED***Request: LoginRequest, options?: HttpClientOptions & { observe?: 'body' | 'events' | 'response' }): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    loginRequest: LoginRequest, options?: HttpClientOptions & { observe?: 'body' | 'events' | 'response' }): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
       return this.http.post<TData>(
-      `/api/v1/***REMOVED***`,
-      ***REMOVED***Request,{
+      `/api/v1/login`,
+      loginRequest,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
       }
@@ -355,8 +355,8 @@ export class UsersService {
 
     if (options?.observe === 'response') {
       return this.http.post<TData>(
-      `/api/v1/***REMOVED***`,
-      ***REMOVED***Request,{
+      `/api/v1/login`,
+      loginRequest,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
       }
@@ -364,8 +364,8 @@ export class UsersService {
     }
 
     return this.http.post<TData>(
-      `/api/v1/***REMOVED***`,
-      ***REMOVED***Request,{
+      `/api/v1/login`,
+      loginRequest,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
       }

@@ -62,7 +62,7 @@ describe('AssistanceComponent', () => {
   it('should have a valid form when all fields are filled correctly', () => {
     component.assistanceForm.controls['lastName'].setValue('Doe');
     component.assistanceForm.controls['firstName'].setValue('John');
-    component.assistanceForm.controls['mail'].setValue('***REMOVED***');
+    component.assistanceForm.controls['mail'].setValue('john.doe@example.com');
     component.assistanceForm.controls['subject'].setValue(1);
     component.assistanceForm.controls['content'].setValue(
       'This is a valid test description.'
@@ -84,7 +84,7 @@ describe('AssistanceComponent', () => {
   it('should set submissionSuccess to true on valid form submission', () => {
     component.assistanceForm.controls['lastName'].setValue('Doe');
     component.assistanceForm.controls['firstName'].setValue('John');
-    component.assistanceForm.controls['mail'].setValue('***REMOVED***');
+    component.assistanceForm.controls['mail'].setValue('john.doe@example.com');
     component.assistanceForm.controls['subject'].setValue(1);
     component.assistanceForm.controls['content'].setValue(
       'This is a valid test description.'

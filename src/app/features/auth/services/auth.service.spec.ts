@@ -33,13 +33,13 @@ describe('AuthService', () => {
     service = TestBed.inject(AuthService);
   });
 
-  it('should ***REMOVED*** and persist tokens', (done) => {
-    const credentials = { username: '***REMOVED***', password: '***REMOVED***' };
+  it('should login and persist tokens', (done) => {
+    const credentials = { username: 'alice', password: 'secret' };
     usersApi.userLogin.and.returnValue(
       of({ access_token: 'access-token', refresh_token: 'refresh-token' } as any)
     );
 
-    service.***REMOVED***(credentials).subscribe((response) => {
+    service.login(credentials).subscribe((response) => {
       expect(response.access_token).toBe('access-token');
       expect(usersApi.userLogin).toHaveBeenCalledWith(credentials);
       expect(tokenService.setTokens).toHaveBeenCalledWith({
@@ -58,25 +58,25 @@ describe('AuthService', () => {
   it('should delegate forgotPassword request', () => {
     passwordResetApi.resetPasswordRequest.and.returnValue(of('OK' as any));
 
-    const result = service.forgotPassword('***REMOVED***@example.com');
+    const result = service.forgotPassword('alice@example.com');
 
-    expect(passwordResetApi.resetPasswordRequest).toHaveBeenCalledWith({ email: '***REMOVED***@example.com' });
+    expect(passwordResetApi.resetPasswordRequest).toHaveBeenCalledWith({ email: 'alice@example.com' });
     result.subscribe((value) => expect(value).toBe('OK'));
   });
 
   it('should validate reset token', () => {
-    passwordResetApi.resetPasswordValidate.and.returnValue(of({ id: 'user-1', email: '***REMOVED***@example.com' } as any));
+    passwordResetApi.resetPasswordValidate.and.returnValue(of({ id: 'user-1', email: 'alice@example.com' } as any));
 
     const result = service.readToken('token-123');
 
     expect(passwordResetApi.resetPasswordValidate).toHaveBeenCalledWith({ token: 'token-123' });
     result.subscribe((value) => {
-      expect(value).toEqual({ id: 'user-1', email: '***REMOVED***@example.com' });
+      expect(value).toEqual({ id: 'user-1', email: 'alice@example.com' });
     });
   });
 
   it('should update password with token and user id', () => {
-    const payload = { userName: '***REMOVED***', newPassword: '***REMOVED***' };
+    const payload = { userName: 'alice', newPassword: 'new-pass' };
     usersApi.userUpdatePassword.and.returnValue(of(undefined as any));
 
     const result = service.updatePassword('token-456', 'user-1', payload);

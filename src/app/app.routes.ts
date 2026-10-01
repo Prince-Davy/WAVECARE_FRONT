@@ -36,11 +36,11 @@ export const routes: Routes = [
   },
   {
     path: PATH_TO_FORGOT_PASSWORD,
-    loadComponent: () => import('@app/features/auth/components/***REMOVED***/***REMOVED***.component').then(c => c.ForgotPasswordComponent)
+    loadComponent: () => import('@app/features/auth/components/forgot-password/forgot-password.component').then(c => c.ForgotPasswordComponent)
   },
   {
     path: PATH_TO_RESET_PASSWORD,
-    loadComponent: () => import('@app/features/auth/components/***REMOVED***/***REMOVED***.component').then(c => c.ResetPasswordComponent)
+    loadComponent: () => import('@app/features/auth/components/reset-password/reset-password.component').then(c => c.ResetPasswordComponent)
   },
   {
     path: PATH_TO_ASSISTANCE,

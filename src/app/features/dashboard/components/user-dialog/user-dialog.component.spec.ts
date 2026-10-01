@@ -39,7 +39,7 @@ describe('UserDialogComponent', () => {
       id: '10',
       lastName: 'Doe',
       firstName: 'John',
-      email: '***REMOVED***',
+      email: 'john.doe@example.com',
       role: 'USER',
       locked: false,
     } as UserResponse;
@@ -81,7 +81,7 @@ describe('UserDialogComponent', () => {
       const fg = component.userDialogForm;
       expect(fg.get('lastName')?.value).toBe('Doe');
       expect(fg.get('firstName')?.value).toBe('John');
-      expect(fg.get('email')?.value).toBe('***REMOVED***');
+      expect(fg.get('email')?.value).toBe('john.doe@example.com');
       expect(fg.get('role')?.value).toBe('USER');
       expect(fg.get('email')?.disabled).toBeTrue();
     });

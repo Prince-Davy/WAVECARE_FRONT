@@ -36,7 +36,7 @@ describe('authGuard', () => {
     expect(router.createUrlTree).not.toHaveBeenCalled();
   });
 
-  it('redirects to ***REMOVED*** when refresh fails', async () => {
+  it('redirects to login when refresh fails', async () => {
     auth.tryAutoRefresh.and.returnValue(Promise.resolve(false));
     const urlTree = {} as UrlTree;
     router.createUrlTree.and.returnValue(urlTree);
@@ -47,7 +47,7 @@ describe('authGuard', () => {
     expect(result).toBe(urlTree);
   });
 
-  it('redirects to ***REMOVED*** when the user is not authenticated after refresh', async () => {
+  it('redirects to login when the user is not authenticated after refresh', async () => {
     auth.tryAutoRefresh.and.returnValue(Promise.resolve(true));
     auth.isAuthenticated.and.returnValue(false);
     const urlTree = {} as UrlTree;

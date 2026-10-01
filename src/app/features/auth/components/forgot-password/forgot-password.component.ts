@@ -12,7 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { tap } from 'rxjs';
 
 @Component({
-  selector: 'app-***REMOVED***',
+  selector: 'app-forgot-password',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -23,8 +23,8 @@ import { tap } from 'rxjs';
     TranslateModule,
     RouterLink
 ],
-  templateUrl: './***REMOVED***.component.html',
-  styleUrls: ['./***REMOVED***.component.scss']
+  templateUrl: './forgot-password.component.html',
+  styleUrls: ['./forgot-password.component.scss']
 })
 export class ForgotPasswordComponent {
 

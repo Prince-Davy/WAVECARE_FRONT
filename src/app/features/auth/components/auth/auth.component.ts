@@ -38,7 +38,7 @@ export class AuthComponent {
   readonly PATH_TO_FORGOT_PASSWORD_FOR_HTML = `/${PATH_TO_FORGOT_PASSWORD}`;
   readonly PATH_TO_ASSISTANCE_FOR_HTML = `/${PATH_TO_ASSISTANCE}`;
 
-  ***REMOVED***Form: FormGroup;
+  loginForm: FormGroup;
   hidePassword = true;
   errorMessage: string | undefined;
   isLockoutModalOpen = false;
@@ -52,7 +52,7 @@ export class AuthComponent {
     private translate: TranslateService
   ) {
 
-    this.***REMOVED***Form = this.fb.group({
+    this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]]
     });
@@ -63,17 +63,17 @@ export class AuthComponent {
   }
 
   get username() {
-    return this.***REMOVED***Form.get('username');
+    return this.loginForm.get('username');
   }
 
   get password() {
-    return this.***REMOVED***Form.get('password');
+    return this.loginForm.get('password');
   }
 
   onSubmit() {
     this.submitted = true;
-    if (this.***REMOVED***Form.valid) {
-      this.authService.***REMOVED***(this.***REMOVED***Form.value)
+    if (this.loginForm.valid) {
+      this.authService.login(this.loginForm.value)
         .pipe(
           tap((response) => {
             console.log("You are logged in");

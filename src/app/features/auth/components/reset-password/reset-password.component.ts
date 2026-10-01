@@ -13,7 +13,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs';
 
 @Component({
-  selector: 'app-***REMOVED***',
+  selector: 'app-reset-password',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -24,8 +24,8 @@ import { tap } from 'rxjs';
     TranslateModule,
     RouterLink
 ],
-  templateUrl: './***REMOVED***.component.html',
-  styleUrls: ['./***REMOVED***.component.scss']
+  templateUrl: './reset-password.component.html',
+  styleUrls: ['./reset-password.component.scss']
 })
 
 export class ResetPasswordComponent {
@@ -60,7 +60,7 @@ export class ResetPasswordComponent {
       this.translate.onTranslationChange
         .pipe(takeUntilDestroyed())
         .subscribe(
-          () => this.message = this.translate.instant('feature.auth.***REMOVED***-component.message.error.invalid-link')
+          () => this.message = this.translate.instant('feature.auth.reset-password-component.message.error.invalid-link')
         );
       this.isError = true;
     }
@@ -111,7 +111,7 @@ export class ResetPasswordComponent {
 
     if (!this.userId || !this.email) {
       this.isError = true;
-      this.message = this.translate.instant('feature.auth.***REMOVED***-component.form.submit.message.error.userinfo-not-available');
+      this.message = this.translate.instant('feature.auth.reset-password-component.form.submit.message.error.userinfo-not-available');
       return;
     }
 
@@ -122,7 +122,7 @@ export class ResetPasswordComponent {
       .pipe(
         tap(response => {
           this.isError = false;
-          this.message = this.translate.instant('feature.auth.***REMOVED***-component.form.submit.message.success');
+          this.message = this.translate.instant('feature.auth.reset-password-component.form.submit.message.success');
 
           if (this.token) {
             this.authService.deleteToken(this.token)

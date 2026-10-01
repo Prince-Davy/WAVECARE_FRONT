@@ -55,8 +55,8 @@
             "error-message": "Ce champs est obligatoire"
           },
           "password": {
-            "label": "***REMOVED*** :",
-            "placeholder": "***REMOVED***",
+            "label": "Mot de passe :",
+            "placeholder": "Mot de passe",
             "error-message": "Ce champs est obligatoire",
             "hide-password-button": "Afficher ou masquer mon mot de passe"
           },
@@ -74,7 +74,7 @@
           "link": "Veuillez contacter votre administrateur",
           "close-button": "Fermer"
         },
-        "***REMOVED***-link": "MOT DE PASSE OUBLIÉ ?",
+        "forgot-password-link": "MOT DE PASSE OUBLIÉ ?",
         "or-divider-text": "OU",
         "external-auth": {
           "label": "S’identifier avec :",
@@ -82,7 +82,7 @@
         },
         "assistance-link": "UN PROBLÈME ? JE M'ADRESSE À UN ADMINISTRATEUR"
       },
-      "***REMOVED***-component": {
+      "forgot-password-component": {
         "logo-alt": "Logo de l'application wavecare",
         "title": "Demande de réinitialisation du mot de passe",
         "description": "Veuillez entrer votre adresse e-mail. Un e-mail vous sera envoyé avec un lien pour réinitialiser votre mot de passe",
@@ -105,19 +105,19 @@
         },
         "assistance-link": "UN PROBLÈME ? JE M'ADRESSE À UN ADMINISTRATEUR"
       },
-      "***REMOVED***-component": {
+      "reset-password-component": {
         "logo-alt": "Logo de l'application wavecare",
         "title": "Réinitialisation de votre mot de passe",
         "password-requirements": "Le mot de passe doit contenir :\n\nUn minimum de 12 caractères et un maximum de 20 caractères\nEt au moins :\n\n\tUne lettre majuscule (Exemple : A, B, C)\n\tUne lettre minuscule (Exemple : a, b, c)\n\tUn chiffre (Exemple : 1, 2, 3)\n\tUn caractère spécial (Exemple : #, €, $, @, *, ‑)",
         "form": {
-          "***REMOVED***word": {
+          "new-password": {
             "label": "Nouveau mot de passe :",
             "placeholder": "Nouveau mot de passe",
             "error-message": {
               "required": "Ce champs est obligatoire",
               "minlength": "Le mot de passe doit contenir au moins 12 caractères.",
               "maxlength": "Le mot de passe ne peut pas dépasser 20 caractères.",
-              "pattern": "***REMOVED*** non conforme"
+              "pattern": "Mot de passe non conforme"
             },
             "hide-password-button": "Afficher ou masquer mon mot de passe"
           },
@@ -131,7 +131,7 @@
           },
           "submit": {
             "message": {
-              "success": "✅ ***REMOVED*** réinitialisé avec succès. Redirection...",
+              "success": "✅ Mot de passe réinitialisé avec succès. Redirection...",
               "error": {
                 "userinfo-not-available": "Erreur: informations utilisateur non disponibles",
                 "technical": "Erreur lors de la réinitialisation du mot de passe"
@@ -604,7 +604,7 @@
       },
       "category": {
         "ACCOUNT_ID": "Identifiant",
-        "ACCOUNT_PASSWORD": "***REMOVED***",
+        "ACCOUNT_PASSWORD": "Mot de passe",
         "EXTERNAL_AUTHENTICATOR": "Pro Santé Connect",
         "ACCOUNT_ACCESS": "Problème d'accès",
         "OTHER": "Autre"
@@ -645,7 +645,7 @@
         "invalid": "Aucun compte n'est associé à cet e-mail."
       },
       "password": {
-        "invalid": "***REMOVED*** incorrect."
+        "invalid": "Mot de passe incorrect."
       }
     },
     "keycloak": {

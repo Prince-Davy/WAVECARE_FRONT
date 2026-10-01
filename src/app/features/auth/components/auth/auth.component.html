@@ -1,7 +1,7 @@
 <div class="auth-container">
   <img class="logo" [alt]="'feature.auth.auth-component.logo-alt' | translate" src="assets/images/LogoWaveCare.png">
 
-  <mat-card class="***REMOVED***-card">
+  <mat-card class="login-card">
     <h2 class="title">{{'feature.auth.auth-component.connect' | translate}}</h2>
 
     @if (submitted && errorMessage) {
@@ -12,38 +12,38 @@
 
     <p class="description">{{'feature.auth.auth-component.description' | translate}}</p>
 
-    <form [formGroup]="***REMOVED***Form" (ngSubmit)="onSubmit()" class="***REMOVED***-form">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
 
       <!-- Mail Field -->
-      <label for="***REMOVED***-username">{{'feature.auth.auth-component.form.username.label' | translate}}</label>
+      <label for="login-username">{{'feature.auth.auth-component.form.username.label' | translate}}</label>
       <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
-        <input id="***REMOVED***-username" matInput [placeholder]="'feature.auth.auth-component.form.username.placeholder' | translate" formControlName="username" required>
-        @if (***REMOVED***Form.get('username')?.invalid && ***REMOVED***Form.get('username')?.touched) {
+        <input id="login-username" matInput [placeholder]="'feature.auth.auth-component.form.username.placeholder' | translate" formControlName="username" required>
+        @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
         <div class="form-control-error-message">{{'feature.auth.auth-component.form.username.error-message' | translate}}</div>
         }
       </mat-form-field>
 
       <!-- Password Field -->
-      <label for="***REMOVED***-password">{{'feature.auth.auth-component.form.password.label' | translate}}</label>
+      <label for="login-password">{{'feature.auth.auth-component.form.password.label' | translate}}</label>
       <mat-form-field class="white-form-field" appearance="outline" subscriptSizing="dynamic">
-        <input id="***REMOVED***-password" matInput [placeholder]="'feature.auth.auth-component.form.password.placeholder' | translate" [type]="hidePassword ? 'password' : 'text'" formControlName="password" required autocomplete="off">
+        <input id="login-password" matInput [placeholder]="'feature.auth.auth-component.form.password.placeholder' | translate" [type]="hidePassword ? 'password' : 'text'" formControlName="password" required autocomplete="off">
         <button [title]="'feature.auth.auth-component.form.password.hide-password-button' | translate" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
-        @if (***REMOVED***Form.get('password')?.invalid && ***REMOVED***Form.get('password')?.touched) {
+        @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
         <div class="form-control-error-message">{{'feature.auth.auth-component.form.password.error-message' | translate}}</div>
         }
       </mat-form-field>
 
       <!-- Submit Button -->
-      <div class="***REMOVED***-submit-wrapper">
+      <div class="login-submit-wrapper">
         <div>
-          <button mat-raised-button class="***REMOVED***-submit" [disabled]="!***REMOVED***Form.valid" type="submit">{{'feature.auth.auth-component.form.submit.button' | translate}}</button>
+          <button mat-raised-button class="login-submit" [disabled]="!loginForm.valid" type="submit">{{'feature.auth.auth-component.form.submit.button' | translate}}</button>
         </div>
       </div>
     </form>
-    <a [routerLink]="PATH_TO_FORGOT_PASSWORD_FOR_HTML" class="***REMOVED***" href="#">
-      {{'feature.auth.auth-component.***REMOVED***-link' | translate}}
+    <a [routerLink]="PATH_TO_FORGOT_PASSWORD_FOR_HTML" class="forgot-password" href="#">
+      {{'feature.auth.auth-component.forgot-password-link' | translate}}
     </a>
 
     <div class="divider">

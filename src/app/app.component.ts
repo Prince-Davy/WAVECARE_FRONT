@@ -32,9 +32,9 @@ export class AppComponent {
   private readonly idleTimeoutService = inject(IdleTimeoutService);
 
   private readonly fullPageRoutes = [
-    '/***REMOVED***',
-    '/***REMOVED***',
-    '/***REMOVED***',
+    '/login',
+    '/forgot-password',
+    '/reset-password',
     '/assistance',
   ];
 

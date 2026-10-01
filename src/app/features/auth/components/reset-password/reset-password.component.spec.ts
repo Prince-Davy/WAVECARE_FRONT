@@ -3,7 +3,7 @@ import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/route
 import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
-import { ResetPasswordComponent } from './***REMOVED***.component';
+import { ResetPasswordComponent } from './reset-password.component';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { NavigationService } from '@app/features/navigation/services/navigation.service';
 
@@ -27,7 +27,7 @@ describe('ResetPasswordComponent', () => {
     authServiceSpy.readToken.and.returnValue(
       of({
         id: 'user-1',
-        email: '***REMOVED***',
+        email: 'john.doe@example.com',
       } as any)
     );
     authServiceSpy.updatePassword.and.returnValue(of(undefined as any));
@@ -65,7 +65,7 @@ describe('ResetPasswordComponent', () => {
   it('should load user info from the token and reset the error state', () => {
     expect(authServiceSpy.readToken).toHaveBeenCalledWith('fake-token');
     expect(component.userId).toBe('user-1');
-    expect(component.email).toBe('***REMOVED***');
+    expect(component.email).toBe('john.doe@example.com');
     expect(component.isError).toBeFalse();
   });
 
@@ -81,20 +81,20 @@ describe('ResetPasswordComponent', () => {
     expect(component.isError).toBeFalse();
   });
 
-  it('should submit a valid password reset and redirect to ***REMOVED***', fakeAsync(() => {
+  it('should submit a valid password reset and redirect to login', fakeAsync(() => {
     component.userId = 'user-1';
-    component.email = '***REMOVED***';
+    component.email = 'john.doe@example.com';
     component.token = 'fake-token';
     component.resetForm.setValue({
-      newPassword: '***REMOVED***',
-      confirmPassword: '***REMOVED***',
+      newPassword: 'Abcdef12!abcd',
+      confirmPassword: 'Abcdef12!abcd',
     });
 
     component.onSubmitNewPassword();
 
     expect(authServiceSpy.updatePassword).toHaveBeenCalledWith('fake-token', 'user-1', {
-      userName: '***REMOVED***',
-      newPassword: '***REMOVED***',
+      userName: 'john.doe@example.com',
+      newPassword: 'Abcdef12!abcd',
     });
     expect(authServiceSpy.deleteToken).toHaveBeenCalledWith('fake-token');
 
@@ -106,8 +106,8 @@ describe('ResetPasswordComponent', () => {
     component.userId = '';
     component.email = '';
     component.resetForm.setValue({
-      newPassword: '***REMOVED***',
-      confirmPassword: '***REMOVED***',
+      newPassword: 'Abcdef12!abcd',
+      confirmPassword: 'Abcdef12!abcd',
     });
 
     component.onSubmitNewPassword();

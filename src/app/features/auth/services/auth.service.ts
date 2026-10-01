@@ -16,7 +16,7 @@ export class AuthService {
   private readonly passwordResetApi = inject(PasswordResetService);
   private readonly tokenService = inject(AuthTokenService);
 
-  ***REMOVED***(credentials: { username: string; password: string }): Observable<TokenResponse> {
+  login(credentials: { username: string; password: string }): Observable<TokenResponse> {
     return this.usersApi.userLogin(credentials)
       .pipe(
         tap(response => {

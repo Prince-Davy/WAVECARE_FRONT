@@ -49,7 +49,7 @@ describe('role.guard', () => {
     });
   });
 
-  it('redirects unauthenticated users to ***REMOVED***', async () => {
+  it('redirects unauthenticated users to login', async () => {
     const auth = createAuthStub(false);
     const urlTree = {} as UrlTree;
 

@@ -8,7 +8,7 @@
   transform-origin: top center;
 }
 
-.***REMOVED***-card {
+.login-card {
   background-color: #005EA5;
   color: white;
   border-radius: 25px;
@@ -38,7 +38,7 @@
   margin-bottom: 40px;
 }
 
-.***REMOVED***-form {
+.login-form {
   display: flex;
   flex-direction: column;
 }
@@ -49,12 +49,12 @@ label {
   font-size: 18px;
 }
 
-.***REMOVED***-submit-wrapper {
+.login-submit-wrapper {
   display: flex;
   justify-content: center;
 }
 
-.***REMOVED***-submit-wrapper:has(.***REMOVED***-submit:disabled) {
+.login-submit-wrapper:has(.login-submit:disabled) {
   div {
     display: flex;
     width: fit-content;
@@ -63,7 +63,7 @@ label {
   }
 }
 
-.***REMOVED***-submit {
+.login-submit {
   font-weight: bold;
   margin-top: 8px;
 
@@ -73,7 +73,7 @@ label {
   }
 }
 
-.***REMOVED*** {
+.forgot-password {
   display: block;
   margin: 20px 0;
   font-size: 12px;

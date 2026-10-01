@@ -8,6 +8,6 @@
 import type { ExtendedProblemDetail } from './extendedProblemDetail';
 
 /**
- * Account locked after too many failed ***REMOVED*** attempts
+ * Account locked after too many failed login attempts
  */
 export type AuthAccountLocked429Response = ExtendedProblemDetail;

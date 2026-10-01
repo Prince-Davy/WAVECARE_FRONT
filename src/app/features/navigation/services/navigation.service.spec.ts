@@ -48,7 +48,7 @@ describe('NavigationService', () => {
     expect(router.navigate).toHaveBeenCalledWith([PATH_TO_TICKETS]);
   });
 
-  it('navigateToLogin routes to ***REMOVED*** page', () => {
+  it('navigateToLogin routes to login page', () => {
     service.navigateToLogin();
     expect(router.navigate).toHaveBeenCalledWith([PATH_TO_LOGIN]);
   });

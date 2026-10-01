@@ -97,7 +97,7 @@ export class IdleTimeoutService {
 
     this.authService.logout();
 
-    this.router.navigateByUrl('/***REMOVED***', {
+    this.router.navigateByUrl('/login', {
       replaceUrl: true,
     });
   }

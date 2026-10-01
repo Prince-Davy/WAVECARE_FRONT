@@ -67,7 +67,7 @@ describe('PatientTableComponent', () => {
   });
 
   it('refreshes on keyword changes and resets filters state', () => {
-    component.keywordsChanged(['***REMOVED***']);
+    component.keywordsChanged(['alice']);
     expect(patientStoreMock.load).toHaveBeenCalled();
 
     component.resetTable();

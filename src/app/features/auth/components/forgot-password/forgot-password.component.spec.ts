@@ -3,7 +3,7 @@ import { ActivatedRoute, provideRouter } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
-import { ForgotPasswordComponent } from './***REMOVED***.component';
+import { ForgotPasswordComponent } from './forgot-password.component';
 import { AuthService } from '@app/features/auth/services/auth.service';
 
 describe('ForgotPasswordComponent', () => {
@@ -56,11 +56,11 @@ describe('ForgotPasswordComponent', () => {
 
   it('should submit a valid request and reset the form on success', () => {
     authServiceSpy.forgotPassword.and.returnValue(of('OK'));
-    component.form.setValue({ email: '***REMOVED***@example.com' });
+    component.form.setValue({ email: 'alice@example.com' });
 
     component.submit();
 
-    expect(authServiceSpy.forgotPassword).toHaveBeenCalledWith('***REMOVED***@example.com');
+    expect(authServiceSpy.forgotPassword).toHaveBeenCalledWith('alice@example.com');
     expect(component.resetRequestSuccess).toBeTrue();
     expect(component.form.value.email).toBeNull();
   });

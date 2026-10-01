@@ -13,7 +13,7 @@ export * from './createUserCommand';
 export * from './extendedProblemDetail';
 export * from './extendedProblemDetailErrorsItem';
 export * from './healthCoverage';
-export * from './***REMOVED***Request';
+export * from './loginRequest';
 export * from './pageable';
 export * from './pageableObject';
 export * from './pagePatientResponse';
