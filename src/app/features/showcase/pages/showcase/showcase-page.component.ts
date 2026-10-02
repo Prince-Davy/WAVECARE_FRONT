@@ -132,7 +132,7 @@ export class ShowcasePageComponent {
     }
 
     private getSectionFromUrl(sections: Section[]): Section | undefined {
-        if (typeof globalThis.window === 'undefined') {
+        if ( globalThis.window === undefined) {
             return undefined;
         }
 
@@ -145,7 +145,7 @@ export class ShowcasePageComponent {
     }
 
     private updateUrl(section: Section): void {
-        if (typeof globalThis.window === 'undefined') {
+        if ( globalThis.window === undefined) {
             return;
         }
 
