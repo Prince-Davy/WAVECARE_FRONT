@@ -47,7 +47,7 @@ export class ShowcasePageComponent {
                 const sectionFromUrl = this.getSectionFromUrl(sections);
                 this.selectedSection.set(sectionFromUrl ?? sections[0]);
                 if (sectionFromUrl) {
-                    window.requestAnimationFrame(() => this.scrollToSection(sectionFromUrl, false));
+                    globalThis.requestAnimationFrame(() => this.scrollToSection(sectionFromUrl, false));
                 }
             }
         });
@@ -83,21 +83,32 @@ export class ShowcasePageComponent {
 
     @HostListener('window:scroll')
     syncSelectedSection(): void {
-        const marker = window.scrollY + window.innerHeight * 0.35;
-        const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
-        this.scrollProgress.set(scrollableHeight > 0
-            ? Math.round((window.scrollY / scrollableHeight) * 100)
-            : 0);
+        const marker = globalThis.scrollY + globalThis.innerHeight * 0.35;
+        const scrollableHeight =
+            document.documentElement.scrollHeight - globalThis.innerHeight;
 
-        const visibleSection = this.sections()
-            .map(section => ({
-                section,
-                element: document.getElementById(this.getSectionElementId(section)),
-            }))
-            .filter(item => item.element && item.element.offsetTop <= marker)
-            .at(-1)?.section;
+        this.scrollProgress.set(
+            scrollableHeight > 0
+                ? Math.round((globalThis.scrollY / scrollableHeight) * 100)
+                : 0
+        );
 
-        if (visibleSection && visibleSection !== this.selectedSection()) {
+        let visibleSection: Section | undefined;
+
+            for (const section of this.sections()) {
+                const element = document.getElementById(
+                    this.getSectionElementId(section)
+                );
+
+                if (element !== null && element.offsetTop <= marker) {
+                    visibleSection = section;
+                }
+            }
+
+        if (
+            visibleSection &&
+            visibleSection !== this.selectedSection()
+        ) {
             this.selectedSection.set(visibleSection);
             this.updateUrl(visibleSection);
         }
@@ -113,7 +124,7 @@ export class ShowcasePageComponent {
     }
 
     scrollToTop(): void {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        globalThis.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     private getSectionElementId(section: Section): string {
@@ -121,18 +132,30 @@ export class ShowcasePageComponent {
     }
 
     private getSectionFromUrl(sections: Section[]): Section | undefined {
-        if (typeof window === 'undefined') {
+        if (typeof globalThis.window === 'undefined') {
             return undefined;
         }
 
-        const sectionId = window.location.hash.slice(1);
-        return sections.find(section => this.getSectionElementId(section) === sectionId);
+        const sectionId = globalThis.location.hash.slice(1);
+
+        return sections.find(
+            section =>
+                this.getSectionElementId(section) === sectionId
+        );
     }
 
     private updateUrl(section: Section): void {
-        if (typeof window !== 'undefined') {
-            window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${this.getSectionElementId(section)}`);
+        if (typeof globalThis.window === 'undefined') {
+            return;
         }
+
+        const sectionId = this.getSectionElementId(section);
+
+        globalThis.history.replaceState(
+            null,
+            '',
+            `${globalThis.location.pathname}${globalThis.location.search}#${sectionId}`
+        );
     }
 
     private scrollToSection(section: Section, smooth = true): void {

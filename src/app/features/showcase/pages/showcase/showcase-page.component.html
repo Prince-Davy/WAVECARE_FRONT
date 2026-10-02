@@ -25,10 +25,12 @@
             }
         </div>
 
-        <div class="showcase-progress" role="progressbar" aria-label="Progression de la page"
-            [attr.aria-valuenow]="scrollProgress()" aria-valuemin="0" aria-valuemax="100">
-            <span [style.width.%]="scrollProgress()"></span>
-        </div>
+        <progress
+            class="showcase-progress"
+            aria-label="Progression de la page"
+            [value]="scrollProgress()"
+            max="100">
+        </progress>
 
         <span class="spacer"></span>
 
